@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RestoreAdditionalProjectSources>https://azuresdkartifacts.blob.core.windows.net/azure-sdk-tools/index.json</RestoreAdditionalProjectSources>
+        <Nullable>annotations</Nullable>
+        <IncludeGeneratorSharedCode>true</IncludeGeneratorSharedCode>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Core.Expressions.DataFactory" Version="1.0.0-beta.4" />
+      <PackageReference Include="Azure.ResourceManager" Version="1.7.0" />
+    <PackageReference Include="Microsoft.Azure.AutoRest.CSharp" Version="3.0.0-beta.20230804.1" />
+
+    </ItemGroup>
+
+</Project>

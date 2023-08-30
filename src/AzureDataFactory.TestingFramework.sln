@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDataFactory.TestingFramework", "AzureDataFactory.TestingFramework\AzureDataFactory.TestingFramework.csproj", "{F5C4C98C-B717-4ED8-95EA-5DD51CB87C92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDataFactory.TestingFramework.Tests", "AzureDataFactory.TestingFramework.Tests\AzureDataFactory.TestingFramework.Tests.csproj", "{76089DF4-314B-4556-9ED7-D2B2F3BBA87A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDataFactory.TestingFramework.Example", "AzureDataFactory.TestingFramework.Example\AzureDataFactory.TestingFramework.Example.csproj", "{F044EB13-DF36-43FB-90E8-9ADDE0E03821}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5C4C98C-B717-4ED8-95EA-5DD51CB87C92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C4C98C-B717-4ED8-95EA-5DD51CB87C92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C4C98C-B717-4ED8-95EA-5DD51CB87C92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C4C98C-B717-4ED8-95EA-5DD51CB87C92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76089DF4-314B-4556-9ED7-D2B2F3BBA87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76089DF4-314B-4556-9ED7-D2B2F3BBA87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76089DF4-314B-4556-9ED7-D2B2F3BBA87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76089DF4-314B-4556-9ED7-D2B2F3BBA87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F044EB13-DF36-43FB-90E8-9ADDE0E03821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F044EB13-DF36-43FB-90E8-9ADDE0E03821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F044EB13-DF36-43FB-90E8-9ADDE0E03821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F044EB13-DF36-43FB-90E8-9ADDE0E03821}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
