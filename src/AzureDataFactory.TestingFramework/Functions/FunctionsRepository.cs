@@ -37,7 +37,7 @@ public static class FunctionsRepository
         return text.Trim(trimArgument[0]);
     }
 
-    private static object Json(object argument)
+    private static string Json(string argument)
     {
         return argument;
     }
