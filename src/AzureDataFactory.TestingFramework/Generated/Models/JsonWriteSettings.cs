@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> Json write settings. </summary>
@@ -20,7 +22,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="formatWriteSettingsType"> The write setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="filePattern"> File pattern of JSON. This setting controls the way a collection of JSON objects will be treated. The default value is 'setOfObjects'. It is case-sensitive. </param>
-        internal JsonWriteSettings(string formatWriteSettingsType, IDictionary<string, BinaryData> additionalProperties, BinaryData filePattern) : base(formatWriteSettingsType, additionalProperties)
+        internal JsonWriteSettings(string formatWriteSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties, BinaryData filePattern) : base(formatWriteSettingsType, additionalProperties)
         {
             FilePattern = filePattern;
             FormatWriteSettingsType = formatWriteSettingsType ?? "JsonWriteSettings";

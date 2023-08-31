@@ -40,7 +40,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="userName"> The username of the Appfigures source. Type: string (or Expression with resultType string). </param>
         /// <param name="password"> The password of the AppFigures source. </param>
         /// <param name="clientKey"> The client key for the AppFigures source. </param>
-        internal AppFiguresLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> userName, DataFactorySecretBaseDefinition password, DataFactorySecretBaseDefinition clientKey) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
+        internal AppFiguresLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> userName, DataFactorySecretBaseDefinition password, DataFactorySecretBaseDefinition clientKey) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
         {
             UserName = userName;
             Password = password;

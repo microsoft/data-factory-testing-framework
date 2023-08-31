@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,13 +16,13 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of ExecutePipelineActivityPolicy. </summary>
         public ExecutePipelineActivityPolicy()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ExecutePipelineActivityPolicy. </summary>
         /// <param name="isSecureInputEnabled"> When set to true, Input from activity is considered as secure and will not be logged to monitoring. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ExecutePipelineActivityPolicy(bool? isSecureInputEnabled, IDictionary<string, BinaryData> additionalProperties)
+        internal ExecutePipelineActivityPolicy(bool? isSecureInputEnabled, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             IsSecureInputEnabled = isSecureInputEnabled;
             AdditionalProperties = additionalProperties;
@@ -59,6 +60,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

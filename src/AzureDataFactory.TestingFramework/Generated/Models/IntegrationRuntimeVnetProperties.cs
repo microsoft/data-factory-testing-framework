@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         public IntegrationRuntimeVnetProperties()
         {
             PublicIPs = new ChangeTrackingList<string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeVnetProperties. </summary>
@@ -25,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="publicIPs"> Resource IDs of the public IP addresses that this integration runtime will use. </param>
         /// <param name="subnetId"> The ID of subnet, to which this Azure-SSIS integration runtime will be joined. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeVnetProperties(Guid? vnetId, string subnet, IList<string> publicIPs, ResourceIdentifier subnetId, IDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeVnetProperties(Guid? vnetId, string subnet, IList<string> publicIPs, ResourceIdentifier subnetId, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             VnetId = vnetId;
             Subnet = subnet;
@@ -72,6 +73,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 using Azure.Core.Pipeline;
 using AzureDataFactory.TestingFramework.Models;
 
@@ -382,7 +383,7 @@ namespace Azure.ResourceManager.DataFactory
             }
         }
 
-        internal HttpMessage CreateCreateRunRequest(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, BinaryData> parameterValueSpecification, string referencePipelineRunId, bool? isRecovery, string startActivityName, bool? startFromFailure)
+        internal HttpMessage CreateCreateRunRequest(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, DataFactoryElement<string>> parameterValueSpecification, string referencePipelineRunId, bool? isRecovery, string startActivityName, bool? startFromFailure)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -456,7 +457,7 @@ namespace Azure.ResourceManager.DataFactory
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/>, <paramref name="resourceGroupName"/>, <paramref name="factoryName"/> or <paramref name="pipelineName"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/>, <paramref name="resourceGroupName"/>, <paramref name="factoryName"/> or <paramref name="pipelineName"/> is an empty string, and was expected to be non-empty. </exception>
-        public async Task<Response<PipelineCreateRunResult>> CreateRunAsync(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, BinaryData> parameterValueSpecification = null, string referencePipelineRunId = null, bool? isRecovery = null, string startActivityName = null, bool? startFromFailure = null, CancellationToken cancellationToken = default)
+        public async Task<Response<PipelineCreateRunResult>> CreateRunAsync(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, DataFactoryElement<string>> parameterValueSpecification = null, string referencePipelineRunId = null, bool? isRecovery = null, string startActivityName = null, bool? startFromFailure = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
             Argument.AssertNotNullOrEmpty(resourceGroupName, nameof(resourceGroupName));
@@ -492,7 +493,7 @@ namespace Azure.ResourceManager.DataFactory
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="subscriptionId"/>, <paramref name="resourceGroupName"/>, <paramref name="factoryName"/> or <paramref name="pipelineName"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="subscriptionId"/>, <paramref name="resourceGroupName"/>, <paramref name="factoryName"/> or <paramref name="pipelineName"/> is an empty string, and was expected to be non-empty. </exception>
-        public Response<PipelineCreateRunResult> CreateRun(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, BinaryData> parameterValueSpecification = null, string referencePipelineRunId = null, bool? isRecovery = null, string startActivityName = null, bool? startFromFailure = null, CancellationToken cancellationToken = default)
+        public Response<PipelineCreateRunResult> CreateRun(string subscriptionId, string resourceGroupName, string factoryName, string pipelineName, IDictionary<string, DataFactoryElement<string>> parameterValueSpecification = null, string referencePipelineRunId = null, bool? isRecovery = null, string startActivityName = null, bool? startFromFailure = null, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNullOrEmpty(subscriptionId, nameof(subscriptionId));
             Argument.AssertNotNullOrEmpty(resourceGroupName, nameof(resourceGroupName));

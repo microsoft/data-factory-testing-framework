@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -27,9 +28,9 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<IReadOnlyDictionary<string, string>> properties = default;
             Optional<IReadOnlyDictionary<string, string>> triggeredPipelines = default;
             Optional<IReadOnlyDictionary<string, string>> runDimension = default;
-            Optional<IReadOnlyDictionary<string, BinaryData>> dependencyStatus = default;
-            IReadOnlyDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            Optional<IReadOnlyDictionary<string, DataFactoryElement<string>>> dependencyStatus = default;
+            IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("triggerRunId"u8))
@@ -118,7 +119,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     {
                         continue;
                     }
-                    Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                    Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                     foreach (var property0 in property.Value.EnumerateObject())
                     {
                         if (property0.Value.ValueKind == JsonValueKind.Null)
@@ -127,13 +128,13 @@ namespace AzureDataFactory.TestingFramework.Models
                         }
                         else
                         {
-                            dictionary.Add(property0.Name, BinaryData.FromString(property0.Value.GetRawText()));
+                            dictionary.Add(property0.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText()));
                         }
                     }
                     dependencyStatus = dictionary;
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new DataFactoryTriggerRun(triggerRunId.Value, triggerName.Value, triggerType.Value, Optional.ToNullable(triggerRunTimestamp), Optional.ToNullable(status), message.Value, Optional.ToDictionary(properties), Optional.ToDictionary(triggeredPipelines), Optional.ToDictionary(runDimension), Optional.ToDictionary(dependencyStatus), additionalProperties);

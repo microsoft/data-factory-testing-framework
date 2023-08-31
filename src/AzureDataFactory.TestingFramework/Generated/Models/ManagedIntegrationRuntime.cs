@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -27,7 +28,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="computeProperties"> The compute resource for managed integration runtime. </param>
         /// <param name="ssisProperties"> SSIS properties for managed integration runtime. </param>
         /// <param name="customerVirtualNetwork"> The name of virtual network to which Azure-SSIS integration runtime will join. </param>
-        internal ManagedIntegrationRuntime(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, BinaryData> additionalProperties, IntegrationRuntimeState? state, ManagedVirtualNetworkReference managedVirtualNetwork, IntegrationRuntimeComputeProperties computeProperties, IntegrationRuntimeSsisProperties ssisProperties, IntegrationRuntimeCustomerVirtualNetwork customerVirtualNetwork) : base(integrationRuntimeType, description, additionalProperties)
+        internal ManagedIntegrationRuntime(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, DataFactoryElement<string>> additionalProperties, IntegrationRuntimeState? state, ManagedVirtualNetworkReference managedVirtualNetwork, IntegrationRuntimeComputeProperties computeProperties, IntegrationRuntimeSsisProperties ssisProperties, IntegrationRuntimeCustomerVirtualNetwork customerVirtualNetwork) : base(integrationRuntimeType, description, additionalProperties)
         {
             State = state;
             ManagedVirtualNetwork = managedVirtualNetwork;

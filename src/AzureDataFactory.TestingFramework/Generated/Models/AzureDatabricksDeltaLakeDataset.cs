@@ -35,7 +35,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="table"> The name of delta table. Type: string (or Expression with resultType string). </param>
         /// <param name="database"> The database name of delta table. Type: string (or Expression with resultType string). </param>
-        internal AzureDatabricksDeltaLakeDataset(string datasetType, string description, DataFactoryElement<IList<DatasetDataElement>> structure, DataFactoryElement<IList<DatasetSchemaDataElement>> schema, DataFactoryLinkedServiceReference linkedServiceName, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, DatasetFolder folder, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> table, DataFactoryElement<string> database) : base(datasetType, description, structure, schema, linkedServiceName, parameters, annotations, folder, additionalProperties)
+        internal AzureDatabricksDeltaLakeDataset(string datasetType, string description, DataFactoryElement<IList<DatasetDataElement>> structure, DataFactoryElement<IList<DatasetSchemaDataElement>> schema, DataFactoryLinkedServiceReference linkedServiceName, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, DatasetFolder folder, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> table, DataFactoryElement<string> database) : base(datasetType, description, structure, schema, linkedServiceName, parameters, annotations, folder, additionalProperties)
         {
             Table = table;
             Database = database;

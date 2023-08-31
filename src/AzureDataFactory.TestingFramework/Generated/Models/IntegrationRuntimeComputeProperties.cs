@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of IntegrationRuntimeComputeProperties. </summary>
         public IntegrationRuntimeComputeProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeComputeProperties. </summary>
@@ -28,7 +29,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="copyComputeScaleProperties"> CopyComputeScale properties for managed integration runtime. </param>
         /// <param name="pipelineExternalComputeScaleProperties"> PipelineExternalComputeScale properties for managed integration runtime. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeComputeProperties(AzureLocation? location, string nodeSize, int? numberOfNodes, int? maxParallelExecutionsPerNode, IntegrationRuntimeDataFlowProperties dataFlowProperties, IntegrationRuntimeVnetProperties vnetProperties, CopyComputeScaleProperties copyComputeScaleProperties, PipelineExternalComputeScaleProperties pipelineExternalComputeScaleProperties, IDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeComputeProperties(AzureLocation? location, string nodeSize, int? numberOfNodes, int? maxParallelExecutionsPerNode, IntegrationRuntimeDataFlowProperties dataFlowProperties, IntegrationRuntimeVnetProperties vnetProperties, CopyComputeScaleProperties copyComputeScaleProperties, PipelineExternalComputeScaleProperties pipelineExternalComputeScaleProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Location = location;
             NodeSize = nodeSize;
@@ -87,6 +88,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

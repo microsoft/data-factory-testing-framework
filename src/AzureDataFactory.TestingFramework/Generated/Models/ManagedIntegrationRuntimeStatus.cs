@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -29,7 +30,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="nodes"> The list of nodes for managed integration runtime. </param>
         /// <param name="otherErrors"> The errors that occurred on this integration runtime. </param>
         /// <param name="lastOperation"> The last operation result that occurred on this integration runtime. </param>
-        internal ManagedIntegrationRuntimeStatus(IntegrationRuntimeType runtimeType, string dataFactoryName, IntegrationRuntimeState? state, IReadOnlyDictionary<string, BinaryData> additionalProperties, DateTimeOffset? createdOn, IReadOnlyList<ManagedIntegrationRuntimeNode> nodes, IReadOnlyList<ManagedIntegrationRuntimeError> otherErrors, ManagedIntegrationRuntimeOperationResult lastOperation) : base(runtimeType, dataFactoryName, state, additionalProperties)
+        internal ManagedIntegrationRuntimeStatus(IntegrationRuntimeType runtimeType, string dataFactoryName, IntegrationRuntimeState? state, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties, DateTimeOffset? createdOn, IReadOnlyList<ManagedIntegrationRuntimeNode> nodes, IReadOnlyList<ManagedIntegrationRuntimeError> otherErrors, ManagedIntegrationRuntimeOperationResult lastOperation) : base(runtimeType, dataFactoryName, state, additionalProperties)
         {
             CreatedOn = createdOn;
             Nodes = nodes;

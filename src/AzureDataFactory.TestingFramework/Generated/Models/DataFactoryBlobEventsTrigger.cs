@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -38,7 +39,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="ignoreEmptyBlobs"> If set to true, blobs with zero bytes will be ignored. </param>
         /// <param name="events"> The type of events that cause this trigger to fire. </param>
         /// <param name="scope"> The ARM resource ID of the Storage Account. </param>
-        internal DataFactoryBlobEventsTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, IList<TriggerPipelineReference> pipelines, string blobPathBeginsWith, string blobPathEndsWith, bool? ignoreEmptyBlobs, IList<DataFactoryBlobEventType> events, string scope) : base(triggerType, description, runtimeState, annotations, additionalProperties, pipelines)
+        internal DataFactoryBlobEventsTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, IList<TriggerPipelineReference> pipelines, string blobPathBeginsWith, string blobPathEndsWith, bool? ignoreEmptyBlobs, IList<DataFactoryBlobEventType> events, string scope) : base(triggerType, description, runtimeState, annotations, additionalProperties, pipelines)
         {
             BlobPathBeginsWith = blobPathBeginsWith;
             BlobPathEndsWith = blobPathEndsWith;

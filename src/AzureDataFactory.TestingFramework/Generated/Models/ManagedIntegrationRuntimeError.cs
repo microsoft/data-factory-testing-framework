@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         internal ManagedIntegrationRuntimeError()
         {
             Parameters = new ChangeTrackingList<string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ManagedIntegrationRuntimeError. </summary>
@@ -25,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="parameters"> Managed integration runtime error parameters. </param>
         /// <param name="message"> Error message. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ManagedIntegrationRuntimeError(DateTimeOffset? time, string code, IReadOnlyList<string> parameters, string message, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal ManagedIntegrationRuntimeError(DateTimeOffset? time, string code, IReadOnlyList<string> parameters, string message, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Time = time;
             Code = code;
@@ -72,6 +73,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

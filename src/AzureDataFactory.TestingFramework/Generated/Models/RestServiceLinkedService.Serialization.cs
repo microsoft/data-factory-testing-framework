@@ -186,8 +186,8 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<DataFactoryElement<string>> tokenEndpoint = default;
             Optional<DataFactoryElement<string>> resource = default;
             Optional<DataFactoryElement<string>> scope = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("type"u8))
@@ -406,7 +406,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new RestServiceLinkedService(type, connectVia.Value, description.Value, Optional.ToDictionary(parameters), Optional.ToList(annotations), additionalProperties, url, enableServerCertificateValidation.Value, authenticationType, userName.Value, password, authHeaders.Value, servicePrincipalId.Value, servicePrincipalKey, tenant.Value, azureCloudType.Value, aadResourceId.Value, encryptedCredential.Value, credential.Value, clientId.Value, clientSecret, tokenEndpoint.Value, resource.Value, scope.Value);

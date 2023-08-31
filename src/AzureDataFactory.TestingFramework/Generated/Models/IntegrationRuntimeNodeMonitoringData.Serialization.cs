@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -26,8 +27,8 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<int> maxConcurrentJobs = default;
             Optional<float> sentBytes = default;
             Optional<float> receivedBytes = default;
-            IReadOnlyDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("nodeName"u8))
@@ -98,7 +99,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     receivedBytes = property.Value.GetSingle();
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new IntegrationRuntimeNodeMonitoringData(nodeName.Value, Optional.ToNullable(availableMemoryInMB), Optional.ToNullable(cpuUtilization), Optional.ToNullable(concurrentJobsLimit), Optional.ToNullable(concurrentJobsRunning), Optional.ToNullable(maxConcurrentJobs), Optional.ToNullable(sentBytes), Optional.ToNullable(receivedBytes), additionalProperties);

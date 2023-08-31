@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         public DataFactoryPrivateEndpointProperties()
         {
             Fqdns = new ChangeTrackingList<string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryPrivateEndpointProperties. </summary>
@@ -27,7 +28,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="privateLinkResourceId"> The ARM resource ID of the resource to which the managed private endpoint is created. </param>
         /// <param name="provisioningState"> The managed private endpoint provisioning state. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryPrivateEndpointProperties(ConnectionStateProperties connectionState, IList<string> fqdns, string groupId, bool? isReserved, ResourceIdentifier privateLinkResourceId, string provisioningState, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryPrivateEndpointProperties(ConnectionStateProperties connectionState, IList<string> fqdns, string groupId, bool? isReserved, ResourceIdentifier privateLinkResourceId, string provisioningState, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ConnectionState = connectionState;
             Fqdns = fqdns;
@@ -80,6 +81,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

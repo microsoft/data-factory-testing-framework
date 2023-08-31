@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Models;
 using Azure.ResourceManager.Models;
 
@@ -22,7 +23,7 @@ namespace Azure.ResourceManager.DataFactory
         public DataFactoryData(AzureLocation location) : base(location)
         {
             GlobalParameters = new ChangeTrackingDictionary<string, DataFactoryGlobalParameterProperties>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryData. </summary>
@@ -47,7 +48,7 @@ namespace Azure.ResourceManager.DataFactory
         /// <param name="publicNetworkAccess"> Whether or not public network access is allowed for the data factory. </param>
         /// <param name="eTag"> Etag identifies change in the resource. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, IDictionary<string, string> tags, AzureLocation location, ManagedServiceIdentity identity, string provisioningState, DateTimeOffset? createdOn, string version, DataFactoryPurviewConfiguration purviewConfiguration, FactoryRepoConfiguration repoConfiguration, IDictionary<string, DataFactoryGlobalParameterProperties> globalParameters, DataFactoryEncryptionConfiguration encryption, DataFactoryPublicNetworkAccess? publicNetworkAccess, ETag? eTag, IDictionary<string, BinaryData> additionalProperties) : base(id, name, resourceType, systemData, tags, location)
+        internal DataFactoryData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, IDictionary<string, string> tags, AzureLocation location, ManagedServiceIdentity identity, string provisioningState, DateTimeOffset? createdOn, string version, DataFactoryPurviewConfiguration purviewConfiguration, FactoryRepoConfiguration repoConfiguration, IDictionary<string, DataFactoryGlobalParameterProperties> globalParameters, DataFactoryEncryptionConfiguration encryption, DataFactoryPublicNetworkAccess? publicNetworkAccess, ETag? eTag, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(id, name, resourceType, systemData, tags, location)
         {
             Identity = identity;
             ProvisioningState = provisioningState;
@@ -128,6 +129,6 @@ namespace Azure.ResourceManager.DataFactory
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

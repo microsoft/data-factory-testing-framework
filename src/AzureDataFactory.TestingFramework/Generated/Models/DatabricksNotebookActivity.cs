@@ -23,8 +23,8 @@ namespace AzureDataFactory.TestingFramework.Models
             Argument.AssertNotNull(notebookPath, nameof(notebookPath));
 
             NotebookPath = notebookPath;
-            BaseParameters = new ChangeTrackingDictionary<string, BinaryData>();
-            Libraries = new ChangeTrackingList<IDictionary<string, BinaryData>>();
+            BaseParameters = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            Libraries = new ChangeTrackingList<IDictionary<string, DataFactoryElement<string>>>();
             ActivityType = "DatabricksNotebook";
         }
 
@@ -42,7 +42,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="notebookPath"> The absolute path of the notebook to be run in the Databricks Workspace. This path must begin with a slash. Type: string (or Expression with resultType string). </param>
         /// <param name="baseParameters"> Base parameters to be used for each run of this job.If the notebook takes a parameter that is not specified, the default value from the notebook will be used. </param>
         /// <param name="libraries"> A list of libraries to be installed on the cluster that will execute the job. </param>
-        internal DatabricksNotebookActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> notebookPath, IDictionary<string, BinaryData> baseParameters, IList<IDictionary<string, BinaryData>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal DatabricksNotebookActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> notebookPath, IDictionary<string, DataFactoryElement<string>> baseParameters, IList<IDictionary<string, DataFactoryElement<string>>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             NotebookPath = notebookPath;
             BaseParameters = baseParameters;
@@ -82,8 +82,8 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> BaseParameters { get; }
+        public IDictionary<string, DataFactoryElement<string>> BaseParameters { get; }
         /// <summary> A list of libraries to be installed on the cluster that will execute the job. </summary>
-        public IList<IDictionary<string, BinaryData>> Libraries { get; }
+        public IList<IDictionary<string, DataFactoryElement<string>>> Libraries { get; }
     }
 }

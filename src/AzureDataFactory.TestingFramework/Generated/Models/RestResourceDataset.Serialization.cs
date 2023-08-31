@@ -156,10 +156,10 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<DataFactoryElement<string>> relativeUrl = default;
             Optional<DataFactoryElement<string>> requestMethod = default;
             Optional<DataFactoryElement<string>> requestBody = default;
-            Optional<IDictionary<string, BinaryData>> additionalHeaders = default;
-            Optional<IDictionary<string, BinaryData>> paginationRules = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            Optional<IDictionary<string, DataFactoryElement<string>>> additionalHeaders = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> paginationRules = default;
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("type"u8))
@@ -281,7 +281,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -290,7 +290,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             additionalHeaders = dictionary;
@@ -302,7 +302,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -311,7 +311,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             paginationRules = dictionary;
@@ -320,7 +320,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new RestResourceDataset(type, description.Value, structure.Value, schema.Value, linkedServiceName, Optional.ToDictionary(parameters), Optional.ToList(annotations), folder.Value, additionalProperties, relativeUrl.Value, requestMethod.Value, requestBody.Value, Optional.ToDictionary(additionalHeaders), Optional.ToDictionary(paginationRules));

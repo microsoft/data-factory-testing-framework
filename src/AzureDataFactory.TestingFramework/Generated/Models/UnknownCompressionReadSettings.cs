@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownCompressionReadSettings. </summary>
@@ -13,7 +15,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of UnknownCompressionReadSettings. </summary>
         /// <param name="compressionReadSettingsType"> The Compression setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownCompressionReadSettings(string compressionReadSettingsType, IDictionary<string, BinaryData> additionalProperties) : base(compressionReadSettingsType, additionalProperties)
+        internal UnknownCompressionReadSettings(string compressionReadSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(compressionReadSettingsType, additionalProperties)
         {
             CompressionReadSettingsType = compressionReadSettingsType ?? "Unknown";
         }

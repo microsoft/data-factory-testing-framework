@@ -16,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of PipelineActivityPolicy. </summary>
         public PipelineActivityPolicy()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of PipelineActivityPolicy. </summary>
@@ -26,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="isSecureInputEnabled"> When set to true, Input from activity is considered as secure and will not be logged to monitoring. </param>
         /// <param name="isSecureOutputEnabled"> When set to true, Output from activity is considered as secure and will not be logged to monitoring. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal PipelineActivityPolicy(DataFactoryElement<string> timeout, DataFactoryElement<int> retry, int? retryIntervalInSeconds, bool? isSecureInputEnabled, bool? isSecureOutputEnabled, IDictionary<string, BinaryData> additionalProperties)
+        internal PipelineActivityPolicy(DataFactoryElement<string> timeout, DataFactoryElement<int> retry, int? retryIntervalInSeconds, bool? isSecureInputEnabled, bool? isSecureOutputEnabled, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Timeout = timeout;
             Retry = retry;
@@ -76,6 +76,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

@@ -40,7 +40,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="pipeline"> Pipeline reference. </param>
         /// <param name="parameters"> Pipeline parameters. </param>
         /// <param name="waitOnCompletion"> Defines whether activity execution will wait for the dependent pipeline execution to finish. Default is false. </param>
-        internal ExecutePipelineActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, ExecutePipelineActivityPolicy policy, DataFactoryPipelineReference pipeline, IDictionary<string, DataFactoryElement<string>> parameters, bool? waitOnCompletion) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
+        internal ExecutePipelineActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, ExecutePipelineActivityPolicy policy, DataFactoryPipelineReference pipeline, IDictionary<string, DataFactoryElement<string>> parameters, bool? waitOnCompletion) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
         {
             Policy = policy;
             Pipeline = pipeline;

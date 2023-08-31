@@ -21,9 +21,9 @@ namespace AzureDataFactory.TestingFramework.Models
             Argument.AssertNotNull(domain, nameof(domain));
 
             Domain = domain;
-            NewClusterSparkConf = new ChangeTrackingDictionary<string, BinaryData>();
-            NewClusterSparkEnvVars = new ChangeTrackingDictionary<string, BinaryData>();
-            NewClusterCustomTags = new ChangeTrackingDictionary<string, BinaryData>();
+            NewClusterSparkConf = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            NewClusterSparkEnvVars = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            NewClusterCustomTags = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
             LinkedServiceType = "AzureDatabricks";
         }
 
@@ -53,7 +53,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="encryptedCredential"> The encrypted credential used for authentication. Credentials are encrypted using the integration runtime credential manager. Type: string. </param>
         /// <param name="policyId"> The policy id for limiting the ability to configure clusters based on a user defined set of rules. Type: string (or Expression with resultType string). </param>
         /// <param name="credential"> The credential reference containing authentication information. </param>
-        internal AzureDatabricksLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> domain, DataFactorySecretBaseDefinition accessToken, DataFactoryElement<string> authentication, DataFactoryElement<string> workspaceResourceId, DataFactoryElement<string> existingClusterId, DataFactoryElement<string> instancePoolId, DataFactoryElement<string> newClusterVersion, DataFactoryElement<string> newClusterNumOfWorker, DataFactoryElement<string> newClusterNodeType, IDictionary<string, BinaryData> newClusterSparkConf, IDictionary<string, BinaryData> newClusterSparkEnvVars, IDictionary<string, BinaryData> newClusterCustomTags, DataFactoryElement<string> newClusterLogDestination, DataFactoryElement<string> newClusterDriverNodeType, DataFactoryElement<IList<string>> newClusterInitScripts, DataFactoryElement<bool> newClusterEnableElasticDisk, string encryptedCredential, DataFactoryElement<string> policyId, DataFactoryCredentialReference credential) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
+        internal AzureDatabricksLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> domain, DataFactorySecretBaseDefinition accessToken, DataFactoryElement<string> authentication, DataFactoryElement<string> workspaceResourceId, DataFactoryElement<string> existingClusterId, DataFactoryElement<string> instancePoolId, DataFactoryElement<string> newClusterVersion, DataFactoryElement<string> newClusterNumOfWorker, DataFactoryElement<string> newClusterNodeType, IDictionary<string, DataFactoryElement<string>> newClusterSparkConf, IDictionary<string, DataFactoryElement<string>> newClusterSparkEnvVars, IDictionary<string, DataFactoryElement<string>> newClusterCustomTags, DataFactoryElement<string> newClusterLogDestination, DataFactoryElement<string> newClusterDriverNodeType, DataFactoryElement<IList<string>> newClusterInitScripts, DataFactoryElement<bool> newClusterEnableElasticDisk, string encryptedCredential, DataFactoryElement<string> policyId, DataFactoryCredentialReference credential) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
         {
             Domain = domain;
             AccessToken = accessToken;
@@ -125,7 +125,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> NewClusterSparkConf { get; }
+        public IDictionary<string, DataFactoryElement<string>> NewClusterSparkConf { get; }
         /// <summary>
         /// A set of optional, user-specified Spark environment variables key-value pairs.
         /// <para>
@@ -156,7 +156,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> NewClusterSparkEnvVars { get; }
+        public IDictionary<string, DataFactoryElement<string>> NewClusterSparkEnvVars { get; }
         /// <summary>
         /// Additional tags for cluster resources. This property is ignored in instance pool configurations.
         /// <para>
@@ -187,7 +187,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> NewClusterCustomTags { get; }
+        public IDictionary<string, DataFactoryElement<string>> NewClusterCustomTags { get; }
         /// <summary> Specify a location to deliver Spark driver, worker, and event logs. Type: string (or Expression with resultType string). </summary>
         public DataFactoryElement<string> NewClusterLogDestination { get; set; }
         /// <summary> The driver node type for the new job cluster. This property is ignored in instance pool configurations. Type: string (or Expression with resultType string). </summary>

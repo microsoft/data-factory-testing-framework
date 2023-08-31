@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -18,7 +19,7 @@ namespace AzureDataFactory.TestingFramework.Models
             DataFlows = new ChangeTrackingList<DataFactoryDataFlowDebugInfo>();
             Datasets = new ChangeTrackingList<DataFactoryDatasetDebugInfo>();
             LinkedServices = new ChangeTrackingList<DataFactoryLinkedServiceDebugInfo>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> The ID of data flow debug session. </summary>
@@ -65,6 +66,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -75,11 +76,11 @@ namespace AzureDataFactory.TestingFramework.Models
             {
                 return null;
             }
-            Optional<IDictionary<string, BinaryData>> additionalCopyOptions = default;
-            Optional<IDictionary<string, BinaryData>> additionalFormatOptions = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> additionalCopyOptions = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> additionalFormatOptions = default;
             string type = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("additionalCopyOptions"u8))
@@ -88,7 +89,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     {
                         continue;
                     }
-                    Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                    Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                     foreach (var property0 in property.Value.EnumerateObject())
                     {
                         if (property0.Value.ValueKind == JsonValueKind.Null)
@@ -97,7 +98,7 @@ namespace AzureDataFactory.TestingFramework.Models
                         }
                         else
                         {
-                            dictionary.Add(property0.Name, BinaryData.FromString(property0.Value.GetRawText()));
+                            dictionary.Add(property0.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText()));
                         }
                     }
                     additionalCopyOptions = dictionary;
@@ -109,7 +110,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     {
                         continue;
                     }
-                    Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                    Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                     foreach (var property0 in property.Value.EnumerateObject())
                     {
                         if (property0.Value.ValueKind == JsonValueKind.Null)
@@ -118,7 +119,7 @@ namespace AzureDataFactory.TestingFramework.Models
                         }
                         else
                         {
-                            dictionary.Add(property0.Name, BinaryData.FromString(property0.Value.GetRawText()));
+                            dictionary.Add(property0.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText()));
                         }
                     }
                     additionalFormatOptions = dictionary;
@@ -129,7 +130,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     type = property.Value.GetString();
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new SnowflakeExportCopyCommand(type, additionalProperties, Optional.ToDictionary(additionalCopyOptions), Optional.ToDictionary(additionalFormatOptions));

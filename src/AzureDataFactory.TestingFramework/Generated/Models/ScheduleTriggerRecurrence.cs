@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of ScheduleTriggerRecurrence. </summary>
         public ScheduleTriggerRecurrence()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ScheduleTriggerRecurrence. </summary>
@@ -26,7 +27,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="timeZone"> The time zone. </param>
         /// <param name="schedule"> The recurrence schedule. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ScheduleTriggerRecurrence(DataFactoryRecurrenceFrequency? frequency, int? interval, DateTimeOffset? startOn, DateTimeOffset? endOn, string timeZone, DataFactoryRecurrenceSchedule schedule, IDictionary<string, BinaryData> additionalProperties)
+        internal ScheduleTriggerRecurrence(DataFactoryRecurrenceFrequency? frequency, int? interval, DateTimeOffset? startOn, DateTimeOffset? endOn, string timeZone, DataFactoryRecurrenceSchedule schedule, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Frequency = frequency;
             Interval = interval;
@@ -79,6 +80,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

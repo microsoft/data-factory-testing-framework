@@ -184,9 +184,9 @@ namespace AzureDataFactory.TestingFramework.Models
             DataFactoryElement<string> jarFilePath = default;
             Optional<DataFactoryLinkedServiceReference> jarLinkedService = default;
             Optional<IList<BinaryData>> jarLibs = default;
-            Optional<IDictionary<string, BinaryData>> defines = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            Optional<IDictionary<string, DataFactoryElement<string>>> defines = default;
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("linkedServiceName"u8))
@@ -367,7 +367,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -376,7 +376,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             defines = dictionary;
@@ -385,7 +385,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new HDInsightMapReduceActivity(name, type, description.Value, Optional.ToNullable(state), Optional.ToNullable(onInactiveMarkAs), Optional.ToList(dependsOn), Optional.ToList(userProperties), additionalProperties, linkedServiceName, policy.Value, Optional.ToList(storageLinkedServices), Optional.ToList(arguments), Optional.ToNullable(getDebugInfo), className, jarFilePath, jarLinkedService, Optional.ToList(jarLibs), Optional.ToDictionary(defines));

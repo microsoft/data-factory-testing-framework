@@ -29,7 +29,7 @@ namespace AzureDataFactory.TestingFramework.Models
             ClassName = className;
             JarFilePath = jarFilePath;
             JarLibs = new ChangeTrackingList<BinaryData>();
-            Defines = new ChangeTrackingDictionary<string, BinaryData>();
+            Defines = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
             ActivityType = "HDInsightMapReduce";
         }
 
@@ -52,7 +52,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="jarLinkedService"> Jar linked service reference. </param>
         /// <param name="jarLibs"> Jar libs. </param>
         /// <param name="defines"> Allows user to specify defines for the MapReduce job request. </param>
-        internal HDInsightMapReduceActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, IList<DataFactoryLinkedServiceReference> storageLinkedServices, IList<BinaryData> arguments, HDInsightActivityDebugInfoOptionSetting? getDebugInfo, DataFactoryElement<string> className, DataFactoryElement<string> jarFilePath, DataFactoryLinkedServiceReference jarLinkedService, IList<BinaryData> jarLibs, IDictionary<string, BinaryData> defines) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal HDInsightMapReduceActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, IList<DataFactoryLinkedServiceReference> storageLinkedServices, IList<BinaryData> arguments, HDInsightActivityDebugInfoOptionSetting? getDebugInfo, DataFactoryElement<string> className, DataFactoryElement<string> jarFilePath, DataFactoryLinkedServiceReference jarLinkedService, IList<BinaryData> jarLibs, IDictionary<string, DataFactoryElement<string>> defines) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             StorageLinkedServices = storageLinkedServices;
             Arguments = arguments;
@@ -167,6 +167,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> Defines { get; }
+        public IDictionary<string, DataFactoryElement<string>> Defines { get; }
     }
 }

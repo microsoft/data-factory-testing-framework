@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -20,7 +21,7 @@ namespace AzureDataFactory.TestingFramework.Models
         public DataFactoryCredential()
         {
             Annotations = new ChangeTrackingList<BinaryData>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryCredential. </summary>
@@ -28,7 +29,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="description"> Credential description. </param>
         /// <param name="annotations"> List of tags that can be used for describing the Credential. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             CredentialType = credentialType;
             Description = description;
@@ -101,6 +102,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

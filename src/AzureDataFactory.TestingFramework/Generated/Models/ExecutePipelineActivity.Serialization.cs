@@ -119,8 +119,8 @@ namespace AzureDataFactory.TestingFramework.Models
             DataFactoryPipelineReference pipeline = default;
             Optional<IDictionary<string, DataFactoryElement<string>>> parameters = default;
             Optional<bool> waitOnCompletion = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("policy"u8))
@@ -240,7 +240,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new ExecutePipelineActivity(name, type, description.Value, Optional.ToNullable(state), Optional.ToNullable(onInactiveMarkAs), Optional.ToList(dependsOn), Optional.ToList(userProperties), additionalProperties, policy.Value, pipeline, Optional.ToDictionary(parameters), Optional.ToNullable(waitOnCompletion));

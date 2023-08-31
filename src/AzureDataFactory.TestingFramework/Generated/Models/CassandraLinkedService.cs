@@ -37,7 +37,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="username"> Username for authentication. Type: string (or Expression with resultType string). </param>
         /// <param name="password"> Password for authentication. </param>
         /// <param name="encryptedCredential"> The encrypted credential used for authentication. Credentials are encrypted using the integration runtime credential manager. Type: string. </param>
-        internal CassandraLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> host, DataFactoryElement<string> authenticationType, DataFactoryElement<int> port, DataFactoryElement<string> username, DataFactorySecretBaseDefinition password, string encryptedCredential) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
+        internal CassandraLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> host, DataFactoryElement<string> authenticationType, DataFactoryElement<int> port, DataFactoryElement<string> username, DataFactorySecretBaseDefinition password, string encryptedCredential) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
         {
             Host = host;
             AuthenticationType = authenticationType;

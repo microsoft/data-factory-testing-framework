@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of PipelineActivityRunInformation. </summary>
         internal PipelineActivityRunInformation()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of PipelineActivityRunInformation. </summary>
@@ -33,7 +34,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="output"> The output for the activity. </param>
         /// <param name="error"> The error if any from the activity run. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal PipelineActivityRunInformation(string pipelineName, Guid? pipelineRunId, string activityName, string activityType, Guid? activityRunId, string linkedServiceName, string status, DateTimeOffset? startOn, DateTimeOffset? endOn, int? durationInMs, BinaryData input, BinaryData output, BinaryData error, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal PipelineActivityRunInformation(string pipelineName, Guid? pipelineRunId, string activityName, string activityType, Guid? activityRunId, string linkedServiceName, string status, DateTimeOffset? startOn, DateTimeOffset? endOn, int? durationInMs, BinaryData input, BinaryData output, BinaryData error, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             PipelineName = pipelineName;
             PipelineRunId = pipelineRunId;
@@ -194,6 +195,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

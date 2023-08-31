@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of IntegrationRuntimeConnectionInfo. </summary>
         internal IntegrationRuntimeConnectionInfo()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeConnectionInfo. </summary>
@@ -26,7 +27,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="publicKey"> The public key for encrypting a credential when transferring the credential to the integration runtime. </param>
         /// <param name="isIdentityCertExprired"> Whether the identity certificate is expired. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeConnectionInfo(string serviceToken, string identityCertThumbprint, Uri hostServiceUri, string version, string publicKey, bool? isIdentityCertExprired, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeConnectionInfo(string serviceToken, string identityCertThumbprint, Uri hostServiceUri, string version, string publicKey, bool? isIdentityCertExprired, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ServiceToken = serviceToken;
             IdentityCertThumbprint = identityCertThumbprint;
@@ -79,6 +80,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

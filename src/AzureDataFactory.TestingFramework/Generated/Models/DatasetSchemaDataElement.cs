@@ -16,14 +16,14 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of DatasetSchemaDataElement. </summary>
         public DatasetSchemaDataElement()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DatasetSchemaDataElement. </summary>
         /// <param name="schemaColumnName"> Name of the schema column. Type: string (or Expression with resultType string). </param>
         /// <param name="schemaColumnType"> Type of the schema column. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DatasetSchemaDataElement(DataFactoryElement<string> schemaColumnName, DataFactoryElement<string> schemaColumnType, IDictionary<string, BinaryData> additionalProperties)
+        internal DatasetSchemaDataElement(DataFactoryElement<string> schemaColumnName, DataFactoryElement<string> schemaColumnType, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             SchemaColumnName = schemaColumnName;
             SchemaColumnType = schemaColumnType;
@@ -64,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

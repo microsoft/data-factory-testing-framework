@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -50,7 +51,7 @@ namespace AzureDataFactory.TestingFramework.Models
                 return null;
             }
             Optional<DataFactoryPipelineReference> pipelineReference = default;
-            Optional<IDictionary<string, BinaryData>> parameters = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> parameters = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("pipelineReference"u8))
@@ -68,7 +69,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     {
                         continue;
                     }
-                    Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                    Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                     foreach (var property0 in property.Value.EnumerateObject())
                     {
                         if (property0.Value.ValueKind == JsonValueKind.Null)
@@ -77,7 +78,7 @@ namespace AzureDataFactory.TestingFramework.Models
                         }
                         else
                         {
-                            dictionary.Add(property0.Name, BinaryData.FromString(property0.Value.GetRawText()));
+                            dictionary.Add(property0.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText()));
                         }
                     }
                     parameters = dictionary;

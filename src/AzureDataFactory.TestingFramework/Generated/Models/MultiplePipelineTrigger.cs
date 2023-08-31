@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -30,7 +31,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="annotations"> List of tags that can be used for describing the trigger. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="pipelines"> Pipelines that need to be started. </param>
-        internal MultiplePipelineTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, IList<TriggerPipelineReference> pipelines) : base(triggerType, description, runtimeState, annotations, additionalProperties)
+        internal MultiplePipelineTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, IList<TriggerPipelineReference> pipelines) : base(triggerType, description, runtimeState, annotations, additionalProperties)
         {
             Pipelines = pipelines;
             TriggerType = triggerType ?? "MultiplePipelineTrigger";

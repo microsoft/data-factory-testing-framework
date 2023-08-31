@@ -23,7 +23,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="dateFormat"> Specify the date format for the csv in Azure Databricks Delta Lake Copy. Type: string (or Expression with resultType string). </param>
         /// <param name="timestampFormat"> Specify the timestamp format for the csv in Azure Databricks Delta Lake Copy. Type: string (or Expression with resultType string). </param>
-        internal AzureDatabricksDeltaLakeExportCommand(string exportSettingsType, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> dateFormat, DataFactoryElement<string> timestampFormat) : base(exportSettingsType, additionalProperties)
+        internal AzureDatabricksDeltaLakeExportCommand(string exportSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> dateFormat, DataFactoryElement<string> timestampFormat) : base(exportSettingsType, additionalProperties)
         {
             DateFormat = dateFormat;
             TimestampFormat = timestampFormat;

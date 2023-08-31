@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -18,8 +19,8 @@ namespace AzureDataFactory.TestingFramework.Models
             Properties = new ChangeTrackingDictionary<string, string>();
             TriggeredPipelines = new ChangeTrackingDictionary<string, string>();
             RunDimension = new ChangeTrackingDictionary<string, string>();
-            DependencyStatus = new ChangeTrackingDictionary<string, BinaryData>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            DependencyStatus = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryTriggerRun. </summary>
@@ -34,7 +35,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="runDimension"> Run dimension for which trigger was fired. </param>
         /// <param name="dependencyStatus"> Status of the upstream pipelines. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryTriggerRun(string triggerRunId, string triggerName, string triggerType, DateTimeOffset? triggerRunTimestamp, DataFactoryTriggerRunStatus? status, string message, IReadOnlyDictionary<string, string> properties, IReadOnlyDictionary<string, string> triggeredPipelines, IReadOnlyDictionary<string, string> runDimension, IReadOnlyDictionary<string, BinaryData> dependencyStatus, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryTriggerRun(string triggerRunId, string triggerName, string triggerType, DateTimeOffset? triggerRunTimestamp, DataFactoryTriggerRunStatus? status, string message, IReadOnlyDictionary<string, string> properties, IReadOnlyDictionary<string, string> triggeredPipelines, IReadOnlyDictionary<string, string> runDimension, IReadOnlyDictionary<string, DataFactoryElement<string>> dependencyStatus, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             TriggerRunId = triggerRunId;
             TriggerName = triggerName;
@@ -97,7 +98,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> DependencyStatus { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> DependencyStatus { get; }
         /// <summary>
         /// Additional Properties
         /// <para>
@@ -128,6 +129,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

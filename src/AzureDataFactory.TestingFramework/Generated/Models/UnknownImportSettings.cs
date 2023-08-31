@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownImportSettings. </summary>
@@ -13,7 +15,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of UnknownImportSettings. </summary>
         /// <param name="importSettingsType"> The import setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownImportSettings(string importSettingsType, IDictionary<string, BinaryData> additionalProperties) : base(importSettingsType, additionalProperties)
+        internal UnknownImportSettings(string importSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(importSettingsType, additionalProperties)
         {
             ImportSettingsType = importSettingsType ?? "Unknown";
         }

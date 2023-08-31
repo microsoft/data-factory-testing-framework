@@ -21,7 +21,7 @@ namespace AzureDataFactory.TestingFramework.Models
             Argument.AssertNotNull(linkedServiceName, nameof(linkedServiceName));
 
             LinkedServiceName = linkedServiceName;
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of LogStorageSettings. </summary>
@@ -30,7 +30,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="logLevel"> Gets or sets the log level, support: Info, Warning. Type: string (or Expression with resultType string). </param>
         /// <param name="enableReliableLogging"> Specifies whether to enable reliable logging. Type: boolean (or Expression with resultType boolean). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal LogStorageSettings(DataFactoryLinkedServiceReference linkedServiceName, DataFactoryElement<string> path, DataFactoryElement<string> logLevel, DataFactoryElement<bool> enableReliableLogging, IDictionary<string, BinaryData> additionalProperties)
+        internal LogStorageSettings(DataFactoryLinkedServiceReference linkedServiceName, DataFactoryElement<string> path, DataFactoryElement<string> logLevel, DataFactoryElement<bool> enableReliableLogging, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             LinkedServiceName = linkedServiceName;
             Path = path;
@@ -77,6 +77,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

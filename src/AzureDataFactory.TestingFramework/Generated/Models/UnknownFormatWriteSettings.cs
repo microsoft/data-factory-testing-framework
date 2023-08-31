@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownFormatWriteSettings. </summary>
@@ -13,7 +15,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of UnknownFormatWriteSettings. </summary>
         /// <param name="formatWriteSettingsType"> The write setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownFormatWriteSettings(string formatWriteSettingsType, IDictionary<string, BinaryData> additionalProperties) : base(formatWriteSettingsType, additionalProperties)
+        internal UnknownFormatWriteSettings(string formatWriteSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(formatWriteSettingsType, additionalProperties)
         {
             FormatWriteSettingsType = formatWriteSettingsType ?? "Unknown";
         }

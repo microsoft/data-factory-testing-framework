@@ -36,7 +36,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="userName"> The Account SID of Twilio service. Type: string (or Expression with resultType string). </param>
         /// <param name="password"> The auth token of Twilio service. </param>
-        internal TwilioLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> userName, DataFactorySecretBaseDefinition password) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
+        internal TwilioLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> userName, DataFactorySecretBaseDefinition password) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
         {
             UserName = userName;
             Password = password;

@@ -7,6 +7,7 @@
 
 using System.Text.Json;
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Models;
 using Azure.ResourceManager.Models;
 
@@ -140,11 +141,11 @@ namespace Azure.ResourceManager.DataFactory
             Optional<IDictionary<string, PipelineVariableSpecification>> variables = default;
             Optional<int> concurrency = default;
             Optional<IList<BinaryData>> annotations = default;
-            Optional<IDictionary<string, BinaryData>> runDimensions = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> runDimensions = default;
             Optional<PipelineFolder> folder = default;
             Optional<DataFactoryPipelinePolicy> policy = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("etag"u8))
@@ -272,7 +273,7 @@ namespace Azure.ResourceManager.DataFactory
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -281,7 +282,7 @@ namespace Azure.ResourceManager.DataFactory
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             runDimensions = dictionary;
@@ -308,7 +309,7 @@ namespace Azure.ResourceManager.DataFactory
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new Pipeline(id, name, type, systemData.Value, description.Value, Optional.ToList(activities), Optional.ToDictionary(parameters), Optional.ToDictionary(variables), Optional.ToNullable(concurrency), Optional.ToList(annotations), Optional.ToDictionary(runDimensions), folder.Value, policy.Value, Optional.ToNullable(etag), additionalProperties);

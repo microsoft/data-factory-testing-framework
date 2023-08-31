@@ -22,8 +22,8 @@ namespace AzureDataFactory.TestingFramework.Models
 
             StorageLinkedServices = new ChangeTrackingList<DataFactoryLinkedServiceReference>();
             Arguments = new ChangeTrackingList<BinaryData>();
-            Defines = new ChangeTrackingDictionary<string, BinaryData>();
-            Variables = new ChangeTrackingDictionary<string, BinaryData>();
+            Defines = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            Variables = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
             ActivityType = "HDInsightHive";
         }
 
@@ -46,7 +46,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="defines"> Allows user to specify defines for Hive job request. </param>
         /// <param name="variables"> User specified arguments under hivevar namespace. </param>
         /// <param name="queryTimeout"> Query timeout value (in minutes).  Effective when the HDInsight cluster is with ESP (Enterprise Security Package). </param>
-        internal HDInsightHiveActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, IList<DataFactoryLinkedServiceReference> storageLinkedServices, IList<BinaryData> arguments, HDInsightActivityDebugInfoOptionSetting? getDebugInfo, DataFactoryElement<string> scriptPath, DataFactoryLinkedServiceReference scriptLinkedService, IDictionary<string, BinaryData> defines, IDictionary<string, BinaryData> variables, int? queryTimeout) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal HDInsightHiveActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, IList<DataFactoryLinkedServiceReference> storageLinkedServices, IList<BinaryData> arguments, HDInsightActivityDebugInfoOptionSetting? getDebugInfo, DataFactoryElement<string> scriptPath, DataFactoryLinkedServiceReference scriptLinkedService, IDictionary<string, DataFactoryElement<string>> defines, IDictionary<string, DataFactoryElement<string>> variables, int? queryTimeout) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             StorageLinkedServices = storageLinkedServices;
             Arguments = arguments;
@@ -128,7 +128,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> Defines { get; }
+        public IDictionary<string, DataFactoryElement<string>> Defines { get; }
         /// <summary>
         /// User specified arguments under hivevar namespace.
         /// <para>
@@ -159,7 +159,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> Variables { get; }
+        public IDictionary<string, DataFactoryElement<string>> Variables { get; }
         /// <summary> Query timeout value (in minutes).  Effective when the HDInsight cluster is with ESP (Enterprise Security Package). </summary>
         public int? QueryTimeout { get; set; }
     }

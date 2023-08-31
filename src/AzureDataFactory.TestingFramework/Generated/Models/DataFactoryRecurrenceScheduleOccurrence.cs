@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,14 +16,14 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of DataFactoryRecurrenceScheduleOccurrence. </summary>
         public DataFactoryRecurrenceScheduleOccurrence()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryRecurrenceScheduleOccurrence. </summary>
         /// <param name="day"> The day of the week. </param>
         /// <param name="occurrence"> The occurrence. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryRecurrenceScheduleOccurrence(DataFactoryDayOfWeek? day, int? occurrence, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryRecurrenceScheduleOccurrence(DataFactoryDayOfWeek? day, int? occurrence, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Day = day;
             Occurrence = occurrence;
@@ -63,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

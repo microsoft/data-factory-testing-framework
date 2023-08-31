@@ -39,7 +39,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="folderPath"> The path of the container/folder that will trigger the pipeline. </param>
         /// <param name="maxConcurrency"> The max number of parallel files to handle when it is triggered. </param>
         /// <param name="linkedService"> The Azure Storage linked service reference. </param>
-        internal DataFactoryBlobTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, IList<TriggerPipelineReference> pipelines, string folderPath, int maxConcurrency, DataFactoryLinkedServiceReference linkedService) : base(triggerType, description, runtimeState, annotations, additionalProperties, pipelines)
+        internal DataFactoryBlobTrigger(string triggerType, string description, DataFactoryTriggerRuntimeState? runtimeState, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, IList<TriggerPipelineReference> pipelines, string folderPath, int maxConcurrency, DataFactoryLinkedServiceReference linkedService) : base(triggerType, description, runtimeState, annotations, additionalProperties, pipelines)
         {
             FolderPath = folderPath;
             MaxConcurrency = maxConcurrency;

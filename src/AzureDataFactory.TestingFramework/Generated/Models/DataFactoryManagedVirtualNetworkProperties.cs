@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,14 +16,14 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of DataFactoryManagedVirtualNetworkProperties. </summary>
         public DataFactoryManagedVirtualNetworkProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryManagedVirtualNetworkProperties. </summary>
         /// <param name="vnetId"> Managed Virtual Network ID. </param>
         /// <param name="alias"> Managed Virtual Network alias. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryManagedVirtualNetworkProperties(Guid? vnetId, string @alias, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryManagedVirtualNetworkProperties(Guid? vnetId, string @alias, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             VnetId = vnetId;
             Alias = @alias;
@@ -63,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

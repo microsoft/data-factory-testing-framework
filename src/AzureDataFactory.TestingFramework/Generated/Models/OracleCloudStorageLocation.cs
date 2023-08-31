@@ -25,7 +25,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="bucketName"> Specify the bucketName of Oracle Cloud Storage. Type: string (or Expression with resultType string). </param>
         /// <param name="version"> Specify the version of Oracle Cloud Storage. Type: string (or Expression with resultType string). </param>
-        internal OracleCloudStorageLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> bucketName, DataFactoryElement<string> version) : base(datasetLocationType, folderPath, fileName, additionalProperties)
+        internal OracleCloudStorageLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> bucketName, DataFactoryElement<string> version) : base(datasetLocationType, folderPath, fileName, additionalProperties)
         {
             BucketName = bucketName;
             Version = version;

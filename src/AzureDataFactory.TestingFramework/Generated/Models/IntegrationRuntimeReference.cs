@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -22,14 +23,14 @@ namespace AzureDataFactory.TestingFramework.Models
 
             ReferenceType = referenceType;
             ReferenceName = referenceName;
-            Parameters = new ChangeTrackingDictionary<string, BinaryData>();
+            Parameters = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeReference. </summary>
         /// <param name="referenceType"> Type of integration runtime. </param>
         /// <param name="referenceName"> Reference integration runtime name. </param>
         /// <param name="parameters"> Arguments for integration runtime. </param>
-        internal IntegrationRuntimeReference(IntegrationRuntimeReferenceType referenceType, string referenceName, IDictionary<string, BinaryData> parameters)
+        internal IntegrationRuntimeReference(IntegrationRuntimeReferenceType referenceType, string referenceName, IDictionary<string, DataFactoryElement<string>> parameters)
         {
             ReferenceType = referenceType;
             ReferenceName = referenceName;
@@ -70,6 +71,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> Parameters { get; }
+        public IDictionary<string, DataFactoryElement<string>> Parameters { get; }
     }
 }

@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         internal SelfHostedIntegrationRuntimeNode()
         {
             Capabilities = new ChangeTrackingDictionary<string, string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of SelfHostedIntegrationRuntimeNode. </summary>
@@ -39,7 +40,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="concurrentJobsLimit"> Maximum concurrent jobs on the integration runtime node. </param>
         /// <param name="maxConcurrentJobs"> The maximum concurrent jobs in this integration runtime. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal SelfHostedIntegrationRuntimeNode(string nodeName, string machineName, Uri hostServiceUri, SelfHostedIntegrationRuntimeNodeStatus? status, IReadOnlyDictionary<string, string> capabilities, string versionStatus, string version, DateTimeOffset? registerOn, DateTimeOffset? lastConnectOn, DateTimeOffset? expireOn, DateTimeOffset? lastStartOn, DateTimeOffset? lastStopOn, IntegrationRuntimeUpdateResult? lastUpdateResult, DateTimeOffset? lastStartUpdateOn, DateTimeOffset? lastEndUpdateOn, bool? isActiveDispatcher, int? concurrentJobsLimit, int? maxConcurrentJobs, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal SelfHostedIntegrationRuntimeNode(string nodeName, string machineName, Uri hostServiceUri, SelfHostedIntegrationRuntimeNodeStatus? status, IReadOnlyDictionary<string, string> capabilities, string versionStatus, string version, DateTimeOffset? registerOn, DateTimeOffset? lastConnectOn, DateTimeOffset? expireOn, DateTimeOffset? lastStartOn, DateTimeOffset? lastStopOn, IntegrationRuntimeUpdateResult? lastUpdateResult, DateTimeOffset? lastStartUpdateOn, DateTimeOffset? lastEndUpdateOn, bool? isActiveDispatcher, int? concurrentJobsLimit, int? maxConcurrentJobs, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             NodeName = nodeName;
             MachineName = machineName;
@@ -128,6 +129,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

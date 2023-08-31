@@ -24,7 +24,7 @@ namespace AzureDataFactory.TestingFramework.Models
 
             Notebook = notebook;
             Parameters = new ChangeTrackingDictionary<string, NotebookParameter>();
-            SparkConfig = new ChangeTrackingDictionary<string, BinaryData>();
+            SparkConfig = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
             ActivityType = "SynapseNotebook";
         }
 
@@ -49,7 +49,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="configurationType"> The type of the spark config. </param>
         /// <param name="targetSparkConfiguration"> The spark configuration of the spark job. </param>
         /// <param name="sparkConfig"> Spark configuration property. </param>
-        internal SynapseNotebookActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, SynapseNotebookReference notebook, BigDataPoolParametrizationReference sparkPool, IDictionary<string, NotebookParameter> parameters, DataFactoryElement<string> executorSize, BinaryData conf, DataFactoryElement<string> driverSize, DataFactoryElement<int> numExecutors, DataFactorySparkConfigurationType? configurationType, SparkConfigurationParametrizationReference targetSparkConfiguration, IDictionary<string, BinaryData> sparkConfig) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal SynapseNotebookActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, SynapseNotebookReference notebook, BigDataPoolParametrizationReference sparkPool, IDictionary<string, NotebookParameter> parameters, DataFactoryElement<string> executorSize, BinaryData conf, DataFactoryElement<string> driverSize, DataFactoryElement<int> numExecutors, DataFactorySparkConfigurationType? configurationType, SparkConfigurationParametrizationReference targetSparkConfiguration, IDictionary<string, DataFactoryElement<string>> sparkConfig) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             Notebook = notebook;
             SparkPool = sparkPool;
@@ -141,6 +141,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> SparkConfig { get; }
+        public IDictionary<string, DataFactoryElement<string>> SparkConfig { get; }
     }
 }

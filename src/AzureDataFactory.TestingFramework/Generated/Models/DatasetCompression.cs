@@ -21,14 +21,14 @@ namespace AzureDataFactory.TestingFramework.Models
             Argument.AssertNotNull(datasetCompressionType, nameof(datasetCompressionType));
 
             DatasetCompressionType = datasetCompressionType;
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DatasetCompression. </summary>
         /// <param name="datasetCompressionType"> Type of dataset compression. Type: string (or Expression with resultType string). </param>
         /// <param name="level"> The dataset compression level. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DatasetCompression(DataFactoryElement<string> datasetCompressionType, DataFactoryElement<string> level, IDictionary<string, BinaryData> additionalProperties)
+        internal DatasetCompression(DataFactoryElement<string> datasetCompressionType, DataFactoryElement<string> level, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             DatasetCompressionType = datasetCompressionType;
             Level = level;
@@ -69,6 +69,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

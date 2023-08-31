@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         internal ManagedIntegrationRuntimeOperationResult()
         {
             Parameters = new ChangeTrackingList<string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ManagedIntegrationRuntimeOperationResult. </summary>
@@ -27,7 +28,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="parameters"> Managed integration runtime error parameters. </param>
         /// <param name="activityId"> The activity id for the operation request. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ManagedIntegrationRuntimeOperationResult(string managedIntegrationRuntimeOperationResultType, DateTimeOffset? startOn, string result, string errorCode, IReadOnlyList<string> parameters, string activityId, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal ManagedIntegrationRuntimeOperationResult(string managedIntegrationRuntimeOperationResultType, DateTimeOffset? startOn, string result, string errorCode, IReadOnlyList<string> parameters, string activityId, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ManagedIntegrationRuntimeOperationResultType = managedIntegrationRuntimeOperationResultType;
             StartOn = startOn;
@@ -80,6 +81,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

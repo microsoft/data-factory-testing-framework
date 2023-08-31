@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -22,8 +23,8 @@ namespace AzureDataFactory.TestingFramework.Models
 
             ReferenceType = referenceType;
             ReferenceName = referenceName;
-            Parameters = new ChangeTrackingDictionary<string, BinaryData>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            Parameters = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFlowReference. </summary>
@@ -32,7 +33,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="datasetParameters"> Reference data flow parameters from dataset. </param>
         /// <param name="parameters"> Data flow parameters. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFlowReference(DataFlowReferenceType referenceType, string referenceName, BinaryData datasetParameters, IDictionary<string, BinaryData> parameters, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFlowReference(DataFlowReferenceType referenceType, string referenceName, BinaryData datasetParameters, IDictionary<string, DataFactoryElement<string>> parameters, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ReferenceType = referenceType;
             ReferenceName = referenceName;
@@ -106,7 +107,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> Parameters { get; }
+        public IDictionary<string, DataFactoryElement<string>> Parameters { get; }
         /// <summary>
         /// Additional Properties
         /// <para>
@@ -137,6 +138,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

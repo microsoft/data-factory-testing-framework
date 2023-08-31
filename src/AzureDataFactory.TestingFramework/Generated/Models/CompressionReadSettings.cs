@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -19,13 +20,13 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of CompressionReadSettings. </summary>
         public CompressionReadSettings()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of CompressionReadSettings. </summary>
         /// <param name="compressionReadSettingsType"> The Compression setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal CompressionReadSettings(string compressionReadSettingsType, IDictionary<string, BinaryData> additionalProperties)
+        internal CompressionReadSettings(string compressionReadSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             CompressionReadSettingsType = compressionReadSettingsType;
             AdditionalProperties = additionalProperties;
@@ -63,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

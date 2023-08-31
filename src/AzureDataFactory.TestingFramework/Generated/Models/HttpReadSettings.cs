@@ -28,7 +28,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalHeaders"> The additional HTTP headers in the request to the RESTful API. Type: string (or Expression with resultType string). </param>
         /// <param name="requestTimeout"> Specifies the timeout for a HTTP client to get HTTP response from HTTP server. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalColumns"> Specifies the additional columns to be added to source data. Type: array of objects(AdditionalColumns) (or Expression with resultType array of objects). </param>
-        internal HttpReadSettings(string storeReadSettingsType, DataFactoryElement<int> maxConcurrentConnections, DataFactoryElement<bool> disableMetricsCollection, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> requestMethod, DataFactoryElement<string> requestBody, DataFactoryElement<string> additionalHeaders, DataFactoryElement<string> requestTimeout, BinaryData additionalColumns) : base(storeReadSettingsType, maxConcurrentConnections, disableMetricsCollection, additionalProperties)
+        internal HttpReadSettings(string storeReadSettingsType, DataFactoryElement<int> maxConcurrentConnections, DataFactoryElement<bool> disableMetricsCollection, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> requestMethod, DataFactoryElement<string> requestBody, DataFactoryElement<string> additionalHeaders, DataFactoryElement<string> requestTimeout, BinaryData additionalColumns) : base(storeReadSettingsType, maxConcurrentConnections, disableMetricsCollection, additionalProperties)
         {
             RequestMethod = requestMethod;
             RequestBody = requestBody;

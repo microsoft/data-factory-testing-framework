@@ -25,7 +25,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="copyBehavior"> The type of copy behavior for copy sink. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="blockSizeInMB"> Indicates the block size(MB) when writing data to blob. Type: integer (or Expression with resultType integer). </param>
-        internal AzureBlobFSWriteSettings(string storeWriteSettingsType, DataFactoryElement<int> maxConcurrentConnections, DataFactoryElement<bool> disableMetricsCollection, BinaryData copyBehavior, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<int> blockSizeInMB) : base(storeWriteSettingsType, maxConcurrentConnections, disableMetricsCollection, copyBehavior, additionalProperties)
+        internal AzureBlobFSWriteSettings(string storeWriteSettingsType, DataFactoryElement<int> maxConcurrentConnections, DataFactoryElement<bool> disableMetricsCollection, BinaryData copyBehavior, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<int> blockSizeInMB) : base(storeWriteSettingsType, maxConcurrentConnections, disableMetricsCollection, copyBehavior, additionalProperties)
         {
             BlockSizeInMB = blockSizeInMB;
             StoreWriteSettingsType = storeWriteSettingsType ?? "AzureBlobFSWriteSettings";

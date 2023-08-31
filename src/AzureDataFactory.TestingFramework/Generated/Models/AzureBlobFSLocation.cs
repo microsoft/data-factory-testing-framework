@@ -24,7 +24,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="fileName"> Specify the file name of dataset. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="fileSystem"> Specify the fileSystem of azure blobFS. Type: string (or Expression with resultType string). </param>
-        internal AzureBlobFSLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> fileSystem) : base(datasetLocationType, folderPath, fileName, additionalProperties)
+        internal AzureBlobFSLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> fileSystem) : base(datasetLocationType, folderPath, fileName, additionalProperties)
         {
             FileSystem = fileSystem;
             DatasetLocationType = datasetLocationType ?? "AzureBlobFSLocation";

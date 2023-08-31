@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         public IntegrationRuntimeDataFlowProperties()
         {
             CustomProperties = new ChangeTrackingList<IntegrationRuntimeDataFlowCustomItem>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeDataFlowProperties. </summary>
@@ -26,7 +27,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="shouldCleanupAfterTtl"> Cluster will not be recycled and it will be used in next data flow activity run until TTL (time to live) is reached if this is set as false. Default is true. </param>
         /// <param name="customProperties"> Custom properties are used to tune the data flow runtime performance. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeDataFlowProperties(DataFlowComputeType? computeType, int? coreCount, int? timeToLiveInMinutes, bool? shouldCleanupAfterTtl, IList<IntegrationRuntimeDataFlowCustomItem> customProperties, IDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeDataFlowProperties(DataFlowComputeType? computeType, int? coreCount, int? timeToLiveInMinutes, bool? shouldCleanupAfterTtl, IList<IntegrationRuntimeDataFlowCustomItem> customProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ComputeType = computeType;
             CoreCount = coreCount;
@@ -76,6 +77,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

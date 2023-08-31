@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> Self-hosted integration runtime. </summary>
@@ -25,7 +27,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// Please note <see cref="LinkedIntegrationRuntimeType"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="LinkedIntegrationRuntimeKeyAuthorization"/> and <see cref="LinkedIntegrationRuntimeRbacAuthorization"/>.
         /// </param>
-        internal SelfHostedIntegrationRuntime(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, BinaryData> additionalProperties, LinkedIntegrationRuntimeType linkedInfo) : base(integrationRuntimeType, description, additionalProperties)
+        internal SelfHostedIntegrationRuntime(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, DataFactoryElement<string>> additionalProperties, LinkedIntegrationRuntimeType linkedInfo) : base(integrationRuntimeType, description, additionalProperties)
         {
             LinkedInfo = linkedInfo;
             IntegrationRuntimeType = integrationRuntimeType;
