@@ -1,0 +1,44 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+          source-url: https://nuget.pkg.github.com/arjendev/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: ./src
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ./src
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: ./src
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v3
+        with:
+         name: dotnet-results-${{ matrix.dotnet-version }}
+         path: ./src/TestResults-${{ matrix.dotnet-version }}
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+      - name: Create the package
+        run: dotnet pack --configuration Release src/AzureDataFactory.TestingFramework
+      - name: Publish the package to GPR
+        run: dotnet nuget push src/AzureDataFactory.TestingFramework/bin/Release/*.nupkg --source "https://nuget.pkg.github.com/arjendev/index.json" --api-key ${{ secrets.PUBLISH_KEY }} --skip-duplicate
