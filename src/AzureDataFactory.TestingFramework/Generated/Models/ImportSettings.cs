@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -19,13 +20,13 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of ImportSettings. </summary>
         public ImportSettings()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ImportSettings. </summary>
         /// <param name="importSettingsType"> The import setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ImportSettings(string importSettingsType, IDictionary<string, BinaryData> additionalProperties)
+        internal ImportSettings(string importSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             ImportSettingsType = importSettingsType;
             AdditionalProperties = additionalProperties;
@@ -63,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

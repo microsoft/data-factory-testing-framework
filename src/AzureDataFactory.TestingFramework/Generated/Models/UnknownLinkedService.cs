@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownLinkedService. </summary>
@@ -17,7 +19,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="parameters"> Parameters for linked service. </param>
         /// <param name="annotations"> List of tags that can be used for describing the linked service. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
+        internal UnknownLinkedService(string linkedServiceType, IntegrationRuntimeReference connectVia, string description, IDictionary<string, EntityParameterSpecification> parameters, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(linkedServiceType, connectVia, description, parameters, annotations, additionalProperties)
         {
             LinkedServiceType = linkedServiceType ?? "Unknown";
         }

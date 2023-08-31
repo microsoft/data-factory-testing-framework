@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -19,14 +20,14 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of DataFactoryIntegrationRuntimeProperties. </summary>
         public DataFactoryIntegrationRuntimeProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryIntegrationRuntimeProperties. </summary>
         /// <param name="integrationRuntimeType"> Type of integration runtime. </param>
         /// <param name="description"> Integration runtime description. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryIntegrationRuntimeProperties(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryIntegrationRuntimeProperties(IntegrationRuntimeType integrationRuntimeType, string description, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             IntegrationRuntimeType = integrationRuntimeType;
             Description = description;
@@ -67,6 +68,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

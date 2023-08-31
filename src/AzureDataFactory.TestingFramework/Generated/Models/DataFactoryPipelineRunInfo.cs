@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -17,7 +18,7 @@ namespace AzureDataFactory.TestingFramework.Models
         {
             Parameters = new ChangeTrackingDictionary<string, string>();
             RunDimensions = new ChangeTrackingDictionary<string, string>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryPipelineRunInfo. </summary>
@@ -35,7 +36,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="status"> The status of a pipeline run. Possible values: Queued, InProgress, Succeeded, Failed, Canceling, Cancelled. </param>
         /// <param name="message"> The message from a pipeline run. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryPipelineRunInfo(Guid? runId, string runGroupId, bool? isLatest, string pipelineName, IReadOnlyDictionary<string, string> parameters, IReadOnlyDictionary<string, string> runDimensions, DataFactoryPipelineRunEntityInfo invokedBy, DateTimeOffset? lastUpdatedOn, DateTimeOffset? runStartOn, DateTimeOffset? runEndOn, int? durationInMs, string status, string message, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryPipelineRunInfo(Guid? runId, string runGroupId, bool? isLatest, string pipelineName, IReadOnlyDictionary<string, string> parameters, IReadOnlyDictionary<string, string> runDimensions, DataFactoryPipelineRunEntityInfo invokedBy, DateTimeOffset? lastUpdatedOn, DateTimeOffset? runStartOn, DateTimeOffset? runEndOn, int? durationInMs, string status, string message, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             RunId = runId;
             RunGroupId = runGroupId;
@@ -109,6 +110,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

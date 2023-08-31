@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -20,7 +21,7 @@ namespace AzureDataFactory.TestingFramework.Models
             WeekDays = new ChangeTrackingList<DataFactoryDayOfWeek>();
             MonthDays = new ChangeTrackingList<int>();
             MonthlyOccurrences = new ChangeTrackingList<DataFactoryRecurrenceScheduleOccurrence>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryRecurrenceSchedule. </summary>
@@ -30,7 +31,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="monthDays"> The month days. </param>
         /// <param name="monthlyOccurrences"> The monthly occurrences. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryRecurrenceSchedule(IList<int> minutes, IList<int> hours, IList<DataFactoryDayOfWeek> weekDays, IList<int> monthDays, IList<DataFactoryRecurrenceScheduleOccurrence> monthlyOccurrences, IDictionary<string, BinaryData> additionalProperties)
+        internal DataFactoryRecurrenceSchedule(IList<int> minutes, IList<int> hours, IList<DataFactoryDayOfWeek> weekDays, IList<int> monthDays, IList<DataFactoryRecurrenceScheduleOccurrence> monthlyOccurrences, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Minutes = minutes;
             Hours = hours;
@@ -80,6 +81,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

@@ -24,7 +24,7 @@ namespace AzureDataFactory.TestingFramework.Models
 
             MainClassName = mainClassName;
             Parameters = new ChangeTrackingList<BinaryData>();
-            Libraries = new ChangeTrackingList<IDictionary<string, BinaryData>>();
+            Libraries = new ChangeTrackingList<IDictionary<string, DataFactoryElement<string>>>();
             ActivityType = "DatabricksSparkJar";
         }
 
@@ -42,7 +42,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="mainClassName"> The full name of the class containing the main method to be executed. This class must be contained in a JAR provided as a library. Type: string (or Expression with resultType string). </param>
         /// <param name="parameters"> Parameters that will be passed to the main method. </param>
         /// <param name="libraries"> A list of libraries to be installed on the cluster that will execute the job. </param>
-        internal DatabricksSparkJarActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> mainClassName, IList<BinaryData> parameters, IList<IDictionary<string, BinaryData>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal DatabricksSparkJarActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> mainClassName, IList<BinaryData> parameters, IList<IDictionary<string, DataFactoryElement<string>>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             MainClassName = mainClassName;
             Parameters = parameters;
@@ -84,6 +84,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </summary>
         public IList<BinaryData> Parameters { get; }
         /// <summary> A list of libraries to be installed on the cluster that will execute the job. </summary>
-        public IList<IDictionary<string, BinaryData>> Libraries { get; }
+        public IList<IDictionary<string, DataFactoryElement<string>>> Libraries { get; }
     }
 }

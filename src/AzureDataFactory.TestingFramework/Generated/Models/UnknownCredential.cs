@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownCredential. </summary>
@@ -15,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="description"> Credential description. </param>
         /// <param name="annotations"> List of tags that can be used for describing the Credential. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties) : base(credentialType, description, annotations, additionalProperties)
+        internal UnknownCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(credentialType, description, annotations, additionalProperties)
         {
             CredentialType = credentialType ?? "Unknown";
         }

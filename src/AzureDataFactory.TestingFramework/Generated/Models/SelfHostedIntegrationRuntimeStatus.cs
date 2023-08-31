@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -43,7 +44,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="pushedVersion"> The version that the integration runtime is going to update to. </param>
         /// <param name="latestVersion"> The latest version on download center. </param>
         /// <param name="autoUpdateEta"> The estimated time when the self-hosted integration runtime will be updated. </param>
-        internal SelfHostedIntegrationRuntimeStatus(IntegrationRuntimeType runtimeType, string dataFactoryName, IntegrationRuntimeState? state, IReadOnlyDictionary<string, BinaryData> additionalProperties, DateTimeOffset? createdOn, Guid? taskQueueId, IntegrationRuntimeInternalChannelEncryptionMode? internalChannelEncryption, string version, IReadOnlyList<SelfHostedIntegrationRuntimeNode> nodes, DateTimeOffset? scheduledUpdateOn, TimeSpan? updateDelayOffset, TimeSpan? localTimeZoneOffset, IReadOnlyDictionary<string, string> capabilities, IReadOnlyList<Uri> serviceUris, IntegrationRuntimeAutoUpdateState? autoUpdate, string versionStatus, IReadOnlyList<LinkedIntegrationRuntime> links, string pushedVersion, string latestVersion, DateTimeOffset? autoUpdateEta) : base(runtimeType, dataFactoryName, state, additionalProperties)
+        internal SelfHostedIntegrationRuntimeStatus(IntegrationRuntimeType runtimeType, string dataFactoryName, IntegrationRuntimeState? state, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties, DateTimeOffset? createdOn, Guid? taskQueueId, IntegrationRuntimeInternalChannelEncryptionMode? internalChannelEncryption, string version, IReadOnlyList<SelfHostedIntegrationRuntimeNode> nodes, DateTimeOffset? scheduledUpdateOn, TimeSpan? updateDelayOffset, TimeSpan? localTimeZoneOffset, IReadOnlyDictionary<string, string> capabilities, IReadOnlyList<Uri> serviceUris, IntegrationRuntimeAutoUpdateState? autoUpdate, string versionStatus, IReadOnlyList<LinkedIntegrationRuntime> links, string pushedVersion, string latestVersion, DateTimeOffset? autoUpdateEta) : base(runtimeType, dataFactoryName, state, additionalProperties)
         {
             CreatedOn = createdOn;
             TaskQueueId = taskQueueId;

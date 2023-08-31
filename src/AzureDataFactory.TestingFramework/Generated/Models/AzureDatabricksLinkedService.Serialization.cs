@@ -230,9 +230,9 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<DataFactoryElement<string>> newClusterVersion = default;
             Optional<DataFactoryElement<string>> newClusterNumOfWorker = default;
             Optional<DataFactoryElement<string>> newClusterNodeType = default;
-            Optional<IDictionary<string, BinaryData>> newClusterSparkConf = default;
-            Optional<IDictionary<string, BinaryData>> newClusterSparkEnvVars = default;
-            Optional<IDictionary<string, BinaryData>> newClusterCustomTags = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> newClusterSparkConf = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> newClusterSparkEnvVars = default;
+            Optional<IDictionary<string, DataFactoryElement<string>>> newClusterCustomTags = default;
             Optional<DataFactoryElement<string>> newClusterLogDestination = default;
             Optional<DataFactoryElement<string>> newClusterDriverNodeType = default;
             Optional<DataFactoryElement<IList<string>>> newClusterInitScripts = default;
@@ -240,8 +240,8 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<string> encryptedCredential = default;
             Optional<DataFactoryElement<string>> policyId = default;
             Optional<DataFactoryCredentialReference> credential = default;
-            IDictionary<string, BinaryData> additionalProperties = default;
-            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
+            Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("type"u8))
@@ -390,7 +390,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -399,7 +399,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             newClusterSparkConf = dictionary;
@@ -411,7 +411,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -420,7 +420,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             newClusterSparkEnvVars = dictionary;
@@ -432,7 +432,7 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
-                            Dictionary<string, BinaryData> dictionary = new Dictionary<string, BinaryData>();
+                            Dictionary<string, DataFactoryElement<string>> dictionary = new Dictionary<string, DataFactoryElement<string>>();
                             foreach (var property1 in property0.Value.EnumerateObject())
                             {
                                 if (property1.Value.ValueKind == JsonValueKind.Null)
@@ -441,7 +441,7 @@ namespace AzureDataFactory.TestingFramework.Models
                                 }
                                 else
                                 {
-                                    dictionary.Add(property1.Name, BinaryData.FromString(property1.Value.GetRawText()));
+                                    dictionary.Add(property1.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property1.Value.GetRawText()));
                                 }
                             }
                             newClusterCustomTags = dictionary;
@@ -509,7 +509,7 @@ namespace AzureDataFactory.TestingFramework.Models
                     }
                     continue;
                 }
-                additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
             return new AzureDatabricksLinkedService(type, connectVia.Value, description.Value, Optional.ToDictionary(parameters), Optional.ToList(annotations), additionalProperties, domain, accessToken, authentication.Value, workspaceResourceId.Value, existingClusterId.Value, instancePoolId.Value, newClusterVersion.Value, newClusterNumOfWorker.Value, newClusterNodeType.Value, Optional.ToDictionary(newClusterSparkConf), Optional.ToDictionary(newClusterSparkEnvVars), Optional.ToDictionary(newClusterCustomTags), newClusterLogDestination.Value, newClusterDriverNodeType.Value, newClusterInitScripts.Value, newClusterEnableElasticDisk.Value, encryptedCredential.Value, policyId.Value, credential.Value);

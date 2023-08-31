@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of IntegrationRuntimeNodeMonitoringData. </summary>
         internal IntegrationRuntimeNodeMonitoringData()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeNodeMonitoringData. </summary>
@@ -28,7 +29,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="sentBytes"> Sent bytes on the integration runtime node. </param>
         /// <param name="receivedBytes"> Received bytes on the integration runtime node. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeNodeMonitoringData(string nodeName, int? availableMemoryInMB, int? cpuUtilization, int? concurrentJobsLimit, int? concurrentJobsRunning, int? maxConcurrentJobs, float? sentBytes, float? receivedBytes, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeNodeMonitoringData(string nodeName, int? availableMemoryInMB, int? cpuUtilization, int? concurrentJobsLimit, int? concurrentJobsRunning, int? maxConcurrentJobs, float? sentBytes, float? receivedBytes, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             NodeName = nodeName;
             AvailableMemoryInMB = availableMemoryInMB;
@@ -87,6 +88,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

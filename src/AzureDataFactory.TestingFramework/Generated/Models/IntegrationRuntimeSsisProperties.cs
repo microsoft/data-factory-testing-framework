@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -17,7 +18,7 @@ namespace AzureDataFactory.TestingFramework.Models
         {
             ExpressCustomSetupProperties = new ChangeTrackingList<CustomSetupBase>();
             PackageStores = new ChangeTrackingList<DataFactoryPackageStore>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeSsisProperties. </summary>
@@ -34,7 +35,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="packageStores"> Package stores for the SSIS Integration Runtime. </param>
         /// <param name="credential"> The credential reference containing authentication information. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeSsisProperties(IntegrationRuntimeSsisCatalogInfo catalogInfo, IntegrationRuntimeLicenseType? licenseType, IntegrationRuntimeCustomSetupScriptProperties customSetupScriptProperties, IntegrationRuntimeDataProxyProperties dataProxyProperties, IntegrationRuntimeEdition? edition, IList<CustomSetupBase> expressCustomSetupProperties, IList<DataFactoryPackageStore> packageStores, DataFactoryCredentialReference credential, IDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeSsisProperties(IntegrationRuntimeSsisCatalogInfo catalogInfo, IntegrationRuntimeLicenseType? licenseType, IntegrationRuntimeCustomSetupScriptProperties customSetupScriptProperties, IntegrationRuntimeDataProxyProperties dataProxyProperties, IntegrationRuntimeEdition? edition, IList<CustomSetupBase> expressCustomSetupProperties, IList<DataFactoryPackageStore> packageStores, DataFactoryCredentialReference credential, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             CatalogInfo = catalogInfo;
             LicenseType = licenseType;
@@ -97,6 +98,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

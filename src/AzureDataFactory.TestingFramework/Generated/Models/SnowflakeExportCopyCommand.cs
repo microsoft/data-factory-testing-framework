@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,8 +16,8 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of SnowflakeExportCopyCommand. </summary>
         public SnowflakeExportCopyCommand()
         {
-            AdditionalCopyOptions = new ChangeTrackingDictionary<string, BinaryData>();
-            AdditionalFormatOptions = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalCopyOptions = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            AdditionalFormatOptions = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
             ExportSettingsType = "SnowflakeExportCopyCommand";
         }
 
@@ -25,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="additionalCopyOptions"> Additional copy options directly passed to snowflake Copy Command. Type: key value pairs (value should be string type) (or Expression with resultType object). Example: "additionalCopyOptions": { "DATE_FORMAT": "MM/DD/YYYY", "TIME_FORMAT": "'HH24:MI:SS.FF'" }. </param>
         /// <param name="additionalFormatOptions"> Additional format options directly passed to snowflake Copy Command. Type: key value pairs (value should be string type) (or Expression with resultType object). Example: "additionalFormatOptions": { "OVERWRITE": "TRUE", "MAX_FILE_SIZE": "'FALSE'" }. </param>
-        internal SnowflakeExportCopyCommand(string exportSettingsType, IDictionary<string, BinaryData> additionalProperties, IDictionary<string, BinaryData> additionalCopyOptions, IDictionary<string, BinaryData> additionalFormatOptions) : base(exportSettingsType, additionalProperties)
+        internal SnowflakeExportCopyCommand(string exportSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties, IDictionary<string, DataFactoryElement<string>> additionalCopyOptions, IDictionary<string, DataFactoryElement<string>> additionalFormatOptions) : base(exportSettingsType, additionalProperties)
         {
             AdditionalCopyOptions = additionalCopyOptions;
             AdditionalFormatOptions = additionalFormatOptions;
@@ -62,7 +63,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalCopyOptions { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalCopyOptions { get; }
         /// <summary>
         /// Additional format options directly passed to snowflake Copy Command. Type: key value pairs (value should be string type) (or Expression with resultType object). Example: "additionalFormatOptions": { "OVERWRITE": "TRUE", "MAX_FILE_SIZE": "'FALSE'" }
         /// <para>
@@ -93,6 +94,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalFormatOptions { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalFormatOptions { get; }
     }
 }

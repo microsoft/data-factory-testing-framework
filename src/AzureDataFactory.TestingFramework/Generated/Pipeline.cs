@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Models;
 using Azure.ResourceManager.Models;
 
@@ -24,8 +25,8 @@ namespace Azure.ResourceManager.DataFactory
             Parameters = new ChangeTrackingDictionary<string, EntityParameterSpecification>();
             Variables = new ChangeTrackingDictionary<string, PipelineVariableSpecification>();
             Annotations = new ChangeTrackingList<BinaryData>();
-            RunDimensions = new ChangeTrackingDictionary<string, BinaryData>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            RunDimensions = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryPipelineData. </summary>
@@ -48,7 +49,7 @@ namespace Azure.ResourceManager.DataFactory
         /// <param name="policy"> Pipeline Policy. </param>
         /// <param name="eTag"> Etag identifies change in the resource. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal Pipeline(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string description, IList<PipelineActivity> activities, IDictionary<string, EntityParameterSpecification> parameters, IDictionary<string, PipelineVariableSpecification> variables, int? concurrency, IList<BinaryData> annotations, IDictionary<string, BinaryData> runDimensions, PipelineFolder folder, DataFactoryPipelinePolicy policy, ETag? eTag, IDictionary<string, BinaryData> additionalProperties) : base(id, name, resourceType, systemData)
+        internal Pipeline(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, string description, IList<PipelineActivity> activities, IDictionary<string, EntityParameterSpecification> parameters, IDictionary<string, PipelineVariableSpecification> variables, int? concurrency, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> runDimensions, PipelineFolder folder, DataFactoryPipelinePolicy policy, ETag? eTag, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(id, name, resourceType, systemData)
         {
             Description = description;
             Activities = activities;
@@ -138,7 +139,7 @@ namespace Azure.ResourceManager.DataFactory
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> RunDimensions { get; }
+        public IDictionary<string, DataFactoryElement<string>> RunDimensions { get; }
         /// <summary> The folder that this Pipeline is in. If not specified, Pipeline will appear at the root level. </summary>
         internal PipelineFolder Folder { get; set; }
         /// <summary> The name of the folder that this Pipeline is in. </summary>
@@ -228,6 +229,6 @@ namespace Azure.ResourceManager.DataFactory
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

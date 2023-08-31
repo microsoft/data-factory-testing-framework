@@ -16,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of IntegrationRuntimeSsisCatalogInfo. </summary>
         public IntegrationRuntimeSsisCatalogInfo()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of IntegrationRuntimeSsisCatalogInfo. </summary>
@@ -26,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="catalogPricingTier"> The pricing tier for the catalog database. The valid values could be found in https://azure.microsoft.com/en-us/pricing/details/sql-database/. </param>
         /// <param name="dualStandbyPairName"> The dual standby pair name of Azure-SSIS Integration Runtimes to support SSISDB failover. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal IntegrationRuntimeSsisCatalogInfo(string catalogServerEndpoint, string catalogAdminUserName, DataFactorySecretString catalogAdminPassword, IntegrationRuntimeSsisCatalogPricingTier? catalogPricingTier, string dualStandbyPairName, IDictionary<string, BinaryData> additionalProperties)
+        internal IntegrationRuntimeSsisCatalogInfo(string catalogServerEndpoint, string catalogAdminUserName, DataFactorySecretString catalogAdminPassword, IntegrationRuntimeSsisCatalogPricingTier? catalogPricingTier, string dualStandbyPairName, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             CatalogServerEndpoint = catalogServerEndpoint;
             CatalogAdminUserName = catalogAdminUserName;
@@ -76,6 +76,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

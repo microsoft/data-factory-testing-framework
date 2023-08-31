@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using Azure.Core.Expressions.DataFactory;
+
 namespace AzureDataFactory.TestingFramework.Models
 {
     /// <summary> The UnknownFormatReadSettings. </summary>
@@ -13,7 +15,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of UnknownFormatReadSettings. </summary>
         /// <param name="formatReadSettingsType"> The read setting type. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal UnknownFormatReadSettings(string formatReadSettingsType, IDictionary<string, BinaryData> additionalProperties) : base(formatReadSettingsType, additionalProperties)
+        internal UnknownFormatReadSettings(string formatReadSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(formatReadSettingsType, additionalProperties)
         {
             FormatReadSettingsType = formatReadSettingsType ?? "Unknown";
         }

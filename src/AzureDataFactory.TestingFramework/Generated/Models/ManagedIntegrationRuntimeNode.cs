@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -16,7 +17,7 @@ namespace AzureDataFactory.TestingFramework.Models
         internal ManagedIntegrationRuntimeNode()
         {
             Errors = new ChangeTrackingList<ManagedIntegrationRuntimeError>();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of ManagedIntegrationRuntimeNode. </summary>
@@ -24,7 +25,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="status"> The managed integration runtime node status. </param>
         /// <param name="errors"> The errors that occurred on this integration runtime node. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal ManagedIntegrationRuntimeNode(string nodeId, ManagedIntegrationRuntimeNodeStatus? status, IReadOnlyList<ManagedIntegrationRuntimeError> errors, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal ManagedIntegrationRuntimeNode(string nodeId, ManagedIntegrationRuntimeNodeStatus? status, IReadOnlyList<ManagedIntegrationRuntimeError> errors, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             NodeId = nodeId;
             Status = status;
@@ -68,6 +69,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

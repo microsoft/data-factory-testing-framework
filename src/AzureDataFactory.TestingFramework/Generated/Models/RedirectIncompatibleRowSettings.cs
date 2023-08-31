@@ -21,14 +21,14 @@ namespace AzureDataFactory.TestingFramework.Models
             Argument.AssertNotNull(linkedServiceName, nameof(linkedServiceName));
 
             LinkedServiceName = linkedServiceName;
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of RedirectIncompatibleRowSettings. </summary>
         /// <param name="linkedServiceName"> Name of the Azure Storage, Storage SAS, or Azure Data Lake Store linked service used for redirecting incompatible row. Must be specified if redirectIncompatibleRowSettings is specified. Type: string (or Expression with resultType string). </param>
         /// <param name="path"> The path for storing the redirect incompatible row data. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal RedirectIncompatibleRowSettings(DataFactoryElement<string> linkedServiceName, DataFactoryElement<string> path, IDictionary<string, BinaryData> additionalProperties)
+        internal RedirectIncompatibleRowSettings(DataFactoryElement<string> linkedServiceName, DataFactoryElement<string> path, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             LinkedServiceName = linkedServiceName;
             Path = path;
@@ -69,6 +69,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

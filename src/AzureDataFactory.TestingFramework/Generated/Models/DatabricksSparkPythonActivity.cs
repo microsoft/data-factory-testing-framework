@@ -24,7 +24,7 @@ namespace AzureDataFactory.TestingFramework.Models
 
             PythonFile = pythonFile;
             Parameters = new ChangeTrackingList<BinaryData>();
-            Libraries = new ChangeTrackingList<IDictionary<string, BinaryData>>();
+            Libraries = new ChangeTrackingList<IDictionary<string, DataFactoryElement<string>>>();
             ActivityType = "DatabricksSparkPython";
         }
 
@@ -42,7 +42,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="pythonFile"> The URI of the Python file to be executed. DBFS paths are supported. Type: string (or Expression with resultType string). </param>
         /// <param name="parameters"> Command line parameters that will be passed to the Python file. </param>
         /// <param name="libraries"> A list of libraries to be installed on the cluster that will execute the job. </param>
-        internal DatabricksSparkPythonActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> pythonFile, IList<BinaryData> parameters, IList<IDictionary<string, BinaryData>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
+        internal DatabricksSparkPythonActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryLinkedServiceReference linkedServiceName, PipelineActivityPolicy policy, DataFactoryElement<string> pythonFile, IList<BinaryData> parameters, IList<IDictionary<string, DataFactoryElement<string>>> libraries) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties, linkedServiceName, policy)
         {
             PythonFile = pythonFile;
             Parameters = parameters;
@@ -84,6 +84,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </summary>
         public IList<BinaryData> Parameters { get; }
         /// <summary> A list of libraries to be installed on the cluster that will execute the job. </summary>
-        public IList<IDictionary<string, BinaryData>> Libraries { get; }
+        public IList<IDictionary<string, DataFactoryElement<string>>> Libraries { get; }
     }
 }

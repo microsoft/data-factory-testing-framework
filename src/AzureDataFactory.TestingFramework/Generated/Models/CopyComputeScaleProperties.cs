@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,14 +16,14 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of CopyComputeScaleProperties. </summary>
         public CopyComputeScaleProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of CopyComputeScaleProperties. </summary>
         /// <param name="dataIntegrationUnit"> DIU number setting reserved for copy activity execution. Supported values are multiples of 4 in range 4-256. </param>
         /// <param name="timeToLive"> Time to live (in minutes) setting of integration runtime which will execute copy activity. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal CopyComputeScaleProperties(int? dataIntegrationUnit, int? timeToLive, IDictionary<string, BinaryData> additionalProperties)
+        internal CopyComputeScaleProperties(int? dataIntegrationUnit, int? timeToLive, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             DataIntegrationUnit = dataIntegrationUnit;
             TimeToLive = timeToLive;
@@ -63,6 +64,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

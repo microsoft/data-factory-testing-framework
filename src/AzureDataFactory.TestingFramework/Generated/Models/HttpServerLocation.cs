@@ -24,7 +24,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="fileName"> Specify the file name of dataset. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
         /// <param name="relativeUri"> Specify the relativeUrl of http server. Type: string (or Expression with resultType string). </param>
-        internal HttpServerLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<string> relativeUri) : base(datasetLocationType, folderPath, fileName, additionalProperties)
+        internal HttpServerLocation(string datasetLocationType, DataFactoryElement<string> folderPath, DataFactoryElement<string> fileName, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<string> relativeUri) : base(datasetLocationType, folderPath, fileName, additionalProperties)
         {
             RelativeUri = relativeUri;
             DatasetLocationType = datasetLocationType ?? "HttpServerLocation";

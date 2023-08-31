@@ -26,7 +26,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="servicePrincipalId"> The app ID of the service principal used to authenticate. </param>
         /// <param name="servicePrincipalKey"> The key of the service principal used to authenticate. </param>
         /// <param name="tenant"> The ID of the tenant to which the service principal belongs. </param>
-        internal ServicePrincipalCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, BinaryData> additionalProperties, BinaryData servicePrincipalId, DataFactoryKeyVaultSecretReference servicePrincipalKey, BinaryData tenant) : base(credentialType, description, annotations, additionalProperties)
+        internal ServicePrincipalCredential(string credentialType, string description, IList<BinaryData> annotations, IDictionary<string, DataFactoryElement<string>> additionalProperties, BinaryData servicePrincipalId, DataFactoryKeyVaultSecretReference servicePrincipalKey, BinaryData tenant) : base(credentialType, description, annotations, additionalProperties)
         {
             ServicePrincipalId = servicePrincipalId;
             ServicePrincipalKey = servicePrincipalKey;

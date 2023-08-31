@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,13 +16,13 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of PipelineExternalComputeScaleProperties. </summary>
         public PipelineExternalComputeScaleProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of PipelineExternalComputeScaleProperties. </summary>
         /// <param name="timeToLive"> Time to live (in minutes) setting of integration runtime which will execute pipeline and external activity. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal PipelineExternalComputeScaleProperties(int? timeToLive, IDictionary<string, BinaryData> additionalProperties)
+        internal PipelineExternalComputeScaleProperties(int? timeToLive, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             TimeToLive = timeToLive;
             AdditionalProperties = additionalProperties;
@@ -59,6 +60,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

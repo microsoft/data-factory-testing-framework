@@ -23,7 +23,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="serializer"> Serializer. Type: string (or Expression with resultType string). </param>
         /// <param name="deserializer"> Deserializer. Type: string (or Expression with resultType string). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DatasetOrcFormat(string datasetStorageFormatType, DataFactoryElement<string> serializer, DataFactoryElement<string> deserializer, IDictionary<string, BinaryData> additionalProperties) : base(datasetStorageFormatType, serializer, deserializer, additionalProperties)
+        internal DatasetOrcFormat(string datasetStorageFormatType, DataFactoryElement<string> serializer, DataFactoryElement<string> deserializer, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(datasetStorageFormatType, serializer, deserializer, additionalProperties)
         {
             DatasetStorageFormatType = datasetStorageFormatType ?? "OrcFormat";
         }

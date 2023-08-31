@@ -36,7 +36,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="variableName"> Name of the variable whose value needs to be set. </param>
         /// <param name="value"> Value to be set. Could be a static value or Expression. </param>
         /// <param name="setSystemVariable"> If set to true, it sets the pipeline run return value. </param>
-        internal SetVariableActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, BinaryData> additionalProperties, SecureInputOutputPolicy policy, string variableName, DataFactoryElement<string> value, bool? setSystemVariable) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
+        internal SetVariableActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, SecureInputOutputPolicy policy, string variableName, DataFactoryElement<string> value, bool? setSystemVariable) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
         {
             Policy = policy;
             VariableName = variableName;

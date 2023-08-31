@@ -16,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of PolybaseSettings. </summary>
         public PolybaseSettings()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of PolybaseSettings. </summary>
@@ -25,7 +25,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="rejectSampleValue"> Determines the number of rows to attempt to retrieve before the PolyBase recalculates the percentage of rejected rows. Type: integer (or Expression with resultType integer), minimum: 0. </param>
         /// <param name="useTypeDefault"> Specifies how to handle missing values in delimited text files when PolyBase retrieves data from the text file. Type: boolean (or Expression with resultType boolean). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal PolybaseSettings(PolybaseSettingsRejectType? rejectType, BinaryData rejectValue, DataFactoryElement<int> rejectSampleValue, DataFactoryElement<bool> useTypeDefault, IDictionary<string, BinaryData> additionalProperties)
+        internal PolybaseSettings(PolybaseSettingsRejectType? rejectType, BinaryData rejectValue, DataFactoryElement<int> rejectSampleValue, DataFactoryElement<bool> useTypeDefault, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             RejectType = rejectType;
             RejectValue = rejectValue;
@@ -101,6 +101,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

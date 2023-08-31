@@ -27,7 +27,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// Please note <see cref="CompressionReadSettings"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
         /// The available derived classes include <see cref="TarGzipReadSettings"/>, <see cref="TarReadSettings"/> and <see cref="ZipDeflateReadSettings"/>.
         /// </param>
-        internal DelimitedTextReadSettings(string formatReadSettingsType, IDictionary<string, BinaryData> additionalProperties, DataFactoryElement<int> skipLineCount, CompressionReadSettings compressionProperties) : base(formatReadSettingsType, additionalProperties)
+        internal DelimitedTextReadSettings(string formatReadSettingsType, IDictionary<string, DataFactoryElement<string>> additionalProperties, DataFactoryElement<int> skipLineCount, CompressionReadSettings compressionProperties) : base(formatReadSettingsType, additionalProperties)
         {
             SkipLineCount = skipLineCount;
             CompressionProperties = compressionProperties;

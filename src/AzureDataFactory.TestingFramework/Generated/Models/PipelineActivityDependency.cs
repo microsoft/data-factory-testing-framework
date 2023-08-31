@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -23,14 +24,14 @@ namespace AzureDataFactory.TestingFramework.Models
 
             Activity = activity;
             DependencyConditions = dependencyConditions.ToList();
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of PipelineActivityDependency. </summary>
         /// <param name="activity"> Activity name. </param>
         /// <param name="dependencyConditions"> Match-Condition for the dependency. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal PipelineActivityDependency(string activity, IList<DependencyCondition> dependencyConditions, IDictionary<string, BinaryData> additionalProperties)
+        internal PipelineActivityDependency(string activity, IList<DependencyCondition> dependencyConditions, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Activity = activity;
             DependencyConditions = dependencyConditions;
@@ -71,6 +72,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

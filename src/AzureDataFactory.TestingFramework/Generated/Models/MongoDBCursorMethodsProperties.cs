@@ -16,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of MongoDBCursorMethodsProperties. </summary>
         public MongoDBCursorMethodsProperties()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of MongoDBCursorMethodsProperties. </summary>
@@ -25,7 +25,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="skip"> Specifies the how many documents skipped and where MongoDB begins returning results. This approach may be useful in implementing paginated results. Type: integer (or Expression with resultType integer). </param>
         /// <param name="limit"> Specifies the maximum number of documents the server returns. limit() is analogous to the LIMIT statement in a SQL database. Type: integer (or Expression with resultType integer). </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal MongoDBCursorMethodsProperties(DataFactoryElement<string> project, DataFactoryElement<string> sort, DataFactoryElement<int> skip, DataFactoryElement<int> limit, IDictionary<string, BinaryData> additionalProperties)
+        internal MongoDBCursorMethodsProperties(DataFactoryElement<string> project, DataFactoryElement<string> sort, DataFactoryElement<int> skip, DataFactoryElement<int> limit, IDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             Project = project;
             Sort = sort;
@@ -72,6 +72,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

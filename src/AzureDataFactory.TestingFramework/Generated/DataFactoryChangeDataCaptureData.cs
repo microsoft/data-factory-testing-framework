@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Models;
 using Azure.ResourceManager.Models;
 
@@ -31,7 +32,7 @@ namespace Azure.ResourceManager.DataFactory
             SourceConnectionsInfo = sourceConnectionsInfo.ToList();
             TargetConnectionsInfo = targetConnectionsInfo.ToList();
             Policy = policy;
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFactoryChangeDataCaptureData. </summary>
@@ -48,7 +49,7 @@ namespace Azure.ResourceManager.DataFactory
         /// <param name="status"> Status of the CDC as to if it is running or stopped. </param>
         /// <param name="eTag"> Etag identifies change in the resource. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFactoryChangeDataCaptureData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, ChangeDataCaptureFolder folder, string description, IList<MapperSourceConnectionsInfo> sourceConnectionsInfo, IList<MapperTargetConnectionsInfo> targetConnectionsInfo, MapperPolicy policy, bool? allowVnetOverride, string status, ETag? eTag, IDictionary<string, BinaryData> additionalProperties) : base(id, name, resourceType, systemData)
+        internal DataFactoryChangeDataCaptureData(ResourceIdentifier id, string name, ResourceType resourceType, SystemData systemData, ChangeDataCaptureFolder folder, string description, IList<MapperSourceConnectionsInfo> sourceConnectionsInfo, IList<MapperTargetConnectionsInfo> targetConnectionsInfo, MapperPolicy policy, bool? allowVnetOverride, string status, ETag? eTag, IDictionary<string, DataFactoryElement<string>> additionalProperties) : base(id, name, resourceType, systemData)
         {
             Folder = folder;
             Description = description;
@@ -119,6 +120,6 @@ namespace Azure.ResourceManager.DataFactory
         /// </list>
         /// </para>
         /// </summary>
-        public IDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }

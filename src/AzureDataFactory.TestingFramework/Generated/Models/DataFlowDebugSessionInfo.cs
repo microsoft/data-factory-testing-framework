@@ -6,6 +6,7 @@
 #nullable disable
 
 using Azure.Core;
+using Azure.Core.Expressions.DataFactory;
 
 namespace AzureDataFactory.TestingFramework.Models
 {
@@ -15,7 +16,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <summary> Initializes a new instance of DataFlowDebugSessionInfo. </summary>
         internal DataFlowDebugSessionInfo()
         {
-            AdditionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            AdditionalProperties = new ChangeTrackingDictionary<string, DataFactoryElement<string>>();
         }
 
         /// <summary> Initializes a new instance of DataFlowDebugSessionInfo. </summary>
@@ -29,7 +30,7 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="timeToLiveInMinutes"> Compute type of the cluster. </param>
         /// <param name="lastActivityOn"> Last activity time of data flow debug session. </param>
         /// <param name="additionalProperties"> Additional Properties. </param>
-        internal DataFlowDebugSessionInfo(string dataFlowName, string computeType, int? coreCount, int? nodeCount, string integrationRuntimeName, Guid? sessionId, DateTimeOffset? startOn, int? timeToLiveInMinutes, DateTimeOffset? lastActivityOn, IReadOnlyDictionary<string, BinaryData> additionalProperties)
+        internal DataFlowDebugSessionInfo(string dataFlowName, string computeType, int? coreCount, int? nodeCount, string integrationRuntimeName, Guid? sessionId, DateTimeOffset? startOn, int? timeToLiveInMinutes, DateTimeOffset? lastActivityOn, IReadOnlyDictionary<string, DataFactoryElement<string>> additionalProperties)
         {
             DataFlowName = dataFlowName;
             ComputeType = computeType;
@@ -91,6 +92,6 @@ namespace AzureDataFactory.TestingFramework.Models
         /// </list>
         /// </para>
         /// </summary>
-        public IReadOnlyDictionary<string, BinaryData> AdditionalProperties { get; }
+        public IReadOnlyDictionary<string, DataFactoryElement<string>> AdditionalProperties { get; }
     }
 }
