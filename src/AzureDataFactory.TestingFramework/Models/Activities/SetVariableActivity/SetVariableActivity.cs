@@ -9,6 +9,10 @@ public partial class SetVariableActivity
     {
         base.Evaluate(state);
 
+        // If SetVariable is used for setting return values, local variables are ignored
+        if (VariableName == "pipelineReturnValue")
+            return this;
+
         var existingVariable = state.Variables.SingleOrDefault(variable => variable.Name == VariableName) ??
                                throw new VariableBeingEvaluatedDoesNotExistException(VariableName);
 

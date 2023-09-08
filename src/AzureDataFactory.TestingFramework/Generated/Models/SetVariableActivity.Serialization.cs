@@ -106,6 +106,7 @@ namespace AzureDataFactory.TestingFramework.Models
             Optional<IList<PipelineActivityUserProperty>> userProperties = default;
             Optional<string> variableName = default;
             Optional<DataFactoryElement<string>> value = default;
+            Optional<Dictionary<string, DataFactoryElement<string>>> pipelineReturnValues = default;
             Optional<bool> setSystemVariable = default;
             IDictionary<string, DataFactoryElement<string>> additionalProperties = default;
             Dictionary<string, DataFactoryElement<string>> additionalPropertiesDictionary = new Dictionary<string, DataFactoryElement<string>>();
@@ -201,6 +202,16 @@ namespace AzureDataFactory.TestingFramework.Models
                             {
                                 continue;
                             }
+
+                            if (property0.Value.ValueKind == JsonValueKind.Array)
+                            {
+                                pipelineReturnValues = new Dictionary<string, DataFactoryElement<string>>();
+                                foreach (var item in property0.Value.EnumerateArray())
+                                    pipelineReturnValues.Value.Add(item.GetProperty("key"u8).GetString(), JsonSerializer.Deserialize<DataFactoryElement<string>>(item.GetProperty("value"u8).GetRawText()));
+
+                                continue;
+                            }
+
                             value = JsonSerializer.Deserialize<DataFactoryElement<string>>(property0.Value.GetRawText());
                             continue;
                         }
@@ -219,7 +230,7 @@ namespace AzureDataFactory.TestingFramework.Models
                 additionalPropertiesDictionary.Add(property.Name, JsonSerializer.Deserialize<DataFactoryElement<string>>(property.Value.GetRawText()));
             }
             additionalProperties = additionalPropertiesDictionary;
-            return new SetVariableActivity(name, type, description.Value, Optional.ToNullable(state), Optional.ToNullable(onInactiveMarkAs), Optional.ToList(dependsOn), Optional.ToList(userProperties), additionalProperties, policy.Value, variableName.Value, value.Value, Optional.ToNullable(setSystemVariable));
+            return new SetVariableActivity(name, type, description.Value, Optional.ToNullable(state), Optional.ToNullable(onInactiveMarkAs), Optional.ToList(dependsOn), Optional.ToList(userProperties), additionalProperties, policy.Value, variableName.Value, value.Value, pipelineReturnValues.Value, Optional.ToNullable(setSystemVariable));
         }
     }
 }
