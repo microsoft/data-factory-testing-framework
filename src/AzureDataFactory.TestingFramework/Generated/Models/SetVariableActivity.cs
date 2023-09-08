@@ -36,11 +36,12 @@ namespace AzureDataFactory.TestingFramework.Models
         /// <param name="variableName"> Name of the variable whose value needs to be set. </param>
         /// <param name="value"> Value to be set. Could be a static value or Expression. </param>
         /// <param name="setSystemVariable"> If set to true, it sets the pipeline run return value. </param>
-        internal SetVariableActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, SecureInputOutputPolicy policy, string variableName, DataFactoryElement<string> value, bool? setSystemVariable) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
+        internal SetVariableActivity(string name, string activityType, string description, PipelineActivityState? state, ActivityOnInactiveMarkAs? onInactiveMarkAs, IList<PipelineActivityDependency> dependsOn, IList<PipelineActivityUserProperty> userProperties, IDictionary<string, DataFactoryElement<string>> additionalProperties, SecureInputOutputPolicy policy, string variableName, DataFactoryElement<string> value, Dictionary<string, DataFactoryElement<string>> pipelineReturnValues, bool? setSystemVariable) : base(name, activityType, description, state, onInactiveMarkAs, dependsOn, userProperties, additionalProperties)
         {
             Policy = policy;
             VariableName = variableName;
             Value = value;
+            PipelineReturnValues = pipelineReturnValues;
             SetSystemVariable = setSystemVariable;
             ActivityType = activityType ?? "SetVariable";
         }
@@ -51,6 +52,8 @@ namespace AzureDataFactory.TestingFramework.Models
         public string VariableName { get; set; }
         /// <summary> Value to be set. Could be a static value or Expression. </summary>
         public DataFactoryElement<string> Value { get; set; }
+        /// <summary> Value to be set. Could be a static value or Expression. </summary>
+        public Dictionary<string, DataFactoryElement<string>> PipelineReturnValues { get; set; }
         /// <summary> If set to true, it sets the pipeline run return value. </summary>
         public bool? SetSystemVariable { get; set; }
     }
