@@ -4,7 +4,7 @@ using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Models;
 
-public partial class ForEachActivity
+public partial class ForEachActivity : IIterationActivity
 {
     protected override List<PipelineActivity> GetNextActivities()
     {

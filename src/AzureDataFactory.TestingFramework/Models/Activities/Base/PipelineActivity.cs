@@ -28,7 +28,7 @@ public partial class PipelineActivity : DataFactoryEntity, IPipelineActivityResu
     {
         foreach (var dependency in DependsOn)
         {
-            var dependencyActivity = state.PipelineActivityResults.SingleOrDefault(a => a.Name == dependency.Activity);
+            var dependencyActivity = state.ScopedPipelineActivityResults.SingleOrDefault(a => a.Name == dependency.Activity);
 
             // If dependency is not yet evaluated, conditions are not met
             if (dependencyActivity == null)

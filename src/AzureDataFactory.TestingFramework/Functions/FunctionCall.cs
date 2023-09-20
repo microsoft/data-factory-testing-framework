@@ -41,6 +41,7 @@ public class FunctionCall : IFunctionPart
                 { } when parameterType == typeof(float) => argument.Evaluate<float>(state),
                 { } when parameterType == typeof(double) => argument.Evaluate<double>(state),
                 { } when parameterType == typeof(object) => argument.Evaluate<object>(state),
+                { IsArray: true } => argument.Evaluate<object[]>(state),
                 _ => throw new Exception($"Unsupported parameter type: {parameterType}")
             };
         }).ToList();

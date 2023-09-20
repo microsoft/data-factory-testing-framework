@@ -19,7 +19,7 @@ public class ActivityExpression : BaseExpression, IPipelineExpression
     public TType Evaluate<TType>(PipelineRunState state)
     {
         var (activityName, fields) = GetActivityNameAndFields();
-        var activity = state.PipelineActivityResults.SingleOrDefault(x => string.Equals(x.Name, activityName, StringComparison.CurrentCultureIgnoreCase)) ??
+        var activity = state.PipelineActivityResults.LastOrDefault(x => string.Equals(x.Name, activityName, StringComparison.CurrentCultureIgnoreCase)) ??
                        throw new ActivityNotFoundException(activityName);
         if (activity.Status == null)
             throw new ActivityNotEvaluatedException(activity.Name);
