@@ -25,6 +25,7 @@ public static class FunctionsRepository
         { "greaterOrEquals", (long a, long b) => a >= b },
         { "not", (bool value) => !value },
         { "empty", (object[] array) => array.Length == 0 },
+        { "split", (string input, string delimiter) => input.Split(delimiter).ToList() }
     };
 
     public static void Register(string functionName, Delegate function)

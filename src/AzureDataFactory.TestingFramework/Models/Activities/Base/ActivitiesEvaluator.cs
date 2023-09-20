@@ -1,3 +1,4 @@
+using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Models.Activities.Base;
@@ -40,7 +41,7 @@ public static class ActivitiesEvaluator
 
             if (!anyActivityEvaluated)
             {
-                throw new Exception("Dependencies could not be evaluated");
+                throw new ActivitiesEvaluatorInvalidDependencyException("Validate that there are no circular dependencies or whether activity results were not set correctly.");
             }
         }
     }
