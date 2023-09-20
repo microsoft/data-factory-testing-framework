@@ -20,6 +20,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Azure.Core.Expressions.DataFactory" Version="1.0.0-beta.4" Aliases="AzureCoreExpressionsDataFactory" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,10 +31,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AzureDataFactory.TestingFramework\AzureDataFactory.TestingFramework.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models\" />
     </ItemGroup>
 
 </Project>

@@ -26,7 +26,7 @@ namespace Azure.Core.Expressions.DataFactory
         internal string? ExpressionString { get; }
         private T? _expressionValue;
 
-        internal DataFactoryElement(T? literal)
+        public DataFactoryElement(T? literal)
         {
             _kind = DataFactoryElementKind.Literal;
             _literal = literal;
@@ -71,13 +71,13 @@ namespace Azure.Core.Expressions.DataFactory
             }
         }
 
-        internal DataFactoryElement(string? expressionString, DataFactoryElementKind kind)
+        public DataFactoryElement(string? expressionString, DataFactoryElementKind kind)
         {
             _kind = kind;
             ExpressionString = expressionString;
         }
 
-        internal DataFactoryElement(DataFactorySecretBaseDefinition secret, DataFactoryElementKind kind)
+        public DataFactoryElement(DataFactorySecretBaseDefinition secret, DataFactoryElementKind kind)
         {
             _kind = kind;
             Secret = secret;

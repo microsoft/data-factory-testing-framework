@@ -13,7 +13,7 @@ public static class FunctionPart
             return new FunctionArgument(expression);
 
         var functionName = match.Groups[1].Value.Trim();
-        if (functionName is "variables" or "activity" or "pipeline")
+        if (functionName is "variables" or "activity" or "pipeline" or "item")
             return new FunctionArgument(expression);
 
         var functionArgumentsExpression = match.Groups[2].Value;
