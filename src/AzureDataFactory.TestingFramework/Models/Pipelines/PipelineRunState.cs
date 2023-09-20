@@ -9,6 +9,7 @@ public class PipelineRunState : RunState
     public List<IPipelineRunVariable> Variables { get; }
     public string? IterationItem { get; set; }
     public List<IPipelineActivityResult> PipelineActivityResults { get; }
+    public List<IPipelineActivityResult> ScopedPipelineActivityResults { get; }
 
     public PipelineRunState(List<IRunParameter> parameters, IDictionary<string, PipelineVariableSpecification> variables) : base(parameters)
     {
@@ -27,13 +28,16 @@ public class PipelineRunState : RunState
             throw new Exception($"Unknown variable type: {variable.Value.VariableType}");
         }).ToList();;
         PipelineActivityResults = new List<IPipelineActivityResult>();
+        ScopedPipelineActivityResults = new List<IPipelineActivityResult>();
         IterationItem = null;
     }
 
-    public PipelineRunState(List<IRunParameter> parameters, List<IPipelineRunVariable> variables, string? iterationItem) : base(parameters)
+    public PipelineRunState(List<IRunParameter> parameters, List<IPipelineRunVariable> variables, List<IPipelineActivityResult> activityResults, string? iterationItem) : base(parameters)
     {
         Variables = variables;
         PipelineActivityResults = new List<IPipelineActivityResult>();
+        PipelineActivityResults.AddRange(activityResults);
+        ScopedPipelineActivityResults = new List<IPipelineActivityResult>();
         IterationItem = iterationItem;
     }
 
@@ -41,16 +45,23 @@ public class PipelineRunState : RunState
     {
         Variables = new List<IPipelineRunVariable>();
         PipelineActivityResults = new List<IPipelineActivityResult>();
+        ScopedPipelineActivityResults = new List<IPipelineActivityResult>();
         IterationItem = null;
     }
 
     public void AddActivityResult(IPipelineActivityResult pipelineActivityResult)
     {
+        ScopedPipelineActivityResults.Add(pipelineActivityResult);
         PipelineActivityResults.Add(pipelineActivityResult);
+    }
+
+    public void AddScopedActivityResultsFromScopedState(PipelineRunState scopedState)
+    {
+        PipelineActivityResults.AddRange(scopedState.ScopedPipelineActivityResults);
     }
 
     public PipelineRunState CreateIterationScope(string? iterationItem)
     {
-        return new PipelineRunState(Parameters, Variables, iterationItem);
+        return new PipelineRunState(Parameters, Variables, PipelineActivityResults, iterationItem);
     }
 }

@@ -19,5 +19,7 @@ public partial class ControlActivity
         {
             yield return activity;
         }
+
+        state.AddScopedActivityResultsFromScopedState(scopedState);
     }
 }

@@ -15,8 +15,16 @@ public static class FunctionsRepository
         { "replace",  (string input, string pattern, string replacement) => input.Replace(pattern, replacement) },
         { "string", (string input) => input },
         { "union" , (string arg0, string arg1) => JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonArray>(arg0).Union(JsonSerializer.Deserialize<JsonArray>((arg1)))) },
-        { "coalesce", (IEnumerable<string> args) => args.FirstOrDefault(arg => !string.IsNullOrEmpty(arg)) }
-
+        { "coalesce", (IEnumerable<string> args) => args.FirstOrDefault(arg => !string.IsNullOrEmpty(arg)) },
+        { "or", (bool a, bool b) => a || b },
+        { "utcnow", () => DateTime.UtcNow.ToString("o") },
+        { "utcNow", () => DateTime.UtcNow.ToString("o") },
+        { "ticks", (string dateTime) => DateTime.Parse(dateTime).Ticks },
+        { "sub", (long a, long b) => a - b },
+        { "div", (long a, long b) => a / b },
+        { "greaterOrEquals", (long a, long b) => a >= b },
+        { "not", (bool value) => !value },
+        { "empty", (object[] array) => array.Length == 0 },
     };
 
     public static void Register(string functionName, Delegate function)

@@ -4,14 +4,14 @@ using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Models;
 
-public partial class IfConditionActivity
+public partial class IfConditionActivity : IIterationActivity
 {
     protected override List<PipelineActivity> GetNextActivities()
     {
-        return _evaluatedExpression.Value ? IfTrueActivities.ToList() : IfFalseActivities.ToList();
+        return EvaluatedExpression ? IfTrueActivities.ToList() : IfFalseActivities.ToList();
     }
 
-    public bool? _evaluatedExpression;
+    private bool? _evaluatedExpression;
     public bool EvaluatedExpression => _evaluatedExpression ?? throw new InvalidOperationException("Expression has not been evaluated yet.");
     public override DataFactoryEntity Evaluate(PipelineRunState state)
     {

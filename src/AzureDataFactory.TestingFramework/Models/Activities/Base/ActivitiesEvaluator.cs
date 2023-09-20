@@ -6,26 +6,31 @@ public static class ActivitiesEvaluator
 {
     public static IEnumerable<PipelineActivity> Evaluate(List<PipelineActivity> activities, PipelineRunState state)
     {
-        while (state.PipelineActivityResults.Count != activities.Count)
+        while (state.ScopedPipelineActivityResults.Count != activities.Count)
         {
             var anyActivityEvaluated = false;
             foreach (var activity in activities
-                         .Where(activity => !state.PipelineActivityResults.Contains(activity))
+                         .Where(activity => !state.ScopedPipelineActivityResults.Contains(activity))
                          .Where(activity => activity.AreDependencyConditionMet(state)))
             {
-                yield return (PipelineActivity) activity.Evaluate(state);
+                var evaluatedActivity = (PipelineActivity) activity.Evaluate(state);
+                if (evaluatedActivity is not IIterationActivity)
+                    yield return evaluatedActivity;
+
                 anyActivityEvaluated = true;
                 state.AddActivityResult(activity);
 
-                if (activity is ControlActivity controlActivity)
+                if (activity is IIterationActivity)
                 {
-                    if (controlActivity is UntilActivity untilActivity)
+                    if (activity is UntilActivity untilActivity)
                     {
-                        while (untilActivity.Expression.Evaluate<bool>(state))
+                        do
+                        {
                             foreach (var child in untilActivity.EvaluateChildActivities(state))
                                 yield return child;
+                        } while (!untilActivity.Expression.Evaluate<bool>(state));
                     }
-                    else
+                    else if (activity is ControlActivity controlActivity)
                     {
                         foreach (var child in controlActivity.EvaluateChildActivities(state))
                             yield return child;
