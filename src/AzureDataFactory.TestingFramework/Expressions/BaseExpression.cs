@@ -6,9 +6,9 @@ using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Expressions;
 
-public abstract class BaseExpression
+internal abstract class BaseExpression
 {
-    public string ExpressionValue { get; }
+    internal string ExpressionValue { get; }
 
     protected BaseExpression(string expressionValue)
     {
@@ -28,12 +28,12 @@ public abstract class BaseExpression
     }
 }
 
-public interface IPipelineExpression
+internal interface IPipelineExpression
 {
     TType Evaluate<TType>(PipelineRunState state);
 }
 
-public interface IRunExpression
+internal interface IRunExpression
 {
     TType Evaluate<TType>(RunState state);
 }

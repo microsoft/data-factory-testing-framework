@@ -9,11 +9,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any linkedService('linkedServiceName') expression.
 /// </summary>
-public class LinkedServiceExpression : BaseExpression, IRunExpression
+internal class LinkedServiceExpression : BaseExpression, IRunExpression
 {
-    public const string ExtractLinkedServiceRegex = @"(@?{?linkedService\(\)\.(\w+)}?)";
+    private const string ExtractLinkedServiceRegex = @"(@?{?linkedService\(\)\.(\w+)}?)";
 
-    public LinkedServiceExpression(string expression) : base(expression)
+    private LinkedServiceExpression(string expression) : base(expression)
     {
     }
 

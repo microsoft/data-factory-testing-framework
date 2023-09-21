@@ -43,26 +43,22 @@ public class BatchJobFunctionalTests
             new RunParameter<string>(ParameterType.Global, "ADFName", "adf-name"),
         });
 
-        var setUserAssignedIdentityActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setUserAssignedIdentityActivity);
+        var setUserAssignedIdentityActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set UserAssignedIdentityReference", setUserAssignedIdentityActivity.Name);
         Assert.Equal("UserAssignedIdentityReference", setUserAssignedIdentityActivity.VariableName);
         Assert.Equal("/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name", setUserAssignedIdentityActivity.Value);
 
-        var setManagerApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setManagerApplicationPackagePathActivity);
+        var setManagerApplicationPackagePathActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.Name);
         Assert.Equal("ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.VariableName);
         Assert.Equal("$AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz", setManagerApplicationPackagePathActivity.Value);
 
-        var setWorkloadApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setWorkloadApplicationPackagePathActivity);
+        var setWorkloadApplicationPackagePathActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.Name);
         Assert.Equal("WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.VariableName);
         Assert.Equal("$AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz", setWorkloadApplicationPackagePathActivity.Value);
 
-        var setCommonEnvironmentSettingsActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setCommonEnvironmentSettingsActivity);
+        var setCommonEnvironmentSettingsActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set CommonEnvironmentSettings", setCommonEnvironmentSettingsActivity.Name);
         Assert.Equal("CommonEnvironmentSettings", setCommonEnvironmentSettingsActivity.VariableName);
         Assert.Equal(@"[
@@ -100,27 +96,23 @@ public class BatchJobFunctionalTests
         }
         ]", setCommonEnvironmentSettingsActivity.Value, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
 
-        var setJobContainerNameActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setJobContainerNameActivity);
+        var setJobContainerNameActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set JobContainerName", setJobContainerNameActivity.Name);
         Assert.Equal("JobContainerName", setJobContainerNameActivity.VariableName);
         Assert.Equal("job-802100a5-ec79-4a52-be62-8d6109f3ff9a", setJobContainerNameActivity.Value);
 
-        var setJobContainerUrlActivity = activities.GetNext() as SetVariableActivity;
-        Assert.NotNull(setJobContainerUrlActivity);
+        var setJobContainerUrlActivity = activities.GetNext<SetVariableActivity>();
         Assert.Equal("Set Job Container URL", setJobContainerUrlActivity.Name);
         Assert.Equal("JobContainerURL", setJobContainerUrlActivity.VariableName);
         Assert.Equal("https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a", setJobContainerUrlActivity.Value);
 
-        var createJobContainer = activities.GetNext() as WebActivity;
-        Assert.NotNull(createJobContainer);
+        var createJobContainer = activities.GetNext<WebActivity>();
         Assert.Equal("Create Job Storage Container", createJobContainer.Name);
         Assert.Equal("https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container", createJobContainer.Uri);
         Assert.Equal("PUT", createJobContainer.Method);
         Assert.Equal("{}", createJobContainer.Body);
 
-        var startJobActivity = activities.GetNext() as WebActivity;
-        Assert.NotNull(startJobActivity);
+        var startJobActivity = activities.GetNext<WebActivity>();
         Assert.Equal("Start Job", startJobActivity.Name);
         Assert.Equal("https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0", startJobActivity.Uri);
         Assert.Equal("POST", startJobActivity.Method);
@@ -188,15 +180,13 @@ public class BatchJobFunctionalTests
     ""usesTaskDependencies"": true,
     ""commonEnvironmentSettings"": [{""name"":""WORKLOAD_APP_PACKAGE"",""value"":""test-application""},{""name"":""WORKLOAD_APP_PACKAGE_VERSION"",""value"":""1.5.0""},{""name"":""MANAGER_APP_PACKAGE"",""value"":""batchmanager""},{""name"":""MANAGER_APP_PACKAGE_VERSION"",""value"":""2.0.0""},{""name"":""BATCH_JOB_TIMEOUT"",""value"":""PT4H""},{""name"":""WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME"",""value"":""batch-account-name""},{""name"":""WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID"",""value"":""/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name""},{""name"":""WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID"",""value"":""/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name""}]}", startJobActivity.Body, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
 
-        var monitorActivity = activities.GetNext() as ExecutePipelineActivity;
-        Assert.NotNull(monitorActivity);
+        var monitorActivity = activities.GetNext<ExecutePipelineActivity>();
         Assert.Equal("Monitor Batch Job", monitorActivity.Name);
         Assert.Equal("monitor_batch_job", monitorActivity.Pipeline.ReferenceName);
         Assert.Equal(1, monitorActivity.Parameters.Count);
         Assert.Equal("802100a5-ec79-4a52-be62-8d6109f3ff9a", monitorActivity.Parameters["JobId"]);
 
-        var copyOutputFiles = activities.GetNext() as ExecutePipelineActivity;
-        Assert.NotNull(copyOutputFiles);
+        var copyOutputFiles = activities.GetNext<ExecutePipelineActivity>();
         Assert.Equal("Copy Output Files", copyOutputFiles.Name);
         Assert.Equal("copy_output_files", copyOutputFiles.Pipeline.ReferenceName);
         Assert.Equal(5, copyOutputFiles.Parameters.Count);
@@ -206,8 +196,7 @@ public class BatchJobFunctionalTests
         Assert.Equal("test-application-output-container-name", copyOutputFiles.Parameters["OutputContainerName"]);
         Assert.Equal("TEMP", copyOutputFiles.Parameters["OutputFolderName"]);
 
-        var deleteJobContainer = activities.GetNext() as WebActivity;
-        Assert.NotNull(deleteJobContainer);
+        var deleteJobContainer = activities.GetNext<WebActivity>();
         Assert.Equal("Delete Job Storage Container", deleteJobContainer.Name);
         Assert.Equal("https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container", deleteJobContainer.Uri);
         Assert.Equal("DELETE", deleteJobContainer.Method);

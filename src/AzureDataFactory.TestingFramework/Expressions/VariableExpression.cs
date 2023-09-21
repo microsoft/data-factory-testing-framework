@@ -10,11 +10,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any variables('variableName') expression.
 /// </summary>
-public class VariableExpression : BaseExpression, IPipelineExpression
+internal class VariableExpression : BaseExpression, IPipelineExpression
 {
-    public const string ExtractVariablesRegex = @"(@?{?variables\('(\w+)'\)}?)";
+    private const string ExtractVariablesRegex = @"(@?{?variables\('(\w+)'\)}?)";
 
-    public VariableExpression(string expression) : base(expression)
+    private VariableExpression(string expression) : base(expression)
     {
     }
 

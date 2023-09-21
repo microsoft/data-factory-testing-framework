@@ -9,11 +9,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any pipeline() expression, like pipeline().parameters.name and pipeline().globalParameters.name.
 /// </summary>
-public class ParameterExpression : BaseExpression, IRunExpression
+internal class ParameterExpression : BaseExpression, IRunExpression
 {
     private readonly ParameterType _type;
 
-    public ParameterExpression(string expression, ParameterType type) : base(expression)
+    private ParameterExpression(string expression, ParameterType type) : base(expression)
     {
         _type = type;
     }
@@ -50,5 +50,4 @@ public class ParameterExpression : BaseExpression, IRunExpression
         var regex = "(@?{?pipeline\\(\\)\\." + GetParameterStringTemplate(parameterType) + @"\.(\w+)}?)";
         return ExpressionFinder.FindByRegex(text, regex, e => new ParameterExpression(e, parameterType));
     }
-
 }

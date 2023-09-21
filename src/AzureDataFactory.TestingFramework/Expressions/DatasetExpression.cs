@@ -9,11 +9,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any dataset('datasetName') expression.
 /// </summary>
-public class DatasetExpression : BaseExpression, IRunExpression
+internal class DatasetExpression : BaseExpression, IRunExpression
 {
-    public const string ExtractDatasetRegex = @"(@?{?dataset\(\)\.(\w+)}?)";
+    private const string ExtractDatasetRegex = @"(@?{?dataset\(\)\.(\w+)}?)";
 
-    public DatasetExpression(string expression) : base(expression)
+    private DatasetExpression(string expression) : base(expression)
     {
     }
 
