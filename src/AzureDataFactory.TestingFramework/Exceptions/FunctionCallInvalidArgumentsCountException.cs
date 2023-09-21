@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Reflection;
 using AzureDataFactory.TestingFramework.Functions;
 

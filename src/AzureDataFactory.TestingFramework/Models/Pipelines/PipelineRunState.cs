@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using Azure;
 using AzureDataFactory.TestingFramework.Models.Activities.Base;
 using AzureDataFactory.TestingFramework.Models.Base;
@@ -23,10 +25,10 @@ public class PipelineRunState : RunState
 
             // TODO: better arrays support
             if (variable.Value.VariableType == PipelineVariableType.Array)
-                return (IPipelineRunVariable) new PipelineRunVariable<string>(variable.Key, variable.Value.DefaultValue?.ToString());
+                return (IPipelineRunVariable)new PipelineRunVariable<string>(variable.Key, variable.Value.DefaultValue?.ToString());
 
             throw new Exception($"Unknown variable type: {variable.Value.VariableType}");
-        }).ToList();;
+        }).ToList();
         PipelineActivityResults = new List<IPipelineActivityResult>();
         ScopedPipelineActivityResults = new List<IPipelineActivityResult>();
         IterationItem = null;
@@ -41,7 +43,7 @@ public class PipelineRunState : RunState
         IterationItem = iterationItem;
     }
 
-    public PipelineRunState(): base(new List<IRunParameter>())
+    public PipelineRunState() : base(new List<IRunParameter>())
     {
         Variables = new List<IPipelineRunVariable>();
         PipelineActivityResults = new List<IPipelineActivityResult>();

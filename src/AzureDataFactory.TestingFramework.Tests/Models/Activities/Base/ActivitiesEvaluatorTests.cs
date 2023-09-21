@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Functions;

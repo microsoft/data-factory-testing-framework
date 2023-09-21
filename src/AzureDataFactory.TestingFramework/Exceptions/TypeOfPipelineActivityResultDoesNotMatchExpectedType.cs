@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 namespace AzureDataFactory.TestingFramework.Expressions;
 
 public class TypeOfPipelineActivityResultDoesNotMatchExpectedType : Exception

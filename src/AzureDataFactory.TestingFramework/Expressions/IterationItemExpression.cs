@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using AzureDataFactory.TestingFramework.Models.Base;
 using AzureDataFactory.TestingFramework.Models.Pipelines;
 
@@ -19,7 +21,7 @@ public class IterationItemExpression : BaseExpression, IPipelineExpression
         if (typeof(TType) != typeof(string))
             throw new ArgumentException($"Only string is supported for {nameof(IterationItemExpression)}.");
 
-        return (TType)(object) state.IterationItem;
+        return (TType)(object)state.IterationItem;
     }
 
     public static IEnumerable<IterationItemExpression> Find(string text)

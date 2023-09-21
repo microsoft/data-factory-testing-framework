@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using Azure.ResourceManager.DataFactory;
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models;

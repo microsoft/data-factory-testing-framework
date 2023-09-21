@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Models;
 using AzureDataFactory.TestingFramework.Models.Pipelines;

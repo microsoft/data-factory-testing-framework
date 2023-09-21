@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Text.RegularExpressions;
 
 namespace AzureDataFactory.TestingFramework.Functions;

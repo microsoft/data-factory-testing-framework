@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 namespace AzureDataFactory.TestingFramework.Models.Pipelines;
 
 public class ActivityNotFoundException : Exception
