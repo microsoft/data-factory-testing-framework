@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 namespace AzureDataFactory.TestingFramework.Models.Base;
 
 public interface IRunParameter

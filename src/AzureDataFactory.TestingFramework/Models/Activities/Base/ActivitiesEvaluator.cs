@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models.Pipelines;
 
@@ -14,7 +16,7 @@ public static class ActivitiesEvaluator
                          .Where(activity => !state.ScopedPipelineActivityResults.Contains(activity))
                          .Where(activity => activity.AreDependencyConditionMet(state)))
             {
-                var evaluatedActivity = (PipelineActivity) activity.Evaluate(state);
+                var evaluatedActivity = (PipelineActivity)activity.Evaluate(state);
                 if (evaluatedActivity is not IIterationActivity)
                     yield return evaluatedActivity;
 

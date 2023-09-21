@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using AzureDataFactory.TestingFramework.Exceptions;
 
 namespace AzureDataFactory.TestingFramework.Models.Activities.Base;

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Collections;
 using AzureDataFactory.TestingFramework.Expressions;
 using AzureDataFactory.TestingFramework.Extensions;
@@ -46,10 +48,10 @@ public class FunctionArgument : IFunctionPart
 
         return typeof(TType) switch
         {
-            { } type when type == typeof(bool) && bool.TryParse(evalExpression, out var boolValue) => (TType)(object) boolValue,
-            { } type when type == typeof(int) && int.TryParse(evalExpression, out var intValue) => (TType)(object) intValue,
-            { } type when type == typeof(long) && long.TryParse(evalExpression, out var longValue) => (TType)(object) longValue,
-            { } type when type == typeof(string) => (TType)(object) evalExpression.TrimOneChar('\''),
+            { } type when type == typeof(bool) && bool.TryParse(evalExpression, out var boolValue) => (TType)(object)boolValue,
+            { } type when type == typeof(int) && int.TryParse(evalExpression, out var intValue) => (TType)(object)intValue,
+            { } type when type == typeof(long) && long.TryParse(evalExpression, out var longValue) => (TType)(object)longValue,
+            { } type when type == typeof(string) => (TType)(object)evalExpression.TrimOneChar('\''),
             { } type => throw new ArgumentException($"The result {evalExpression} with DataType: {type} could not be parsed accordingly.")
         };
     }

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Text.RegularExpressions;
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models.Base;
@@ -31,9 +33,8 @@ public class ActivityExpression : BaseExpression, IPipelineExpression
                 if (typeof(TType) != typeof(string))
                     throw new TypeOfPipelineActivityResultDoesNotMatchExpectedType(activity.Name, firstField, typeof(string), typeof(TType));
 
-                return (TType)(object) activity.Status.ToString().ToLower();
+                return (TType)(object)activity.Status.ToString().ToLower();
             case "output":
-            {
                 var activityOutput = activity.Output;
                 foreach (var field in fields.Skip(1))
                 {
@@ -49,7 +50,6 @@ public class ActivityExpression : BaseExpression, IPipelineExpression
                     throw new TypeOfPipelineActivityResultDoesNotMatchExpectedType(activity.Name, string.Join(".", fields), activityOutput.GetType(), typeof(TType));
 
                 return type;
-            }
             default:
                 throw new ActivityOutputFieldNotFoundException(activity.Name, firstField);
         }

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Functions;
 using AzureDataFactory.TestingFramework.Models;
@@ -218,7 +220,8 @@ public class FunctionCallTests
     {
         // Arrange
         var state = new PipelineRunState();
-        state.AddActivityResult(new TestActivityResult("someActivityOutputingString", new {
+        state.AddActivityResult(new TestActivityResult("someActivityOutputingString", new
+        {
             SomeString = "A message that contains PartOfString!"
         }));
 

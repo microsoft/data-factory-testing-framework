@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models;
 using AzureDataFactory.TestingFramework.Models.Base;
@@ -15,49 +17,49 @@ public class BatchJobFunctionalTests
         Assert.Equal("batch_job", pipeline.Name);
         Assert.Equal(11, pipeline.Activities.Count);
 
-		var activities = pipeline.EvaluateWithActivityEnumerator(new List<IRunParameter>
-		{
-			new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "batch-pool-id"),
-			new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application"),
-			new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "1.5.0"),
-			new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "batchmanager"),
-			new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "2.0.0"),
-			new RunParameter<string>(ParameterType.Parameter, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
-			new RunParameter<string>(ParameterType.Parameter, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
-			new RunParameter<string>(ParameterType.Parameter, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
-			new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
-			new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
-			new RunParameter<string>(ParameterType.Parameter, "JobAdditionalEnvironmentSettings", "[]"),
-			new RunParameter<string>(ParameterType.Parameter, "OutputStorageAccountName", "test-application-output-storage-account-name"),
-			new RunParameter<string>(ParameterType.Parameter, "OutputContainerName", "test-application-output-container-name"),
-			new RunParameter<string>(ParameterType.Parameter, "OutputFolderName", "TEMP"),
-			new RunParameter<string>(ParameterType.Parameter, "BatchJobTimeout", "PT4H"),
-			new RunParameter<string>(ParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
-			new RunParameter<string>(ParameterType.Global, "BatchAccountSubscription", "SUBSCRIPTION_ID"),
-			new RunParameter<string>(ParameterType.Global, "BatchAccountResourceGroup", "RESOURCE_GROUP"),
-			new RunParameter<string>(ParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com"),
-			new RunParameter<string>(ParameterType.Global, "ADFSubscription", "bd19dba4-89ad-4976-b862-848bf43a4340"),
-			new RunParameter<string>(ParameterType.Global, "ADFResourceGroup", "adf-rg"),
-			new RunParameter<string>(ParameterType.Global, "ADFName", "adf-name"),
-		});
+        var activities = pipeline.EvaluateWithActivityEnumerator(new List<IRunParameter>
+        {
+            new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "batch-pool-id"),
+            new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application"),
+            new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "1.5.0"),
+            new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "batchmanager"),
+            new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "2.0.0"),
+            new RunParameter<string>(ParameterType.Parameter, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
+            new RunParameter<string>(ParameterType.Parameter, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
+            new RunParameter<string>(ParameterType.Parameter, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
+            new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
+            new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
+            new RunParameter<string>(ParameterType.Parameter, "JobAdditionalEnvironmentSettings", "[]"),
+            new RunParameter<string>(ParameterType.Parameter, "OutputStorageAccountName", "test-application-output-storage-account-name"),
+            new RunParameter<string>(ParameterType.Parameter, "OutputContainerName", "test-application-output-container-name"),
+            new RunParameter<string>(ParameterType.Parameter, "OutputFolderName", "TEMP"),
+            new RunParameter<string>(ParameterType.Parameter, "BatchJobTimeout", "PT4H"),
+            new RunParameter<string>(ParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
+            new RunParameter<string>(ParameterType.Global, "BatchAccountSubscription", "SUBSCRIPTION_ID"),
+            new RunParameter<string>(ParameterType.Global, "BatchAccountResourceGroup", "RESOURCE_GROUP"),
+            new RunParameter<string>(ParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com"),
+            new RunParameter<string>(ParameterType.Global, "ADFSubscription", "bd19dba4-89ad-4976-b862-848bf43a4340"),
+            new RunParameter<string>(ParameterType.Global, "ADFResourceGroup", "adf-rg"),
+            new RunParameter<string>(ParameterType.Global, "ADFName", "adf-name"),
+        });
 
-		var setUserAssignedIdentityActivity = activities.GetNext() as SetVariableActivity;
-		Assert.NotNull(setUserAssignedIdentityActivity);
-		Assert.Equal("Set UserAssignedIdentityReference", setUserAssignedIdentityActivity.Name);
-		Assert.Equal("UserAssignedIdentityReference", setUserAssignedIdentityActivity.VariableName);
-		Assert.Equal("/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name", setUserAssignedIdentityActivity.Value);
+        var setUserAssignedIdentityActivity = activities.GetNext() as SetVariableActivity;
+        Assert.NotNull(setUserAssignedIdentityActivity);
+        Assert.Equal("Set UserAssignedIdentityReference", setUserAssignedIdentityActivity.Name);
+        Assert.Equal("UserAssignedIdentityReference", setUserAssignedIdentityActivity.VariableName);
+        Assert.Equal("/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name", setUserAssignedIdentityActivity.Value);
 
-		var setManagerApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
-		Assert.NotNull(setManagerApplicationPackagePathActivity);
-		Assert.Equal("Set ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.Name);
-		Assert.Equal("ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.VariableName);
-		Assert.Equal("$AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz", setManagerApplicationPackagePathActivity.Value);
+        var setManagerApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
+        Assert.NotNull(setManagerApplicationPackagePathActivity);
+        Assert.Equal("Set ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.Name);
+        Assert.Equal("ManagerApplicationPackagePath", setManagerApplicationPackagePathActivity.VariableName);
+        Assert.Equal("$AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz", setManagerApplicationPackagePathActivity.Value);
 
-		var setWorkloadApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
-		Assert.NotNull(setWorkloadApplicationPackagePathActivity);
-		Assert.Equal("Set WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.Name);
-		Assert.Equal("WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.VariableName);
-		Assert.Equal("$AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz", setWorkloadApplicationPackagePathActivity.Value);
+        var setWorkloadApplicationPackagePathActivity = activities.GetNext() as SetVariableActivity;
+        Assert.NotNull(setWorkloadApplicationPackagePathActivity);
+        Assert.Equal("Set WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.Name);
+        Assert.Equal("WorkloadApplicationPackagePath", setWorkloadApplicationPackagePathActivity.VariableName);
+        Assert.Equal("$AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz", setWorkloadApplicationPackagePathActivity.Value);
 
         var setCommonEnvironmentSettingsActivity = activities.GetNext() as SetVariableActivity;
         Assert.NotNull(setCommonEnvironmentSettingsActivity);
@@ -193,23 +195,23 @@ public class BatchJobFunctionalTests
         Assert.Equal(1, monitorActivity.Parameters.Count);
         Assert.Equal("802100a5-ec79-4a52-be62-8d6109f3ff9a", monitorActivity.Parameters["JobId"]);
 
-		var copyOutputFiles = activities.GetNext() as ExecutePipelineActivity;
-		Assert.NotNull(copyOutputFiles);
-		Assert.Equal("Copy Output Files", copyOutputFiles.Name);
-		Assert.Equal("copy_output_files", copyOutputFiles.Pipeline.ReferenceName);
-		Assert.Equal(5, copyOutputFiles.Parameters.Count);
-		Assert.Equal("job-802100a5-ec79-4a52-be62-8d6109f3ff9a", copyOutputFiles.Parameters["JobContainerName"]);
-		Assert.Equal("TASKOUTPUT_", copyOutputFiles.Parameters["TaskOutputFolderPrefix"]);
-		Assert.Equal("test-application-output-storage-account-name", copyOutputFiles.Parameters["OutputStorageAccountName"]);
-		Assert.Equal("test-application-output-container-name", copyOutputFiles.Parameters["OutputContainerName"]);
-		Assert.Equal("TEMP", copyOutputFiles.Parameters["OutputFolderName"]);
+        var copyOutputFiles = activities.GetNext() as ExecutePipelineActivity;
+        Assert.NotNull(copyOutputFiles);
+        Assert.Equal("Copy Output Files", copyOutputFiles.Name);
+        Assert.Equal("copy_output_files", copyOutputFiles.Pipeline.ReferenceName);
+        Assert.Equal(5, copyOutputFiles.Parameters.Count);
+        Assert.Equal("job-802100a5-ec79-4a52-be62-8d6109f3ff9a", copyOutputFiles.Parameters["JobContainerName"]);
+        Assert.Equal("TASKOUTPUT_", copyOutputFiles.Parameters["TaskOutputFolderPrefix"]);
+        Assert.Equal("test-application-output-storage-account-name", copyOutputFiles.Parameters["OutputStorageAccountName"]);
+        Assert.Equal("test-application-output-container-name", copyOutputFiles.Parameters["OutputContainerName"]);
+        Assert.Equal("TEMP", copyOutputFiles.Parameters["OutputFolderName"]);
 
-		var deleteJobContainer = activities.GetNext() as WebActivity;
-		Assert.NotNull(deleteJobContainer);
-		Assert.Equal("Delete Job Storage Container", deleteJobContainer.Name);
-		Assert.Equal("https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container", deleteJobContainer.Uri);
-		Assert.Equal("DELETE", deleteJobContainer.Method);
-		Assert.Null(deleteJobContainer.Body);
+        var deleteJobContainer = activities.GetNext() as WebActivity;
+        Assert.NotNull(deleteJobContainer);
+        Assert.Equal("Delete Job Storage Container", deleteJobContainer.Name);
+        Assert.Equal("https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container", deleteJobContainer.Uri);
+        Assert.Equal("DELETE", deleteJobContainer.Method);
+        Assert.Null(deleteJobContainer.Body);
 
         Assert.Throws<ActivityEnumeratorException>(() => activities.GetNext());
     }

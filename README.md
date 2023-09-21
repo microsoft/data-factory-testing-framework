@@ -25,6 +25,12 @@ Azure Data Factory does not support unit testing out of the box. The only way to
 
 > Even though Azure Data Factory is a UI-driven tool and writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and existing pipelines will not break, without writing unit tests?
 
+## Getting started
+
+1. Add the following nuget source to `nuget.config`: `https://nuget.pkg.github.com/arjendev/index.json`
+2. Install the nuget package: `dotnet add package AzureDataFactory.TestingFramework --prerelease`
+3. Start writing tests
+
 ## Features - Examples
 
 The samples seen below is the _only_ code that you need to write! The framework will take care of the rest. 

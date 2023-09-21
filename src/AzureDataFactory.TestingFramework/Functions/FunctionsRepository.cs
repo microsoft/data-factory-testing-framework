@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Text.Json;
 using System.Text.Json.Nodes;
 

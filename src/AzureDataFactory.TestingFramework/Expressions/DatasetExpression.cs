@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+
 using System.Text.RegularExpressions;
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models.Base;

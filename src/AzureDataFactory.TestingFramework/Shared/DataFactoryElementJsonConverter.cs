@@ -1,5 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Copyright (c) Microsoft Corporation.
 
 using System.Reflection;
 using System.Text.Json;
@@ -108,19 +107,19 @@ namespace Azure.Core.Expressions.DataFactory
                     Serialize(writer, keyValuePairElement);
                     break;
                 default:
-                {
-                    if (TryGetGenericDataFactoryList(value.GetType(), out Type? genericListType))
                     {
-                        var methodInfo = GetGenericSerializationMethod(genericListType!, nameof(SerializeGenericList));
-                        methodInfo!.Invoke(null, new object[] { writer, value });
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"Unable to convert {value.GetType().Name} into a DataFactoryExpression<T>");
-                    }
+                        if (TryGetGenericDataFactoryList(value.GetType(), out Type? genericListType))
+                        {
+                            var methodInfo = GetGenericSerializationMethod(genericListType!, nameof(SerializeGenericList));
+                            methodInfo!.Invoke(null, new object[] { writer, value });
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Unable to convert {value.GetType().Name} into a DataFactoryExpression<T>");
+                        }
 
-                    break;
-                }
+                        break;
+                    }
             }
         }
 
