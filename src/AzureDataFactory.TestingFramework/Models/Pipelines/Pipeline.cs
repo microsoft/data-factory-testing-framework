@@ -10,11 +10,24 @@ namespace Azure.ResourceManager.DataFactory;
 
 public partial class Pipeline
 {
+    /// <summary>
+    /// Gets the activity by name.
+    /// </summary>
+    /// <param name="activityName">Name of the activity as described in `name` field of the activity</param>
+    /// <returns></returns>
+    /// <exception cref="ActivityNotFoundException">Thrown if activity name cannot be found</exception>
     public PipelineActivity GetActivityByName(string activityName)
     {
         return Activities.SingleOrDefault(activity => activity.Name == activityName) ?? throw new ActivityNotFoundException(activityName);
     }
 
+    /// <summary>
+    /// Evaluates the pipeline with the provided parameters. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
+    /// </summary>
+    /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
+    /// <returns></returns>
+    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
+    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
     public IEnumerable<PipelineActivity> Evaluate(List<IRunParameter> parameters)
     {
         //Check if all parameters are provided
@@ -31,6 +44,13 @@ public partial class Pipeline
             yield return activity;
     }
 
+    /// <summary>
+    /// Evaluates the pipeline with the provider parameters and returns an enumerator to easily iterate over the activities. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
+    /// </summary>
+    /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
+    /// <returns></returns>
+    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
+    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
     public ActivityEnumerator EvaluateWithActivityEnumerator(List<IRunParameter> parameters)
     {
         var activities = Evaluate(parameters);

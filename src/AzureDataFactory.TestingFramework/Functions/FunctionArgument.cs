@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 
-using System.Collections;
 using AzureDataFactory.TestingFramework.Expressions;
 using AzureDataFactory.TestingFramework.Extensions;
 using AzureDataFactory.TestingFramework.Models.Base;

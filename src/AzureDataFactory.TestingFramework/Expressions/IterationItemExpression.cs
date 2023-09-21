@@ -8,11 +8,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any item() expression.
 /// </summary>
-public class IterationItemExpression : BaseExpression, IPipelineExpression
+internal class IterationItemExpression : BaseExpression, IPipelineExpression
 {
-    public const string ExtractIterationItemRegex = "(@?{?item\\(\\)\\}?)";
+    private const string ExtractIterationItemRegex = "(@?{?item\\(\\)\\}?)";
 
-    public IterationItemExpression(string expression) : base(expression)
+    private IterationItemExpression(string expression) : base(expression)
     {
     }
 

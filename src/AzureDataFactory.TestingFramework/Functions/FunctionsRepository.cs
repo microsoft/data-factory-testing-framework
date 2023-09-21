@@ -30,6 +30,11 @@ public static class FunctionsRepository
         { "split", (string input, string delimiter) => input.Split(delimiter).ToList() }
     };
 
+    /// <summary>
+    /// Registers a function to be used to evaluate ADF expressions.
+    /// </summary>
+    /// <param name="functionName">The name of the function</param>
+    /// <param name="function">The delegate that takes the expected arguments and evaluates them in C#.</param>
     public static void Register(string functionName, Delegate function)
     {
         Functions[functionName] = function;

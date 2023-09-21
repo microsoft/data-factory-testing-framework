@@ -8,6 +8,11 @@ namespace AzureDataFactory.TestingFramework.Models.Base;
 
 public abstract class DataFactoryEntity
 {
+    /// <summary>
+    /// Used to evaluate all the DataFactoryElements in the object graph.
+    /// </summary>
+    /// <param name="state">The pipeline state to be used for evaluating the expressions.</param>
+    /// <returns>Reference to itself.</returns>
     public virtual DataFactoryEntity Evaluate(PipelineRunState state)
     {
         EvaluateProperties(this, state, new List<object>());

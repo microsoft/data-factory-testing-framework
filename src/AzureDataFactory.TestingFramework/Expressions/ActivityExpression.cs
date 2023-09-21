@@ -10,11 +10,11 @@ namespace AzureDataFactory.TestingFramework.Expressions;
 /// <summary>
 /// Used to evaluate any activity('activityName').status or activity('activityName').output.field1.field2
 /// </summary>
-public class ActivityExpression : BaseExpression, IPipelineExpression
+internal class ActivityExpression : BaseExpression, IPipelineExpression
 {
-    public const string ExtractActivityRegex = @"(@?{?activity\('(\w+( +\w+)*)'\)(\.(\w+))*}?)";
+    private const string ExtractActivityRegex = @"(@?{?activity\('(\w+( +\w+)*)'\)(\.(\w+))*}?)";
 
-    public ActivityExpression(string expression) : base(expression)
+    private ActivityExpression(string expression) : base(expression)
     {
     }
 
@@ -67,7 +67,7 @@ public class ActivityExpression : BaseExpression, IPipelineExpression
         return (activityName, fields);
     }
 
-    public static IEnumerable<ActivityExpression> Find(string text)
+    internal static IEnumerable<ActivityExpression> Find(string text)
     {
         return ExpressionFinder.FindByRegex(text, ExtractActivityRegex, e => new ActivityExpression(e));
     }
