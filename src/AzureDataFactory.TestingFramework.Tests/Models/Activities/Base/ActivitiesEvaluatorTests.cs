@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using Azure.Core.Expressions.DataFactory;
 using AzureDataFactory.TestingFramework.Exceptions;

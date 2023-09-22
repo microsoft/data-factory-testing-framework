@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using AzureDataFactory.TestingFramework.Models;
 using AzureDataFactory.TestingFramework.Models.Base;

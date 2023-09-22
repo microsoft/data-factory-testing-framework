@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using AzureDataFactory.TestingFramework.Functions;
 using AzureDataFactory.TestingFramework.Models.Pipelines;

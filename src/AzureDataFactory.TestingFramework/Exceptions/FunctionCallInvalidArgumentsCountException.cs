@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 using System.Reflection;
 using AzureDataFactory.TestingFramework.Functions;
