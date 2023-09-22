@@ -4,7 +4,7 @@
 csharp_new_line_before_members_in_object_initializers = false
 csharp_new_line_before_open_brace = all
 csharp_preferred_modifier_order = internal, protected, private, public, file, new, override, sealed, abstract, static, virtual, async, extern, unsafe, volatile, readonly, required:suggestion
-file_header_template=Copyright (c) Microsoft Corporation.
+file_header_template=Copyright (c) Microsoft Corporation.\nLicensed under the MIT License.
 
 # ReSharper properties
 resharper_accessor_owner_body = accessors_with_expression_body
