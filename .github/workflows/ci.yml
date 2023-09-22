@@ -40,5 +40,5 @@ jobs:
       - name: Create the package
         run: dotnet pack --configuration Release src/AzureDataFactory.TestingFramework
       - name: Publish the package to GPR
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: dotnet nuget push src/AzureDataFactory.TestingFramework/bin/Release/*.nupkg --source "https://nuget.pkg.github.com/arjendev/index.json" --api-key ${{ secrets.PUBLISH_KEY }} --skip-duplicate
