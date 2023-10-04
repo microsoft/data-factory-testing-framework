@@ -35,20 +35,7 @@ Azure Data Factory does not support unit testing out of the box. The only way to
 
 The samples seen below is the _only_ code that you need to write! The framework will take care of the rest. 
 
-1. Evaluate expressions
-
-    ```csharp
-        // Arrange 
-        var expression = FunctionPart.Parse("concat('https://example.com/jobs/', '123', concat('&', 'abc'))");
-
-        // Act
-        var evaluated = expression.Evaluate();
-        
-        // Assert
-        Assert.Equal("https://example.com/jobs/123&abc", evaluated);
-    ``` 
-
-2. Evaluate activities (e.g. a WebActivity that calls Azure Batch API), LinkedServices, Datasets and Triggers
+1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API), LinkedServices, Datasets and Triggers
 
     ```csharp
       // Arrange
@@ -73,7 +60,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
     
     ```
    
-3. Evaluate Pipelines and test the flow of activities given a specific input
+2. Evaluate Pipelines and test the flow of activities given a specific input
 
     ```csharp
     var pipeline = PipelineFactory.ParseFromFile(pipelineFileName);
@@ -88,13 +75,13 @@ The samples seen below is the _only_ code that you need to write! The framework 
             new(ParameterType.Global, "BaseUrl", "https://example.com"),
         });
 
-    var setVariableActivity = activities.GetNext() as SetVariableActivity;
+    var setVariableActivity = activities.GetNext<SetVariableActivity>();
     Assert.NotNull(setVariableActivity);
     Assert.Equal("Set JobName", setVariableActivity.Name);
     Assert.Equal("JobName", setVariableActivity.VariableName);
     Assert.Equal("Job-123", setVariableActivity.Value);
 
-    var getVersionActivity = activities.GetNext() as WebActivity;
+    var getVersionActivity = activities.GetNext<WebActivity>();
     Assert.NotNull(getVersionActivity);
     Assert.Equal("Get version", getVersionActivity.Name);
     Assert.Equal("https://example.com/version", getVersionActivity.Uri);
@@ -104,7 +91,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
         Version = "version1"
     });
 
-    var createBatchActivity = activities.GetNext() as WebHookActivity;
+    var createBatchActivity = activities.GetNext<WebHookActivity>();
     Assert.NotNull(createBatchActivity);
     Assert.Equal("Trigger Azure Batch Job", createBatchActivity.Name);
     Assert.Equal("https://example.com/jobs", createBatchActivity.Uri);
@@ -114,6 +101,20 @@ The samples seen below is the _only_ code that you need to write! The framework 
    
     Assert.Throws<ActivityEnumeratorException>(() => activities.GetNext());
     ```
+
+3. Evaluate expressions
+
+    ```csharp
+        // Arrange 
+        var expression = FunctionPart.Parse("concat('https://example.com/jobs/', '123', concat('&', 'abc'))");
+
+        // Act
+        var evaluated = expression.Evaluate();
+        
+        // Assert
+        Assert.Equal("https://example.com/jobs/123&abc", evaluated);
+    ``` 
+
    
 > See AzureDataFactory.TestingFramework.Example project for more samples
 
