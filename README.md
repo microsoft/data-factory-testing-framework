@@ -63,12 +63,13 @@ The samples seen below is the _only_ code that you need to write! The framework 
 2. Evaluate Pipelines and test the flow of activities given a specific input
 
     ```csharp
-    var pipeline = PipelineFactory.ParseFromFile(pipelineFileName);
+    var testFramework = new TestFramework(dataFactoryFolderPath: "BatchJob");
+    var pipeline = testFramework.Repository.GetPipelineByName("batch_job");
     Assert.Equal("example-pipeline", pipeline.Name);
     Assert.Equal(6, pipeline.Activities.Count);
 
     // Runs the pipeline with the provided parameters
-    var activities = pipeline.EvaluateWithActivityEnumerator(new List<RunParameter>
+    var activities = testFramework.Evaluate(pipeline, new List<RunParameter>
         {
             new(ParameterType.Parameter, "JobId", "123"),
             new(ParameterType.Parameter, "ContainerName", "test-container"),

@@ -16,7 +16,7 @@ public class BatchJobUnitTests
 
     public BatchJobUnitTests()
     {
-        _pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline.json");
+        _pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline/batch_job.json");
         _state = new PipelineRunState();
     }
 

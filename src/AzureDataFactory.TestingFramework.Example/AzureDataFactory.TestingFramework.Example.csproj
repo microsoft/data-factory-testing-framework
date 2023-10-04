@@ -23,13 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="BatchJob\pipeline.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <ProjectReference Include="..\AzureDataFactory.TestingFramework\AzureDataFactory.TestingFramework.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AzureDataFactory.TestingFramework\AzureDataFactory.TestingFramework.csproj" />
+      <None Update="BatchJob\pipeline\batch_job.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -13,15 +13,20 @@ public partial class ControlActivity
         return new List<PipelineActivity>();
     }
 
-    public virtual IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state)
+    internal virtual IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state, TestFramework testFramework)
     {
         var scopedState = state.CreateIterationScope(null);
         var activities = GetNextActivities();
-        foreach (var activity in ActivitiesEvaluator.Evaluate(activities, scopedState))
+        foreach (var activity in testFramework.EvaluateActivities(activities, scopedState))
         {
             yield return activity;
         }
 
         state.AddScopedActivityResultsFromScopedState(scopedState);
+    }
+
+    internal virtual IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state)
+    {
+        return EvaluateChildActivities(state, new TestFramework());
     }
 }

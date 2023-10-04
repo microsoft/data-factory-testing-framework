@@ -4,21 +4,20 @@
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models;
 using AzureDataFactory.TestingFramework.Models.Base;
-using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Example.BatchJob;
 
 public class BatchJobFunctionalTests
 {
-
     [Fact]
     public void BatchJobTest()
     {
-        var pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline.json");
+        var testFramework = new TestFramework(dataFactoryFolderPath: "BatchJob");
+        var pipeline = testFramework.Repository.GetPipelineByName("batch_job");
         Assert.Equal("batch_job", pipeline.Name);
         Assert.Equal(11, pipeline.Activities.Count);
 
-        var activities = pipeline.EvaluateWithActivityEnumerator(new List<IRunParameter>
+        var activities = testFramework.Evaluate(pipeline, new List<IRunParameter>
         {
             new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "batch-pool-id"),
             new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application"),

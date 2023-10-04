@@ -23,14 +23,14 @@ public partial class ForEachActivity : IIterationActivity
         return base.Evaluate(state);
     }
 
-    public override IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state)
+    internal override IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state, TestFramework testFramework)
     {
         var activities = GetNextActivities();
 
         return IterationItems.SelectMany(item =>
         {
             var scopedState = state.CreateIterationScope(item);
-            return ActivitiesEvaluator.Evaluate(activities, scopedState);
+            return testFramework.EvaluateActivities(activities, scopedState);
         });
     }
 }

@@ -28,7 +28,7 @@ public class ForEachActivityTests
 
         // Act
         forEachActivity.Evaluate(state);
-        var childActivities = forEachActivity.EvaluateChildActivities(state);
+        var childActivities = forEachActivity.EvaluateChildActivities(state, new TestFramework());
 
         // Assert
         using var enumarator = childActivities.GetEnumerator();
