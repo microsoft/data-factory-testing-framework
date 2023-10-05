@@ -20,8 +20,8 @@ public class ChildPipelineTests
         // Act
         var activities = testFramework.EvaluateWithEnumerator(pipeline, new List<IRunParameter>()
         {
-            new RunParameter<string>(ParameterType.Parameter, "Url", "https://example.com"),
-            new RunParameter<string>(ParameterType.Parameter, "Body", "{ \"key\": \"value\" }")
+            new RunParameter<string>(ParameterType.Pipeline, "Url", "https://example.com"),
+            new RunParameter<string>(ParameterType.Pipeline, "Body", "{ \"key\": \"value\" }")
         });
 
         // Assert
@@ -41,8 +41,8 @@ public class ChildPipelineTests
         // Act
         var exception = Assert.Throws<PipelineNotFoundException>(() => testFramework.EvaluateAll(pipeline, new List<IRunParameter>()
         {
-            new RunParameter<string>(ParameterType.Parameter, "Url", "https://example.com"),
-            new RunParameter<string>(ParameterType.Parameter, "Body", "{ \"key\": \"value\" }")
+            new RunParameter<string>(ParameterType.Pipeline, "Url", "https://example.com"),
+            new RunParameter<string>(ParameterType.Pipeline, "Body", "{ \"key\": \"value\" }")
         }));
 
         // Assert

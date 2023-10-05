@@ -34,7 +34,7 @@ public class PipelineTests
         // Act
         var activities = testFramework.EvaluateAll(pipeline, new List<IRunParameter>()
         {
-            new RunParameter<string>(ParameterType.Parameter, "key1", "value1")
+            new RunParameter<string>(ParameterType.Pipeline, "key1", "value1")
         });
 
         // Assert

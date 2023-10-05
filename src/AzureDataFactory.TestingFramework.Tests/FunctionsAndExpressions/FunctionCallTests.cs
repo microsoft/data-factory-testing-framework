@@ -36,7 +36,7 @@ public class FunctionCallTests
         // Arrange
         var rawExpression = "concat('https://example.com/jobs/', pipeline().parameters.abc)";
         var expression = FunctionPart.Parse(rawExpression);
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "abc", "123"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "abc", "123"));
 
         // Act
         var evaluated = expression.Evaluate<string>(_state);
@@ -114,7 +114,7 @@ public class FunctionCallTests
         var expression = FunctionPart.Parse(rawExpression);
         _state.AddActivityResult(new TestActivityResult("abc", new { abc = "123" }));
         _state.Variables.Add(new PipelineRunVariable<string>("abc", "456"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "abc", "789"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "abc", "789"));
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "abc", "10"));
 
         // Act

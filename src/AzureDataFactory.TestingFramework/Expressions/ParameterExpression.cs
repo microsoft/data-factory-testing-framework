@@ -39,7 +39,7 @@ internal class ParameterExpression : BaseExpression, IRunExpression
     {
         return type switch
         {
-            ParameterType.Parameter => "parameters",
+            ParameterType.Pipeline => "parameters",
             ParameterType.Global => "globalParameters",
             _ => throw new NotImplementedException($"Parameter type {type} is not implemented.")
         };

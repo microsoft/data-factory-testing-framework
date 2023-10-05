@@ -11,7 +11,7 @@ public partial class ExecutePipelineActivity : IIterationActivity
     internal List<IRunParameter> GetChildRunParameters(PipelineRunState state)
     {
         var parameters = state.Parameters.Where(p => p.Type == ParameterType.Global).ToList();
-        parameters.AddRange(Parameters.Select(p => new RunParameter<string>(ParameterType.Parameter, p.Key, p.Value)));
+        parameters.AddRange(Parameters.Select(p => new RunParameter<string>(ParameterType.Pipeline, p.Key, p.Value)));
         return parameters;
     }
 }
