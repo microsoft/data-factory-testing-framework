@@ -11,9 +11,9 @@ public static class DataFactoryRepositoryFactory
     public static DataFactoryRepository ParseFromFolder(string folderPath)
     {
         var pipelines = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "pipeline"), Pipeline.DeserializeDataFactoryPipelineData);
-        var linkedServices = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "linkedService"), DataFactoryLinkedServiceProperties.DeserializeDataFactoryLinkedServiceProperties);
-        var datasets = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "dataset"), DataFactoryDatasetProperties.DeserializeDataFactoryDatasetProperties);
-        var triggers = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "trigger"), DataFactoryTriggerProperties.DeserializeDataFactoryTriggerProperties);
+        var linkedServices = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "linkedService"), DataFactoryLinkedServiceData.DeserializeDataFactoryLinkedServiceData);
+        var datasets = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "dataset"), DataFactoryDatasetData.DeserializeDataFactoryDatasetData);
+        var triggers = GetDataFactoryEntitiesByFolderPath(Path.Combine(folderPath, "trigger"), DataFactoryTriggerData.DeserializeDataFactoryTriggerData);
 
         return new DataFactoryRepository(pipelines, linkedServices, datasets, triggers);
     }

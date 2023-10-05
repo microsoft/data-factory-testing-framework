@@ -17,7 +17,7 @@ public class BatchJobFunctionalTests
         Assert.Equal("batch_job", pipeline.Name);
         Assert.Equal(11, pipeline.Activities.Count);
 
-        var activities = testFramework.Evaluate(pipeline, new List<IRunParameter>
+        var activities = testFramework.EvaluateWithEnumerator(pipeline, new List<IRunParameter>
         {
             new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "batch-pool-id"),
             new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application"),

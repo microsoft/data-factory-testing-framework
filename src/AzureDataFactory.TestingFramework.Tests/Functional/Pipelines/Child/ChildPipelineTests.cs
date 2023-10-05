@@ -18,7 +18,7 @@ public class ChildPipelineTests
         var pipeline = testFramework.Repository.GetPipelineByName("main");
 
         // Act
-        var activities = testFramework.Evaluate(pipeline, new List<IRunParameter>()
+        var activities = testFramework.EvaluateWithEnumerator(pipeline, new List<IRunParameter>()
         {
             new RunParameter<string>(ParameterType.Parameter, "Url", "https://example.com"),
             new RunParameter<string>(ParameterType.Parameter, "Body", "{ \"key\": \"value\" }")

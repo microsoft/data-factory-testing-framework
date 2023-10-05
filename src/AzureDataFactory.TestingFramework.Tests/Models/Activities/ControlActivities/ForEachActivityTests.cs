@@ -13,6 +13,7 @@ public class ForEachActivityTests
     public void WhenEvaluateChildActivities_ThenShouldReturnTheActivityWithItemExpressionEvaluated()
     {
         // Arrange
+        var testFramework = new TestFramework();
         var forEachActivity = new ForEachActivity("ForEachActivity",
             new DataFactoryExpression(DataFactoryExpressionType.Expression, "@split('a,b,c', ',')"),
             new List<PipelineActivity>()
@@ -28,7 +29,7 @@ public class ForEachActivityTests
 
         // Act
         forEachActivity.Evaluate(state);
-        var childActivities = forEachActivity.EvaluateChildActivities(state, new TestFramework());
+        var childActivities = testFramework.Evaluate(forEachActivity, state);
 
         // Assert
         using var enumarator = childActivities.GetEnumerator();

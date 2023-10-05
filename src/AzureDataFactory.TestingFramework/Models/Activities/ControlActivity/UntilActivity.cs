@@ -8,8 +8,15 @@ namespace AzureDataFactory.TestingFramework.Models;
 
 public partial class UntilActivity : IIterationActivity
 {
-    protected override List<PipelineActivity> GetNextActivities()
+    internal override IEnumerable<PipelineActivity> EvaluateControlActivityIterations(PipelineRunState state, EvaluateActivitiesDelegate evaluateActivities)
     {
-        return Activities.ToList();
+        do
+        {
+            var scopedState = state.CreateIterationScope(null);
+            foreach (var child in evaluateActivities(Activities.ToList(), scopedState))
+                yield return child;
+
+            state.AddScopedActivityResultsFromScopedState(scopedState);
+        } while (!Expression.Evaluate<bool>(state));
     }
 }

@@ -15,7 +15,7 @@ public class DataFactoryRepository
     /// <param name="linkedServices">List of deserialized linkedServices</param>
     /// <param name="datasets">List of deserialized datasets</param>
     /// <param name="triggers">List of deserialized triggers</param>
-    public DataFactoryRepository(List<Pipeline> pipelines, List<DataFactoryLinkedServiceProperties> linkedServices, List<DataFactoryDatasetProperties> datasets, List<DataFactoryTriggerProperties> triggers)
+    public DataFactoryRepository(List<Pipeline> pipelines, List<DataFactoryLinkedServiceData> linkedServices, List<DataFactoryDatasetData> datasets, List<DataFactoryTriggerData> triggers)
     {
         Pipelines = pipelines;
         LinkedServices = linkedServices;
@@ -26,15 +26,15 @@ public class DataFactoryRepository
     public DataFactoryRepository()
     {
         Pipelines = new List<Pipeline>();
-        LinkedServices = new List<DataFactoryLinkedServiceProperties>();
-        Datasets = new List<DataFactoryDatasetProperties>();
-        Triggers = new List<DataFactoryTriggerProperties>();
+        LinkedServices = new List<DataFactoryLinkedServiceData>();
+        Datasets = new List<DataFactoryDatasetData>();
+        Triggers = new List<DataFactoryTriggerData>();
     }
 
     public List<Pipeline> Pipelines { get; private set; }
-    public List<DataFactoryLinkedServiceProperties> LinkedServices { get; private set; }
-    public List<DataFactoryDatasetProperties> Datasets { get; private set; }
-    public List<DataFactoryTriggerProperties> Triggers { get; private set; }
+    public List<DataFactoryLinkedServiceData> LinkedServices { get; private set; }
+    public List<DataFactoryDatasetData> Datasets { get; private set; }
+    public List<DataFactoryTriggerData> Triggers { get; private set; }
 
     public Pipeline GetPipelineByName(string name)
     {

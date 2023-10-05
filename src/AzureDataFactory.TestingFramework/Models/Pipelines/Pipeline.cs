@@ -23,14 +23,12 @@ public partial class Pipeline
     }
 
     /// <summary>
-    /// Evaluates the pipeline with the provided parameters. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
+    /// Validates whether the list of parameters are complete and not duplicate.
     /// </summary>
-    /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
-    /// <param name="testFramework">Reference to the test framework containing the repository and configuration</param>
-    /// <returns></returns>
-    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
-    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
-    internal IEnumerable<PipelineActivity> Evaluate(List<IRunParameter> parameters, TestFramework testFramework)
+    /// <param name="parameters"></param>
+    /// <exception cref="PipelineParameterNotProvidedException"></exception>
+    /// <exception cref="PipelineDuplicateParameterProvidedException"></exception>
+    internal void ValidateParameters(List<IRunParameter> parameters)
     {
         //Check if all parameters are provided
         foreach (var parameter in Parameters.Where(parameter => parameters.All(p => p.Name != parameter.Key)))
@@ -40,35 +38,5 @@ public partial class Pipeline
         var duplicateParameters = parameters.GroupBy(x => new { x.Name, x.Type }).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
         if (duplicateParameters.Any())
             throw new PipelineDuplicateParameterProvidedException($"Duplicate parameters provided: {string.Join(", ", duplicateParameters.Select(x => $"{x.Name} ({x.Type})"))}");
-
-        var state = new PipelineRunState(parameters, Variables);
-        foreach (var activity in testFramework.EvaluateActivities(Activities.ToList(), state))
-            yield return activity;
-    }
-
-    /// <summary>
-    /// Evaluates the pipeline with the provided parameters. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
-    /// </summary>
-    /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
-    /// <returns></returns>
-    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
-    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
-    internal IEnumerable<PipelineActivity> Evaluate(List<IRunParameter> parameters)
-    {
-        return Evaluate(parameters, new TestFramework());
-    }
-
-    /// <summary>
-    /// Evaluates the pipeline with the provider parameters and returns an enumerator to easily iterate over the activities. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
-    /// </summary>
-    /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
-    /// <param name="testFramework">Reference to the test framework containing the repository and configuration</param>
-    /// <returns></returns>
-    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
-    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
-    internal ActivityEnumerator EvaluateWithActivityEnumerator(List<IRunParameter> parameters, TestFramework testFramework)
-    {
-        var activities = Evaluate(parameters, testFramework);
-        return new ActivityEnumerator(activities);
     }
 }

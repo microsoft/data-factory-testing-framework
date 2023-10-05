@@ -29,6 +29,7 @@ public class IfConditionActivityTests
     public void WhenEvaluated_ShouldEvaluateCorrectChildActivities(bool expressionOutcome, string expectedActivityName)
     {
         // Arrange
+        var testFramework = new TestFramework();
         var expression = expressionOutcome ? "@equals(1, 1)" : "@equals(1, 2)";
         var activity = new IfConditionActivity("IfConditionActivity",
             new DataFactoryExpression(DataFactoryExpressionType.Expression, expression))
@@ -41,7 +42,7 @@ public class IfConditionActivityTests
         activity.Evaluate(state);
 
         // Act
-        var childActivities = activity.EvaluateChildActivities(state).ToList();
+        var childActivities = testFramework.Evaluate(activity, state).ToList();
 
         // Assert
         Assert.Single(childActivities);

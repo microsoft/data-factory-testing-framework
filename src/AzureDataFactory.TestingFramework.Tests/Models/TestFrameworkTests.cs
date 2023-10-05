@@ -43,7 +43,7 @@ public class TestFrameworkTests
         // Act
         var state = new PipelineRunState();
         state.Variables.Add(new PipelineRunVariable<string>("variable1", string.Empty));
-        var evaluatedActivities = _testFramework.EvaluateActivities(_activities, state).ToList();
+        var evaluatedActivities = _testFramework.Evaluate(_activities, state).ToList();
 
         // Assert
         Assert.NotNull(evaluatedActivities);
@@ -59,7 +59,7 @@ public class TestFrameworkTests
         _setVariableActivity.DependsOn.Add(new PipelineActivityDependency("webActivity", new[] { DependencyCondition.Succeeded }));
 
         // Assert
-        Assert.Throws<ActivitiesEvaluatorInvalidDependencyException>(() => _testFramework.EvaluateActivities(_activities, new PipelineRunState()).ToList());
+        Assert.Throws<ActivitiesEvaluatorInvalidDependencyException>(() => _testFramework.Evaluate(_activities, new PipelineRunState()).ToList());
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class TestFrameworkTests
         _webActivity.Uri = new DataFactoryElement<string>("@concat('https://www.example.com/', item())", DataFactoryElementKind.Expression);
 
         // Act
-        var evaluatedActivities = _testFramework.EvaluateActivities(new List<PipelineActivity> { foreachActivity }, state);
+        var evaluatedActivities = _testFramework.Evaluate(new List<PipelineActivity> { foreachActivity }, state);
 
         // Assert
         using var enumerator = evaluatedActivities.GetEnumerator();
@@ -108,7 +108,7 @@ public class TestFrameworkTests
             _activities);
 
         // Act
-        var evaluatedActivities = _testFramework.EvaluateActivities(new List<PipelineActivity> { untilActivity }, state);
+        var evaluatedActivities = _testFramework.Evaluate(new List<PipelineActivity> { untilActivity }, state);
 
         // Assert
         using var enumerator = evaluatedActivities.GetEnumerator();

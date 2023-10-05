@@ -8,25 +8,10 @@ namespace AzureDataFactory.TestingFramework.Models;
 
 public partial class ControlActivity
 {
-    protected virtual List<PipelineActivity> GetNextActivities()
+    internal delegate IEnumerable<PipelineActivity> EvaluateActivitiesDelegate(List<PipelineActivity> activities, PipelineRunState state);
+    internal virtual IEnumerable<PipelineActivity> EvaluateControlActivityIterations(PipelineRunState state,  EvaluateActivitiesDelegate evaluateActivities)
     {
+        // Note: unfortunately cannot use abstract method
         return new List<PipelineActivity>();
-    }
-
-    internal virtual IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state, TestFramework testFramework)
-    {
-        var scopedState = state.CreateIterationScope(null);
-        var activities = GetNextActivities();
-        foreach (var activity in testFramework.EvaluateActivities(activities, scopedState))
-        {
-            yield return activity;
-        }
-
-        state.AddScopedActivityResultsFromScopedState(scopedState);
-    }
-
-    internal virtual IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state)
-    {
-        return EvaluateChildActivities(state, new TestFramework());
     }
 }

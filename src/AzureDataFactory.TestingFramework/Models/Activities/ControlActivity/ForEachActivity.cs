@@ -9,11 +9,6 @@ namespace AzureDataFactory.TestingFramework.Models;
 
 public partial class ForEachActivity : IIterationActivity
 {
-    protected override List<PipelineActivity> GetNextActivities()
-    {
-        return Activities.ToList();
-    }
-
     private List<string>? _items;
     public List<string> IterationItems => _items ?? throw new InvalidOperationException("Items have not been evaluated yet.");
     public override DataFactoryEntity Evaluate(PipelineRunState state)
@@ -23,14 +18,17 @@ public partial class ForEachActivity : IIterationActivity
         return base.Evaluate(state);
     }
 
-    internal override IEnumerable<PipelineActivity> EvaluateChildActivities(PipelineRunState state, TestFramework testFramework)
+    internal override IEnumerable<PipelineActivity> EvaluateControlActivityIterations(PipelineRunState state, EvaluateActivitiesDelegate evaluateActivities)
     {
-        var activities = GetNextActivities();
-
-        return IterationItems.SelectMany(item =>
+        // Note: using enumerator to support yield return in foreach
+        using var enumerator = IterationItems.GetEnumerator();
+        while (enumerator.MoveNext())
         {
-            var scopedState = state.CreateIterationScope(item);
-            return testFramework.EvaluateActivities(activities, scopedState);
-        });
+            var scopedState = state.CreateIterationScope(enumerator.Current);
+            foreach (var activity in evaluateActivities(Activities.ToList(), scopedState))
+                yield return activity;
+
+            state.AddScopedActivityResultsFromScopedState(scopedState);
+        }
     }
 }

@@ -29,9 +29,16 @@ public class TestFramework
     /// <returns></returns>
     /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
     /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
-    public ActivityEnumerator Evaluate(Pipeline pipeline, List<IRunParameter> parameters)
+    public IEnumerable<PipelineActivity> Evaluate(Pipeline pipeline, List<IRunParameter> parameters)
     {
-        return pipeline.EvaluateWithActivityEnumerator(parameters, this);
+        pipeline.ValidateParameters(parameters);
+        var state = new PipelineRunState(parameters, pipeline.Variables);
+        return Evaluate(pipeline.Activities.ToList(), state);
+    }
+
+    public ActivityEnumerator EvaluateWithEnumerator(Pipeline pipeline, List<IRunParameter> parameters)
+    {
+        return new ActivityEnumerator(Evaluate(pipeline, parameters));
     }
 
     /// <summary>
@@ -44,10 +51,15 @@ public class TestFramework
     /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
     public List<PipelineActivity> EvaluateAll(Pipeline pipeline, List<IRunParameter> parameters)
     {
-        return pipeline.Evaluate(parameters, this).ToList();
+        return Evaluate(pipeline, parameters).ToList();
     }
 
-    internal IEnumerable<PipelineActivity> EvaluateActivities(List<PipelineActivity> activities, PipelineRunState state)
+    public IEnumerable<PipelineActivity> Evaluate(PipelineActivity activity, PipelineRunState state)
+    {
+        return Evaluate(new List<PipelineActivity> { activity }, state);
+    }
+
+    public IEnumerable<PipelineActivity> Evaluate(List<PipelineActivity> activities, PipelineRunState state)
     {
         while (state.ScopedPipelineActivityResults.Count != activities.Count)
         {
@@ -70,21 +82,13 @@ public class TestFramework
                         var pipeline = Repository.GetPipelineByName(executePipelineActivity.Pipeline.ReferenceName);
 
                         // Evaluate the pipeline with its own scope
-                        foreach (var childActivity in pipeline.Evaluate(executePipelineActivity.GetChildRunParameters(state)))
+                        foreach (var childActivity in Evaluate(pipeline, executePipelineActivity.GetChildRunParameters(state)))
                             yield return childActivity;
-                    }
-                    else if (activity is UntilActivity untilActivity)
-                    {
-                        do
-                        {
-                            foreach (var child in untilActivity.EvaluateChildActivities(state, this))
-                                yield return child;
-                        } while (!untilActivity.Expression.Evaluate<bool>(state));
                     }
                     else if (activity is ControlActivity controlActivity)
                     {
-                        foreach (var child in controlActivity.EvaluateChildActivities(state, this))
-                            yield return child;
+                        foreach (var childActivity in controlActivity.EvaluateControlActivityIterations(state, Evaluate))
+                            yield return childActivity;
                     }
                 }
             }
