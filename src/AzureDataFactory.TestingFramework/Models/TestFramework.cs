@@ -46,7 +46,7 @@ public class TestFramework
     /// </summary>
     /// <param name="pipeline">The pipeline to evaluate.</param>
     /// <param name="parameters">The global and regular parameters to be used for evaluating expressions.</param>
-    /// <returns></returns>
+    /// <returns>A list of evaluated pipeline activities</returns>
     /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
     /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
     public List<PipelineActivity> EvaluateAll(Pipeline pipeline, List<IRunParameter> parameters)
@@ -54,11 +54,23 @@ public class TestFramework
         return Evaluate(pipeline, parameters).ToList();
     }
 
+    /// <summary>
+    /// Evaluates a single activity given a state. Any expression part of the activity is evaluated based on the state of the pipeline.
+    /// </summary>
+    /// <param name="activity">The activity to evaluate</param>
+    /// <param name="state">The state which will be used to evaluate the expressions</param>
+    /// <returns>A list of evaluated pipelines, which can be more than 1 due to possible child activities.</returns>
     public IEnumerable<PipelineActivity> Evaluate(PipelineActivity activity, PipelineRunState state)
     {
         return Evaluate(new List<PipelineActivity> { activity }, state);
     }
 
+    /// <summary>
+    /// Evaluates all given activities using the provided parameters. The order of activity execution is simulated based on the dependencies. Any expression part of the activity is evaluated based on the state of the pipeline.
+    /// </summary>
+    /// <param name="activities">The activities to evaluate</param>
+    /// <param name="state">The state which will be used to evaluate the expressions</param>
+    /// <returns>A list of evaluated pipelines</returns>
     public IEnumerable<PipelineActivity> Evaluate(List<PipelineActivity> activities, PipelineRunState state)
     {
         while (state.ScopedPipelineActivityResults.Count != activities.Count)

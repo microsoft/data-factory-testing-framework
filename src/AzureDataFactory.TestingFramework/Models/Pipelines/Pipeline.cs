@@ -26,8 +26,8 @@ public partial class Pipeline
     /// Validates whether the list of parameters are complete and not duplicate.
     /// </summary>
     /// <param name="parameters"></param>
-    /// <exception cref="PipelineParameterNotProvidedException"></exception>
-    /// <exception cref="PipelineDuplicateParameterProvidedException"></exception>
+    /// <exception cref="PipelineParameterNotProvidedException">Thrown if a required pipeline parameter is not required</exception>
+    /// <exception cref="PipelineDuplicateParameterProvidedException">Thrown if a pipeline parameter is provided more than once</exception>
     internal void ValidateParameters(List<IRunParameter> parameters)
     {
         //Check if all parameters are provided
