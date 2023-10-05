@@ -45,7 +45,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
       var activity = pipeline.GetActivityByName("Trigger Azure Batch Job") as WebHookActivity;
       
       _state.Parameters.Add(new RunParameter(ParameterType.Global, "BaseUrl", "https://example.com"));
-      _state.Parameters.Add(new RunParameter(ParameterType.Parameter, "JobId", "123"));
+      _state.Parameters.Add(new RunParameter(ParameterType.Pipeline, "JobId", "123"));
       _state.Variables.Add(new PipelineRunVariable("JobName", "Job-123"));
       _state.AddActivityResult(new TestActivityResult("Get version", new
       {
@@ -73,8 +73,8 @@ The samples seen below is the _only_ code that you need to write! The framework 
     // Runs the pipeline with the provided parameters
     var activities = testFramework.Evaluate(pipeline, new List<RunParameter>
         {
-            new(ParameterType.Parameter, "JobId", "123"),
-            new(ParameterType.Parameter, "ContainerName", "test-container"),
+            new(ParameterType.Pipeline, "JobId", "123"),
+            new(ParameterType.Pipeline, "ContainerName", "test-container"),
             new(ParameterType.Global, "BaseUrl", "https://example.com"),
         });
 
