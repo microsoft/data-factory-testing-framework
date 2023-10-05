@@ -12,7 +12,7 @@ If there's a lot of interest in this framework, then I will continue to improve 
 
 1. Evaluate the outcome of any data factory resource result given a set of input parameters. The framework will evaluate parameters, globalParameters, variables, activityOutputs and their expressions, so that the final result can be asserted.
 2. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
-3. Automatically parse any data factory resource into the correct typed class (1500+ classes available).
+3. Automatically parse the entire data factory folder and parse any data factory entity into the correct typed class (1500+ classes available).
 4. Evaluate expressions, but not all functions are supported yet. You can always easily register your own custom functions.
 
 ## Why
@@ -27,9 +27,11 @@ Azure Data Factory does not support unit testing out of the box. The only way to
 
 ## Getting started
 
-1. Add the following nuget source to `nuget.config`: `https://nuget.pkg.github.com/arjendev/index.json`
-2. Install the nuget package: `dotnet add package AzureDataFactory.TestingFramework --prerelease`
-3. Start writing tests
+1. Create a .NET Unit Test project (xUnit is used in examples)
+2. Navigate in terminal to the project folder
+3. Add private github package nuget source:  `dotnet nuget add source https://nuget.pkg.github.com/arjendev/index.json --name arjendevfeed --username <GITHUB_HANDLE> --password <TOKEN>`
+4. Add package to project: `dotnet add package AzureDataFactory.TestingFramework --prerelease`
+5. Start writing tests
 
 ## Features - Examples
 
