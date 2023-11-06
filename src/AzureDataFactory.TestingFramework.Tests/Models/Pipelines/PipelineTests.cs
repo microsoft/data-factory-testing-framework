@@ -14,25 +14,27 @@ public class PipelineTests
     public void WhenEvaluatingPipelineWithMissingParameters_ShouldThrowException()
     {
         // Arrange
+        var testFramework = new TestFramework();
         var pipeline = new Pipeline();
         pipeline.Parameters.Add("key1", new EntityParameterSpecification(EntityParameterType.String));
         pipeline.Parameters.Add("key2", new EntityParameterSpecification(EntityParameterType.String));
 
         // Assert
-        Assert.Throws<PipelineParameterNotProvidedException>(() => pipeline.Evaluate(new List<IRunParameter>()).ToList());
+        Assert.Throws<PipelineParameterNotProvidedException>(() => testFramework.Evaluate(pipeline, new List<IRunParameter>()).ToList());
     }
 
     [Fact]
     public void WhenEvaluatingPipeline_ShouldReturnActivities()
     {
         // Arrange
+        var testFramework = new TestFramework();
         var pipeline = new Pipeline();
         pipeline.Parameters.Add("key1", new EntityParameterSpecification(EntityParameterType.String));
 
         // Act
-        var activities = pipeline.Evaluate(new List<IRunParameter>()
+        var activities = testFramework.EvaluateAll(pipeline, new List<IRunParameter>()
         {
-            new RunParameter<string>(ParameterType.Parameter, "key1", "value1")
+            new RunParameter<string>(ParameterType.Pipeline, "key1", "value1")
         });
 
         // Assert

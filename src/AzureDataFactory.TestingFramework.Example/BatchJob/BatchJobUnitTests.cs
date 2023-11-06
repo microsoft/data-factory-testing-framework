@@ -16,7 +16,7 @@ public class BatchJobUnitTests
 
     public BatchJobUnitTests()
     {
-        _pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline.json");
+        _pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline/batch_job.json");
         _state = new PipelineRunState();
     }
 
@@ -48,7 +48,7 @@ public class BatchJobUnitTests
         var variable = new PipelineRunVariable<string>("UserAssignedIdentityReference");
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "BatchAccountSubscription", "batch-account-subscription"));
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "BatchAccountResourceGroup", "batch-account-resource-group"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name"));
         _state.Variables.Add(variable);
 
         // Act
@@ -66,8 +66,8 @@ public class BatchJobUnitTests
         // Arrange
         var activity = _pipeline.GetActivityByName("Set ManagerApplicationPackagePath") as SetVariableActivity;
         var variable = new PipelineRunVariable<string>("ManagerApplicationPackagePath");
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "managerworkload"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "0.13.2"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"));
         _state.Variables.Add(variable);
 
         // Act
@@ -84,8 +84,8 @@ public class BatchJobUnitTests
         // Arrange
         var activity = _pipeline.GetActivityByName("Set WorkloadApplicationPackagePath") as SetVariableActivity;
         var variable = new PipelineRunVariable<string>("WorkloadApplicationPackagePath");
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "workload"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "0.13.2"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"));
         _state.Variables.Add(variable);
 
         // Act
@@ -102,14 +102,14 @@ public class BatchJobUnitTests
         // Arrange
         var activity = _pipeline.GetActivityByName("Set CommonEnvironmentSettings") as SetVariableActivity;
         var variable = new PipelineRunVariable<string>("CommonEnvironmentSettings");
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "workload"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "0.13.2"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "managerworkload"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "0.13.2"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "BatchJobTimeout", "PT4H"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "BatchJobTimeout", "PT4H"));
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "BatchStorageAccountName", "batch-account-name"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityClientId", "workload-user-assigned-identity-client-id"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "workload-user-assigned-identity-client-id"));
         _state.Variables.Add(new PipelineRunVariable<string>("UserAssignedIdentityReference", "/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"));
         _state.Variables.Add(variable);
 
@@ -177,7 +177,7 @@ public class BatchJobUnitTests
         // Arrange
         var activity = _pipeline.GetActivityByName("Set JobContainerName") as SetVariableActivity;
         var jobContainerNameVariable = new PipelineRunVariable<string>("JobContainerName");
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
         _state.Variables.Add(jobContainerNameVariable);
 
         // Act
@@ -198,17 +198,17 @@ public class BatchJobUnitTests
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"));
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "ADFResourceGroup", "adf-rg"));
         _state.Parameters.Add(new RunParameter<string>(ParameterType.Global, "ADFName", "adf-name"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "BatchJobTimeout", "PT4H"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "test-application-batch-pool-id"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application-name"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "1.5.0"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "batchmanager"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "2.0.0"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "test-application-batch-pool-id"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityClientId", "test-application-identity-client-id"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "JobAdditionalEnvironmentSettings", "[{\"name\": \"STORAGE_ACCOUNT_NAME\", \"value\": \"teststorage\"}]"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "BatchJobTimeout", "PT4H"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "BatchPoolId", "test-application-batch-pool-id"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application-name"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-batch-pool-id"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "test-application-identity-client-id"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "JobAdditionalEnvironmentSettings", "[{\"name\": \"STORAGE_ACCOUNT_NAME\", \"value\": \"teststorage\"}]"));
         _state.Variables.Add(new PipelineRunVariable<string>("JobContainerURL", "https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"));
         _state.Variables.Add(new PipelineRunVariable<string>("UserAssignedIdentityReference", "/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"));
         _state.Variables.Add(new PipelineRunVariable<string>("ManagerApplicationPackagePath", "$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"));
@@ -292,7 +292,7 @@ public class BatchJobUnitTests
     {
         // Arrange
         var activity = _pipeline.GetActivityByName("Monitor Batch Job") as ExecutePipelineActivity;
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"));
 
         // Act
         activity.Evaluate(_state);
@@ -310,10 +310,10 @@ public class BatchJobUnitTests
         // Arrange
         var activity = _pipeline.GetActivityByName("Copy Output Files") as ExecutePipelineActivity;
         _state.Variables.Add(new PipelineRunVariable<string>("JobContainerName", "job-8b6b545b-c583-4a06-adf7-19ff41370aba"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "TaskOutputFolderPrefix", "TASKOUTPUT_"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "OutputStorageAccountName", "teststorage"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "OutputContainerName", "test-application-output-container-name"));
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "OutputFolderName", "output"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "OutputStorageAccountName", "teststorage"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "OutputFolderName", "output"));
 
         // Act
         activity.Evaluate(_state);

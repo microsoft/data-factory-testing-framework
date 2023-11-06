@@ -73,7 +73,7 @@ public class FunctionArgumentTests
         // Arrange
         var expression = "pipeline().parameters.parameterName";
         var argument = new FunctionArgument(expression);
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "parameterName", "parameterValue"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "parameterName", "parameterValue"));
 
         // Act
         var evaluated = argument.Evaluate<string>(_state);
@@ -163,7 +163,7 @@ public class FunctionArgumentTests
         // Arrange
         var expression = "{ \"parameter\": \"@pipeline().parameters.parameterName\" }";
         var argument = new FunctionArgument(expression);
-        _state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "parameterName", "parameterValue"));
+        _state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "parameterName", "parameterValue"));
 
         // Act
         var evaluated = argument.Evaluate<string>(_state);
@@ -233,7 +233,7 @@ public class FunctionArgumentTests
         // Arrange
         var expression = "pipeline().parameters.parameterName";
         var argument = new FunctionArgument(expression);
-        _state.Parameters.Add(new RunParameter<int>(ParameterType.Parameter, "parameterName", 1));
+        _state.Parameters.Add(new RunParameter<int>(ParameterType.Pipeline, "parameterName", 1));
 
         // Act
         Assert.Throws<ExpressionParameterOrVariableTypeMismatchException>(() => argument.Evaluate<string>(_state));

@@ -18,7 +18,7 @@ public class PipelineRunStateTests
             {
                 new RunParameter<string>(ParameterType.Dataset, "datasetKey", "datasetValue"),
                 new RunParameter<string>(ParameterType.LinkedService, "linkedServiceKey", "linkedServiceValue"),
-                new RunParameter<string>(ParameterType.Parameter, "parameterKey", "parameterValue"),
+                new RunParameter<string>(ParameterType.Pipeline, "parameterKey", "parameterValue"),
                 new RunParameter<string>(ParameterType.Global, "globalParameterKey", "globalParameterValue")
             },
             new Dictionary<string, PipelineVariableSpecification>()
@@ -38,7 +38,7 @@ public class PipelineRunStateTests
         Assert.Equal(ParameterType.LinkedService, linkedServiceParameter.Type);
 
         var parameterParameter = state.Parameters.Single(p => p.Name == "parameterKey");
-        Assert.Equal(ParameterType.Parameter, parameterParameter.Type);
+        Assert.Equal(ParameterType.Pipeline, parameterParameter.Type);
 
         var globalParameterParameter = state.Parameters.Single(p => p.Name == "globalParameterKey");
         Assert.Equal(ParameterType.Global, globalParameterParameter.Type);
@@ -95,7 +95,7 @@ public class PipelineRunStateTests
         // Arrange
         var state = new PipelineRunState();
         state.AddActivityResult(new TestActivityResult("activityName", DependencyCondition.Succeeded));
-        state.Parameters.Add(new RunParameter<string>(ParameterType.Parameter, "parameterKey", "parameterValue"));
+        state.Parameters.Add(new RunParameter<string>(ParameterType.Pipeline, "parameterKey", "parameterValue"));
         state.Variables.Add(new PipelineRunVariable<string>("variableKey", "variableValue"));
 
         // Act

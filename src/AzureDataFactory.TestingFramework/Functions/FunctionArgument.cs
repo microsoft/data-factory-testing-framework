@@ -24,7 +24,7 @@ public class FunctionArgument : IFunctionPart
         var expressions = new List<BaseExpression>()
             .Concat(ActivityExpression.Find(evalExpression))
             .Concat(ParameterExpression.Find(evalExpression, ParameterType.Global))
-            .Concat(ParameterExpression.Find(evalExpression, ParameterType.Parameter))
+            .Concat(ParameterExpression.Find(evalExpression, ParameterType.Pipeline))
             .Concat(VariableExpression.Find(evalExpression))
             .Concat(IterationItemExpression.Find(evalExpression))
             .Concat(DatasetExpression.Find(evalExpression))

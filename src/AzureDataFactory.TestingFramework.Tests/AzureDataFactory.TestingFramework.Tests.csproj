@@ -27,6 +27,12 @@
       <None Update="Functional\CopyActivities\copyactivity-example.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Functional\Pipelines\Child\pipeline\child.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Functional\Pipelines\Child\pipeline\main.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

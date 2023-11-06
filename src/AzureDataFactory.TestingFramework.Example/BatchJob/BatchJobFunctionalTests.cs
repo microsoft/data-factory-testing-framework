@@ -4,37 +4,36 @@
 using AzureDataFactory.TestingFramework.Exceptions;
 using AzureDataFactory.TestingFramework.Models;
 using AzureDataFactory.TestingFramework.Models.Base;
-using AzureDataFactory.TestingFramework.Models.Pipelines;
 
 namespace AzureDataFactory.TestingFramework.Example.BatchJob;
 
 public class BatchJobFunctionalTests
 {
-
     [Fact]
     public void BatchJobTest()
     {
-        var pipeline = PipelineFactory.ParseFromFile("BatchJob/pipeline.json");
+        var testFramework = new TestFramework(dataFactoryFolderPath: "BatchJob");
+        var pipeline = testFramework.Repository.GetPipelineByName("batch_job");
         Assert.Equal("batch_job", pipeline.Name);
         Assert.Equal(11, pipeline.Activities.Count);
 
-        var activities = pipeline.EvaluateWithActivityEnumerator(new List<IRunParameter>
+        var activities = testFramework.EvaluateWithEnumerator(pipeline, new List<IRunParameter>
         {
-            new RunParameter<string>(ParameterType.Parameter, "BatchPoolId", "batch-pool-id"),
-            new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageName", "test-application"),
-            new RunParameter<string>(ParameterType.Parameter, "WorkloadApplicationPackageVersion", "1.5.0"),
-            new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageName", "batchmanager"),
-            new RunParameter<string>(ParameterType.Parameter, "ManagerApplicationPackageVersion", "2.0.0"),
-            new RunParameter<string>(ParameterType.Parameter, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
-            new RunParameter<string>(ParameterType.Parameter, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
-            new RunParameter<string>(ParameterType.Parameter, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
-            new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
-            new RunParameter<string>(ParameterType.Parameter, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
-            new RunParameter<string>(ParameterType.Parameter, "JobAdditionalEnvironmentSettings", "[]"),
-            new RunParameter<string>(ParameterType.Parameter, "OutputStorageAccountName", "test-application-output-storage-account-name"),
-            new RunParameter<string>(ParameterType.Parameter, "OutputContainerName", "test-application-output-container-name"),
-            new RunParameter<string>(ParameterType.Parameter, "OutputFolderName", "TEMP"),
-            new RunParameter<string>(ParameterType.Parameter, "BatchJobTimeout", "PT4H"),
+            new RunParameter<string>(ParameterType.Pipeline, "BatchPoolId", "batch-pool-id"),
+            new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application"),
+            new RunParameter<string>(ParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
+            new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
+            new RunParameter<string>(ParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
+            new RunParameter<string>(ParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
+            new RunParameter<string>(ParameterType.Pipeline, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
+            new RunParameter<string>(ParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
+            new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
+            new RunParameter<string>(ParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
+            new RunParameter<string>(ParameterType.Pipeline, "JobAdditionalEnvironmentSettings", "[]"),
+            new RunParameter<string>(ParameterType.Pipeline, "OutputStorageAccountName", "test-application-output-storage-account-name"),
+            new RunParameter<string>(ParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"),
+            new RunParameter<string>(ParameterType.Pipeline, "OutputFolderName", "TEMP"),
+            new RunParameter<string>(ParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
             new RunParameter<string>(ParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
             new RunParameter<string>(ParameterType.Global, "BatchAccountSubscription", "SUBSCRIPTION_ID"),
             new RunParameter<string>(ParameterType.Global, "BatchAccountResourceGroup", "RESOURCE_GROUP"),

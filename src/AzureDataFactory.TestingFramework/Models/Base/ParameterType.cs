@@ -3,4 +3,4 @@
 
 namespace AzureDataFactory.TestingFramework.Models.Base;
 
-public enum ParameterType { Parameter, Global, Dataset, LinkedService }
+public enum ParameterType { Pipeline, Global, Dataset, LinkedService }
