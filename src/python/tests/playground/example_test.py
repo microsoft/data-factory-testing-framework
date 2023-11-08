@@ -3,7 +3,6 @@ from azure.mgmt.datafactory import models as _models
 
 from data_factory_testing_framework.generated import Deserializer
 from data_factory_testing_framework.generated.models import WebActivity, PipelineResource
-import data_factory_testing_framework.models.activities.base.activity
 
 
 def get_pipeline():
