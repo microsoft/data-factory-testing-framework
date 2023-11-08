@@ -1,11 +1,12 @@
 import re
 
-from src.scripts.utils.string_utils import trim
+from data_factory_testing_framework.scripts.utils.string_utils import trim, reindent
 
 PARAM_OR_RETURNS_REGEX = re.compile(":(?:ivar|returns)")
 RETURNS_REGEX = re.compile(":returns: (?P<doc>.*)", re.S)
 PARAM_REGEX = re.compile(":ivar (?P<name>[\*\w]+): (?P<doc>.*?)"
                          "(?:(?=:ivar)|(?=:return)|(?=:raises)|\Z)", re.S)
+
 
 def parse_restructured_docstring(docstring):
     """Parse the docstring into its components.
