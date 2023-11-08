@@ -1,7 +1,4 @@
 import json
-import unittest
-from unittest import TestCase
-
 from azure.mgmt.datafactory import models as _models
 
 from data_factory_testing_framework.generated import Deserializer
@@ -23,23 +20,15 @@ def evaluate(activity: WebActivity):
     activity.body.evaluate()
 
 
-class TestPipeline(TestCase):
+class TestPipeline:
     pipeline: PipelineResource
-
-    @classmethod
-    def setUpClass(cls):
-        cls.pipeline = get_pipeline()
 
     def test_web_activity(self):
         # Arrange
-        web_activity: WebActivity = self.pipeline.activities[0]
+        web_activity: WebActivity = get_pipeline().activities[0]
 
         # Act
         evaluate(web_activity)
 
         # Assert
         assert web_activity.body.value == "test2"
-
-
-if __name__ == '__main__':
-    unittest.main()

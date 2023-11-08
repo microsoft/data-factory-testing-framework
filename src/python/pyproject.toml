@@ -11,6 +11,7 @@ azure-mgmt-datafactory = "^3.1.0"
 azure-identity = "^1.14.1"
 astor = "^0.8.1"
 docstring-parser = "^0.15"
+pytest = "^7.4.3"
 
 
 [build-system]
