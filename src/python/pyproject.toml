@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "azure-data-factory-testing-framework-python"
+version = "0.1.0"
+description = ""
+authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+azure-mgmt-datafactory = "^3.1.0"
+azure-identity = "^1.14.1"
+astor = "^0.8.1"
+docstring-parser = "^0.15"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
