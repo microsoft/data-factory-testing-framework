@@ -1,6 +1,5 @@
 import ast
 from _ast import Name, Load
-from src.scripts.utils.docstring_utils import parse_restructured_docstring
 
 target_type = "DataFactoryElement"
 
