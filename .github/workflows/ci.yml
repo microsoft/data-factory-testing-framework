@@ -23,22 +23,22 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Install dependencies
         run: dotnet restore
-        working-directory: ./src
+        working-directory: ./src/dotnet
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        working-directory: ./src
+        working-directory: ./src/dotnet
       - name: Test
         run: dotnet test --no-restore --verbosity normal
-        working-directory: ./src
+        working-directory: ./src/dotnet
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
          name: dotnet-results-${{ matrix.dotnet-version }}
-         path: ./src/TestResults-${{ matrix.dotnet-version }}
+         path: ./src/dotnet/TestResults-${{ matrix.dotnet-version }}
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
       - name: Create the package
-        run: dotnet pack --configuration Release src/AzureDataFactory.TestingFramework
+        run: dotnet pack --configuration Release src/dotnet/AzureDataFactory.TestingFramework
       - name: Publish the package to GPR
         if: github.ref == 'refs/heads/main'
-        run: dotnet nuget push src/AzureDataFactory.TestingFramework/bin/Release/*.nupkg --source "https://nuget.pkg.github.com/arjendev/index.json" --api-key ${{ secrets.PUBLISH_KEY }} --skip-duplicate
+        run: dotnet nuget push src/dotnet/AzureDataFactory.TestingFramework/bin/Release/*.nupkg --source "https://nuget.pkg.github.com/arjendev/index.json" --api-key ${{ secrets.PUBLISH_KEY }} --skip-duplicate
