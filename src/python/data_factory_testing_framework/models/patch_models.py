@@ -5,6 +5,8 @@ from data_factory_testing_framework.models.activities.control_activities.control
 from data_factory_testing_framework.models.activities.control_activities.execute_pipeline_activity import \
     ExecutePipelineActivity
 from data_factory_testing_framework.models.activities.control_activities.for_each_activity import ForEachActivity
+from data_factory_testing_framework.models.activities.control_activities.if_condition_activity import \
+    IfConditionActivity
 from data_factory_testing_framework.models.expression import Expression
 
 
@@ -15,6 +17,7 @@ def patch_models():
     patch_model(_models.ControlActivity, ControlActivity)
     patch_model(_models.ForEachActivity, ForEachActivity)
     patch_model(_models.Expression, Expression)
+    patch_model(_models.IfConditionActivity, IfConditionActivity)
 
 
 def patch_model(main_class, partial_class):

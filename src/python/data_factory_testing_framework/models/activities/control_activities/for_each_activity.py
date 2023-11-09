@@ -12,7 +12,7 @@ class ForEachActivity:
         return super(ControlActivity, self).evaluate(state)
 
     def evaluate_control_activity_iterations(self: ForEachActivity, state: PipelineRunState, evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]]):
-        for item in self.items.evaluated_items:
+        for item in self.items.evaluated:
             scoped_state = state.create_iteration_scope(item)
             for activity in evaluate_activities(self.activities, scoped_state):
                 yield activity
