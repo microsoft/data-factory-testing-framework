@@ -10,19 +10,17 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class TestFramework:
 
-    def __init__(self, data_factory_folder_path: str, should_evaluate_child_pipelines: bool = False):
-        self.repository = DataFactoryRepositoryFactory.parse_from_folder(data_factory_folder_path)
+    def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False):
+        self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(data_factory_folder_path)
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
-    def evaluate_activity(self, activity: Activity) -> DependencyCondition:
-        self.evaluate_activities([activity])
-        return activity.status
+    def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
+        return self.evaluate_activities([activity], state)
 
-    def evaluate_pipeline(self, pipeline: PipelineResource, state: PipelineRunState):
+    def evaluate_pipeline(self, pipeline: PipelineResource, state: PipelineRunState) -> List[Activity]:
         return self.evaluate_activities(pipeline.activities, state)
 
-    def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> DependencyCondition:
-        print("hi")
+    def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> List[Activity]:
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(

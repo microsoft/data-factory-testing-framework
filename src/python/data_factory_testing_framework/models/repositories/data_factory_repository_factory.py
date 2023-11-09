@@ -2,11 +2,13 @@ import json
 import os
 
 from data_factory_testing_framework.generated import Deserializer
+from data_factory_testing_framework.models.patch_models import patch_models
 from data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
-from data_factory_testing_framework.models.repositories.models_repository import ModelsRepository
+from data_factory_testing_framework.generated import models as _models
 
-models_repository = ModelsRepository()
-deserializer = Deserializer(models_repository.get_models())
+patch_models()
+models = {k: v for k, v in _models.__dict__.items() if isinstance(v, type)}
+deserializer = Deserializer(models)
 
 
 class DataFactoryRepositoryFactory:
