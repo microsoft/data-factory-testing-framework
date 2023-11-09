@@ -6,11 +6,6 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class ForEachActivity:
 
-    @staticmethod
-    def patch_generated_models(models):
-        models.ForEachActivity.evaluate = ForEachActivity.evaluate
-        models.ForEachActivity.evaluate_control_activity_iterations = ForEachActivity.evaluate_control_activity_iterations
-
     def evaluate(self: ForEachActivity, state: PipelineRunState):
         self.items.evaluate(state)
 
