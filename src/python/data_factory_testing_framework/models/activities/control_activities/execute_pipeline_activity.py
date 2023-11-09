@@ -8,10 +8,6 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class ExecutePipelineActivity:
 
-    @staticmethod
-    def patch_generated_models(models):
-        models.ExecutePipelineActivity.get_child_run_parameters = ExecutePipelineActivity.get_child_run_parameters
-
     def get_child_run_parameters(self, state: PipelineRunState) -> List[RunParameter]:
         child_parameters = []
         for parameter in state.parameters:

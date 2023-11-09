@@ -10,8 +10,14 @@ from data_factory_testing_framework.models.expression import Expression
 
 # Patch models with our custom classes
 def patch_models():
-    Activity.patch_generated_models(_models)
-    ExecutePipelineActivity.patch_generated_models(_models)
-    ControlActivity.patch_generated_models(_models)
-    ForEachActivity.patch_generated_models(_models)
-    Expression.patch_generated_models(_models)
+    patch_model(_models.Activity, Activity)
+    patch_model(_models.ExecutePipelineActivity, ExecutePipelineActivity)
+    patch_model(_models.ControlActivity, ControlActivity)
+    patch_model(_models.ForEachActivity, ForEachActivity)
+    patch_model(_models.Expression, Expression)
+
+
+def patch_model(main_class, partial_class):
+    partial_class_method_list = [attribute for attribute in dir(partial_class) if callable(getattr(partial_class, attribute)) and attribute.startswith('__') is False]
+    for method_name in partial_class_method_list:
+        setattr(main_class, method_name, getattr(partial_class, method_name))

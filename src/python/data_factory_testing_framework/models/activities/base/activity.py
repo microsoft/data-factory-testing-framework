@@ -6,16 +6,8 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 class Activity:
     status: DependencyCondition
 
-    @staticmethod
-    def patch_generated_models(models):
-        models.Activity._evaluate_expressions = Activity.evaluate_expressions
-        models.Activity.evaluate = Activity.evaluate
-        models.Activity.are_dependency_condition_met = Activity.are_dependency_condition_met
-        models.Activity.get_scoped_activity_result_by_name = Activity.get_scoped_activity_result_by_name
-        models.Activity.status = None
-
     def evaluate(self, state: PipelineRunState) -> Activity:
-        self._evaluate_expressions(self)
+        self.evaluate_expressions(self)
         self.status = DependencyCondition.Succeeded
         return self
 
@@ -34,7 +26,7 @@ class Activity:
             if data_factory_element := isinstance(attribute, DataFactoryElement) and attribute:
                 data_factory_element.evaluate()
             else:
-                self._evaluate_expressions(attribute, visited)
+                self.evaluate_expressions(attribute, visited)
 
     def get_scoped_activity_result_by_name(self, name: str, state: PipelineRunState):
         return next((activity_result for activity_result in state.scoped_pipeline_activity_results if activity_result.name == name), None)
