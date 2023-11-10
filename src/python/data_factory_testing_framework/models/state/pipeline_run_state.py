@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import \
+    VariableBeingEvaluatedDoesNotExistError
 from data_factory_testing_framework.generated.models import VariableSpecification
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
@@ -26,3 +28,11 @@ class PipelineRunState(RunState):
 
     def add_scoped_activity_results_from_scoped_state(self, scoped_state):
         self.pipeline_activity_results.extend(scoped_state.pipeline_activity_results)
+
+    def set_variable(self, variable_name: str, value):
+        for variable in self.variables:
+            if variable.name == variable_name:
+                variable.value = value
+                return
+
+        raise VariableBeingEvaluatedDoesNotExistError(variable_name)

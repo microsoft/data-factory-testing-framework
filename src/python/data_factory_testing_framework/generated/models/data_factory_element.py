@@ -10,5 +10,5 @@ class DataFactoryElement(Generic[T]):
     def __init__(self, expression: str):
         self.expression = expression
 
-    def evaluate(self):
-        self.value = "test2"  # TODO: Evaluate expression
+    def evaluate(self, state):
+        return self.expression
