@@ -33,13 +33,13 @@ class Activity:
             return True
 
         for dependency in self.depends_on:
-            dependency_activity = state.get_scoped_activity_result_by_name(dependency.activity, state)
+            dependency_activity = state.try_get_scoped_activity_result_by_name(dependency.activity)
 
             if dependency_activity is None:
                 return False
 
             for dependency_condition in dependency.dependency_conditions:
-                if dependency_activity.status != dependency_condition:
+                if dependency_activity["status"] != dependency_condition:
                     return False
 
         return True

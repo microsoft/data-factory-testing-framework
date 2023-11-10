@@ -3,6 +3,7 @@ from typing import List
 from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
 from data_factory_testing_framework.generated.models import PipelineResource, Activity
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
+from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 
 
 class PipelineResource:
@@ -18,7 +19,7 @@ class PipelineResource:
         for pipeline_parameter_name, pipeline_parameter_specification in self.parameters.items():
             found = False
             for parameter in parameters:
-                if pipeline_parameter_name == parameter.name and pipeline_parameter_specification.type == parameter.type:
+                if pipeline_parameter_name == parameter.name and parameter.type == RunParameterType.Pipeline:
                     found = True
                     break
 

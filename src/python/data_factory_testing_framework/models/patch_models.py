@@ -9,6 +9,7 @@ from data_factory_testing_framework.models.activities.control_activities.if_cond
     IfConditionActivity
 from data_factory_testing_framework.models.activities.control_activities.until_activity import UntilActivity
 from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.expression import Expression
 from data_factory_testing_framework.models.pipelines.pipeline_resource import PipelineResource
 
@@ -24,6 +25,7 @@ def patch_models():
     patch_model(_models.UntilActivity, UntilActivity)
     patch_model(_models.SetVariableActivity, SetVariableActivity)
     patch_model(_models.PipelineResource, PipelineResource)
+    patch_model(_models.DataFactoryElement, DataFactoryElement)
 
 
 def patch_model(main_class, partial_class):
