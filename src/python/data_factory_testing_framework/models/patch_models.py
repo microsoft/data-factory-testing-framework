@@ -8,6 +8,7 @@ from data_factory_testing_framework.models.activities.control_activities.for_eac
 from data_factory_testing_framework.models.activities.control_activities.if_condition_activity import \
     IfConditionActivity
 from data_factory_testing_framework.models.activities.control_activities.until_activity import UntilActivity
+from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
 from data_factory_testing_framework.models.expression import Expression
 
 
@@ -20,6 +21,7 @@ def patch_models():
     patch_model(_models.Expression, Expression)
     patch_model(_models.IfConditionActivity, IfConditionActivity)
     patch_model(_models.UntilActivity, UntilActivity)
+    patch_model(_models.SetVariableActivity, SetVariableActivity)
 
 
 def patch_model(main_class, partial_class):

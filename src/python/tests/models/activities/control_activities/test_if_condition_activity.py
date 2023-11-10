@@ -33,13 +33,13 @@ class TestIfConditionActivity:
                 SetVariableActivity(
                     name="setVariableActivity1",
                     variable_name="variable",
-                    value="dummy")
+                    value=DataFactoryElement("dummy"))
             ],
             if_false_activities=[
                 SetVariableActivity(
                     name="setVariableActivity2",
                     variable_name="variable",
-                    value="dummy")
+                    value=DataFactoryElement("dummy"))
             ]
         )
 

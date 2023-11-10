@@ -7,11 +7,11 @@ class Activity:
     status: DependencyCondition
 
     def evaluate(self, state: PipelineRunState) -> Activity:
-        self.evaluate_expressions(self)
+        self.evaluate_expressions(self, state)
         self.status = DependencyCondition.Succeeded
         return self
 
-    def evaluate_expressions(self, obj: Any, visited: List[Any] = None):
+    def evaluate_expressions(self, obj: Any, state: PipelineRunState, visited: List[Any] = None):
         if visited is None:
             visited = []
 
@@ -24,9 +24,9 @@ class Activity:
         for attribute_name in attribute_names:
             attribute = getattr(obj, attribute_name)
             if data_factory_element := isinstance(attribute, DataFactoryElement) and attribute:
-                data_factory_element.evaluate()
+                data_factory_element.evaluate(state)
             else:
-                self.evaluate_expressions(attribute, visited)
+                self.evaluate_expressions(attribute, state, visited)
 
     def get_scoped_activity_result_by_name(self, name: str, state: PipelineRunState):
         return next((activity_result for activity_result in state.scoped_pipeline_activity_results if activity_result.name == name), None)
