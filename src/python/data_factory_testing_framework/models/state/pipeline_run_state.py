@@ -12,8 +12,8 @@ class PipelineRunState(RunState):
     def __init__(self, parameters: List[RunParameter] = [], variables: Dict[str, VariableSpecification] = {}, pipeline_activity_results: Dict[str, Any] = {}, iteration_item: str = None):
         super().__init__(parameters)
         self.variables = []
-        for variable in variables:
-            self.variables.append(PipelineRunVariable(variable.name, variable.value))
+        for variable_name, variable in variables.items():
+            self.variables.append(PipelineRunVariable(variable_name, variable.default_value))
 
         self.pipeline_activity_results: Dict[str, Any] = pipeline_activity_results
         self.scoped_pipeline_activity_results: Dict[str, Any] = {}
@@ -35,8 +35,8 @@ class PipelineRunState(RunState):
     def add_scoped_activity_results_from_scoped_state(self, scoped_state):
         self.pipeline_activity_results.extend(scoped_state.pipeline_activity_results)
 
-    def get_scoped_activity_result_by_name(self, name: str):
-        return self.scoped_pipeline_activity_results[name]
+    def try_get_scoped_activity_result_by_name(self, name: str):
+        return self.pipeline_activity_results[name] if name in self.pipeline_activity_results else None
 
     def set_variable(self, variable_name: str, value):
         for variable in self.variables:

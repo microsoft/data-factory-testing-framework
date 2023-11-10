@@ -11,7 +11,7 @@ def find_and_replace_activity(expression: str, state: PipelineRunState):
         activity_name = match.group("activity_name")
         fields = match.group(0).split('.')[1:]
 
-        activity = state.get_scoped_activity_result_by_name(activity_name)
+        activity = state.try_get_scoped_activity_result_by_name(activity_name)
         if activity is None:
             raise ActivityNotFoundError(activity_name)
 

@@ -10,6 +10,14 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
+def trim_one_char(text: str, character):
+    if text.startswith(character):
+        text = text[1:]
+    if text.endswith(character):
+        text = text[:-1]
+    return text
+
+
 class FunctionArgument:
     def __init__(self, expression: str):
         self.expression = expression.strip('\n').strip(' ')
@@ -22,4 +30,5 @@ class FunctionArgument:
         evaluated_expression = find_and_replace_dataset(evaluated_expression, state)
         evaluated_expression = find_and_replace_iteration_item(evaluated_expression, state)
         evaluated_expression = find_and_replace_activity(evaluated_expression, state)
-        return evaluated_expression
+        return trim_one_char(evaluated_expression, "'")
+

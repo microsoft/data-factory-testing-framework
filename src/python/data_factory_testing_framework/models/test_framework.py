@@ -2,6 +2,7 @@ from typing import Any, List
 
 from data_factory_testing_framework.generated.models import Activity, DependencyCondition, PipelineResource, \
     UntilActivity, ForEachActivity, IfConditionActivity, ExecutePipelineActivity, ControlActivity
+from data_factory_testing_framework.models.base.run_parameter import RunParameter
 
 from data_factory_testing_framework.models.repositories.data_factory_repository_factory import \
     DataFactoryRepositoryFactory
@@ -17,15 +18,16 @@ class TestFramework:
     def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
         return self.evaluate_activities([activity], state)
 
-    def evaluate_pipeline(self, pipeline: PipelineResource, state: PipelineRunState) -> List[Activity]:
+    def evaluate_pipeline(self, pipeline: PipelineResource, parameters: List[RunParameter]) -> List[Activity]:
+        pipeline.validate_parameters(parameters)
+        state = PipelineRunState(parameters, pipeline.variables)
         return self.evaluate_activities(pipeline.activities, state)
 
     def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> List[Activity]:
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
-                    lambda a: a not in state.scoped_pipeline_activity_results and a.are_dependency_condition_met(state),
-                    activities):
+                    lambda a: a.name not in state.scoped_pipeline_activity_results and a.are_dependency_condition_met(state), activities):
                 evaluated_activity = activity.evaluate(state)
                 if not self._is_iteration_activity(evaluated_activity) or (isinstance(evaluated_activity, ExecutePipelineActivity) and not self.should_evaluate_child_pipelines):
                     yield evaluated_activity
