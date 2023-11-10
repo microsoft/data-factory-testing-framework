@@ -28,15 +28,12 @@ class Activity:
             else:
                 self.evaluate_expressions(attribute, state, visited)
 
-    def get_scoped_activity_result_by_name(self, name: str, state: PipelineRunState):
-        return next((activity_result for activity_result in state.scoped_pipeline_activity_results if activity_result.name == name), None)
-
     def are_dependency_condition_met(self, state: PipelineRunState):
         if not self.depends_on:
             return True
 
         for dependency in self.depends_on:
-            dependency_activity = self.get_scoped_activity_result_by_name(dependency.activity, state)
+            dependency_activity = state.get_scoped_activity_result_by_name(dependency.activity, state)
 
             if dependency_activity is None:
                 return False

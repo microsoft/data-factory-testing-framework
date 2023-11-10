@@ -1,6 +1,6 @@
 from typing import List
 
-from data_factory_testing_framework.exceptions.activity_not_found_exception import ActivityNotFoundException
+from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
 from data_factory_testing_framework.generated.models import PipelineResource, Activity
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 
@@ -11,7 +11,7 @@ class PipelineResource:
             if activity.name == name:
                 return activity
 
-        raise ActivityNotFoundException(f"Activity with name {name} not found")
+        raise ActivityNotFoundError(f"Activity with name {name} not found")
 
     def validate_parameters(self: PipelineResource, parameters: List[RunParameter]):
         # Check if all parameters are provided

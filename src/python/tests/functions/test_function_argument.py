@@ -7,6 +7,7 @@ from data_factory_testing_framework.exceptions.linked_service_parameter_not_foun
     LinkedServiceParameterNotFoundError
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
+from data_factory_testing_framework.generated.models import DependencyCondition
 from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
@@ -57,7 +58,7 @@ def test_evaluate_variable_string_expression():
 
 def test_evaluate_linked_service_string_expression():
     # Arrange
-    expression = "linkedService('linkedServiceName')"
+    expression = "@linkedService('linkedServiceName')"
     argument = FunctionArgument(expression)
     state = PipelineRunState()
     state.parameters.append(RunParameter(RunParameterType.LinkedService, "linkedServiceName", "linkedServiceNameValue"))
@@ -152,4 +153,45 @@ def test_evaluate_unknown_linked_service():
         argument.evaluate(state)
 
 
+def test_evaluate_activity_output_expression():
+    # Arrange
+    expression = "activity('activityName').output.outputName"
+    argument = FunctionArgument(expression)
+    state = PipelineRunState()
+    state.add_activity_result("activityName", DependencyCondition.SUCCEEDED, {"outputName": "outputValue"})
 
+    # Act
+    evaluated = argument.evaluate(state)
+
+    # Assert
+    assert evaluated == "outputValue"
+
+
+def test_evaluate_activity_output_nested_expression():
+    # Arrange
+    expression = "activity('activityName').output.nestedOutput.nestedField"
+    argument = FunctionArgument(expression)
+    state = PipelineRunState()
+    state.add_activity_result("activityName", DependencyCondition.SUCCEEDED,
+                              {"nestedOutput": {"nestedField": "outputValue"}})
+
+    # Act
+    evaluated = argument.evaluate(state)
+
+    # Assert
+    assert evaluated == "outputValue"
+
+
+def test_evaluate_complex_json_expression():
+    # Arrange
+    expression = '" { "command": "@pipeline().globalParameters.command", "argument": @pipeline().parameters.argument } "'
+    argument = FunctionArgument(expression)
+    state = PipelineRunState()
+    state.parameters.append(RunParameter(RunParameterType.Global, "command", "commandValue"))
+    state.parameters.append(RunParameter(RunParameterType.Pipeline, "argument", "argumentValue"))
+
+    # Act
+    evaluated = argument.evaluate(state)
+
+    # Assert
+    assert evaluated == '" { "command": "commandValue", "argument": argumentValue } "'
