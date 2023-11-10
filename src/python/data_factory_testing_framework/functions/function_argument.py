@@ -1,3 +1,4 @@
+from data_factory_testing_framework.functions.expressions.expression_activity import find_and_replace_activity
 from data_factory_testing_framework.functions.expressions.expression_dataset import find_and_replace_dataset
 from data_factory_testing_framework.functions.expressions.expression_iteration_item import \
     find_and_replace_iteration_item
@@ -20,4 +21,5 @@ class FunctionArgument:
         evaluated_expression = find_and_replace_linked_services(evaluated_expression, state)
         evaluated_expression = find_and_replace_dataset(evaluated_expression, state)
         evaluated_expression = find_and_replace_iteration_item(evaluated_expression, state)
+        evaluated_expression = find_and_replace_activity(evaluated_expression, state)
         return evaluated_expression
