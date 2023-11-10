@@ -1,5 +1,5 @@
 from data_factory_testing_framework.generated.models import WebActivity, DependencyCondition, SetVariableActivity
-from data_factory_testing_framework.models.base.parameter_type import ParameterType
+from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.models.test_framework import TestFramework
@@ -12,28 +12,28 @@ class TestBatchJob:
         test_framework = TestFramework("pipelines")
         pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
         state = PipelineRunState(parameters=[
-            RunParameter(ParameterType.Pipeline, "BatchPoolId", "batch-pool-id"),
-            RunParameter(ParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application"),
-            RunParameter(ParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
-            RunParameter(ParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
-            RunParameter(ParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
-            RunParameter(ParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
-            RunParameter(ParameterType.Pipeline, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
-            RunParameter(ParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
-            RunParameter(ParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
-            RunParameter(ParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
-            RunParameter(ParameterType.Pipeline, "JobAdditionalEnvironmentSettings", "[]"),
-            RunParameter(ParameterType.Pipeline, "OutputStorageAccountName", "test-application-output-storage-account-name"),
-            RunParameter(ParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"),
-            RunParameter(ParameterType.Pipeline, "OutputFolderName", "TEMP"),
-            RunParameter(ParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
-            RunParameter(ParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
-            RunParameter(ParameterType.Global, "BatchAccountSubscription", "SUBSCRIPTION_ID"),
-            RunParameter(ParameterType.Global, "BatchAccountResourceGroup", "RESOURCE_GROUP"),
-            RunParameter(ParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com"),
-            RunParameter(ParameterType.Global, "ADFSubscription", "bd19dba4-89ad-4976-b862-848bf43a4340"),
-            RunParameter(ParameterType.Global, "ADFResourceGroup", "adf-rg"),
-            RunParameter(ParameterType.Global, "ADFName", "adf-name"),
+            RunParameter(RunParameterType.Pipeline, "BatchPoolId", "batch-pool-id"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
+            RunParameter(RunParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "802100a5-ec79-4a52-be62-8d6109f3ff9a"),
+            RunParameter(RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-identity-name"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"),
+            RunParameter(RunParameterType.Pipeline, "JobAdditionalEnvironmentSettings", "[]"),
+            RunParameter(RunParameterType.Pipeline, "OutputStorageAccountName", "test-application-output-storage-account-name"),
+            RunParameter(RunParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"),
+            RunParameter(RunParameterType.Pipeline, "OutputFolderName", "TEMP"),
+            RunParameter(RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
+            RunParameter(RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
+            RunParameter(RunParameterType.Global, "BatchAccountSubscription", "SUBSCRIPTION_ID"),
+            RunParameter(RunParameterType.Global, "BatchAccountResourceGroup", "RESOURCE_GROUP"),
+            RunParameter(RunParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com"),
+            RunParameter(RunParameterType.Global, "ADFSubscription", "bd19dba4-89ad-4976-b862-848bf43a4340"),
+            RunParameter(RunParameterType.Global, "ADFResourceGroup", "adf-rg"),
+            RunParameter(RunParameterType.Global, "ADFName", "adf-name"),
         ])
 
         # Act

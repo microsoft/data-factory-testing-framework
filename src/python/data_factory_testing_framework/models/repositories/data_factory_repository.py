@@ -1,5 +1,6 @@
 from typing import List
 
+from data_factory_testing_framework.exceptions.pipeline_not_found_exception import PipelineNotFoundException
 from data_factory_testing_framework.generated.models import PipelineResource
 
 
@@ -12,4 +13,4 @@ class DataFactoryRepository:
             if pipeline.name == name:
                 return pipeline
 
-        raise Exception(f"Pipeline with name {name} not found")
+        raise PipelineNotFoundException(f"Pipeline with name {name} not found")
