@@ -24,7 +24,7 @@ def test_when_evaluated_should_evaluate_expression():
     activity.evaluate(PipelineRunState())
 
     # Assert
-    assert activity.expression.evaluated == True
+    assert activity.expression.evaluated is True
 
 
 @pytest.mark.parametrize("expression_outcome,expected_activity_name", [(True, "setVariableActivity1"),(False, "setVariableActivity2")])

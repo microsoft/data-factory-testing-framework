@@ -6,7 +6,7 @@ T = TypeVar("T")
 
 
 class RunParameter(Generic[T]):
-    def __init__(self, type: RunParameterType, name: str, value: T):
+    def __init__(self, type: RunParameterType, name: str, value: T) -> None:
         self.type = type
         self.name = name
         self.value = value

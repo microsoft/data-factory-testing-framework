@@ -11,7 +11,7 @@ from data_factory_testing_framework.models.state.run_state import RunState
 
 
 class PipelineRunState(RunState):
-    def __init__(self, parameters: Optional[List[RunParameter]] = None, variable_specifications: Optional[Dict[str, VariableSpecification]] = None, pipeline_activity_results: Optional[Dict[str, Any]] = None, iteration_item: str = None):
+    def __init__(self, parameters: Optional[List[RunParameter]] = None, variable_specifications: Optional[Dict[str, VariableSpecification]] = None, pipeline_activity_results: Optional[Dict[str, Any]] = None, iteration_item: str = None) -> None:
         if variable_specifications is None:
             variable_specifications = {}
 

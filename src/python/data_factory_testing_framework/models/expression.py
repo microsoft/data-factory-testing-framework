@@ -8,7 +8,7 @@ TResult = TypeVar("TResult")
 
 
 class Expression[TResult]:
-    def __init__(self):
+    def __init__(self) -> None:
         self.evaluated: TResult = []
 
     def evaluate(self: Expression, state: PipelineRunState):

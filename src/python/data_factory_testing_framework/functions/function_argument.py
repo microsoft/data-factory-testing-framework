@@ -21,7 +21,7 @@ def trim_one_char(text: str, character):
 
 
 class FunctionArgument:
-    def __init__(self, expression: str):
+    def __init__(self, expression: str) -> None:
         self.expression = expression.strip('\n').strip(' ')
 
     def evaluate(self, state: PipelineRunState):

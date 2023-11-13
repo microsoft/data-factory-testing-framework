@@ -18,7 +18,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class TestFramework:
 
-    def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False):
+    def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False) -> None:
         self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(data_factory_folder_path)
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 

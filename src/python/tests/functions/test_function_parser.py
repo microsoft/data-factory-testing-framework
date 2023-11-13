@@ -5,7 +5,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 def test_parse_expression_with_nested_function_and_single_quote():
     # Arrange
-    state = PipelineRunState()
+    PipelineRunState()
     raw_expression = "concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))"
 
     # Act
@@ -30,7 +30,7 @@ def test_parse_expression_with_nested_function_and_single_quote():
 
 def test_parse_expression_with_adf_native_functions():
     # Arrange
-    state = PipelineRunState()
+    PipelineRunState()
     raw_expression = "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)"
 
     # Act

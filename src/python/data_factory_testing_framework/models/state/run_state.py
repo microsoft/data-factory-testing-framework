@@ -4,7 +4,7 @@ from data_factory_testing_framework.models.base.run_parameter import RunParamete
 
 
 class RunState:
-    def __init__(self, parameters: Optional[List[RunParameter]] = None):
+    def __init__(self, parameters: Optional[List[RunParameter]] = None) -> None:
         if parameters is None:
             parameters = []
 

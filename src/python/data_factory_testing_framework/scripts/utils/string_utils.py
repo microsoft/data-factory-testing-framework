@@ -2,7 +2,7 @@ import sys
 
 
 def trim(docstring):
-    """Trim function from PEP-257"""
+    """Trim function from PEP-257."""
     if not docstring:
         return ""
     # Convert tabs to spaces (following the normal Python rules)
