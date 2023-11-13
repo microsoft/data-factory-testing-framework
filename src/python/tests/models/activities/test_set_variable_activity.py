@@ -14,7 +14,7 @@ from data_factory_testing_framework.models.test_framework import TestFramework
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set():
     # Arrange
-    test_framework = TestFramework()
+    TestFramework()
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",
@@ -35,7 +35,7 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set():
 
 def test_when_unknown_variable_evaluated_then_should_raise_exception():
     # Arrange
-    test_framework = TestFramework()
+    TestFramework()
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",

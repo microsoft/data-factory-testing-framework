@@ -10,7 +10,7 @@ from data_factory_testing_framework.functions.functions_repository import Functi
 class FunctionCall:
     function_names_with_all_arguments_as_list = ["concat"]
 
-    def __init__(self, name: str, arguments: List):
+    def __init__(self, name: str, arguments: List) -> None:
         self.name = name
         self.arguments = arguments
 
