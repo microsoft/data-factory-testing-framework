@@ -4,8 +4,7 @@ from data_factory_testing_framework.scripts.utils.string_utils import reindent, 
 
 PARAM_OR_RETURNS_REGEX = re.compile(":(?:ivar|returns)")
 RETURNS_REGEX = re.compile(":returns: (?P<doc>.*)", re.S)
-PARAM_REGEX = re.compile(":ivar (?P<name>[\*\w]+): (?P<doc>.*?)"
-                         "(?:(?=:ivar)|(?=:return)|(?=:raises)|\Z)", re.S)
+PARAM_REGEX = re.compile(":ivar (?P<name>[\*\w]+): (?P<doc>.*?)" "(?:(?=:ivar)|(?=:return)|(?=:raises)|\Z)", re.S)
 
 
 def parse_restructured_docstring(docstring):
@@ -40,10 +39,7 @@ def parse_restructured_docstring(docstring):
                 long_description = long_description[:long_desc_end].rstrip()
 
             if params_returns_desc:
-                params = [
-                    {"name": name, "doc": trim(doc)}
-                    for name, doc in PARAM_REGEX.findall(params_returns_desc)
-                ]
+                params = [{"name": name, "doc": trim(doc)} for name, doc in PARAM_REGEX.findall(params_returns_desc)]
 
                 match = RETURNS_REGEX.search(params_returns_desc)
                 if match:
@@ -55,4 +51,3 @@ def parse_restructured_docstring(docstring):
         "params": params,
         "returns": returns,
     }
-

@@ -21,9 +21,11 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set():
         variable_name=variable_name,
         value=DataFactoryElement("TestValue"),
     )
-    state = PipelineRunState(variable_specifications={
-        variable_name: VariableSpecification(type="String", default_value=""),
-    })
+    state = PipelineRunState(
+        variable_specifications={
+            variable_name: VariableSpecification(type="String", default_value=""),
+        },
+    )
 
     # Act
     set_variable_activity.evaluate(state)

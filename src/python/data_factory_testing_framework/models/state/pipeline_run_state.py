@@ -11,7 +11,13 @@ from data_factory_testing_framework.models.state.run_state import RunState
 
 
 class PipelineRunState(RunState):
-    def __init__(self, parameters: Optional[List[RunParameter]] = None, variable_specifications: Optional[Dict[str, VariableSpecification]] = None, pipeline_activity_results: Optional[Dict[str, Any]] = None, iteration_item: str = None) -> None:
+    def __init__(
+        self,
+        parameters: Optional[List[RunParameter]] = None,
+        variable_specifications: Optional[Dict[str, VariableSpecification]] = None,
+        pipeline_activity_results: Optional[Dict[str, Any]] = None,
+        iteration_item: str = None,
+    ) -> None:
         if variable_specifications is None:
             variable_specifications = {}
 
@@ -41,7 +47,12 @@ class PipelineRunState(RunState):
         }
 
     def create_iteration_scope(self, iteration_item: str):
-        return PipelineRunState(self.parameters, self._variable_specifications, self.pipeline_activity_results, iteration_item)
+        return PipelineRunState(
+            self.parameters,
+            self._variable_specifications,
+            self.pipeline_activity_results,
+            iteration_item,
+        )
 
     def add_scoped_activity_results_from_scoped_state(self, scoped_state):
         for result in scoped_state.pipeline_activity_results:
@@ -64,4 +75,3 @@ class PipelineRunState(RunState):
                 return variable
 
         raise VariableDoesNotExistError(variable_name)
-

@@ -9,7 +9,7 @@ def find_and_replace_activity(expression: str, state: PipelineRunState):
     match = re.match(pattern, expression)
     if match:
         activity_name = match.group("activity_name")
-        fields = match.group(0).split('.')[1:]
+        fields = match.group(0).split(".")[1:]
 
         activity = state.try_get_scoped_activity_result_by_name(activity_name)
         if activity is None:

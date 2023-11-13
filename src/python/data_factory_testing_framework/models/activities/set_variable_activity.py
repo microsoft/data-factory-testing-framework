@@ -3,7 +3,6 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 class SetVariableActivity:
-
     def evaluate(self: SetVariableActivity, state: PipelineRunState):
         super(ControlActivity, self).evaluate(state)
 
@@ -13,4 +12,3 @@ class SetVariableActivity:
         state.set_variable(self.variable_name, self.value.evaluate(state))
 
         return self
-

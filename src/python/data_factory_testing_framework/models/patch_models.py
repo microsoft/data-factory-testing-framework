@@ -30,6 +30,10 @@ def patch_models():
 
 
 def patch_model(main_class, partial_class):
-    partial_class_method_list = [attribute for attribute in dir(partial_class) if callable(getattr(partial_class, attribute)) and attribute.startswith('__') is False]
+    partial_class_method_list = [
+        attribute
+        for attribute in dir(partial_class)
+        if callable(getattr(partial_class, attribute)) and attribute.startswith("__") is False
+    ]
     for method_name in partial_class_method_list:
         setattr(main_class, method_name, getattr(partial_class, method_name))

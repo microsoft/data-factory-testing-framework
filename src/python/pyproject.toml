@@ -44,6 +44,9 @@ ignore = [
 extend-exclude = ["data_factory_testing_framework/generated/**"]
 line-length = 120
 
+[tool.ruff.lint.pycodestyle]
+max-line-length = 160 # relax line length limit to 140 characters (wrapping happens at 120)
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 

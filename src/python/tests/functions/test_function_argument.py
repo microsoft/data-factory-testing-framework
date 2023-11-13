@@ -47,9 +47,11 @@ def test_evaluate_variable_string_expression():
     # Arrange
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
-    state = PipelineRunState(variable_specifications={
-        "variableName": VariableSpecification(type="String", default_value="variableValue"),
-    })
+    state = PipelineRunState(
+        variable_specifications={
+            "variableName": VariableSpecification(type="String", default_value="variableValue"),
+        },
+    )
 
     # Act
     evaluated = argument.evaluate(state)
@@ -175,8 +177,11 @@ def test_evaluate_activity_output_nested_expression():
     expression = "activity('activityName').output.nestedOutput.nestedField"
     argument = FunctionArgument(expression)
     state = PipelineRunState()
-    state.add_activity_result("activityName", DependencyCondition.SUCCEEDED,
-                              {"nestedOutput": {"nestedField": "outputValue"}})
+    state.add_activity_result(
+        "activityName",
+        DependencyCondition.SUCCEEDED,
+        {"nestedOutput": {"nestedField": "outputValue"}},
+    )
 
     # Act
     evaluated = argument.evaluate(state)
@@ -187,7 +192,9 @@ def test_evaluate_activity_output_nested_expression():
 
 def test_evaluate_complex_json_expression():
     # Arrange
-    expression = '" { "command": "@pipeline().globalParameters.command", "argument": @pipeline().parameters.argument } "'
+    expression = (
+        '" { "command": "@pipeline().globalParameters.command", "argument": @pipeline().parameters.argument } "'
+    )
     argument = FunctionArgument(expression)
     state = PipelineRunState()
     state.parameters.append(RunParameter(RunParameterType.Global, "command", "commandValue"))
