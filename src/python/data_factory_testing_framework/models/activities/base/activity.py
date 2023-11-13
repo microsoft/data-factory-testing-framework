@@ -1,14 +1,13 @@
 from typing import Any, List
 from data_factory_testing_framework.generated.models import Activity, DependencyCondition, DataFactoryElement
+from data_factory_testing_framework.generated.models import Activity as GeneratedActivity
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
 class Activity:
-    status: DependencyCondition
-
     def evaluate(self, state: PipelineRunState) -> Activity:
         self.evaluate_expressions(self, state)
-        self.status = DependencyCondition.Succeeded
+        self.status: DependencyCondition = DependencyCondition.Succeeded
         return self
 
     def evaluate_expressions(self, obj: Any, state: PipelineRunState, visited: List[Any] = None):
@@ -20,11 +19,25 @@ class Activity:
 
         visited.append(obj)
 
-        attribute_names = [attribute for attribute in dir(obj) if not attribute.startswith('__') and not callable(getattr(obj, attribute))]
+        if data_factory_element := isinstance(obj, DataFactoryElement) and obj:
+            data_factory_element.evaluate(state)
+            return
+
+        attribute_names = [attribute for attribute in dir(obj) if not attribute.startswith('_') and not callable(getattr(obj, attribute))]
         for attribute_name in attribute_names:
             attribute = getattr(obj, attribute_name)
-            if data_factory_element := isinstance(attribute, DataFactoryElement) and attribute:
-                data_factory_element.evaluate(state)
+            if attribute is None:
+                continue
+
+            if isinstance(attribute, dict):
+                for key in attribute.keys():
+                    self.evaluate_expressions(attribute[key], state, visited)
+            elif isinstance(attribute, list):
+                for item in attribute:
+                    if isinstance(item, GeneratedActivity):
+                        continue
+
+                    self.evaluate_expressions(item, state, visited)
             else:
                 self.evaluate_expressions(attribute, state, visited)
 

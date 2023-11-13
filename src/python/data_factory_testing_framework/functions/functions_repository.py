@@ -18,7 +18,7 @@ class FunctionsRepository:
         ),
         "replace": lambda input_str, pattern, replacement: input_str.replace(pattern, replacement),
         "string": lambda input_str: input_str,
-        "union": lambda arg0, arg1: json.dumps(list(set(json.loads(arg0) + json.loads(arg1)))),
+        "union": lambda arg0, arg1: json.dumps(json.loads(arg0) + json.loads(arg1)),
         "coalesce": lambda args: next((arg for arg in args if arg is not None), None),
         "or": lambda a, b: a or b,
         "utcnow": lambda: datetime.utcnow().isoformat(),
@@ -32,25 +32,25 @@ class FunctionsRepository:
     }
 
     @staticmethod
-    def register(function_name: str, function: Callable):
+    def _register(function_name: str, function: Callable):
         FunctionsRepository.functions[function_name] = function
 
     @staticmethod
-    def func_equals(argument0, argument1):
+    def _func_equals(argument0, argument1):
         if type(argument0) != type(argument1):
             raise ValueError("Equals function requires arguments of the same type.")
         return argument0 == argument1
 
     @staticmethod
-    def trim(text, trim_argument):
+    def _trim(text, trim_argument):
         return text.strip(trim_argument[0])
 
     @staticmethod
-    def json(argument):
+    def _json(argument):
         return argument
 
     @staticmethod
-    def contains(obj, value):
+    def _contains(obj, value):
         if isinstance(obj, dict):
             return value in obj
         elif isinstance(obj, IterableType):

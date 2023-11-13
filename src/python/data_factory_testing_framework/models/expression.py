@@ -4,13 +4,13 @@ from data_factory_testing_framework.functions.function_parser import parse_expre
 from data_factory_testing_framework.generated.models import Expression
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
-
 TResult = TypeVar("TResult")
 
 
 class Expression[TResult]:
-
-    evaluated: TResult = []
+    def __init__(self):
+        self.evaluated: TResult = []
 
     def evaluate(self: Expression, state: PipelineRunState):
-        return parse_expression(self.expression).evaluate(state)
+        self.evaluated = parse_expression(self.value).evaluate(state)
+        return self.evaluated

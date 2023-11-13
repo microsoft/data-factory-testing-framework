@@ -14,7 +14,7 @@ class IfConditionActivity:
 
     def evaluate_control_activity_iterations(self: IfConditionActivity, state: PipelineRunState, evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]]):
         scoped_state = state.create_iteration_scope(None)
-        activities = self.if_true_activities if self.expression.value else self.if_false_activities
+        activities = self.if_true_activities if self.expression.evaluated else self.if_false_activities
         for activity in evaluate_activities(activities, scoped_state):
             yield activity
 
