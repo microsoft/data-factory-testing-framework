@@ -8,7 +8,7 @@ from data_factory_testing_framework.models.test_framework import TestFramework
 TestFramework()
 
 
-def test_when_validate_parameters_is_accurate_should_pass():
+def test_when_validate_parameters_is_accurate_should_pass() -> None:
     # Arrange
     pipeline = PipelineResource(
         name="pipeline",
@@ -27,7 +27,7 @@ def test_when_validate_parameters_is_accurate_should_pass():
     )
 
 
-def test_when_validate_parameters_is_missing_run_parameter_should_throw_error():
+def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() -> None:
     # Arrange
     pipeline = PipelineResource(
         parameters={
@@ -52,7 +52,7 @@ def test_when_validate_parameters_is_missing_run_parameter_should_throw_error():
     )
 
 
-def test_when_duplicate_parameters_supplied_should_throw_error():
+def test_when_duplicate_parameters_supplied_should_throw_error() -> None:
     # Arrange
     pipeline = PipelineResource(
         parameters={

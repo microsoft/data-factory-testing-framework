@@ -9,7 +9,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 class IfConditionActivity:
-    def evaluate(self: IfConditionActivity, state: PipelineRunState):
+    def evaluate(self: IfConditionActivity, state: PipelineRunState) -> IfConditionActivity:
         self.expression.evaluate(state)
 
         return super(ControlActivity, self).evaluate(state)
@@ -18,7 +18,7 @@ class IfConditionActivity:
         self: IfConditionActivity,
         state: PipelineRunState,
         evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ):
+    ) -> Generator[Activity, None, None]:
         scoped_state = state.create_iteration_scope(None)
         activities = self.if_true_activities if self.expression.evaluated else self.if_false_activities
         for activity in evaluate_activities(activities, scoped_state):

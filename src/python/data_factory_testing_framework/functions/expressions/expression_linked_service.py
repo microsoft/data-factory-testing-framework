@@ -7,7 +7,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_linked_services(expression: str, state: PipelineRunState):
+def find_and_replace_linked_services(expression: str, state: PipelineRunState) -> str:
     pattern = r"(@?{?linkedService\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:

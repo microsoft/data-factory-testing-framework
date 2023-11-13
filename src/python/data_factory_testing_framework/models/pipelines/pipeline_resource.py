@@ -14,7 +14,7 @@ class PipelineResource:
 
         raise ActivityNotFoundError(f"Activity with name {name} not found")
 
-    def validate_parameters(self: PipelineResource, parameters: List[RunParameter]):
+    def validate_parameters(self: PipelineResource, parameters: List[RunParameter]) -> None:
         # Check if all parameters are provided
         for pipeline_parameter_name, pipeline_parameter_specification in self.parameters.items():
             found = False

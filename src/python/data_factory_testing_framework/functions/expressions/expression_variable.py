@@ -4,7 +4,7 @@ from data_factory_testing_framework.exceptions.variable_not_found_error import V
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_variables(expression: str, state: PipelineRunState):
+def find_and_replace_variables(expression: str, state: PipelineRunState) -> str:
     pattern = r"(@?{?variables\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:

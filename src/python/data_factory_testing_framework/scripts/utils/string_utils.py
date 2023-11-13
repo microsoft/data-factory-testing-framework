@@ -1,7 +1,7 @@
 import sys
 
 
-def trim(docstring):
+def trim(docstring: str) -> str:
     """Trim function from PEP-257."""
     if not docstring:
         return ""
@@ -35,5 +35,5 @@ def trim(docstring):
     return "\n".join(trimmed)
 
 
-def reindent(string):
+def reindent(string: str) -> str:
     return "\n".join(l.strip() for l in string.strip().split("\n"))

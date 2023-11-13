@@ -13,7 +13,7 @@ deserializer = Deserializer(models)
 
 class DataFactoryRepositoryFactory:
     @staticmethod
-    def parse_from_folder(folder_path: str):
+    def parse_from_folder(folder_path: str) -> DataFactoryRepository:
         pipelines = DataFactoryRepositoryFactory._get_data_factory_entities_by_folder_path(
             folder_path,
             "PipelineResource",
@@ -21,7 +21,7 @@ class DataFactoryRepositoryFactory:
         return DataFactoryRepository(pipelines)
 
     @staticmethod
-    def _get_data_factory_entities_by_folder_path(folder_path: str, target_class: str):
+    def _get_data_factory_entities_by_folder_path(folder_path: str, target_class: str) -> list:
         entities = []
         files = os.listdir(folder_path)
         for file in files:

@@ -7,7 +7,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_parameters(expression: str, parameter_type: RunParameterType, state: PipelineRunState):
+def find_and_replace_parameters(expression: str, parameter_type: RunParameterType, state: PipelineRunState) -> str:
     pattern = rf"(@?{{?pipeline\(\)\.{_get_parameter_string_template(parameter_type)}\.(\w+)}}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
@@ -24,7 +24,7 @@ def find_and_replace_parameters(expression: str, parameter_type: RunParameterTyp
     return expression
 
 
-def _get_parameter_string_template(parameter_type: RunParameterType):
+def _get_parameter_string_template(parameter_type: RunParameterType) -> str:
     if parameter_type == RunParameterType.Pipeline:
         return "parameters"
     elif parameter_type == RunParameterType.Global:

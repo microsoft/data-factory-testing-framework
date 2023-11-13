@@ -4,7 +4,7 @@ from data_factory_testing_framework.exceptions.state_iteration_item_not_set impo
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_iteration_item(expression: str, state: PipelineRunState):
+def find_and_replace_iteration_item(expression: str, state: PipelineRunState) -> str:
     pattern = r"(@?{?item\(\)\}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:

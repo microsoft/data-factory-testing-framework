@@ -11,6 +11,6 @@ class Expression[TResult]:
     def __init__(self) -> None:
         self.evaluated: TResult = []
 
-    def evaluate(self: Expression, state: PipelineRunState):
+    def evaluate(self: Expression, state: PipelineRunState) -> TResult:
         self.evaluated = parse_expression(self.value).evaluate(state)
         return self.evaluated

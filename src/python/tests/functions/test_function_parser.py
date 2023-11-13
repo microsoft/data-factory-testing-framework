@@ -3,7 +3,7 @@ from data_factory_testing_framework.functions.function_parser import parse_expre
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def test_parse_expression_with_nested_function_and_single_quote():
+def test_parse_expression_with_nested_function_and_single_quote() -> None:
     # Arrange
     PipelineRunState()
     raw_expression = "concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))"
@@ -28,7 +28,7 @@ def test_parse_expression_with_nested_function_and_single_quote():
     assert inner_function.arguments[1].expression == "'abc,'"
 
 
-def test_parse_expression_with_adf_native_functions():
+def test_parse_expression_with_adf_native_functions() -> None:
     # Arrange
     PipelineRunState()
     raw_expression = "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)"

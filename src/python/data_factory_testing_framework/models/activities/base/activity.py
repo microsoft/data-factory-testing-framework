@@ -11,7 +11,7 @@ class Activity:
         self.status: DependencyCondition = DependencyCondition.Succeeded
         return self
 
-    def evaluate_expressions(self, obj: Any, state: PipelineRunState, visited: List[Any] = None):
+    def evaluate_expressions(self, obj: Any, state: PipelineRunState, visited: List[Any] = None) -> None:  # noqa: ANN401
         if visited is None:
             visited = []
 
@@ -46,7 +46,7 @@ class Activity:
             else:
                 self.evaluate_expressions(attribute, state, visited)
 
-    def are_dependency_condition_met(self, state: PipelineRunState):
+    def are_dependency_condition_met(self, state: PipelineRunState) -> bool:
         if not self.depends_on:
             return True
 

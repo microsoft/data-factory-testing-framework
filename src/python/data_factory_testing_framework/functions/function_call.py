@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
@@ -14,7 +14,7 @@ class FunctionCall:
         self.name = name
         self.arguments = arguments
 
-    def evaluate(self, state):
+    def evaluate(self, state: Any) -> str:  # noqa: ANN401 - what is the type of state?
         function = FunctionsRepository.functions.get(self.name)
         if not function:
             raise UnsupportedFunctionError(self.name)

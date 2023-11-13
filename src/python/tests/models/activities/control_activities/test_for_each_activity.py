@@ -12,7 +12,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 
-def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated():
+def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated() -> None:
     # Arrange
     test_framework = TestFramework()
     for_each_activity = ForEachActivity(

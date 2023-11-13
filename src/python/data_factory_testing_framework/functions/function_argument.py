@@ -12,7 +12,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def trim_one_char(text: str, character):
+def trim_one_char(text: str, character: str) -> str:
     if text.startswith(character):
         text = text[1:]
     if text.endswith(character):
@@ -24,7 +24,7 @@ class FunctionArgument:
     def __init__(self, expression: str) -> None:
         self.expression = expression.strip("\n").strip(" ")
 
-    def evaluate(self, state: PipelineRunState):
+    def evaluate(self, state: PipelineRunState) -> str:
         evaluated_expression = find_and_replace_parameters(self.expression, RunParameterType.Pipeline, state)
         evaluated_expression = find_and_replace_parameters(evaluated_expression, RunParameterType.Global, state)
         evaluated_expression = find_and_replace_variables(evaluated_expression, state)
