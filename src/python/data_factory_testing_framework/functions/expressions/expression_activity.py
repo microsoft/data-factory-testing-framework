@@ -4,7 +4,7 @@ from data_factory_testing_framework.exceptions.activity_not_found_error import A
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_activity(expression: str, state: PipelineRunState):
+def find_and_replace_activity(expression: str, state: PipelineRunState) -> str:
     pattern = r"activity\('(?P<activity_name>.*?)'\)(?:\.(\w+))+$"
     match = re.match(pattern, expression)
     if match:

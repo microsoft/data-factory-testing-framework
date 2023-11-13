@@ -7,7 +7,7 @@ RETURNS_REGEX = re.compile(":returns: (?P<doc>.*)", re.S)
 PARAM_REGEX = re.compile(":ivar (?P<name>[\*\w]+): (?P<doc>.*?)" "(?:(?=:ivar)|(?=:return)|(?=:raises)|\Z)", re.S)
 
 
-def parse_restructured_docstring(docstring):
+def parse_restructured_docstring(docstring: str) -> dict:
     """Parse the docstring into its components.
 
     :returns: a dictionary of form

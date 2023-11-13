@@ -6,7 +6,7 @@ from data_factory_testing_framework.functions.function_call import FunctionCall
 extract_func_regex = r"^@?{?([^()]+?)\((.*)\)}?$"
 
 
-def parse_expression(expression: str):
+def parse_expression(expression: str) -> FunctionArgument:
     match = re.match(extract_func_regex, expression, re.DOTALL)
     if not match:
         return FunctionArgument(expression)

@@ -15,7 +15,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def test_evaluate_parameter_expression():
+def test_evaluate_parameter_expression() -> None:
     # Arrange
     expression = "pipeline().parameters.parameterName"
     argument = FunctionArgument(expression)
@@ -29,7 +29,7 @@ def test_evaluate_parameter_expression():
     assert evaluated == "parameterValue"
 
 
-def test_evaluate_global_parameter_expression():
+def test_evaluate_global_parameter_expression() -> None:
     # Arrange
     expression = "pipeline().globalParameters.parameterName"
     argument = FunctionArgument(expression)
@@ -43,7 +43,7 @@ def test_evaluate_global_parameter_expression():
     assert evaluated == "parameterValue"
 
 
-def test_evaluate_variable_string_expression():
+def test_evaluate_variable_string_expression() -> None:
     # Arrange
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
@@ -60,7 +60,7 @@ def test_evaluate_variable_string_expression():
     assert evaluated == "variableValue"
 
 
-def test_evaluate_linked_service_string_expression():
+def test_evaluate_linked_service_string_expression() -> None:
     # Arrange
     expression = "@linkedService('linkedServiceName')"
     argument = FunctionArgument(expression)
@@ -74,7 +74,7 @@ def test_evaluate_linked_service_string_expression():
     assert evaluated == "linkedServiceNameValue"
 
 
-def test_evaluate_dataset_string_expression():
+def test_evaluate_dataset_string_expression() -> None:
     # Arrange
     expression = "dataset('datasetName')"
     argument = FunctionArgument(expression)
@@ -88,7 +88,7 @@ def test_evaluate_dataset_string_expression():
     assert evaluated == "datasetNameValue"
 
 
-def test_evaluate_iteration_item_string_expression():
+def test_evaluate_iteration_item_string_expression() -> None:
     # Arrange
     expression = "item()"
     argument = FunctionArgument(expression)
@@ -102,7 +102,7 @@ def test_evaluate_iteration_item_string_expression():
     assert evaluated == "iterationItemValue"
 
 
-def test_evaluate_unknown_pipeline_parameter():
+def test_evaluate_unknown_pipeline_parameter() -> None:
     # Arrange
     expression = "pipeline().parameters.parameterName"
     argument = FunctionArgument(expression)
@@ -114,7 +114,7 @@ def test_evaluate_unknown_pipeline_parameter():
         print("hi")
 
 
-def test_evaluate_unknown_global_pipeline_parameter():
+def test_evaluate_unknown_global_pipeline_parameter() -> None:
     # Arrange
     expression = "pipeline().globalParameters.parameterName"
     argument = FunctionArgument(expression)
@@ -125,7 +125,7 @@ def test_evaluate_unknown_global_pipeline_parameter():
         argument.evaluate(state)
 
 
-def test_evaluate_unknown_variable():
+def test_evaluate_unknown_variable() -> None:
     # Arrange
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
@@ -136,7 +136,7 @@ def test_evaluate_unknown_variable():
         argument.evaluate(state)
 
 
-def test_evaluate_unknown_dataset():
+def test_evaluate_unknown_dataset() -> None:
     # Arrange
     expression = "dataset('datasetName')"
     argument = FunctionArgument(expression)
@@ -147,7 +147,7 @@ def test_evaluate_unknown_dataset():
         argument.evaluate(state)
 
 
-def test_evaluate_unknown_linked_service():
+def test_evaluate_unknown_linked_service() -> None:
     # Arrange
     expression = "linkedService('linkedServiceName')"
     argument = FunctionArgument(expression)
@@ -158,7 +158,7 @@ def test_evaluate_unknown_linked_service():
         argument.evaluate(state)
 
 
-def test_evaluate_activity_output_expression():
+def test_evaluate_activity_output_expression() -> None:
     # Arrange
     expression = "activity('activityName').output.outputName"
     argument = FunctionArgument(expression)
@@ -172,7 +172,7 @@ def test_evaluate_activity_output_expression():
     assert evaluated == "outputValue"
 
 
-def test_evaluate_activity_output_nested_expression():
+def test_evaluate_activity_output_nested_expression() -> None:
     # Arrange
     expression = "activity('activityName').output.nestedOutput.nestedField"
     argument = FunctionArgument(expression)
@@ -190,7 +190,7 @@ def test_evaluate_activity_output_nested_expression():
     assert evaluated == "outputValue"
 
 
-def test_evaluate_complex_json_expression():
+def test_evaluate_complex_json_expression() -> None:
     # Arrange
     expression = (
         '" { "command": "@pipeline().globalParameters.command", "argument": @pipeline().parameters.argument } "'

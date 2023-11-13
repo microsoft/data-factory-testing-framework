@@ -6,7 +6,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 
-def test_batch_job_pipeline():
+def test_batch_job_pipeline() -> None:
     # Arrange
     test_framework = TestFramework("pipelines")
     pipeline = test_framework.repository.get_pipeline_by_name("batch_job")

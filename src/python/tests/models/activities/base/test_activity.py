@@ -32,7 +32,9 @@ TestFramework()
         ("Completed", "Completed", True),
     ],
 )
-def test_dependency_conditions_when_called_returns_expected(required_condition, actual_condition, expected):
+def test_dependency_conditions_when_called_returns_expected(
+    required_condition: str, actual_condition: str, expected: bool
+) -> None:
     # Arrange
     pipeline_activity = Activity(
         name="activity",
@@ -51,7 +53,7 @@ def test_dependency_conditions_when_called_returns_expected(required_condition, 
     assert result == expected
 
 
-def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded():
+def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded() -> None:
     # Arrange
     pipeline_activity = Activity(name="activity", depends_on=[])
     state = PipelineRunState()
@@ -63,7 +65,7 @@ def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded():
     assert pipeline_activity.status == DependencyCondition.Succeeded
 
 
-def test_evaluate_is_evaluating_expressions_inside_dict():
+def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
     # Arrange
     pipeline_activity = ExecutePipelineActivity(
         name="activity",

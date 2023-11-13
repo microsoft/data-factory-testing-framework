@@ -9,5 +9,5 @@ class ControlActivity:
         self,
         state: PipelineRunState,
         evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ):
+    ) -> Generator[Activity, None, None]:
         return []

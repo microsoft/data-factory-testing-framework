@@ -4,7 +4,7 @@ from _ast import Load, Name
 target_type = "DataFactoryElement"
 
 
-def get_type_from_description(description):
+def get_type_from_description(description: str) -> str:
     dfe_type = "str"
     if "Expression with resultType string" in description:
         dfe_type = "str"
@@ -16,7 +16,7 @@ def get_type_from_description(description):
     return dfe_type
 
 
-def update_attribute_type(arg, description):
+def update_attribute_type(arg: ast.arg, description: str) -> None:
     dfe_type = get_type_from_description(description)
     if "Expression" in description:
         if (
@@ -39,7 +39,7 @@ def update_attribute_type(arg, description):
             )
 
 
-def transform_ast(node):
+def transform_ast(node: ast.ClassDef) -> None:
     if isinstance(node, ast.ClassDef):
         for body_item in node.body:
             if isinstance(body_item, ast.FunctionDef):

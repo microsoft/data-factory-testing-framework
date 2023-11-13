@@ -36,7 +36,7 @@ class PipelineRunState(RunState):
         self.scoped_pipeline_activity_results: Dict[str, Any] = {}
         self.iteration_item = iteration_item
 
-    def add_activity_result(self, activity_name: str, status: DependencyCondition, output: Any = None):
+    def add_activity_result(self, activity_name: str, status: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
         self.pipeline_activity_results[activity_name] = {
             "status": status,
             "output": output,
@@ -46,7 +46,7 @@ class PipelineRunState(RunState):
             "output": output,
         }
 
-    def create_iteration_scope(self, iteration_item: str):
+    def create_iteration_scope(self, iteration_item: str) -> "PipelineRunState":
         return PipelineRunState(
             self.parameters,
             self._variable_specifications,
@@ -54,14 +54,14 @@ class PipelineRunState(RunState):
             iteration_item,
         )
 
-    def add_scoped_activity_results_from_scoped_state(self, scoped_state):
+    def add_scoped_activity_results_from_scoped_state(self, scoped_state: "PipelineRunState") -> None:
         for result in scoped_state.pipeline_activity_results:
             self.pipeline_activity_results[result] = scoped_state.pipeline_activity_results[result]
 
-    def try_get_scoped_activity_result_by_name(self, name: str):
+    def try_get_scoped_activity_result_by_name(self, name: str) -> Optional[Dict[str, Any]]:
         return self.pipeline_activity_results[name] if name in self.pipeline_activity_results else None
 
-    def set_variable(self, variable_name: str, value):
+    def set_variable(self, variable_name: str, value: Any) -> None:  # noqa: ANN401
         for variable in self.variables:
             if variable.name == variable_name:
                 variable.value = value
@@ -69,7 +69,7 @@ class PipelineRunState(RunState):
 
         raise VariableBeingEvaluatedDoesNotExistError(variable_name)
 
-    def get_variable_by_name(self, variable_name):
+    def get_variable_by_name(self, variable_name: str) -> PipelineRunVariable:
         for variable in self.variables:
             if variable.name == variable_name:
                 return variable

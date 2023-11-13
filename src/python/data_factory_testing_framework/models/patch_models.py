@@ -16,7 +16,7 @@ from data_factory_testing_framework.models.pipelines.pipeline_resource import Pi
 
 
 # Patch models with our custom classes
-def patch_models():
+def patch_models() -> None:
     patch_model(_models.Activity, Activity)
     patch_model(_models.ExecutePipelineActivity, ExecutePipelineActivity)
     patch_model(_models.ControlActivity, ControlActivity)
@@ -29,7 +29,7 @@ def patch_models():
     patch_model(_models.DataFactoryElement, DataFactoryElement)
 
 
-def patch_model(main_class, partial_class):
+def patch_model(main_class: type, partial_class: type) -> None:
     partial_class_method_list = [
         attribute
         for attribute in dir(partial_class)

@@ -5,7 +5,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 class UntilActivity:
-    def evaluate(self: UntilActivity, state: PipelineRunState):
+    def evaluate(self: UntilActivity, state: PipelineRunState) -> UntilActivity:
         self.expression.evaluate(state)
 
         return super(ControlActivity, self).evaluate(state)
@@ -14,7 +14,7 @@ class UntilActivity:
         self: UntilActivity,
         state: PipelineRunState,
         evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ):
+    ) -> Generator[Activity, None, None]:
         while True:
             scoped_state = state.create_iteration_scope(None)
             for activity in evaluate_activities(self.activities, scoped_state):

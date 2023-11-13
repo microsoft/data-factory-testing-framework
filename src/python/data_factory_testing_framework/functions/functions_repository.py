@@ -1,7 +1,7 @@
 import json
 from collections.abc import Iterable as IterableType
 from datetime import datetime
-from typing import Callable, Dict
+from typing import Any, Callable, Dict
 
 
 class FunctionsRepository:
@@ -35,25 +35,25 @@ class FunctionsRepository:
     }
 
     @staticmethod
-    def _register(function_name: str, function: Callable):
+    def _register(function_name: str, function: Callable) -> None:
         FunctionsRepository.functions[function_name] = function
 
     @staticmethod
-    def _func_equals(argument0, argument1):
+    def _func_equals(argument0: Any, argument1: Any) -> bool:  # noqa: ANN401
         if type(argument0) != type(argument1):
             raise ValueError("Equals function requires arguments of the same type.")
         return argument0 == argument1
 
     @staticmethod
-    def _trim(text, trim_argument):
+    def _trim(text: str, trim_argument: str) -> str:
         return text.strip(trim_argument[0])
 
     @staticmethod
-    def _json(argument):
+    def _json(argument: Any) -> Any:  # noqa: ANN401
         return argument
 
     @staticmethod
-    def _contains(obj, value):
+    def _contains(obj: Any, value: Any) -> bool:  # noqa: ANN401
         if isinstance(obj, dict):
             return value in obj
         elif isinstance(obj, IterableType):

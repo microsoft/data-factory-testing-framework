@@ -10,7 +10,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def test_evaluate_expression_with_nested_function():
+def test_evaluate_expression_with_nested_function() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/,', '123''', concat('&', 'abc,'))"
     expression = parse_expression(raw_expression)
@@ -22,7 +22,7 @@ def test_evaluate_expression_with_nested_function():
     assert evaluated == "https://example.com/jobs/,123'&abc,"
 
 
-def test_evaluate_with_parameter():
+def test_evaluate_with_parameter() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/', pipeline().parameters.abc)"
     expression = parse_expression(raw_expression)
@@ -39,7 +39,7 @@ def test_evaluate_with_parameter():
     assert evaluated == "https://example.com/jobs/123"
 
 
-def test_evaluate_with_global_parameter():
+def test_evaluate_with_global_parameter() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/', pipeline().globalParameters.abc)"
     expression = parse_expression(raw_expression)
@@ -56,7 +56,7 @@ def test_evaluate_with_global_parameter():
     assert evaluated == "https://example.com/jobs/123"
 
 
-def test_evaluate_with_variable():
+def test_evaluate_with_variable() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/', variables('abc'))"
     expression = parse_expression(raw_expression)
@@ -73,7 +73,7 @@ def test_evaluate_with_variable():
     assert evaluated == "https://example.com/jobs/123"
 
 
-def test_evaluate_with_activity_output():
+def test_evaluate_with_activity_output() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/', activity('abc').output.abc)"
     expression = parse_expression(raw_expression)
@@ -87,7 +87,7 @@ def test_evaluate_with_activity_output():
     assert evaluated == "https://example.com/jobs/123"
 
 
-def test_evaluate_with_activity_output_and_variable():
+def test_evaluate_with_activity_output_and_variable() -> None:
     # Arrange
     raw_expression = "concat('https://example.com/jobs/', activity('abc').output.abc, '/', variables('abc'))"
     expression = parse_expression(raw_expression)
@@ -105,7 +105,7 @@ def test_evaluate_with_activity_output_and_variable():
     assert evaluated == "https://example.com/jobs/123/456"
 
 
-def test_evaluate_with_activity_output_and_variable_and_parameters():
+def test_evaluate_with_activity_output_and_variable_and_parameters() -> None:
     # Arrange
     raw_expression = (
         "concat('https://example.com/jobs/', activity('abc').output.abc, '/', "
@@ -139,7 +139,7 @@ def test_evaluate_with_activity_output_and_variable_and_parameters():
         ("1", "2", False),
     ],
 )
-def test_evaluate_equals_expression(left, right, expected):
+def test_evaluate_equals_expression(left: str, right: str, expected: bool) -> None:
     # Arrange
     raw_expression = f"equals({left}, {right})"
     expression = parse_expression(raw_expression)
@@ -160,7 +160,7 @@ def test_evaluate_equals_expression(left, right, expected):
         (0, -1, False),
     ],
 )
-def test_evaluate_equals_int_expression(left, right, expected):
+def test_evaluate_equals_int_expression(left: int, right: int, expected: bool) -> None:
     # Arrange
     raw_expression = f"equals({left}, {right})"
     expression = parse_expression(raw_expression)
@@ -180,7 +180,7 @@ def test_evaluate_equals_int_expression(left, right, expected):
         ("SomeKey3", False),
     ],
 )
-def test_contains_dictionary_key_expression(key, expected):
+def test_contains_dictionary_key_expression(key: str, expected: str) -> None:
     # Arrange
     state = PipelineRunState()
     state.add_activity_result(
@@ -206,7 +206,7 @@ def test_contains_dictionary_key_expression(key, expected):
         ("SomeItem3", False),
     ],
 )
-def test_contains_list_item_expression(key, expected):
+def test_contains_list_item_expression(key: str, expected: bool) -> None:
     # Arrange
     state = PipelineRunState()
     state.add_activity_result(
@@ -231,7 +231,7 @@ def test_contains_list_item_expression(key, expected):
         ("NotPartOfString", False),
     ],
 )
-def test_contains_string_expression(substring, expected):
+def test_contains_string_expression(substring: str, expected: bool) -> None:
     # Arrange
     state = PipelineRunState()
     state.add_activity_result(
@@ -249,7 +249,7 @@ def test_contains_string_expression(substring, expected):
     assert evaluated == expected
 
 
-def test_function_call_wrong_arguments_error():
+def test_function_call_wrong_arguments_error() -> None:
     # Arrange
     raw_expression = "trim('abc', 'a', 'b')"
     expression = parse_expression(raw_expression)

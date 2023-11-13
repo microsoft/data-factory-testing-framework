@@ -12,7 +12,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 
-def test_when_evaluate_until_activity_should_repeat_until_expression_is_true():
+def test_when_evaluate_until_activity_should_repeat_until_expression_is_true() -> None:
     # Arrange
     test_framework = TestFramework()
     until_activity = UntilActivity(

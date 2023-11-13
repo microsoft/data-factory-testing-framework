@@ -14,7 +14,7 @@ from data_factory_testing_framework.models.test_framework import TestFramework
 TestFramework()
 
 
-def test_when_evaluated_should_evaluate_expression():
+def test_when_evaluated_should_evaluate_expression() -> None:
     # Arrange
     activity = IfConditionActivity(
         name="IfConditionActivity",
@@ -32,7 +32,9 @@ def test_when_evaluated_should_evaluate_expression():
     "expression_outcome,expected_activity_name",
     [(True, "setVariableActivity1"), (False, "setVariableActivity2")],
 )
-def test_when_evaluated_should_evaluate_correct_child_activities(expression_outcome, expected_activity_name):
+def test_when_evaluated_should_evaluate_correct_child_activities(
+    expression_outcome: bool, expected_activity_name: str
+) -> None:
     # Arrange
     test_framework = TestFramework()
     expression = "@equals(1, 1)" if expression_outcome else "@equals(1, 2)"

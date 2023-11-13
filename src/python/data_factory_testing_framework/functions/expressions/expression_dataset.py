@@ -5,7 +5,7 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
-def find_and_replace_dataset(expression: str, state: PipelineRunState):
+def find_and_replace_dataset(expression: str, state: PipelineRunState) -> str:
     pattern = r"(@?{?dataset\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:

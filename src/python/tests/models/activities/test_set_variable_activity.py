@@ -12,7 +12,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 
-def test_when_string_variable_evaluated_then_state_variable_should_be_set():
+def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:
     # Arrange
     TestFramework()
     variable_name = "TestVariable"
@@ -35,7 +35,7 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set():
     assert variable.value == "TestValue"
 
 
-def test_when_unknown_variable_evaluated_then_should_raise_exception():
+def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
     # Arrange
     TestFramework()
     variable_name = "TestVariable"
