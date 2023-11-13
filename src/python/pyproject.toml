@@ -11,9 +11,41 @@ azure-mgmt-datafactory = "^3.1.0"
 azure-identity = "^1.14.1"
 astor = "^0.8.1"
 docstring-parser = "^0.15"
+
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
+ruff = "^0.1.5"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = [
+    "A", # flake8 builtins
+    "COM", # flake8 commas
+    "ANN", # annotations
+    "E", # PEP8 conventions 
+    "F", # pyflakes
+    "D", # Pydoc style docstrings
+    "B", # bugbear
+    "N", # PEP8 naming conventions
+    "I"
+]
+ignore = [
+    "D100", # Ignore missing docstring in public module
+    "D101",
+    "D102",
+    "D103",
+    "D104", # Ignore missing docstring in public package
+    "ANN101", # Ignore missing type annotation for self in method
+]
+extend-exclude = ["data_factory_testing_framework/generated/**"]
+line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
