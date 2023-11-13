@@ -1,8 +1,13 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import ForEachActivity, Expression, ExpressionType, \
-    SetVariableActivity, DataFactoryElement, IfConditionActivity, VariableSpecification
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.generated.models import (
+    DataFactoryElement,
+    Expression,
+    ExpressionType,
+    IfConditionActivity,
+    SetVariableActivity,
+    VariableSpecification,
+)
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.models.test_framework import TestFramework
 
@@ -34,18 +39,18 @@ def test_when_evaluated_should_evaluate_correct_child_activities(expression_outc
             SetVariableActivity(
                 name="setVariableActivity1",
                 variable_name="variable",
-                value=DataFactoryElement("dummy"))
+                value=DataFactoryElement("dummy")),
         ],
         if_false_activities=[
             SetVariableActivity(
                 name="setVariableActivity2",
                 variable_name="variable",
-                value=DataFactoryElement("dummy"))
-        ]
+                value=DataFactoryElement("dummy")),
+        ],
     )
 
     state = PipelineRunState(variable_specifications={
-        "variable": VariableSpecification(type="String")
+        "variable": VariableSpecification(type="String"),
     })
 
     # Act

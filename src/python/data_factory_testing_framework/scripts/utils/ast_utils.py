@@ -1,5 +1,5 @@
 import ast
-from _ast import Name, Load
+from _ast import Load, Name
 
 target_type = "DataFactoryElement"
 

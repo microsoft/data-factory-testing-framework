@@ -1,8 +1,8 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import PipelineResource, ParameterSpecification
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
+from data_factory_testing_framework.generated.models import ParameterSpecification, PipelineResource
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
+from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 TestFramework()
@@ -14,14 +14,14 @@ def test_when_validate_parameters_is_accurate_should_pass():
         name="pipeline",
         parameters={
             "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline)
-        }
+            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+        },
     )
 
     # Act
     pipeline.validate_parameters([
         RunParameter(RunParameterType.Pipeline, "pipelineParameterName", "pipelineParameterValue"),
-        RunParameter(RunParameterType.Pipeline, "pipelineParameterName2", "pipelineParameterValue2")
+        RunParameter(RunParameterType.Pipeline, "pipelineParameterName2", "pipelineParameterValue2"),
     ])
 
 
@@ -30,8 +30,8 @@ def test_when_validate_parameters_is_missing_run_parameter_should_throw_error():
     pipeline = PipelineResource(
         parameters={
             "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline)
-        }
+            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+        },
     )
     pipeline.name = "pipeline"
 
@@ -50,8 +50,8 @@ def test_when_duplicate_parameters_supplied_should_throw_error():
     pipeline = PipelineResource(
         parameters={
             "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline)
-        }
+            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+        },
     )
     pipeline.name = "pipeline"
 
@@ -60,7 +60,7 @@ def test_when_duplicate_parameters_supplied_should_throw_error():
         pipeline.validate_parameters([
             RunParameter(RunParameterType.Pipeline, "pipelineParameterName", "pipelineParameterValue"),
             RunParameter(RunParameterType.Pipeline, "pipelineParameterName", "pipelineParameterValue"),
-            RunParameter(RunParameterType.Pipeline, "pipelineParameterName2", "pipelineParameterValue2")
+            RunParameter(RunParameterType.Pipeline, "pipelineParameterName2", "pipelineParameterValue2"),
         ])
 
     # Assert

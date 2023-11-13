@@ -1,7 +1,14 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import Activity, ActivityDependency, DependencyCondition, \
-    ExecutePipelineActivity, DataFactoryElement, PipelineReference, PipelineReferenceType
+from data_factory_testing_framework.generated.models import (
+    Activity,
+    ActivityDependency,
+    DataFactoryElement,
+    DependencyCondition,
+    ExecutePipelineActivity,
+    PipelineReference,
+    PipelineReferenceType,
+)
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
@@ -25,7 +32,7 @@ TestFramework()
 def test_dependency_conditions_when_called_returns_expected(required_condition, actual_condition, expected):
     # Arrange
     pipeline_activity = Activity(name="activity", depends_on=[
-        ActivityDependency(activity="otherActivity", dependency_conditions=[required_condition])
+        ActivityDependency(activity="otherActivity", dependency_conditions=[required_condition]),
     ])
 
     state = PipelineRunState()
@@ -53,10 +60,10 @@ def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded():
 def test_evaluate_is_evaluating_expressions_inside_dict():
     # Arrange
     pipeline_activity = ExecutePipelineActivity(name="activity", pipeline=PipelineReference(type=PipelineReferenceType.PIPELINE_REFERENCE, reference_name="dummy"), depends_on=[], parameters={
-        "url": DataFactoryElement("pipeline().parameters.url")
+        "url": DataFactoryElement("pipeline().parameters.url"),
     })
     state = PipelineRunState(parameters=[
-        RunParameter(RunParameterType.Pipeline, "url", "example.com")
+        RunParameter(RunParameterType.Pipeline, "url", "example.com"),
     ])
 
     # Act

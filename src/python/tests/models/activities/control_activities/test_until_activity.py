@@ -1,8 +1,13 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import ForEachActivity, Expression, ExpressionType, \
-    SetVariableActivity, DataFactoryElement, UntilActivity, VariableSpecification
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.generated.models import (
+    DataFactoryElement,
+    Expression,
+    ExpressionType,
+    SetVariableActivity,
+    UntilActivity,
+    VariableSpecification,
+)
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.models.test_framework import TestFramework
 
@@ -15,14 +20,14 @@ def test_when_evaluate_until_activity_should_repeat_until_expression_is_true():
                                    activities=[
                                        SetVariableActivity(name="setVariable", variable_name="variable",
                                                            value=DataFactoryElement[str]("'1'"),
-                                                           depends_on=[])
+                                                           depends_on=[]),
                                    ],
                                    depends_on=[])
 
     state = PipelineRunState(
         variable_specifications={
-            "variable": VariableSpecification(type="String")
-        }
+            "variable": VariableSpecification(type="String"),
+        },
     )
 
     # Act

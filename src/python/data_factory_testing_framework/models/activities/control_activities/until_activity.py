@@ -1,7 +1,6 @@
 from typing import Callable, Generator
 
-from data_factory_testing_framework.generated.models import ForEachActivity, Activity, ControlActivity, \
-    UntilActivity
+from data_factory_testing_framework.generated.models import Activity, ControlActivity, UntilActivity
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 

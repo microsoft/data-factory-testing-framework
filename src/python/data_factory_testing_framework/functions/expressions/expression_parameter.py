@@ -1,7 +1,8 @@
 import re
 
-from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import \
-    ExpressionParameterNotFoundError
+from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import (
+    ExpressionParameterNotFoundError,
+)
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 

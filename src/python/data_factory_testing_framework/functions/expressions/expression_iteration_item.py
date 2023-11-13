@@ -5,7 +5,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 def find_and_replace_iteration_item(expression: str, state: PipelineRunState):
-    pattern = fr'(@?{{?item\(\)\}}?)'
+    pattern = r'(@?{?item\(\)\}?)'
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         if state.iteration_item is None:

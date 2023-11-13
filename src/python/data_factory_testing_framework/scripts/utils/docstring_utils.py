@@ -1,6 +1,6 @@
 import re
 
-from data_factory_testing_framework.scripts.utils.string_utils import trim, reindent
+from data_factory_testing_framework.scripts.utils.string_utils import reindent, trim
 
 PARAM_OR_RETURNS_REGEX = re.compile(":(?:ivar|returns)")
 RETURNS_REGEX = re.compile(":returns: (?P<doc>.*)", re.S)
@@ -19,7 +19,6 @@ def parse_restructured_docstring(docstring):
                   "returns": ...
               }
     """
-
     short_description = long_description = returns = ""
     params = []
 
@@ -54,6 +53,6 @@ def parse_restructured_docstring(docstring):
         "short_description": short_description,
         "long_description": long_description,
         "params": params,
-        "returns": returns
+        "returns": returns,
     }
 

@@ -1,10 +1,10 @@
 import pytest
 
-from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import \
-    FunctionCallInvalidArgumentsCountError
+from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
+    FunctionCallInvalidArgumentsCountError,
+)
 from data_factory_testing_framework.functions.function_parser import parse_expression
-from data_factory_testing_framework.generated.models import VariableSpecification, DependencyCondition
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
@@ -27,7 +27,7 @@ def test_evaluate_with_parameter():
     raw_expression = "concat('https://example.com/jobs/', pipeline().parameters.abc)"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(parameters=[
-        RunParameter[str](RunParameterType.Pipeline, "abc", "123")
+        RunParameter[str](RunParameterType.Pipeline, "abc", "123"),
     ])
 
     # Act
@@ -42,7 +42,7 @@ def test_evaluate_with_global_parameter():
     raw_expression = "concat('https://example.com/jobs/', pipeline().globalParameters.abc)"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(parameters=[
-        RunParameter[str](RunParameterType.Global, "abc", "123")
+        RunParameter[str](RunParameterType.Global, "abc", "123"),
     ])
 
     # Act
@@ -57,7 +57,7 @@ def test_evaluate_with_variable():
     raw_expression = "concat('https://example.com/jobs/', variables('abc'))"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(variable_specifications={
-        "abc": VariableSpecification(type="String", default_value="123")
+        "abc": VariableSpecification(type="String", default_value="123"),
     })
 
     # Act
@@ -86,7 +86,7 @@ def test_evaluate_with_activity_output_and_variable():
     raw_expression = "concat('https://example.com/jobs/', activity('abc').output.abc, '/', variables('abc'))"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(variable_specifications={
-        "abc": VariableSpecification(type="String", default_value="456")
+        "abc": VariableSpecification(type="String", default_value="456"),
     })
     state.add_activity_result("abc", DependencyCondition.SUCCEEDED, {"abc": "123"})
 
@@ -103,10 +103,10 @@ def test_evaluate_with_activity_output_and_variable_and_parameters():
                       "variables('abc'), '/', pipeline().parameters.abc, '/', pipeline().globalParameters.abc)")
     expression = parse_expression(raw_expression)
     state = PipelineRunState(variable_specifications={
-        "abc": VariableSpecification(type="String", default_value="456")
+        "abc": VariableSpecification(type="String", default_value="456"),
     }, parameters=[
         RunParameter(RunParameterType.Pipeline, "abc", "789"),
-        RunParameter(RunParameterType.Global, "abc", "10")
+        RunParameter(RunParameterType.Global, "abc", "10"),
     ])
     state.add_activity_result("abc", DependencyCondition.SUCCEEDED, {"abc": "123"})
 

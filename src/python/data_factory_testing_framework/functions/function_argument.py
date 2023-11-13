@@ -1,9 +1,11 @@
 from data_factory_testing_framework.functions.expressions.expression_activity import find_and_replace_activity
 from data_factory_testing_framework.functions.expressions.expression_dataset import find_and_replace_dataset
-from data_factory_testing_framework.functions.expressions.expression_iteration_item import \
-    find_and_replace_iteration_item
-from data_factory_testing_framework.functions.expressions.expression_linked_service import \
-    find_and_replace_linked_services
+from data_factory_testing_framework.functions.expressions.expression_iteration_item import (
+    find_and_replace_iteration_item,
+)
+from data_factory_testing_framework.functions.expressions.expression_linked_service import (
+    find_and_replace_linked_services,
+)
 from data_factory_testing_framework.functions.expressions.expression_parameter import find_and_replace_parameters
 from data_factory_testing_framework.functions.expressions.expression_variable import find_and_replace_variables
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType

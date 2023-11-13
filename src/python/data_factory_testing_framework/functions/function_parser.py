@@ -48,5 +48,5 @@ def parse_expression(expression: str):
 
     return FunctionCall(
         function_name,
-        list(map(parse_expression, [x.strip() for x in arguments]))
+        list(map(parse_expression, [x.strip() for x in arguments])),
     )

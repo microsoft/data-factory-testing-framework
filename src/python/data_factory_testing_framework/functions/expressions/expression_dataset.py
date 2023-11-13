@@ -6,7 +6,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 def find_and_replace_dataset(expression: str, state: PipelineRunState):
-    pattern = fr'(@?{{?dataset\(\'(\w+)\'\)}}?)'
+    pattern = r'(@?{?dataset\(\'(\w+)\'\)}?)'
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         data_set_name = match.group(2)

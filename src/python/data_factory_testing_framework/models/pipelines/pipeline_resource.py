@@ -1,7 +1,7 @@
 from typing import List
 
 from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from data_factory_testing_framework.generated.models import PipelineResource, Activity
+from data_factory_testing_framework.generated.models import Activity, PipelineResource
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 

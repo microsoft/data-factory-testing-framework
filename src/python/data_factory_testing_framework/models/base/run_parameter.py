@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 

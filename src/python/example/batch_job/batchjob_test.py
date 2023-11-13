@@ -1,9 +1,8 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import WebActivity, DependencyCondition, SetVariableActivity
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
+from data_factory_testing_framework.generated.models import SetVariableActivity
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.test_framework import TestFramework
 
 
