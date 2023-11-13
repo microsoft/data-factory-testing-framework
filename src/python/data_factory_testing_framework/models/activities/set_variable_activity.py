@@ -1,4 +1,4 @@
-from data_factory_testing_framework.generated.models import SetVariableActivity, ControlActivity
+from data_factory_testing_framework.generated.models import ControlActivity, SetVariableActivity
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 

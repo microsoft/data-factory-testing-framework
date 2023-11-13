@@ -1,11 +1,12 @@
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import \
-    VariableBeingEvaluatedDoesNotExistError
+from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
+    VariableBeingEvaluatedDoesNotExistError,
+)
 from data_factory_testing_framework.exceptions.variable_does_not_exist_error import VariableDoesNotExistError
-from data_factory_testing_framework.generated.models import VariableSpecification, DependencyCondition
-from data_factory_testing_framework.models.base.run_parameter import RunParameter
+from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
 from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.state.run_state import RunState
 
 
@@ -32,11 +33,11 @@ class PipelineRunState(RunState):
     def add_activity_result(self, activity_name: str, status: DependencyCondition, output: Any = None):
         self.pipeline_activity_results[activity_name] = {
             "status": status,
-            "output": output
+            "output": output,
         }
         self.scoped_pipeline_activity_results[activity_name] = {
             "status": status,
-            "output": output
+            "output": output,
         }
 
     def create_iteration_scope(self, iteration_item: str):

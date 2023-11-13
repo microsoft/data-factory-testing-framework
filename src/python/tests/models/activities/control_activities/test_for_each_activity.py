@@ -1,8 +1,13 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import ForEachActivity, Expression, ExpressionType, \
-    SetVariableActivity, DataFactoryElement, VariableSpecification
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.generated.models import (
+    DataFactoryElement,
+    Expression,
+    ExpressionType,
+    ForEachActivity,
+    SetVariableActivity,
+    VariableSpecification,
+)
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.models.test_framework import TestFramework
 
@@ -16,11 +21,11 @@ def test_when_evaluate_child_activities_then_should_return_the_activity_with_ite
                                         activities=[
                                             SetVariableActivity(name="setVariable", variable_name="variable",
                                                                 value=DataFactoryElement[str]("item()"),
-                                                                depends_on=[])
+                                                                depends_on=[]),
                                         ],
                                         depends_on=[])
     state = PipelineRunState(variable_specifications={
-        "variable": VariableSpecification(type="String")
+        "variable": VariableSpecification(type="String"),
     })
 
     # Act

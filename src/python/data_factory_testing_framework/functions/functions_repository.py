@@ -1,7 +1,7 @@
-from typing import Dict, Callable, List, Iterable, Union
 import json
-from datetime import datetime
 from collections.abc import Iterable as IterableType
+from datetime import datetime
+from typing import Callable, Dict
 
 
 class FunctionsRepository:

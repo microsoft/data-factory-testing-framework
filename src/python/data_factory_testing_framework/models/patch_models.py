@@ -1,12 +1,13 @@
 from data_factory_testing_framework.generated import models as _models
-
 from data_factory_testing_framework.models.activities.base import Activity
 from data_factory_testing_framework.models.activities.control_activities.control_activity import ControlActivity
-from data_factory_testing_framework.models.activities.control_activities.execute_pipeline_activity import \
-    ExecutePipelineActivity
+from data_factory_testing_framework.models.activities.control_activities.execute_pipeline_activity import (
+    ExecutePipelineActivity,
+)
 from data_factory_testing_framework.models.activities.control_activities.for_each_activity import ForEachActivity
-from data_factory_testing_framework.models.activities.control_activities.if_condition_activity import \
-    IfConditionActivity
+from data_factory_testing_framework.models.activities.control_activities.if_condition_activity import (
+    IfConditionActivity,
+)
 from data_factory_testing_framework.models.activities.control_activities.until_activity import UntilActivity
 from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
 from data_factory_testing_framework.models.data_factory_element import DataFactoryElement

@@ -1,11 +1,18 @@
-from typing import Any, List
+from typing import List
 
-from data_factory_testing_framework.generated.models import Activity, DependencyCondition, PipelineResource, \
-    UntilActivity, ForEachActivity, IfConditionActivity, ExecutePipelineActivity, ControlActivity
+from data_factory_testing_framework.generated.models import (
+    Activity,
+    ControlActivity,
+    ExecutePipelineActivity,
+    ForEachActivity,
+    IfConditionActivity,
+    PipelineResource,
+    UntilActivity,
+)
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
-
-from data_factory_testing_framework.models.repositories.data_factory_repository_factory import \
-    DataFactoryRepositoryFactory
+from data_factory_testing_framework.models.repositories.data_factory_repository_factory import (
+    DataFactoryRepositoryFactory,
+)
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 

@@ -1,13 +1,14 @@
 import re
 
-from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import \
-    LinkedServiceParameterNotFoundError
+from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import (
+    LinkedServiceParameterNotFoundError,
+)
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 
 def find_and_replace_linked_services(expression: str, state: PipelineRunState):
-    pattern = fr'(@?{{?linkedService\(\'(\w+)\'\)}}?)'
+    pattern = r'(@?{?linkedService\(\'(\w+)\'\)}?)'
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         linked_service_name = match.group(2)

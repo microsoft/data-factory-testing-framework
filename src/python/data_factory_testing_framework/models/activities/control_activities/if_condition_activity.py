@@ -1,7 +1,10 @@
 from typing import Callable, Generator
 
-from data_factory_testing_framework.generated.models import ForEachActivity, Activity, ControlActivity, \
-    IfConditionActivity
+from data_factory_testing_framework.generated.models import (
+    Activity,
+    ControlActivity,
+    IfConditionActivity,
+)
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
 
 

@@ -1,10 +1,12 @@
 import pytest
 
 from data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import DatasetParameterNotFoundError
-from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import \
-    ExpressionParameterNotFoundError
-from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import \
-    LinkedServiceParameterNotFoundError
+from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import (
+    ExpressionParameterNotFoundError,
+)
+from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import (
+    LinkedServiceParameterNotFoundError,
+)
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
@@ -46,7 +48,7 @@ def test_evaluate_variable_string_expression():
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
     state = PipelineRunState(variable_specifications={
-        "variableName": VariableSpecification(type="String", default_value="variableValue")
+        "variableName": VariableSpecification(type="String", default_value="variableValue"),
     })
 
     # Act
