@@ -7,8 +7,7 @@ from data_factory_testing_framework.exceptions.linked_service_parameter_not_foun
     LinkedServiceParameterNotFoundError
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
-from data_factory_testing_framework.generated.models import DependencyCondition
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
@@ -46,8 +45,9 @@ def test_evaluate_variable_string_expression():
     # Arrange
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
-    state = PipelineRunState()
-    state.variables.append(PipelineRunVariable("variableName", "variableValue"))
+    state = PipelineRunState(variable_specifications={
+        "variableName": VariableSpecification(type="String", default_value="variableValue")
+    })
 
     # Act
     evaluated = argument.evaluate(state)
@@ -107,6 +107,7 @@ def test_evaluate_unknown_pipeline_parameter():
     # Act
     with pytest.raises(ExpressionParameterNotFoundError):
         argument.evaluate(state)
+        print("hi")
 
 
 def test_evaluate_unknown_global_pipeline_parameter():

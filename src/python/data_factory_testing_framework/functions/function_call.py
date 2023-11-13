@@ -1,4 +1,3 @@
-import inspect
 from typing import List
 
 from data_factory_testing_framework.exceptions.unsupported_function_error import UnsupportedFunctionError
@@ -6,6 +5,8 @@ from data_factory_testing_framework.functions.functions_repository import Functi
 
 
 class FunctionCall:
+    function_names_with_all_arguments_as_list = ["concat"]
+
     def __init__(self, name: str, arguments: List):
         self.name = name
         self.arguments = arguments
@@ -19,9 +20,7 @@ class FunctionCall:
         for argument in self.arguments:
             evaluated_arguments.append(argument.evaluate(state))
 
-        signature = inspect.signature(function)
-        parameters = signature.parameters
-        if len(parameters) == 1:
+        if self.name in FunctionCall.function_names_with_all_arguments_as_list:
             return function(evaluated_arguments)
 
         return function(*evaluated_arguments)
