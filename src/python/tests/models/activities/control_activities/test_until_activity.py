@@ -15,14 +15,19 @@ from data_factory_testing_framework.models.test_framework import TestFramework
 def test_when_evaluate_until_activity_should_repeat_until_expression_is_true():
     # Arrange
     test_framework = TestFramework()
-    until_activity = UntilActivity(name="UntilActivity",
-                                   expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"),
-                                   activities=[
-                                       SetVariableActivity(name="setVariable", variable_name="variable",
-                                                           value=DataFactoryElement[str]("'1'"),
-                                                           depends_on=[]),
-                                   ],
-                                   depends_on=[])
+    until_activity = UntilActivity(
+        name="UntilActivity",
+        expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"),
+        activities=[
+            SetVariableActivity(
+                name="setVariable",
+                variable_name="variable",
+                value=DataFactoryElement[str]("'1'"),
+                depends_on=[],
+            ),
+        ],
+        depends_on=[],
+    )
 
     state = PipelineRunState(
         variable_specifications={

@@ -5,7 +5,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 def find_and_replace_variables(expression: str, state: PipelineRunState):
-    pattern = r'(@?{?variables\(\'(\w+)\'\)}?)'
+    pattern = r"(@?{?variables\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         variable_name = match.group(2)

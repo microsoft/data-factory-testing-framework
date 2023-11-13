@@ -24,7 +24,11 @@ class Activity:
             data_factory_element.evaluate(state)
             return
 
-        attribute_names = [attribute for attribute in dir(obj) if not attribute.startswith('_') and not callable(getattr(obj, attribute))]
+        attribute_names = [
+            attribute
+            for attribute in dir(obj)
+            if not attribute.startswith("_") and not callable(getattr(obj, attribute))
+        ]
         for attribute_name in attribute_names:
             attribute = getattr(obj, attribute_name)
             if attribute is None:
@@ -57,5 +61,3 @@ class Activity:
                     return False
 
         return True
-
-

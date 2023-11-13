@@ -7,7 +7,6 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 class ExecutePipelineActivity:
-
     @staticmethod
     def get_child_run_parameters(state: PipelineRunState) -> List[RunParameter]:
         child_parameters = []

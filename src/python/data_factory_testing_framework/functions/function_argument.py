@@ -22,7 +22,7 @@ def trim_one_char(text: str, character):
 
 class FunctionArgument:
     def __init__(self, expression: str) -> None:
-        self.expression = expression.strip('\n').strip(' ')
+        self.expression = expression.strip("\n").strip(" ")
 
     def evaluate(self, state: PipelineRunState):
         evaluated_expression = find_and_replace_parameters(self.expression, RunParameterType.Pipeline, state)
@@ -33,4 +33,3 @@ class FunctionArgument:
         evaluated_expression = find_and_replace_iteration_item(evaluated_expression, state)
         evaluated_expression = find_and_replace_activity(evaluated_expression, state)
         return trim_one_char(evaluated_expression, "'")
-

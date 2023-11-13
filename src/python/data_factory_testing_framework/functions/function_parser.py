@@ -3,7 +3,7 @@ import re
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.functions.function_call import FunctionCall
 
-extract_func_regex = r'^@?{?([^()]+?)\((.*)\)}?$'
+extract_func_regex = r"^@?{?([^()]+?)\((.*)\)}?$"
 
 
 def parse_expression(expression: str):
@@ -23,8 +23,8 @@ def parse_expression(expression: str):
     arguments = []
     for i in range(len(function_arguments_expression)):
         current_char = function_arguments_expression[i]
-        next_char = function_arguments_expression[i + 1] if i < len(function_arguments_expression) - 1 else '\0'
-        if current_char == ',' and not in_quotes and in_parenthesis == 0:
+        next_char = function_arguments_expression[i + 1] if i < len(function_arguments_expression) - 1 else "\0"
+        if current_char == "," and not in_quotes and in_parenthesis == 0:
             arguments.append(function_arguments_expression[start:i].replace("''", "'"))
             start = i + 1
             continue
@@ -37,14 +37,14 @@ def parse_expression(expression: str):
         if current_char == "'":
             in_quotes = not in_quotes
 
-        if current_char == '(':
+        if current_char == "(":
             in_parenthesis += 1
 
-        if current_char == ')':
+        if current_char == ")":
             in_parenthesis -= 1
 
         if i == len(function_arguments_expression) - 1:
-            arguments.append(function_arguments_expression[start:i + 1].replace("''", "'"))
+            arguments.append(function_arguments_expression[start : i + 1].replace("''", "'"))
 
     return FunctionCall(
         function_name,

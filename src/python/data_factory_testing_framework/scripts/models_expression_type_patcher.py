@@ -2,8 +2,8 @@ import ast
 
 from data_factory_testing_framework.scripts.utils.ast_utils import transform_ast
 
-if __name__ == '__main__':
-    with (open('../generated/models/_models_py3_raw.py', 'r') as f):
+if __name__ == "__main__":
+    with open("../generated/models/_models_py3_raw.py", "r") as f:
         source_code = f.read()
 
     # Parse the source code into an abstract syntax tree

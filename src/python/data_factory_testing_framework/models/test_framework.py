@@ -17,9 +17,10 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 class TestFramework:
-
     def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False) -> None:
-        self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(data_factory_folder_path)
+        self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(
+            data_factory_folder_path,
+        )
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
     def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
@@ -34,9 +35,14 @@ class TestFramework:
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
-                    lambda a: a.name not in state.scoped_pipeline_activity_results and a.are_dependency_condition_met(state), activities):
+                lambda a: a.name not in state.scoped_pipeline_activity_results
+                and a.are_dependency_condition_met(state),
+                activities,
+            ):
                 evaluated_activity = activity.evaluate(state)
-                if not self._is_iteration_activity(evaluated_activity) or (isinstance(evaluated_activity, ExecutePipelineActivity) and not self.should_evaluate_child_pipelines):
+                if not self._is_iteration_activity(evaluated_activity) or (
+                    isinstance(evaluated_activity, ExecutePipelineActivity) and not self.should_evaluate_child_pipelines
+                ):
                     yield evaluated_activity
 
                 any_activity_evaluated = True
@@ -45,7 +51,9 @@ class TestFramework:
                 if self._is_iteration_activity(activity):
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:
                         execute_pipeline_activity: ExecutePipelineActivity = activity
-                        pipeline = self.repository.get_pipeline_by_name(execute_pipeline_activity.pipeline.reference_name)
+                        pipeline = self.repository.get_pipeline_by_name(
+                            execute_pipeline_activity.pipeline.reference_name,
+                        )
 
                         # Evaluate the pipeline with its own scope
                         for childActivity in self.evaluate_pipeline(pipeline, activity.get_child_run_parameters(state)):
@@ -53,16 +61,22 @@ class TestFramework:
 
                     if isinstance(activity, ControlActivity):
                         control_activity: ControlActivity = activity
-                        for childActivity in control_activity.evaluate_control_activity_iterations(state, self.evaluate_activities):
+                        for childActivity in control_activity.evaluate_control_activity_iterations(
+                            state,
+                            self.evaluate_activities,
+                        ):
                             yield childActivity
 
             if not any_activity_evaluated:
                 raise Exception(
-                    "Validate that there are no circular dependencies or whether activity results were not set correctly.")
+                    "Validate that there are no circular dependencies or whether activity results were not set correctly.",
+                )
 
     @staticmethod
     def _is_iteration_activity(activity: Activity) -> bool:
-        return (isinstance(activity, UntilActivity) or
-                isinstance(activity, ForEachActivity) or
-                isinstance(activity, IfConditionActivity) or
-                isinstance(activity, ExecutePipelineActivity))
+        return (
+            isinstance(activity, UntilActivity)
+            or isinstance(activity, ForEachActivity)
+            or isinstance(activity, IfConditionActivity)
+            or isinstance(activity, ExecutePipelineActivity)
+        )

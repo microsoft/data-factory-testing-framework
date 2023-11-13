@@ -17,23 +17,29 @@ from data_factory_testing_framework.models.test_framework import TestFramework
 TestFramework()
 
 
-@pytest.mark.parametrize("required_condition, actual_condition, expected", [
-    ("Succeeded", "Succeeded", True),
-    ("Failed", "Succeeded", False),
-    ("Skipped", "Succeeded", False),
-    ("Completed", "Succeeded", False),
-    ("Failed", "Failed", True),
-    ("Skipped", "Failed", False),
-    ("Completed", "Failed", False),
-    ("Skipped", "Skipped", True),
-    ("Completed", "Skipped", False),
-    ("Completed", "Completed", True),
-])
+@pytest.mark.parametrize(
+    "required_condition, actual_condition, expected",
+    [
+        ("Succeeded", "Succeeded", True),
+        ("Failed", "Succeeded", False),
+        ("Skipped", "Succeeded", False),
+        ("Completed", "Succeeded", False),
+        ("Failed", "Failed", True),
+        ("Skipped", "Failed", False),
+        ("Completed", "Failed", False),
+        ("Skipped", "Skipped", True),
+        ("Completed", "Skipped", False),
+        ("Completed", "Completed", True),
+    ],
+)
 def test_dependency_conditions_when_called_returns_expected(required_condition, actual_condition, expected):
     # Arrange
-    pipeline_activity = Activity(name="activity", depends_on=[
-        ActivityDependency(activity="otherActivity", dependency_conditions=[required_condition]),
-    ])
+    pipeline_activity = Activity(
+        name="activity",
+        depends_on=[
+            ActivityDependency(activity="otherActivity", dependency_conditions=[required_condition]),
+        ],
+    )
 
     state = PipelineRunState()
     state.add_activity_result("otherActivity", actual_condition)
@@ -59,12 +65,19 @@ def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded():
 
 def test_evaluate_is_evaluating_expressions_inside_dict():
     # Arrange
-    pipeline_activity = ExecutePipelineActivity(name="activity", pipeline=PipelineReference(type=PipelineReferenceType.PIPELINE_REFERENCE, reference_name="dummy"), depends_on=[], parameters={
-        "url": DataFactoryElement("pipeline().parameters.url"),
-    })
-    state = PipelineRunState(parameters=[
-        RunParameter(RunParameterType.Pipeline, "url", "example.com"),
-    ])
+    pipeline_activity = ExecutePipelineActivity(
+        name="activity",
+        pipeline=PipelineReference(type=PipelineReferenceType.PIPELINE_REFERENCE, reference_name="dummy"),
+        depends_on=[],
+        parameters={
+            "url": DataFactoryElement("pipeline().parameters.url"),
+        },
+    )
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(RunParameterType.Pipeline, "url", "example.com"),
+        ],
+    )
 
     # Act
     pipeline_activity.evaluate(state)

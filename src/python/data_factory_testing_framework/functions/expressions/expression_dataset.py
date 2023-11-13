@@ -6,11 +6,18 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 def find_and_replace_dataset(expression: str, state: PipelineRunState):
-    pattern = r'(@?{?dataset\(\'(\w+)\'\)}?)'
+    pattern = r"(@?{?dataset\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         data_set_name = match.group(2)
-        data_set = next((x for x in state.parameters if x.name.lower() == data_set_name.lower() and x.type == RunParameterType.Dataset), None)
+        data_set = next(
+            (
+                x
+                for x in state.parameters
+                if x.name.lower() == data_set_name.lower() and x.type == RunParameterType.Dataset
+            ),
+            None,
+        )
         if data_set is None:
             raise DatasetParameterNotFoundError(data_set_name)
 

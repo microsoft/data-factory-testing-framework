@@ -12,10 +12,12 @@ deserializer = Deserializer(models)
 
 
 class DataFactoryRepositoryFactory:
-
     @staticmethod
     def parse_from_folder(folder_path: str):
-        pipelines = DataFactoryRepositoryFactory._get_data_factory_entities_by_folder_path(folder_path, "PipelineResource")
+        pipelines = DataFactoryRepositoryFactory._get_data_factory_entities_by_folder_path(
+            folder_path,
+            "PipelineResource",
+        )
         return DataFactoryRepository(pipelines)
 
     @staticmethod
@@ -24,7 +26,7 @@ class DataFactoryRepositoryFactory:
         files = os.listdir(folder_path)
         for file in files:
             if file.endswith(".json"):
-                with (open(os.path.join(folder_path, file), 'r') as f):
+                with open(os.path.join(folder_path, file), "r") as f:
                     pipeline_json = json.load(f)
                     entities.append(deserializer._deserialize(target_class, pipeline_json))
 

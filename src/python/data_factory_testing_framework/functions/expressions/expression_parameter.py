@@ -8,11 +8,14 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 
 def find_and_replace_parameters(expression: str, parameter_type: RunParameterType, state: PipelineRunState):
-    pattern = fr'(@?{{?pipeline\(\)\.{_get_parameter_string_template(parameter_type)}\.(\w+)}}?)'
+    pattern = rf"(@?{{?pipeline\(\)\.{_get_parameter_string_template(parameter_type)}\.(\w+)}}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
         parameter_name = match.group(2)
-        parameter = next((x for x in state.parameters if x.name.lower() == parameter_name.lower() and x.type == parameter_type), None)
+        parameter = next(
+            (x for x in state.parameters if x.name.lower() == parameter_name.lower() and x.type == parameter_type),
+            None,
+        )
         if parameter is None:
             raise ExpressionParameterNotFoundError(parameter_name)
 
@@ -23,8 +26,8 @@ def find_and_replace_parameters(expression: str, parameter_type: RunParameterTyp
 
 def _get_parameter_string_template(parameter_type: RunParameterType):
     if parameter_type == RunParameterType.Pipeline:
-        return 'parameters'
+        return "parameters"
     elif parameter_type == RunParameterType.Global:
-        return 'globalParameters'
+        return "globalParameters"
     else:
-        raise ValueError(f'Parameter type not supported: {parameter_type}')
+        raise ValueError(f"Parameter type not supported: {parameter_type}")

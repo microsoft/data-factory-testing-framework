@@ -11,10 +11,13 @@ class FunctionsRepository:
         "equals": lambda argument0, argument1: argument0 == argument1,
         "json": lambda argument: argument,
         "contains": lambda obj, value: (
-            value in obj if isinstance(obj, dict) else
-            value in obj if isinstance(obj, IterableType) else
-            value in obj if isinstance(obj, str) else
-            False
+            value in obj
+            if isinstance(obj, dict)
+            else value in obj
+            if isinstance(obj, IterableType)
+            else value in obj
+            if isinstance(obj, str)
+            else False
         ),
         "replace": lambda input_str, pattern, replacement: input_str.replace(pattern, replacement),
         "string": lambda input_str: input_str,

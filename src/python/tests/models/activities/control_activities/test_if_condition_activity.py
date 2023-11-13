@@ -18,7 +18,8 @@ def test_when_evaluated_should_evaluate_expression():
     # Arrange
     activity = IfConditionActivity(
         name="IfConditionActivity",
-        expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"))
+        expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"),
+    )
 
     # Act
     activity.evaluate(PipelineRunState())
@@ -27,7 +28,10 @@ def test_when_evaluated_should_evaluate_expression():
     assert activity.expression.evaluated is True
 
 
-@pytest.mark.parametrize("expression_outcome,expected_activity_name", [(True, "setVariableActivity1"),(False, "setVariableActivity2")])
+@pytest.mark.parametrize(
+    "expression_outcome,expected_activity_name",
+    [(True, "setVariableActivity1"), (False, "setVariableActivity2")],
+)
 def test_when_evaluated_should_evaluate_correct_child_activities(expression_outcome, expected_activity_name):
     # Arrange
     test_framework = TestFramework()
@@ -39,19 +43,23 @@ def test_when_evaluated_should_evaluate_correct_child_activities(expression_outc
             SetVariableActivity(
                 name="setVariableActivity1",
                 variable_name="variable",
-                value=DataFactoryElement("dummy")),
+                value=DataFactoryElement("dummy"),
+            ),
         ],
         if_false_activities=[
             SetVariableActivity(
                 name="setVariableActivity2",
                 variable_name="variable",
-                value=DataFactoryElement("dummy")),
+                value=DataFactoryElement("dummy"),
+            ),
         ],
     )
 
-    state = PipelineRunState(variable_specifications={
-        "variable": VariableSpecification(type="String"),
-    })
+    state = PipelineRunState(
+        variable_specifications={
+            "variable": VariableSpecification(type="String"),
+        },
+    )
 
     # Act
     child_activities = list(test_framework.evaluate_activity(activity, state))
