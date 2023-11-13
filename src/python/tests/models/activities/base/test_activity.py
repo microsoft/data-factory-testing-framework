@@ -33,7 +33,7 @@ TestFramework()
     ],
 )
 def test_dependency_conditions_when_called_returns_expected(
-    required_condition: str, actual_condition: str, expected: bool
+    required_condition: str, actual_condition: str, expected: bool,
 ) -> None:
     # Arrange
     pipeline_activity = Activity(

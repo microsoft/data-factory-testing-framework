@@ -33,7 +33,7 @@ def test_when_evaluated_should_evaluate_expression() -> None:
     [(True, "setVariableActivity1"), (False, "setVariableActivity2")],
 )
 def test_when_evaluated_should_evaluate_correct_child_activities(
-    expression_outcome: bool, expected_activity_name: str
+    expression_outcome: bool, expected_activity_name: str,
 ) -> None:
     # Arrange
     test_framework = TestFramework()
