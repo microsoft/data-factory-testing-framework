@@ -18,6 +18,7 @@ class PipelineRunState(RunState):
         pipeline_activity_results: Optional[Dict[str, Any]] = None,
         iteration_item: str = None,
     ) -> None:
+        """Pipeline run state."""
         if variable_specifications is None:
             variable_specifications = {}
 

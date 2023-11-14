@@ -22,6 +22,11 @@ def trim_one_char(text: str, character: str) -> str:
 
 class FunctionArgument:
     def __init__(self, expression: str) -> None:
+        """Represents a function argument.
+
+        Args:
+            expression: The expression of the argument.
+        """
         self.expression = expression.strip("\n").strip(" ")
 
     def evaluate(self, state: PipelineRunState) -> str:
