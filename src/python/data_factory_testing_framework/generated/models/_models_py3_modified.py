@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
 from azure.mgmt.datafactory import _serialization
 
 from .data_factory_element import DataFactoryElement
+from ...models.state.run_state import RunState
 
 if sys.version_info >= (3, 9):
     from collections.abc import MutableMapping
@@ -89,6 +90,9 @@ class Activity(_serialization.Model):
         self.description = description
         self.depends_on = depends_on
         self.user_properties = user_properties
+
+    def evaluate(self, state: RunState) -> str:
+        pass
 
 class ActivityDependency(_serialization.Model):
     """Activity dependency information.
@@ -2294,6 +2298,9 @@ class ControlActivity(Activity):
         """
         super().__init__(additional_properties=additional_properties, name=name, description=description, depends_on=depends_on, user_properties=user_properties, **kwargs)
         self.type: str = 'Container'
+
+    def evaluate(self, state: RunState) -> str:
+        pass
 
 class AppendVariableActivity(ControlActivity):
     """Append value for a Variable of type Array.

@@ -8,6 +8,11 @@ from data_factory_testing_framework.models.base.run_parameter_type import RunPar
 
 class PipelineResource:
     def get_activity_by_name(self: PipelineResource, name: str) -> Activity:
+        """Get an activity by name. Throws an exception if the activity is not found.
+
+        Args:
+            name: Name of the activity.
+        """
         for activity in self.activities:
             if activity.name == name:
                 return activity
@@ -15,6 +20,11 @@ class PipelineResource:
         raise ActivityNotFoundError(f"Activity with name {name} not found")
 
     def validate_parameters(self: PipelineResource, parameters: List[RunParameter]) -> None:
+        """Validate that all parameters are provided and that no duplicate parameters are provided.
+
+        Args:
+            parameters: List of parameters.
+        """
         # Check if all parameters are provided
         for pipeline_parameter_name, pipeline_parameter_specification in self.parameters.items():
             found = False

@@ -7,7 +7,7 @@ T = TypeVar("T")
 
 class RunParameter(Generic[T]):
     def __init__(self, parameter_type: RunParameterType, name: str, value: T) -> None:
-        """Run parameter.
+        """Run parameter. Represents a parameter that is being tracked during a pipeline run.
 
         Args:
             parameter_type: Type of the parameter.

@@ -5,7 +5,11 @@ from data_factory_testing_framework.models.base.run_parameter import RunParamete
 
 class RunState:
     def __init__(self, parameters: Optional[List[RunParameter]] = None) -> None:
-        """Run state."""
+        """Represents the RunState for non-pipeline runs, like LinkedServices, Datasets and Triggers.
+
+        Args:
+            parameters: The global and regular parameters to be used for evaluating expressions.
+        """
         if parameters is None:
             parameters = []
 

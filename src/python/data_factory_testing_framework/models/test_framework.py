@@ -18,21 +18,60 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class TestFramework:
     def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False) -> None:
-        """Test framework for evaluating pipelines."""
+        """Initializes the test framework allowing you to evaluate pipelines and activities.
+
+        Args:
+            data_factory_folder_path: optional path to the folder containing the data factory files.
+            The repository attribute will be populated with the data factory entities if provided.
+            should_evaluate_child_pipelines: optional boolean indicating whether child pipelines should be evaluated. Defaults to False.
+        """
         self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(
             data_factory_folder_path,
         )
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
     def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
+        """Evaluates a single activity given a state. Any expression part of the activity is evaluated based on the state of the pipeline.
+
+        Args:
+            activity: The activity to evaluate.
+            state: The state to use for evaluating the activity.
+
+        Returns:
+             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
+        """
         return self.evaluate_activities([activity], state)
 
     def evaluate_pipeline(self, pipeline: PipelineResource, parameters: List[RunParameter]) -> List[Activity]:
+        """Evaluates all pipeline activities using the provided parameters.
+
+        The order of activity execution is simulated based on the dependencies.
+        Any expression part of the activity is evaluated based on the state of the pipeline.
+
+        Args:
+            pipeline: The pipeline to evaluate.
+            parameters: The parameters to use for evaluating the pipeline.
+
+        Returns:
+            A list of evaluated pipelines, which can be more than 1 due to possible child activities.
+        """
         pipeline.validate_parameters(parameters)
         state = PipelineRunState(parameters, pipeline.variables)
         return self.evaluate_activities(pipeline.activities, state)
 
     def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> List[Activity]:
+        """Evaluates all activities using the provided state.
+
+        The order of activity execution is simulated based on the dependencies.
+        Any expression part of the activity is evaluated based on the state of the pipeline.
+
+        Args:
+            activities: The activities to evaluate.
+            state: The state to use for evaluating the pipeline.
+
+        Returns:
+            A list of evaluated pipelines, which can be more than 1 due to possible child activities.
+        """
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
