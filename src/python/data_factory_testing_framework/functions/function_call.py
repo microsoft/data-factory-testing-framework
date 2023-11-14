@@ -1,11 +1,10 @@
-from typing import Any
-
 from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
 from data_factory_testing_framework.exceptions.unsupported_function_error import UnsupportedFunctionError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
+from data_factory_testing_framework.models.state.run_state import RunState
 
 
 class FunctionCall:
@@ -21,7 +20,7 @@ class FunctionCall:
         self.name = name
         self.arguments = arguments
 
-    def evaluate(self, state: Any) -> str:  # noqa: ANN401 - what is the type of state?
+    def evaluate(self, state: RunState) -> str:
         function = FunctionsRepository.functions.get(self.name)
         if not function:
             raise UnsupportedFunctionError(self.name)
