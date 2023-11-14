@@ -56,16 +56,18 @@ class TestFramework:
                         )
 
                         # Evaluate the pipeline with its own scope
-                        for childActivity in self.evaluate_pipeline(pipeline, activity.get_child_run_parameters(state)):
-                            yield childActivity
+                        for child_activity in self.evaluate_pipeline(
+                            pipeline, activity.get_child_run_parameters(state)
+                        ):
+                            yield child_activity
 
                     if isinstance(activity, ControlActivity):
                         control_activity: ControlActivity = activity
-                        for childActivity in control_activity.evaluate_control_activity_iterations(
+                        for child_activity in control_activity.evaluate_control_activity_iterations(
                             state,
                             self.evaluate_activities,
                         ):
-                            yield childActivity
+                            yield child_activity
 
             if not any_activity_evaluated:
                 raise Exception(
