@@ -209,8 +209,7 @@ def test_batch_job_pipeline() -> None:
     "onAllTasksComplete": "terminatejob",
     "onTaskFailure": "noaction",
     "usesTaskDependencies": true,
-    "commonEnvironmentSettings": [{"name": "WORKLOAD_APP_PACKAGE", "value": "test-application"}, {"name": "WORKLOAD_APP_PACKAGE_VERSION", "value": "1.5.0"}, {"name": "MANAGER_APP_PACKAGE", "value": "batchmanager"}, {"name": "MANAGER_APP_PACKAGE_VERSION", "value": "2.0.0"}, {"name": "BATCH_JOB_TIMEOUT", "value": "PT4H"}, {"name": "WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME", "value": "batch-account-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}]}
-    """  # noqa: E501
+    "commonEnvironmentSettings": [{"name": "WORKLOAD_APP_PACKAGE", "value": "test-application"}, {"name": "WORKLOAD_APP_PACKAGE_VERSION", "value": "1.5.0"}, {"name": "MANAGER_APP_PACKAGE", "value": "batchmanager"}, {"name": "MANAGER_APP_PACKAGE_VERSION", "value": "2.0.0"}, {"name": "BATCH_JOB_TIMEOUT", "value": "PT4H"}, {"name": "WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME", "value": "batch-account-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}]}"""  # noqa: E501
     )
 
     activity = next(activities)
