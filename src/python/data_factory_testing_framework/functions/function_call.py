@@ -1,16 +1,23 @@
-from typing import Any, List
+from typing import Any
 
 from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
 from data_factory_testing_framework.exceptions.unsupported_function_error import UnsupportedFunctionError
+from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 
 
 class FunctionCall:
     function_names_with_all_arguments_as_list = ["concat"]
 
-    def __init__(self, name: str, arguments: List) -> None:
+    def __init__(self, name: str, arguments: list[FunctionArgument]) -> None:
+        """Represents a function call.
+
+        Args:
+            name: The name of the function.
+            arguments: The arguments of the function.
+        """
         self.name = name
         self.arguments = arguments
 

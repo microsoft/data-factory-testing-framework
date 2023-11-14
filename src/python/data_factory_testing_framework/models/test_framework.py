@@ -18,6 +18,7 @@ from data_factory_testing_framework.models.state.pipeline_run_state import Pipel
 
 class TestFramework:
     def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False) -> None:
+        """Test framework for evaluating pipelines."""
         self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(
             data_factory_folder_path,
         )
@@ -57,7 +58,8 @@ class TestFramework:
 
                         # Evaluate the pipeline with its own scope
                         for child_activity in self.evaluate_pipeline(
-                            pipeline, activity.get_child_run_parameters(state)
+                            pipeline,
+                            activity.get_child_run_parameters(state),
                         ):
                             yield child_activity
 

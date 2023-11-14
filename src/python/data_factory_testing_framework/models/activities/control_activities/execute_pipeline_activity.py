@@ -1,6 +1,5 @@
 from typing import List
 
-from data_factory_testing_framework.generated.models import ExecutePipelineActivity
 from data_factory_testing_framework.models.base.run_parameter import RunParameter
 from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
 from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
