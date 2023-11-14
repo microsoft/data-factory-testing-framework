@@ -13,5 +13,10 @@ class Expression[TResult]:
         self.evaluated: TResult = []
 
     def evaluate(self: Expression, state: PipelineRunState) -> TResult:
+        """Evaluates the expression by replacing all parameters and variables with their values and then evaluating the expression.
+
+        Args:
+            state: The state to use for evaluating the expression.
+        """
         self.evaluated = parse_expression(self.value).evaluate(state)
         return self.evaluated

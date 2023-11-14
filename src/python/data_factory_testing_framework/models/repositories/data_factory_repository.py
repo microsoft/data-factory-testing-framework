@@ -6,13 +6,19 @@ from data_factory_testing_framework.generated.models import PipelineResource
 
 class DataFactoryRepository:
     def __init__(self, pipelines: List[PipelineResource]) -> None:
-        """Data factory repository.
+        """Initializes the repository with pipelines, linkedServices, datasets and triggers.
 
-        The data factory repository contains all the pipelines that can be evaluated.
+        Args:
+            pipelines: List of pipelines.
         """
         self.pipelines = pipelines
 
     def get_pipeline_by_name(self, name: str) -> PipelineResource:
+        """Get a pipeline by name. Throws an exception if the pipeline is not found.
+
+        Args:
+            name: Name of the pipeline.
+        """
         for pipeline in self.pipelines:
             if pipeline.name == name:
                 return pipeline

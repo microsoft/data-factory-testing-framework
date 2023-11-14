@@ -23,7 +23,7 @@ def trim_one_char(text: str, character: str) -> str:
 
 class FunctionArgument:
     def __init__(self, expression: str) -> None:
-        """Represents a function argument.
+        """Represents a function argument which can be evaluated into a single value.
 
         Args:
             expression: The expression of the argument.

@@ -1,3 +1,5 @@
+from typing import Union
+
 from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
@@ -10,8 +12,8 @@ from data_factory_testing_framework.models.state.run_state import RunState
 class FunctionCall:
     function_names_with_all_arguments_as_list = ["concat"]
 
-    def __init__(self, name: str, arguments: list[FunctionArgument]) -> None:
-        """Represents a function call.
+    def __init__(self, name: str, arguments: list[Union["FunctionCall", FunctionArgument]]) -> None:
+        """Represents a function call with passed arguments that can be evaluated into a single value.
 
         Args:
             name: The name of the function.
