@@ -36,4 +36,4 @@ def trim(docstring: str) -> str:
 
 
 def reindent(string: str) -> str:
-    return "\n".join(l.strip() for l in string.strip().split("\n"))
+    return "\n".join(line.strip() for line in string.strip().split("\n"))
