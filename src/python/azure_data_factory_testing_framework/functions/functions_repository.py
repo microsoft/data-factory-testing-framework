@@ -35,7 +35,7 @@ class FunctionsRepository:
     }
 
     @staticmethod
-    def _register(function_name: str, function: Callable) -> None:
+    def register(function_name: str, function: Callable) -> None:
         FunctionsRepository.functions[function_name] = function
 
     @staticmethod
