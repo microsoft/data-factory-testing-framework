@@ -8,7 +8,7 @@ from data_factory_testing_framework.test_framework import TestFramework
 
 def test_batch_job_pipeline() -> None:
     # Arrange
-    test_framework = TestFramework("./example/batch_job/pipelines")
+    test_framework = TestFramework("./examples/batch_job/pipelines")
     pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
 
     # Act
