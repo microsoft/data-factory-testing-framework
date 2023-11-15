@@ -1,6 +1,6 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.generated.models import (
     Activity,
     ActivityDependency,
     DataFactoryElement,
@@ -9,9 +9,9 @@ from data_factory_testing_framework.generated.models import (
     PipelineReference,
     PipelineReferenceType,
 )
-from data_factory_testing_framework.state import PipelineRunState, RunParameterType
-from data_factory_testing_framework.state.run_parameter import RunParameter
-from data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
+from azure_data_factory_testing_framework.state.run_parameter import RunParameter
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 TestFramework()
 

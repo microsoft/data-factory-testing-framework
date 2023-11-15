@@ -1,6 +1,6 @@
 import pytest
 
-from data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.generated.models import (
     DataFactoryElement,
     Expression,
     ExpressionType,
@@ -8,8 +8,8 @@ from data_factory_testing_framework.generated.models import (
     UntilActivity,
     VariableSpecification,
 )
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_evaluate_until_activity_should_repeat_until_expression_is_true() -> None:

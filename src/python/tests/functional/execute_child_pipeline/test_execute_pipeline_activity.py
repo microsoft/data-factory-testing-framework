@@ -1,8 +1,8 @@
 import pytest
 
-from data_factory_testing_framework import TestFramework
-from data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
-from data_factory_testing_framework.state import RunParameter, RunParameterType
+from azure_data_factory_testing_framework import TestFramework
+from azure_data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
+from azure_data_factory_testing_framework.state import RunParameter, RunParameterType
 
 
 def test_execute_pipeline_activity_child_activities_executed() -> None:
