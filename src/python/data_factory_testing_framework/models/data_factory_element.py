@@ -1,12 +1,15 @@
-from typing import Any, Generic, TypeVar
+from typing import Union
 
 from data_factory_testing_framework.functions.function_parser import parse_expression
 from data_factory_testing_framework.generated.models import DataFactoryElement
+from data_factory_testing_framework.models.state.run_state import RunState
 
-T = TypeVar("T")
 
+class DataFactoryElement():
+    def __init__(self) -> None:
+        """DataFactoryElement."""
+        self.value: Union[str, int, bool] = None
 
-class DataFactoryElement(Generic[T]):
-    def evaluate(self: DataFactoryElement, state: Any) -> None:  # noqa: ANN401
+    def evaluate(self: DataFactoryElement, state: RunState) -> None:
         self.value = parse_expression(self.expression).evaluate(state)
         return self.value
