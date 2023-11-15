@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
@@ -95,7 +95,7 @@ class PipelineRunState(RunState):
         """
         return self.pipeline_activity_results[name] if name in self.pipeline_activity_results else None
 
-    def set_variable(self, variable_name: str, value: Any) -> None:  # noqa: ANN401
+    def set_variable(self, variable_name: str, value: Union[str, int, bool]) -> None:
         """Sets the value of a variable if it exists. Otherwise throws an exception.
 
         Args:

@@ -26,7 +26,7 @@ class PipelineResource:
             parameters: List of parameters.
         """
         # Check if all parameters are provided
-        for pipeline_parameter_name, pipeline_parameter_specification in self.parameters.items():
+        for pipeline_parameter_name, _ in self.parameters.items():
             found = False
             for parameter in parameters:
                 if pipeline_parameter_name == parameter.name and parameter.type == RunParameterType.Pipeline:
