@@ -35,12 +35,12 @@ class PipelineResource:
 
             if not found:
                 raise ValueError(
-                    f"Parameter with name '{pipeline_parameter_name}' and type '{pipeline_parameter_specification.type}' not found in pipeline '{self.name}'",
+                    f"Parameter with name '{pipeline_parameter_name}' and type 'RunParameterType.Pipeline' not found in pipeline '{self.name}'",
                 )
 
         # Check if no duplicate parameters are provided
         for parameter in parameters:
             if sum(1 for p in parameters if p.name == parameter.name and p.type == parameter.type) > 1:
                 raise ValueError(
-                    f"Duplicate parameter with name '{parameter.name}' and type '{parameter.type}' found in pipeline '{self.name}'",
+                    f"Duplicate parameter with name '{parameter.name}' and type 'RunParameterType.{parameter.type}' found in pipeline '{self.name}'",
                 )
