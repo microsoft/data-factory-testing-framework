@@ -30,7 +30,8 @@ def test_execute_pipeline_activity_child_activities_executed() -> None:
 
 def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_known_exception_thrown() -> None:
     # Arrange
-    test_framework = TestFramework(data_factory_folder_path="./tests/functional/execute_child_pipeline/pipeline", should_evaluate_child_pipelines=True)
+    test_framework = TestFramework(data_factory_folder_path="./tests/functional/execute_child_pipeline/pipeline",
+                                   should_evaluate_child_pipelines=True)
     test_framework.repository.pipelines.remove(test_framework.repository.get_pipeline_by_name("child"))
     pipeline = test_framework.repository.get_pipeline_by_name("main")
 
