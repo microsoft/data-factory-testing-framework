@@ -58,5 +58,4 @@ jobs:
         working-directory: ./src/python
         run: |
           source .venv/bin/activate
-          pytest tests/
-          coverage report
+          pytest .
