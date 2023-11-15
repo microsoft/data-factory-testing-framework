@@ -6,7 +6,7 @@ from data_factory_testing_framework.exceptions.function_call_invalid_arguments_c
 from data_factory_testing_framework.exceptions.unsupported_function_error import UnsupportedFunctionError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
-from data_factory_testing_framework.models.state.run_state import RunState
+from data_factory_testing_framework.state import RunState
 
 
 class FunctionCall:

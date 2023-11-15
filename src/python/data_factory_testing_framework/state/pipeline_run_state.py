@@ -5,9 +5,9 @@ from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not
 )
 from data_factory_testing_framework.exceptions.variable_does_not_exist_error import VariableDoesNotExistError
 from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
-from data_factory_testing_framework.models.base.pipeline_run_variable import PipelineRunVariable
-from data_factory_testing_framework.models.base.run_parameter import RunParameter
-from data_factory_testing_framework.models.state.run_state import RunState
+from data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
+from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state.run_state import RunState
 
 
 class PipelineRunState(RunState):

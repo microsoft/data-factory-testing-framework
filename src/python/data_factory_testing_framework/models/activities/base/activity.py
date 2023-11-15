@@ -2,7 +2,7 @@ from typing import Any, List
 
 from data_factory_testing_framework.generated.models import Activity, DataFactoryElement, DependencyCondition
 from data_factory_testing_framework.generated.models import Activity as GeneratedActivity
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState
 
 
 class Activity:

@@ -5,9 +5,9 @@ from data_factory_testing_framework.exceptions.function_call_invalid_arguments_c
 )
 from data_factory_testing_framework.functions.function_parser import parse_expression
 from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
-from data_factory_testing_framework.models.base.run_parameter import RunParameter
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def test_evaluate_expression_with_nested_function() -> None:

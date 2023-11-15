@@ -8,8 +8,8 @@ from data_factory_testing_framework.generated.models import (
     SetVariableActivity,
     VariableSpecification,
 )
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.models.test_framework import TestFramework
+from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated() -> None:

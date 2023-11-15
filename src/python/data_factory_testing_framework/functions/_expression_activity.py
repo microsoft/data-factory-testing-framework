@@ -1,7 +1,7 @@
 import re
 
 from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def find_and_replace_activity(expression: str, state: PipelineRunState) -> str:

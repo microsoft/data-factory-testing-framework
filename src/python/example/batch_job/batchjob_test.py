@@ -1,9 +1,9 @@
 import pytest
 
 from data_factory_testing_framework.generated.models import SetVariableActivity
-from data_factory_testing_framework.models.base.run_parameter import RunParameter
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
-from data_factory_testing_framework.models.test_framework import TestFramework
+from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_batch_job_pipeline() -> None:

@@ -1,7 +1,7 @@
 import re
 
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def find_and_replace_variables(expression: str, state: PipelineRunState) -> str:

@@ -2,7 +2,7 @@ from typing import Union
 
 from data_factory_testing_framework.functions.function_parser import parse_expression
 from data_factory_testing_framework.generated.models import Expression
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState
 
 
 class Expression:

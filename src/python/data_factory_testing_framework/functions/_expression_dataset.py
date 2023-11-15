@@ -1,8 +1,8 @@
 import re
 
 from data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import DatasetParameterNotFoundError
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def find_and_replace_dataset(expression: str, state: PipelineRunState) -> str:

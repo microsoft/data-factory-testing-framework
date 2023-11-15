@@ -1,7 +1,7 @@
 import re
 
 from data_factory_testing_framework.exceptions.state_iteration_item_not_set_error import StateIterationItemNotSetError
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def find_and_replace_iteration_item(expression: str, state: PipelineRunState) -> str:
