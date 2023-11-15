@@ -9,25 +9,25 @@ from data_factory_testing_framework.models.activities.control_activities.if_cond
 )
 from data_factory_testing_framework.models.activities.control_activities.until_activity import UntilActivity
 from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
-from data_factory_testing_framework.models.expressions._data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models.expressions._expression import Expression
+from data_factory_testing_framework.models.expressions.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models.expressions.expression import Expression
 from data_factory_testing_framework.models.pipelines.pipeline_resource import PipelineResource
 
 
 # Patch models with our custom classes
 def patch_models() -> None:
-    patch_model(_models.Activity, Activity)
-    patch_model(_models.ExecutePipelineActivity, ExecutePipelineActivity)
-    patch_model(_models.ForEachActivity, ForEachActivity)
-    patch_model(_models.Expression, Expression)
-    patch_model(_models.IfConditionActivity, IfConditionActivity)
-    patch_model(_models.UntilActivity, UntilActivity)
-    patch_model(_models.SetVariableActivity, SetVariableActivity)
-    patch_model(_models.PipelineResource, PipelineResource)
-    patch_model(_models.DataFactoryElement, DataFactoryElement)
+    _patch_model(_models.Activity, Activity)
+    _patch_model(_models.ExecutePipelineActivity, ExecutePipelineActivity)
+    _patch_model(_models.ForEachActivity, ForEachActivity)
+    _patch_model(_models.Expression, Expression)
+    _patch_model(_models.IfConditionActivity, IfConditionActivity)
+    _patch_model(_models.UntilActivity, UntilActivity)
+    _patch_model(_models.SetVariableActivity, SetVariableActivity)
+    _patch_model(_models.PipelineResource, PipelineResource)
+    _patch_model(_models.DataFactoryElement, DataFactoryElement)
 
 
-def patch_model(main_class: type, partial_class: type) -> None:
+def _patch_model(main_class: type, partial_class: type) -> None:
     partial_class_method_list = [
         attribute
         for attribute in dir(partial_class)
