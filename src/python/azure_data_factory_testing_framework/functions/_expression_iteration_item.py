@@ -1,6 +1,8 @@
 import re
 
-from azure_data_factory_testing_framework.exceptions.state_iteration_item_not_set_error import StateIterationItemNotSetError
+from azure_data_factory_testing_framework.exceptions.state_iteration_item_not_set_error import (
+    StateIterationItemNotSetError,
+)
 from azure_data_factory_testing_framework.state import PipelineRunState
 
 

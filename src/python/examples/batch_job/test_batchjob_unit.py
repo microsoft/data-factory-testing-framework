@@ -1,8 +1,14 @@
+# flake8: noqa: E501
 import pytest
 
 from azure_data_factory_testing_framework import TestFramework
-from azure_data_factory_testing_framework.generated.models import SetVariableActivity, VariableSpecification, \
-    PipelineResource, WebActivity, ExecutePipelineActivity
+from azure_data_factory_testing_framework.generated.models import (
+    ExecutePipelineActivity,
+    PipelineResource,
+    SetVariableActivity,
+    VariableSpecification,
+    WebActivity,
+)
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameter, RunParameterType
 
 
@@ -13,7 +19,7 @@ def test_framework() -> TestFramework:
     )
 
 @pytest.fixture
-def pipeline(test_framework) -> PipelineResource:
+def pipeline(test_framework: TestFramework) -> PipelineResource:
     return test_framework.repository.get_pipeline_by_name("batch_job")
 
 
@@ -172,7 +178,7 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
     state = PipelineRunState(
         variable_specifications={
             "JobContainerURL": VariableSpecification(type="String", default_value="https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
-        }
+        },
     )
 
     # Act
@@ -234,7 +240,7 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: PipelineRes
             "ManagerApplicationPackagePath": VariableSpecification(type="String", default_value="$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"),
             "WorkloadApplicationPackagePath": VariableSpecification(type="String", default_value="$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz"),
             "CommonEnvironmentSettings": VariableSpecification(type="String", default_value="[{\"name\":\"COMMON_ENV_SETTING\",\"value\":\"dummy\"}]"),
-        }
+        },
     )
 
     # Act
@@ -318,7 +324,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: PipelineResource) 
     state = PipelineRunState(
         parameters=[
             RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
-        ]
+        ],
     )
 
     # Act
@@ -343,7 +349,7 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: PipelineReso
             RunParameter[str](RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
             RunParameter[str](RunParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"),
             RunParameter[str](RunParameterType.Pipeline, "OutputFolderName", "output"),
-        ]
+        ],
     )
 
     # Act
