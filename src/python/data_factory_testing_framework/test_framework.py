@@ -1,5 +1,8 @@
 from typing import List
 
+from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
+    PipelineActivitiesCircularDependencyError,
+)
 from data_factory_testing_framework.generated.models import (
     Activity,
     ControlActivity,
@@ -10,6 +13,7 @@ from data_factory_testing_framework.generated.models import (
     UntilActivity,
 )
 from data_factory_testing_framework.models import DataFactoryRepositoryFactory
+from data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
 from data_factory_testing_framework.state import PipelineRunState, RunParameter
 
 
@@ -22,9 +26,11 @@ class TestFramework:
             The repository attribute will be populated with the data factory entities if provided.
             should_evaluate_child_pipelines: optional boolean indicating whether child pipelines should be evaluated. Defaults to False.
         """
-        self.repository = data_factory_folder_path is not None and DataFactoryRepositoryFactory.parse_from_folder(
-            data_factory_folder_path,
-        )
+        if data_factory_folder_path is not None:
+            self.repository = DataFactoryRepositoryFactory.parse_from_folder(data_factory_folder_path)
+        else:
+            self.repository = DataFactoryRepository([])
+
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
     def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
@@ -109,9 +115,7 @@ class TestFramework:
                             yield child_activity
 
             if not any_activity_evaluated:
-                raise Exception(
-                    "Validate that there are no circular dependencies or whether activity results were not set correctly.",
-                )
+                raise PipelineActivitiesCircularDependencyError()
 
     @staticmethod
     def _is_iteration_activity(activity: Activity) -> bool:
