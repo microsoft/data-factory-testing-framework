@@ -5,7 +5,11 @@ from azure_data_factory_testing_framework.exceptions.pipeline_activities_circula
     PipelineActivitiesCircularDependencyError,
 )
 from azure_data_factory_testing_framework.generated.data_factory_element import DataFactoryElement
-from azure_data_factory_testing_framework.generated.models import ActivityDependency, PipelineResource, SetVariableActivity
+from azure_data_factory_testing_framework.generated.models import (
+    ActivityDependency,
+    PipelineResource,
+    SetVariableActivity,
+)
 
 
 def test_circular_dependency_between_activities_should_throw_error() -> None:
