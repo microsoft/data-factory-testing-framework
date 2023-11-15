@@ -3,8 +3,7 @@ import re
 from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import (
     ExpressionParameterNotFoundError,
 )
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
 def find_and_replace_parameters(expression: str, parameter_type: RunParameterType, state: PipelineRunState) -> str:

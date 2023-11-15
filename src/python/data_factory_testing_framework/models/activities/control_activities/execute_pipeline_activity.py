@@ -1,8 +1,7 @@
 from typing import List
 
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from data_factory_testing_framework.state.run_parameter import RunParameter
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state import PipelineRunState
 
 
 class ExecutePipelineActivity:

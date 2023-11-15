@@ -3,8 +3,7 @@ import re
 from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import (
     LinkedServiceParameterNotFoundError,
 )
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
 def find_and_replace_linked_services(expression: str, state: PipelineRunState) -> str:
