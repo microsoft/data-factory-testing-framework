@@ -1,6 +1,6 @@
 from typing import Generic, TypeVar
 
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
+from data_factory_testing_framework.state.run_parameter_type import RunParameterType
 
 T = TypeVar("T")
 

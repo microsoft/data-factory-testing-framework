@@ -9,10 +9,10 @@ from data_factory_testing_framework.generated.models import (
     PipelineReference,
     PipelineReferenceType,
 )
-from data_factory_testing_framework.models.base.run_parameter import RunParameter
-from data_factory_testing_framework.models.base.run_parameter_type import RunParameterType
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.models.test_framework import TestFramework
+from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.test_framework import TestFramework
 
 TestFramework()
 

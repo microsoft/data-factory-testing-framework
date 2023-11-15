@@ -1,12 +1,9 @@
-import collections
 import datetime
 import sys
-from abc import ABC
 from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union, Generator, Callable
 from azure.mgmt.datafactory import _serialization
 
-from .data_factory_element import DataFactoryElement
-from ...models.state.run_state import RunState
+from data_factory_testing_framework.generated.data_factory_element import DataFactoryElement
 
 if sys.version_info >= (3, 9):
     from collections.abc import MutableMapping
@@ -91,7 +88,7 @@ class Activity(_serialization.Model):
         self.depends_on = depends_on
         self.user_properties = user_properties
 
-    def evaluate(self, state: RunState) -> str:
+    def evaluate(self, state) -> str:
         pass
 
 class ActivityDependency(_serialization.Model):
@@ -2301,8 +2298,8 @@ class ControlActivity(Activity):
 
     def evaluate_control_activity_iterations(
             self,
-            state: RunState,
-            evaluate_activities: Callable[[RunState], Generator[Activity, None, None]],
+            state,
+            evaluate_activities: Callable,
     ) -> Generator[Activity, None, None]:
             return []
 

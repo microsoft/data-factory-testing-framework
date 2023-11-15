@@ -3,7 +3,7 @@ import os
 
 from data_factory_testing_framework.generated import Deserializer
 from data_factory_testing_framework.generated import models as _models
-from data_factory_testing_framework.models.patch_models import patch_models
+from data_factory_testing_framework.models._patch_models import patch_models
 from data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
 
 patch_models()

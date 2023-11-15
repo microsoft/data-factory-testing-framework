@@ -8,8 +8,8 @@ from data_factory_testing_framework.generated.models import (
     UntilActivity,
     VariableSpecification,
 )
-from data_factory_testing_framework.models.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.models.test_framework import TestFramework
+from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_evaluate_until_activity_should_repeat_until_expression_is_true() -> None:
