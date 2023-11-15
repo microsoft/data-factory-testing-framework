@@ -1,12 +1,12 @@
 import pytest
 
-from data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
+from azure_data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
-from data_factory_testing_framework.functions.function_parser import parse_expression
-from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
-from data_factory_testing_framework.state import PipelineRunState, RunParameterType
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from azure_data_factory_testing_framework.functions.function_parser import parse_expression
+from azure_data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
+from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
+from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 
 def test_evaluate_expression_with_nested_function() -> None:

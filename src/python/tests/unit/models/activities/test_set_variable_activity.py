@@ -1,15 +1,15 @@
 import pytest
 
-from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
+from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.generated.models import (
     DataFactoryElement,
     SetVariableActivity,
     VariableSpecification,
 )
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:
