@@ -8,15 +8,8 @@ from data_factory_testing_framework.functions._expression_linked_service import 
 )
 from data_factory_testing_framework.functions._expression_parameter import find_and_replace_parameters
 from data_factory_testing_framework.functions._expression_variable import find_and_replace_variables
+from data_factory_testing_framework.functions._string_utils import _trim_one_char
 from data_factory_testing_framework.state import PipelineRunState, RunParameterType, RunState
-
-
-def trim_one_char(text: str, character: str) -> str:
-    if text.startswith(character):
-        text = text[1:]
-    if text.endswith(character):
-        text = text[:-1]
-    return text
 
 
 class FunctionArgument:
@@ -37,4 +30,4 @@ class FunctionArgument:
             evaluated_expression = find_and_replace_activity(evaluated_expression, state)
             evaluated_expression = find_and_replace_iteration_item(evaluated_expression, state)
             evaluated_expression = find_and_replace_variables(evaluated_expression, state)
-        return trim_one_char(evaluated_expression, "'")
+        return _trim_one_char(evaluated_expression, "'")

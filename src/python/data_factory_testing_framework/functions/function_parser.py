@@ -1,4 +1,5 @@
 import re
+from typing import Union
 
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.functions.function_call import FunctionCall
@@ -6,7 +7,7 @@ from data_factory_testing_framework.functions.function_call import FunctionCall
 extract_func_regex = r"^@?{?([^()]+?)\((.*)\)}?$"
 
 
-def parse_expression(expression: str) -> FunctionArgument:
+def parse_expression(expression: str) -> Union[FunctionCall, FunctionArgument]:
     match = re.match(extract_func_regex, expression, re.DOTALL)
     if not match:
         return FunctionArgument(expression)
@@ -44,7 +45,7 @@ def parse_expression(expression: str) -> FunctionArgument:
             in_parenthesis -= 1
 
         if i == len(function_arguments_expression) - 1:
-            arguments.append(function_arguments_expression[start : i + 1].replace("''", "'"))
+            arguments.append(function_arguments_expression[start: i + 1].replace("''", "'"))
 
     return FunctionCall(
         function_name,
