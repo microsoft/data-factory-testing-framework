@@ -58,4 +58,5 @@ jobs:
         working-directory: ./src/python
         run: |
           source .venv/bin/activate
-          pytest .
+          pytest tests/
+          pytest examples/
