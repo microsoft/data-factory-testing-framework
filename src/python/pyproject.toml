@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "azure-data-factory-testing-framework-python"
+name = "data-factory-testing-framework"
 version = "0.1.0"
 description = ""
 authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>"]
