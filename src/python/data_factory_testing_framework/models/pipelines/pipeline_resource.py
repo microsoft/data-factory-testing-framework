@@ -2,8 +2,8 @@ from typing import List
 
 from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
 from data_factory_testing_framework.generated.models import Activity, PipelineResource
-from data_factory_testing_framework.state.run_parameter import RunParameter
 from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.state.run_parameter import RunParameter
 
 
 class PipelineResource:

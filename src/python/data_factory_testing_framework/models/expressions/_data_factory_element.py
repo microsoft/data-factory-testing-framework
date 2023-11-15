@@ -1,4 +1,4 @@
-from typing import Union, Generic, TypeVar
+from typing import Generic, TypeVar, Union
 
 from data_factory_testing_framework.functions import parse_expression
 from data_factory_testing_framework.generated.models import DataFactoryElement

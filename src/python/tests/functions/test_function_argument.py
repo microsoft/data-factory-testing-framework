@@ -10,9 +10,8 @@ from data_factory_testing_framework.exceptions.linked_service_parameter_not_foun
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.function_argument import FunctionArgument
 from data_factory_testing_framework.generated.models import DependencyCondition, VariableSpecification
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from data_factory_testing_framework.state.run_parameter import RunParameter
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state import PipelineRunState
 
 
 def test_evaluate_parameter_expression() -> None:

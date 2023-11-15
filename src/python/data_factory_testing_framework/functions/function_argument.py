@@ -8,9 +8,7 @@ from data_factory_testing_framework.functions._expression_linked_service import 
 )
 from data_factory_testing_framework.functions._expression_parameter import find_and_replace_parameters
 from data_factory_testing_framework.functions._expression_variable import find_and_replace_variables
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.state import RunState
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType, RunState
 
 
 def trim_one_char(text: str, character: str) -> str:
