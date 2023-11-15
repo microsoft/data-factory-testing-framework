@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
