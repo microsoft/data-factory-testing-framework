@@ -1,7 +1,7 @@
 import ast
 from _ast import Load, Name
 
-from src.python.azure_azure_data_factory_testing_framework.scripts.utils.docstring_utils import (
+from azure_data_factory_testing_framework.scripts.utils.docstring_utils import (
     parse_restructured_docstring,
 )
 
