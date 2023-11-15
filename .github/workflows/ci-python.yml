@@ -8,6 +8,10 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/azure-data-factory-testing-framework
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -59,3 +63,5 @@ jobs:
         run: |
           source .venv/bin/activate
           pytest .
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
