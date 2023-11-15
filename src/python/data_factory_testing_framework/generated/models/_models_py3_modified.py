@@ -2,7 +2,7 @@ import collections
 import datetime
 import sys
 from abc import ABC
-from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
+from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union, Generator, Callable
 from azure.mgmt.datafactory import _serialization
 
 from .data_factory_element import DataFactoryElement
@@ -2299,8 +2299,12 @@ class ControlActivity(Activity):
         super().__init__(additional_properties=additional_properties, name=name, description=description, depends_on=depends_on, user_properties=user_properties, **kwargs)
         self.type: str = 'Container'
 
-    def evaluate(self, state: RunState) -> str:
-        pass
+    def evaluate_control_activity_iterations(
+            self,
+            state: RunState,
+            evaluate_activities: Callable[[RunState], Generator[Activity, None, None]],
+    ) -> Generator[Activity, None, None]:
+            return []
 
 class AppendVariableActivity(ControlActivity):
     """Append value for a Variable of type Array.
