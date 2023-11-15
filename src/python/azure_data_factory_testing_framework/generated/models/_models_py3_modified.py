@@ -29625,6 +29625,10 @@ class PipelineResource(SubResource):
         self.folder = folder
         self.policy = policy
 
+    def get_activity_by_name(self, name: str) -> Activity:
+        pass
+
+
 class PipelineRun(_serialization.Model):
     """Information about a pipeline run.
 
