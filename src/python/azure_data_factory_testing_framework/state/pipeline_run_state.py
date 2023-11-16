@@ -1,10 +1,13 @@
 from typing import Any, Dict, List, Optional, Union
 
+from azure_data_factory_testing_framework.data_factory.generated.models import (
+    DependencyCondition,
+    VariableSpecification,
+)
 from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
 from azure_data_factory_testing_framework.exceptions.variable_does_not_exist_error import VariableDoesNotExistError
-from azure_data_factory_testing_framework.data_factory.generated.models import DependencyCondition, VariableSpecification
 from azure_data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 from azure_data_factory_testing_framework.state.run_state import RunState

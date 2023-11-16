@@ -1,7 +1,7 @@
 from typing import Union
 
-from azure_data_factory_testing_framework.functions.function_parser import parse_expression
 from azure_data_factory_testing_framework.data_factory.generated.models import Expression
+from azure_data_factory_testing_framework.functions.function_parser import parse_expression
 from azure_data_factory_testing_framework.state import PipelineRunState
 
 

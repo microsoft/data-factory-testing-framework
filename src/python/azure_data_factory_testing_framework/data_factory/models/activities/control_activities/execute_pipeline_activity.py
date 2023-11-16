@@ -6,7 +6,6 @@ from azure_data_factory_testing_framework.state.run_parameter import RunParamete
 
 
 class ExecutePipelineActivity:
-
     def get_child_run_parameters(self: ExecutePipelineActivity, state: PipelineRunState) -> List[RunParameter]:
         child_parameters = []
         for parameter in state.parameters:

@@ -1,10 +1,13 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.generated.models import (
+    DependencyCondition,
+    VariableSpecification,
+)
 from azure_data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
 from azure_data_factory_testing_framework.functions.function_parser import parse_expression
-from azure_data_factory_testing_framework.data_factory.generated.models import DependencyCondition, VariableSpecification
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 

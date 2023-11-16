@@ -43,7 +43,7 @@ ignore = [
     "D104", # Ignore missing docstring in public package
     "ANN101", # Ignore missing type annotation for self in method
 ]
-extend-exclude = ["azure_data_factory_testing_framework/generated/**"]
+extend-exclude = ["azure_data_factory_testing_framework/data_factory/generated/**"]
 line-length = 120
 
 [tool.ruff.lint.pycodestyle]
