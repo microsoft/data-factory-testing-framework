@@ -56,9 +56,9 @@ The samples seen below is the _only_ code that you need to write! The framework 
     activity.evaluate(state)
 
     # Assert
-    assert "https://example.com/jobs" == activity.uri
+    assert "https://example.com/jobs" == activity.url.value
     assert "POST" == activity.method
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.body
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.body.value
     ```
    
 2. Evaluate Pipelines and test the flow of activities given a specific input
@@ -70,7 +70,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
     assert 6 == len(pipeline.activities)
 
     # Runs the pipeline with the provided parameters
-    activities = test_framework.evaluate(pipeline, [
+    activities = test_framework.evaluate_pipeline(pipeline, [
         RunParameter(RunParameterType.Pipeline, "JobId", "123"),
         RunParameter(RunParameterType.Pipeline, "ContainerName", "test-container"),
         RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
@@ -80,23 +80,23 @@ The samples seen below is the _only_ code that you need to write! The framework 
     assert set_variable_activity is not None
     assert "Set JobName" == set_variable_activity.name
     assert "JobName" == set_variable_activity.variable_name
-    assert "Job-123" == set_variable_activity.value
+    assert "Job-123" == set_variable_activity.value.value
 
     get_version_activity: WebActivity = next(activities)
     assert get_version_activity is not None
     assert "Get version" == get_version_activity.name
-    assert "https://example.com/version" == get_version_activity.uri
+    assert "https://example.com/version" == get_version_activity.url.value
     assert "GET" == get_version_activity.method
     assert get_version_activity.body is None
-    test_framework.add_activity_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
+    state.add_activity_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
 
     create_batch_activity: WebHookActivity = next(activities)
     assert create_batch_activity is not None
     assert "Trigger Azure Batch Job" == create_batch_activity.name
-    assert "https://example.com/jobs" == create_batch_activity.uri
+    assert "https://example.com/jobs" == create_batch_activity.url.value
     assert "POST" == create_batch_activity.method
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.body
-    test_framework.add_activity_result(create_batch_activity.name, DependencyCondition.Succeeded, {"JobId": "123"})
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.body.value
+    state.add_activity_result(create_batch_activity.name, DependencyCondition.Succeeded, {"JobId": "123"})
     create_batch_activity.set_result(DependencyCondition.Succeeded, "OK")
 
     with pytest.raises(StopIteration):
@@ -110,7 +110,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
 As the framework is interpreting expressions containing functions, these functions need to be implemented in Python. The goal is to start supporting more and more functions, but if a function is not supported, then the following code can be used to register a missing function:
 
 ```python
-   FunctionsRepository.register("equals", lambda arguments: "".join(arguments))
+   FunctionsRepository.register("concat", lambda arguments: "".join(arguments))
    FunctionsRepository.register("trim", lambda text, trim_argument: text.strip(trim_argument[0]))
 ``` 
 
