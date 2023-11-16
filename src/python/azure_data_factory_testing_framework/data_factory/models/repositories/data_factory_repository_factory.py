@@ -1,10 +1,10 @@
 import json
 import os
 
-from azure_data_factory_testing_framework.generated import Deserializer
-from azure_data_factory_testing_framework.generated import models as _models
-from azure_data_factory_testing_framework.models._patch_models import patch_models
-from azure_data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
+from azure_data_factory_testing_framework.data_factory.generated import Deserializer
+from azure_data_factory_testing_framework.data_factory.generated import models as _models
+from azure_data_factory_testing_framework.data_factory.models._patch_models import patch_models
+from azure_data_factory_testing_framework.data_factory.models.repositories.data_factory_repository import DataFactoryRepository
 
 patch_models()
 models = {k: v for k, v in _models.__dict__.items() if isinstance(v, type)}

@@ -3,7 +3,7 @@ import pytest
 from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from azure_data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.data_factory.generated.models import (
     DataFactoryElement,
     SetVariableActivity,
     VariableSpecification,

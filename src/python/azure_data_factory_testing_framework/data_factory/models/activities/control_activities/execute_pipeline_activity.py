@@ -1,6 +1,6 @@
 from typing import List
 
-from azure_data_factory_testing_framework.generated.models import ExecutePipelineActivity
+from azure_data_factory_testing_framework.data_factory.generated.models import ExecutePipelineActivity
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 

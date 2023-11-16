@@ -3,7 +3,7 @@ from typing import List
 from azure_data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
     PipelineActivitiesCircularDependencyError,
 )
-from azure_data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.data_factory.generated.models import (
     Activity,
     ControlActivity,
     ExecutePipelineActivity,
@@ -12,8 +12,8 @@ from azure_data_factory_testing_framework.generated.models import (
     PipelineResource,
     UntilActivity,
 )
-from azure_data_factory_testing_framework.models import DataFactoryRepositoryFactory
-from azure_data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
+from azure_data_factory_testing_framework.data_factory.models import DataFactoryRepositoryFactory
+from azure_data_factory_testing_framework.data_factory.models.repositories.data_factory_repository import DataFactoryRepository
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameter
 
 

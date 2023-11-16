@@ -1,6 +1,6 @@
 from typing import Callable, Generator
 
-from azure_data_factory_testing_framework.generated.models import Activity, ControlActivity, ForEachActivity
+from azure_data_factory_testing_framework.data_factory.generated.models import Activity, ControlActivity, ForEachActivity
 from azure_data_factory_testing_framework.state import PipelineRunState
 
 

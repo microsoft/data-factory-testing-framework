@@ -4,8 +4,8 @@ from azure_data_factory_testing_framework import TestFramework
 from azure_data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
     PipelineActivitiesCircularDependencyError,
 )
-from azure_data_factory_testing_framework.generated.data_factory_element import DataFactoryElement
-from azure_data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.data_factory.generated.data_factory_element import DataFactoryElement
+from azure_data_factory_testing_framework.data_factory.generated.models import (
     ActivityDependency,
     PipelineResource,
     SetVariableActivity,
