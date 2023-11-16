@@ -1,9 +1,9 @@
 import pytest
 
 from azure_data_factory_testing_framework.data_factory.generated.models import ParameterSpecification, PipelineResource
+from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
-from azure_data_factory_testing_framework.test_framework import TestFramework
 
 TestFramework()
 

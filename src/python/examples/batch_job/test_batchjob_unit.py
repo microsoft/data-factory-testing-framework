@@ -1,7 +1,7 @@
 # flake8: noqa: E501
 import pytest
 
-from azure_data_factory_testing_framework import TestFramework
+from azure_data_factory_testing_framework.data_factory import TestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     ExecutePipelineActivity,
     PipelineResource,
@@ -18,6 +18,7 @@ def test_framework() -> TestFramework:
         data_factory_folder_path="./examples/batch_job/pipelines",
     )
 
+
 @pytest.fixture
 def pipeline(test_framework: TestFramework) -> PipelineResource:
     return test_framework.repository.get_pipeline_by_name("batch_job")
@@ -29,10 +30,14 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
     state = PipelineRunState(
         variable_specifications={
             "JobContainerURL": VariableSpecification(type="String"),
-            "JobContainerName": VariableSpecification(type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
-        }, parameters=[
+            "JobContainerName": VariableSpecification(
+                type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba",
+            ),
+        },
+        parameters=[
             RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
-        ])
+        ],
+    )
 
     # Act
     activity.evaluate(state)
@@ -50,12 +55,15 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
     state = PipelineRunState(
         variable_specifications={
             "UserAssignedIdentityReference": VariableSpecification(type="String"),
-        }, parameters=[
+        },
+        parameters=[
             RunParameter[str](RunParameterType.Global, "BatchAccountSubscription", "batch-account-subscription"),
             RunParameter[str](RunParameterType.Global, "BatchAccountResourceGroup", "batch-account-resource-group"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName",
-                              "workload-user-assigned-identity-name"),
-        ])
+            RunParameter[str](
+                RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name",
+            ),
+        ],
+    )
 
     # Act
     activity.evaluate(state)
@@ -73,10 +81,12 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
     state = PipelineRunState(
         variable_specifications={
             "ManagerApplicationPackagePath": VariableSpecification(type="String"),
-        }, parameters=[
+        },
+        parameters=[
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
-        ])
+        ],
+    )
 
     # Act
     activity.evaluate(state)
@@ -94,10 +104,12 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
     state = PipelineRunState(
         variable_specifications={
             "WorkloadApplicationPackagePath": VariableSpecification(type="String"),
-        }, parameters=[
+        },
+        parameters=[
             RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
             RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
-        ])
+        ],
+    )
 
     # Act
     activity.evaluate(state)
@@ -115,20 +127,28 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
     state = PipelineRunState(
         variable_specifications={
             "CommonEnvironmentSettings": VariableSpecification(type="String"),
-            "UserAssignedIdentityReference": VariableSpecification(type="String",
-                                                                   default_value="/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"),
-        }, parameters=[
+            "UserAssignedIdentityReference": VariableSpecification(
+                type="String",
+                default_value="/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name",
+            ),
+        },
+        parameters=[
             RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
             RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
             RunParameter[str](RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
             RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName",
-                              "workload-user-assigned-identity-name"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId",
-                              "workload-user-assigned-identity-client-id"),
-        ])
+            RunParameter[str](
+                RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "workload-user-assigned-identity-name",
+            ),
+            RunParameter[str](
+                RunParameterType.Pipeline,
+                "WorkloadUserAssignedIdentityClientId",
+                "workload-user-assigned-identity-client-id",
+            ),
+        ],
+    )
 
     # Act
     activity.evaluate(state)
@@ -177,7 +197,10 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
     activity: WebActivity = pipeline.get_activity_by_name("Create Job Storage Container")
     state = PipelineRunState(
         variable_specifications={
-            "JobContainerURL": VariableSpecification(type="String", default_value="https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            "JobContainerURL": VariableSpecification(
+                type="String",
+                default_value="https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba",
+            ),
         },
     )
 
@@ -186,7 +209,10 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
 
     # Assert
     assert "Create Job Storage Container" == activity.name
-    assert "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.url.value
+    assert (
+        "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container"
+        == activity.url.value
+    )
     assert "PUT" == activity.method
     assert "{}" == activity.body.value
 
@@ -215,7 +241,9 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: PipelineRes
     activity: WebActivity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](RunParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com"),
+            RunParameter[str](
+                RunParameterType.Global, "BatchURI", "https://batch-account-name.westeurope.batch.azure.com",
+            ),
             RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
             RunParameter[str](RunParameterType.Global, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"),
             RunParameter[str](RunParameterType.Global, "ADFResourceGroup", "adf-rg"),
@@ -227,19 +255,39 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: PipelineRes
             RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
             RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-batch-pool-id"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId",
-                              "test-application-identity-client-id"),
-            RunParameter[str](RunParameterType.Pipeline, "JobAdditionalEnvironmentSettings",
-                              "[{\"name\": \"STORAGE_ACCOUNT_NAME\", \"value\": \"teststorage\"}]"),
+            RunParameter[str](
+                RunParameterType.Pipeline, "ManagerTaskParameters", "--parameter1 dummy --parameter2 another-dummy",
+            ),
+            RunParameter[str](
+                RunParameterType.Pipeline, "WorkloadUserAssignedIdentityName", "test-application-batch-pool-id",
+            ),
+            RunParameter[str](
+                RunParameterType.Pipeline, "WorkloadUserAssignedIdentityClientId", "test-application-identity-client-id",
+            ),
+            RunParameter[str](
+                RunParameterType.Pipeline,
+                "JobAdditionalEnvironmentSettings",
+                '[{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}]',
+            ),
         ],
         variable_specifications={
-            "JobContainerURL": VariableSpecification(type="String", default_value="https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
-            "UserAssignedIdentityReference": VariableSpecification(type="String", default_value="/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"),
-            "ManagerApplicationPackagePath": VariableSpecification(type="String", default_value="$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"),
-            "WorkloadApplicationPackagePath": VariableSpecification(type="String", default_value="$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz"),
-            "CommonEnvironmentSettings": VariableSpecification(type="String", default_value="[{\"name\":\"COMMON_ENV_SETTING\",\"value\":\"dummy\"}]"),
+            "JobContainerURL": VariableSpecification(
+                type="String",
+                default_value="https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba",
+            ),
+            "UserAssignedIdentityReference": VariableSpecification(
+                type="String",
+                default_value="/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name",
+            ),
+            "ManagerApplicationPackagePath": VariableSpecification(
+                type="String", default_value="$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz",
+            ),
+            "WorkloadApplicationPackagePath": VariableSpecification(
+                type="String", default_value="$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz",
+            ),
+            "CommonEnvironmentSettings": VariableSpecification(
+                type="String", default_value='[{"name":"COMMON_ENV_SETTING","value":"dummy"}]',
+            ),
         },
     )
 
@@ -248,7 +296,9 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: PipelineRes
 
     # Assert
     assert "Start Job" == activity.name
-    assert "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0" == activity.url.value
+    assert (
+        "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0" == activity.url.value
+    )
     assert "POST" == activity.method
 
     expected_body = """{
@@ -342,12 +392,16 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: PipelineReso
     activity: ExecutePipelineActivity = pipeline.get_activity_by_name("Copy Output Files")
     state = PipelineRunState(
         variable_specifications={
-            "JobContainerName": VariableSpecification(type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            "JobContainerName": VariableSpecification(
+                type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba",
+            ),
         },
         parameters=[
             RunParameter[str](RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
             RunParameter[str](RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
-            RunParameter[str](RunParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name"),
+            RunParameter[str](
+                RunParameterType.Pipeline, "OutputContainerName", "test-application-output-container-name",
+            ),
             RunParameter[str](RunParameterType.Pipeline, "OutputFolderName", "output"),
         ],
     )
@@ -371,7 +425,9 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
     activity: WebActivity = pipeline.get_activity_by_name("Delete Job Storage Container")
     state = PipelineRunState(
         variable_specifications={
-            "JobContainerName": VariableSpecification(type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            "JobContainerName": VariableSpecification(
+                type="String", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba",
+            ),
         },
         parameters=[
             RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
@@ -383,6 +439,9 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
 
     # Assert
     assert "Delete Job Storage Container" == activity.name
-    assert "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.url.value
+    assert (
+        "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container"
+        == activity.url.value
+    )
     assert "DELETE" == activity.method
     assert activity.body is None

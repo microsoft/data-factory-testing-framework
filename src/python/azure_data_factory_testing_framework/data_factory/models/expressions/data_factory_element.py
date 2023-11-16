@@ -1,7 +1,7 @@
 from typing import Generic, TypeVar, Union
 
-from azure_data_factory_testing_framework.functions import parse_expression
 from azure_data_factory_testing_framework.data_factory.generated.models import DataFactoryElement
+from azure_data_factory_testing_framework.functions import parse_expression
 from azure_data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")

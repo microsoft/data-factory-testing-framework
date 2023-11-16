@@ -45,7 +45,7 @@ def parse_expression(expression: str) -> Union[FunctionCall, FunctionArgument]:
             in_parenthesis -= 1
 
         if i == len(function_arguments_expression) - 1:
-            arguments.append(function_arguments_expression[start: i + 1].replace("''", "'"))
+            arguments.append(function_arguments_expression[start : i + 1].replace("''", "'"))
 
     return FunctionCall(
         function_name,

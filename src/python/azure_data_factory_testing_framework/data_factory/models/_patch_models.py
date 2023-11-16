@@ -3,12 +3,18 @@ from azure_data_factory_testing_framework.data_factory.models.activities.base.ac
 from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.execute_pipeline_activity import (
     ExecutePipelineActivity,
 )
-from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.for_each_activity import ForEachActivity
+from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.for_each_activity import (
+    ForEachActivity,
+)
 from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.if_condition_activity import (
     IfConditionActivity,
 )
-from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.until_activity import UntilActivity
-from azure_data_factory_testing_framework.data_factory.models.activities.set_variable_activity import SetVariableActivity
+from azure_data_factory_testing_framework.data_factory.models.activities.control_activities.until_activity import (
+    UntilActivity,
+)
+from azure_data_factory_testing_framework.data_factory.models.activities.set_variable_activity import (
+    SetVariableActivity,
+)
 from azure_data_factory_testing_framework.data_factory.models.expressions.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.data_factory.models.expressions.expression import Expression
 from azure_data_factory_testing_framework.data_factory.models.pipelines.pipeline_resource import PipelineResource

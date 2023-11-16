@@ -1,8 +1,5 @@
 from typing import List
 
-from azure_data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
-    PipelineActivitiesCircularDependencyError,
-)
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     Activity,
     ControlActivity,
@@ -13,7 +10,12 @@ from azure_data_factory_testing_framework.data_factory.generated.models import (
     UntilActivity,
 )
 from azure_data_factory_testing_framework.data_factory.models import DataFactoryRepositoryFactory
-from azure_data_factory_testing_framework.data_factory.models.repositories.data_factory_repository import DataFactoryRepository
+from azure_data_factory_testing_framework.data_factory.models.repositories.data_factory_repository import (
+    DataFactoryRepository,
+)
+from azure_data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
+    PipelineActivitiesCircularDependencyError,
+)
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameter
 
 
@@ -78,14 +80,13 @@ class TestFramework:
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
-                    lambda a: a.name not in state.scoped_pipeline_activity_results
-                              and a.are_dependency_condition_met(state),
-                    activities,
+                lambda a: a.name not in state.scoped_pipeline_activity_results
+                and a.are_dependency_condition_met(state),
+                activities,
             ):
                 evaluated_activity = activity.evaluate(state)
                 if not self._is_iteration_activity(evaluated_activity) or (
-                        isinstance(evaluated_activity,
-                                   ExecutePipelineActivity) and not self.should_evaluate_child_pipelines
+                    isinstance(evaluated_activity, ExecutePipelineActivity) and not self.should_evaluate_child_pipelines
                 ):
                     yield evaluated_activity
 
@@ -101,16 +102,16 @@ class TestFramework:
 
                         # Evaluate the pipeline with its own scope
                         for child_activity in self.evaluate_pipeline(
-                                pipeline,
-                                activity.get_child_run_parameters(state),
+                            pipeline,
+                            activity.get_child_run_parameters(state),
                         ):
                             yield child_activity
 
                     if isinstance(activity, ControlActivity):
                         control_activity: ControlActivity = activity
                         for child_activity in control_activity.evaluate_control_activity_iterations(
-                                state,
-                                self.evaluate_activities,
+                            state,
+                            self.evaluate_activities,
                         ):
                             yield child_activity
 
@@ -120,8 +121,8 @@ class TestFramework:
     @staticmethod
     def _is_iteration_activity(activity: Activity) -> bool:
         return (
-                isinstance(activity, UntilActivity)
-                or isinstance(activity, ForEachActivity)
-                or isinstance(activity, IfConditionActivity)
-                or isinstance(activity, ExecutePipelineActivity)
+            isinstance(activity, UntilActivity)
+            or isinstance(activity, ForEachActivity)
+            or isinstance(activity, IfConditionActivity)
+            or isinstance(activity, ExecutePipelineActivity)
         )
