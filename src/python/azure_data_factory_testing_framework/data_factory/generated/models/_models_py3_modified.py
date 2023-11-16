@@ -3,7 +3,7 @@ import sys
 from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union, Generator, Callable
 from azure.mgmt.datafactory import _serialization
 
-from azure_data_factory_testing_framework.generated.data_factory_element import DataFactoryElement
+from azure_data_factory_testing_framework.data_factory.generated.data_factory_element import DataFactoryElement
 
 if sys.version_info >= (3, 9):
     from collections.abc import MutableMapping

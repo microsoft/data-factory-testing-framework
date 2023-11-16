@@ -1,7 +1,7 @@
 from typing import Any, List
 
-from azure_data_factory_testing_framework.generated.models import Activity, DataFactoryElement, DependencyCondition
-from azure_data_factory_testing_framework.generated.models import Activity as GeneratedActivity
+from azure_data_factory_testing_framework.data_factory.generated.models import Activity, DataFactoryElement, DependencyCondition
+from azure_data_factory_testing_framework.data_factory.generated.models import Activity as GeneratedActivity
 from azure_data_factory_testing_framework.state import PipelineRunState
 
 

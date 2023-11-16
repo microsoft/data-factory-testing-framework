@@ -1,4 +1,4 @@
-from azure_data_factory_testing_framework.generated.models import ControlActivity, SetVariableActivity
+from azure_data_factory_testing_framework.data_factory.generated.models import ControlActivity, SetVariableActivity
 from azure_data_factory_testing_framework.state import PipelineRunState
 
 

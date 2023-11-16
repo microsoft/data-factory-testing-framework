@@ -54,7 +54,7 @@ from typing import (
     Mapping,
 )
 
-from azure_data_factory_testing_framework.generated.models import DataFactoryElement
+from azure_data_factory_testing_framework.data_factory.generated.models import DataFactoryElement
 
 try:
     from urllib import quote  # type: ignore

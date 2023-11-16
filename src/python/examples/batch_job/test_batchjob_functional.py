@@ -1,6 +1,6 @@
 import pytest
 
-from azure_data_factory_testing_framework.generated.models import SetVariableActivity
+from azure_data_factory_testing_framework.data_factory.generated.models import SetVariableActivity
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 from azure_data_factory_testing_framework.test_framework import TestFramework
@@ -117,7 +117,7 @@ def test_batch_job_pipeline() -> None:
     ]"""  # noqa: E501
     )
 
-    activity = next(activities)
+    activity: SetVariableActivity = next(activities)
     assert activity.name == "Set JobContainerName"
     assert activity.variable_name == "JobContainerName"
     assert activity.value.value == "job-802100a5-ec79-4a52-be62-8d6109f3ff9a"

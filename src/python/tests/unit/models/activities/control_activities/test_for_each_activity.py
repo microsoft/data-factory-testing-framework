@@ -1,6 +1,6 @@
 import pytest
 
-from azure_data_factory_testing_framework.generated.models import (
+from azure_data_factory_testing_framework.data_factory.generated.models import (
     DataFactoryElement,
     Expression,
     ExpressionType,
