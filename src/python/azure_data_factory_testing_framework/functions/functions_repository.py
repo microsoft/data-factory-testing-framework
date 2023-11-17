@@ -1,63 +1,31 @@
-import json
-from collections.abc import Iterable as IterableType
-from datetime import datetime
-from typing import Any, Callable, Dict
+from typing import Callable, Dict
+
+import azure_data_factory_testing_framework.functions.functions_collection_implementation as collection_functions
+import azure_data_factory_testing_framework.functions.functions_conversion_implementation as conversion_functions
+import azure_data_factory_testing_framework.functions.functions_date_implementation as date_functions
+import azure_data_factory_testing_framework.functions.functions_logical_implementation as logical_functions
+import azure_data_factory_testing_framework.functions.functions_math_implementation as math_functions
+import azure_data_factory_testing_framework.functions.functions_string_implementation as string_functions
 
 
 class FunctionsRepository:
     functions: Dict[str, Callable] = {
-        "concat": lambda arguments: "".join(arguments),
-        "trim": lambda text, trim_argument: text.strip(trim_argument[0]),
-        "equals": lambda argument0, argument1: argument0 == argument1,
-        "json": lambda argument: argument,
-        "contains": lambda obj, value: (
-            value in obj
-            if isinstance(obj, dict)
-            else value in obj
-            if isinstance(obj, IterableType)
-            else value in obj
-            if isinstance(obj, str)
-            else False
-        ),
-        "replace": lambda input_str, pattern, replacement: input_str.replace(pattern, replacement),
-        "string": lambda input_str: input_str,
-        "union": lambda arg0, arg1: json.dumps(json.loads(arg0) + json.loads(arg1)),
-        "coalesce": lambda args: next((arg for arg in args if arg is not None), None),
-        "or": lambda a, b: a or b,
-        "utcnow": lambda: datetime.utcnow().isoformat(),
-        "ticks": lambda date_time: datetime.fromisoformat(date_time).timestamp(),
-        "sub": lambda a, b: a - b,
-        "div": lambda a, b: a / b,
-        "greaterOrEquals": lambda a, b: a >= b,
-        "not": lambda value: not value,
-        "empty": lambda array: len(array) == 0,
-        "split": lambda input_str, delimiter: input_str.split(delimiter),
+        "concat": string_functions.concat,
+        "trim": string_functions.trim,
+        "equals": logical_functions.equals,
+        "json": conversion_functions.json,
+        "contains": collection_functions.contains,
+        "replace": string_functions.replace,
+        "string": conversion_functions.string,
+        "union": collection_functions.union,
+        "coalesce": conversion_functions.coalesce,
+        "or": logical_functions.or_,
+        "utcnow": date_functions.utcnow,
+        "ticks": date_functions.ticks,
+        "sub": math_functions.sub,
+        "div": math_functions.div,
+        "greaterOrEquals": logical_functions.greater_or_equals,
+        "not": logical_functions.not_,
+        "empty": collection_functions.empty,
+        "split": string_functions.split,
     }
-
-    @staticmethod
-    def register(function_name: str, function: Callable) -> None:
-        FunctionsRepository.functions[function_name] = function
-
-    @staticmethod
-    def _func_equals(argument0: Any, argument1: Any) -> bool:  # noqa: ANN401
-        if type(argument0) != type(argument1):
-            raise ValueError("Equals function requires arguments of the same type.")
-        return argument0 == argument1
-
-    @staticmethod
-    def _trim(text: str, trim_argument: str) -> str:
-        return text.strip(trim_argument[0])
-
-    @staticmethod
-    def _json(argument: Any) -> Any:  # noqa: ANN401
-        return argument
-
-    @staticmethod
-    def _contains(obj: Any, value: Any) -> bool:  # noqa: ANN401
-        if isinstance(obj, dict):
-            return value in obj
-        elif isinstance(obj, IterableType):
-            return value in obj
-        elif isinstance(obj, str):
-            return value in obj
-        raise ValueError("Contains function requires an object of type Dictionary, IEnumerable, or string.")
