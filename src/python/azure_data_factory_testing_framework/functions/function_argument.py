@@ -11,6 +11,15 @@ from azure_data_factory_testing_framework.functions._expression_variable import 
 from azure_data_factory_testing_framework.functions._string_utils import _trim_one_char
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType, RunState
 
+replace_functions = [
+    lambda expression, state: find_and_replace_parameters(expression, RunParameterType.Pipeline, state),
+    lambda expression, state: find_and_replace_parameters(expression, RunParameterType.Global, state),
+    lambda expression, state: find_and_replace_linked_services(expression, state),
+    lambda expression, state: find_and_replace_dataset(expression, state),
+    lambda expression, state: find_and_replace_activity(expression, state),
+    lambda expression, state: find_and_replace_iteration_item(expression, state),
+    lambda expression, state: find_and_replace_variables(expression, state),
+]
 
 class FunctionArgument:
     def __init__(self, expression: str) -> None:
@@ -22,12 +31,17 @@ class FunctionArgument:
         self.expression = expression.strip("\n").strip(" ")
 
     def evaluate(self, state: RunState) -> str:
-        evaluated_expression = find_and_replace_parameters(self.expression, RunParameterType.Pipeline, state)
-        evaluated_expression = find_and_replace_parameters(evaluated_expression, RunParameterType.Global, state)
-        evaluated_expression = find_and_replace_linked_services(evaluated_expression, state)
-        evaluated_expression = find_and_replace_dataset(evaluated_expression, state)
-        if isinstance(state, PipelineRunState):
-            evaluated_expression = find_and_replace_activity(evaluated_expression, state)
-            evaluated_expression = find_and_replace_iteration_item(evaluated_expression, state)
-            evaluated_expression = find_and_replace_variables(evaluated_expression, state)
+        evaluated_expression = self.expression
+        for replace_function in replace_functions:
+            evaluated_expression, full_match_bool = replace_function(evaluated_expression, state)
+            if full_match_bool:
+                return evaluated_expression       
+
+        if evaluated_expression.lower() == "true" or evaluated_expression.lower() == "false":
+            return evaluated_expression.lower() == "true"
+        elif evaluated_expression.lstrip('-').isdigit():
+            return int(evaluated_expression)
+        elif evaluated_expression.replace(".", "", 1).isdigit():
+            return float(evaluated_expression)
+        
         return _trim_one_char(evaluated_expression, "'")

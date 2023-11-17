@@ -1,4 +1,5 @@
 import re
+from typing import Union
 
 from azure_data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import (
     DatasetParameterNotFoundError,
@@ -6,7 +7,7 @@ from azure_data_factory_testing_framework.exceptions.dataset_parameter_not_found
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
-def find_and_replace_dataset(expression: str, state: PipelineRunState) -> str:
+def find_and_replace_dataset(expression: str, state: PipelineRunState) -> (Union[str, bool, int, float], bool):
     pattern = r"(@?{?dataset\(\'(\w+)\'\)}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
@@ -22,6 +23,9 @@ def find_and_replace_dataset(expression: str, state: PipelineRunState) -> str:
         if data_set is None:
             raise DatasetParameterNotFoundError(data_set_name)
 
+        if expression == match.group(0):
+            return data_set.value, True
+
         expression = expression.replace(match.group(0), str(data_set.value))
 
-    return expression
+    return expression, False

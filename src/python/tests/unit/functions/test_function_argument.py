@@ -32,6 +32,18 @@ def test_evaluate_parameter_expression() -> None:
     # Assert
     assert evaluated == "parameterValue"
 
+def test_evaluate_parameter_returning_int_expression() -> None:
+    # Arrange
+    expression = "pipeline().parameters.parameterName"
+    argument = FunctionArgument(expression)
+    state = PipelineRunState()
+    state.parameters.append(RunParameter(RunParameterType.Pipeline, "parameterName", 1))
+
+    # Act
+    evaluated = argument.evaluate(state)
+
+    # Assert
+    assert evaluated == 1
 
 def test_evaluate_global_parameter_expression() -> None:
     # Arrange
