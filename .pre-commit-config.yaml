@@ -1,0 +1,27 @@
+repos:
+-   repo: https://github.com/python-poetry/poetry
+    rev: 1.6.1
+    hooks:
+    -   id: poetry-check
+        args: ["-C", "./src/python"]
+    -   id: poetry-lock
+        args: ["-C", "./src/python", "--no-update"]
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.1.5
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+    - id: ruff-format
+-   repo: local
+    hooks:
+    -   id: pytest
+        name: pytest
+        # we need to use bash to run poetry as we need to change directory
+        # before running the tests
+        entry: bash -c "cd src/python && poetry run pytest tests"
+        language: system
+        types: [python]
+        require_serial: true
+        args: ["-C", "./src/python"]
+        pass_filenames: false
+
