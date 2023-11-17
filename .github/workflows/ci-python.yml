@@ -63,10 +63,11 @@ jobs:
         run: |
           source .venv/bin/activate
           pytest .
-      - name: Build package
+      - name: Set build version and build package
         working-directory: ./src/python
         run: |
           source .venv/bin/activate
+          poetry version 0.0.0.alpha${{ github.run_number}}
           poetry build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
