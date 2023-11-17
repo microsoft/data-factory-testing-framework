@@ -1,20 +1,19 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     DataFactoryElement,
     SetVariableActivity,
-    VariableSpecification,
 )
-from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
 from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:
     # Arrange
-    TestFramework()
+    DataFactoryTestFramework()
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",
@@ -22,9 +21,9 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> N
         value=DataFactoryElement("TestValue"),
     )
     state = PipelineRunState(
-        variable_specifications={
-            variable_name: VariableSpecification(type="String", default_value=""),
-        },
+        variables=[
+            PipelineRunVariable(name=variable_name, default_value=""),
+        ],
     )
 
     # Act
@@ -37,7 +36,7 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> N
 
 def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
     # Arrange
-    TestFramework()
+    DataFactoryTestFramework()
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",

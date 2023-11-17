@@ -1,13 +1,10 @@
 from typing import Any, Dict, List, Optional, Union
 
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    DependencyCondition,
-    VariableSpecification,
-)
 from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
 from azure_data_factory_testing_framework.exceptions.variable_does_not_exist_error import VariableDoesNotExistError
+from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from azure_data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 from azure_data_factory_testing_framework.state.run_state import RunState
@@ -17,7 +14,7 @@ class PipelineRunState(RunState):
     def __init__(
         self,
         parameters: Optional[List[RunParameter]] = None,
-        variable_specifications: Optional[Dict[str, VariableSpecification]] = None,
+        variables: Optional[List[PipelineRunVariable]] = None,
         pipeline_activity_results: Optional[Dict[str, Any]] = None,
         iteration_item: str = None,
     ) -> None:
@@ -25,25 +22,20 @@ class PipelineRunState(RunState):
 
         Args:
             parameters: The global and regular parameters to be used for evaluating expressions.
-            variable_specifications: The initial variables specification to use for the pipeline run.
+            variables: The initial variables specification to use for the pipeline run.
             pipeline_activity_results: The results of previous activities to use for validating dependencyConditions and evaluating expressions
             (i.e. activity('activityName').output).
             iteration_item: The current item() of a ForEach activity.
         """
-        if variable_specifications is None:
-            variable_specifications = {}
+        if variables is None:
+            variables = []
 
         if pipeline_activity_results is None:
             pipeline_activity_results = {}
 
         super().__init__(parameters)
 
-        self._variable_specifications = variable_specifications
-
-        self.variables: List[PipelineRunVariable] = []
-        for variable_name, variable in variable_specifications.items():
-            self.variables.append(PipelineRunVariable(variable_name, variable.default_value))
-
+        self.variables = variables
         self.pipeline_activity_results: Dict[str, Any] = pipeline_activity_results
         self.scoped_pipeline_activity_results: Dict[str, Any] = {}
         self.iteration_item = iteration_item
@@ -76,7 +68,7 @@ class PipelineRunState(RunState):
         """
         return PipelineRunState(
             self.parameters,
-            self._variable_specifications,
+            self.variables,
             self.pipeline_activity_results,
             iteration_item,
         )
@@ -98,7 +90,7 @@ class PipelineRunState(RunState):
         """
         return self.pipeline_activity_results[name] if name in self.pipeline_activity_results else None
 
-    def set_variable(self, variable_name: str, value: Union[str, int, bool]) -> None:
+    def set_variable(self, variable_name: str, value: Union[str, int, bool, float]) -> None:
         """Sets the value of a variable if it exists. Otherwise throws an exception.
 
         Args:

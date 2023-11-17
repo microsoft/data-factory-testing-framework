@@ -19,7 +19,7 @@ def find_and_replace_activity(expression: str, state: PipelineRunState) -> (Unio
         field_value = activity
         for field in fields:
             field_value = field_value[field]
-        
+
         if expression == match.group(0):
             return field_value, True
 

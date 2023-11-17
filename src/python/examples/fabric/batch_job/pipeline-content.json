@@ -1,0 +1,389 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Set Job Container URL",
+        "type": "SetVariable",
+        "dependsOn": [
+          {
+            "activity": "Set JobContainerName",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "JobContainerURL",
+          "value": {
+            "value": "@concat('https://',pipeline().parameters.BatchStorageAccountName,'.blob.core.windows.net/', variables('JobContainerName'))",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set UserAssignedIdentityReference",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "UserAssignedIdentityReference",
+          "value": {
+            "value": "@concat('/subscriptions/',pipeline().parameters.BatchAccountSubscription,'/resourcegroups/',pipeline().parameters.BatchAccountResourceGroup,'/providers/Microsoft.ManagedIdentity/userAssignedIdentities/',pipeline().parameters.WorkloadUserAssignedIdentityName)",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set ManagerApplicationPackagePath",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "ManagerApplicationPackagePath",
+          "value": {
+            "value": "@concat('$AZ_BATCH_APP_PACKAGE_',\n    pipeline().parameters.ManagerApplicationPackageName,'_',replace(replace(pipeline().parameters.ManagerApplicationPackageVersion,'.','_'),'-','_'),'/',pipeline().parameters.ManagerApplicationPackageName,'.tar.gz')",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set WorkloadApplicationPackagePath",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "WorkloadApplicationPackagePath",
+          "value": {
+            "value": "@concat('$AZ_BATCH_APP_PACKAGE_',\n    pipeline().parameters.WorkloadApplicationPackageName,'_',replace(replace(pipeline().parameters.WorkloadApplicationPackageVersion,'.','_'),'-','_'),'/',pipeline().parameters.WorkloadApplicationPackageName,'.tar.gz')",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set CommonEnvironmentSettings",
+        "type": "SetVariable",
+        "dependsOn": [
+          {
+            "activity": "Set UserAssignedIdentityReference",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "CommonEnvironmentSettings",
+          "value": {
+            "value": "@json(\n    concat('[\n    {\n        \"name\": \"WORKLOAD_APP_PACKAGE\",\n        \"value\": \"',pipeline().parameters.WorkloadApplicationPackageName,'\"\n    },\n    {\n        \"name\": \"WORKLOAD_APP_PACKAGE_VERSION\",\n        \"value\": \"',pipeline().parameters.WorkloadApplicationPackageVersion,'\"\n    },\n    {\n        \"name\": \"MANAGER_APP_PACKAGE\",\n        \"value\": \"',pipeline().parameters.ManagerApplicationPackageName,'\"\n    },\n    {\n        \"name\": \"MANAGER_APP_PACKAGE_VERSION\",\n        \"value\": \"',pipeline().parameters.ManagerApplicationPackageVersion,'\"\n    },\n    {\n        \"name\": \"BATCH_JOB_TIMEOUT\",\n        \"value\": \"',pipeline().parameters.BatchJobTimeout,'\"\n    },\n    {\n        \"name\": \"WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME\",\n        \"value\": \"',pipeline().parameters.BatchStorageAccountName,'\"\n    },\n    {\n        \"name\": \"WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID\",\n        \"value\": \"',variables('UserAssignedIdentityReference'),'\"\n    },\n    {\n        \"name\": \"WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID\",\n        \"value\": \"',pipeline().parameters.WorkloadUserAssignedIdentityClientId,'\"\n    }\n    ]')\n)",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set JobContainerName",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "JobContainerName",
+          "value": {
+            "value": "@concat('job-', pipeline().parameters.JobId)",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Create Job Storage Container",
+        "type": "WebActivity",
+        "dependsOn": [
+          {
+            "activity": "Set Job Container URL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "relativeUrl": {
+            "type": "Expression",
+            "value": "@concat(variables('JobContainerURL'), '?restype=container')"
+          },
+          "method": "PUT",
+          "headers": {
+            "x-ms-version": "2023-01-03"
+          },
+          "body": {
+            "value": "@concat('{','}')",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "6d70b649-d684-439b-a9c2-d2bb5241cd39"
+        }
+      },
+      {
+        "name": "Delete Job Storage Container",
+        "type": "WebActivity",
+        "dependsOn": [
+          {
+            "activity": "Copy Output Files",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "relativeUrl": {
+            "value": "@concat(variables('JobContainerName'),'?restype=container')",
+            "type": "Expression"
+          },
+          "method": "DELETE",
+          "headers": {
+            "x-ms-version": "2023-01-03"
+          }
+        },
+        "externalReferences": {
+          "connection": "6d70b649-d684-439b-a9c2-d2bb5241cd39"
+        }
+      },
+      {
+        "name": "Copy Output Files",
+        "type": "ExecutePipeline",
+        "dependsOn": [
+          {
+            "activity": "Monitor Batch Job",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "pipeline": {
+            "referenceName": "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true,
+          "parameters": {
+            "JobContainerName": {
+              "value": "@variables('JobContainerName')",
+              "type": "Expression"
+            },
+            "TaskOutputFolderPrefix": {
+              "value": "@pipeline().parameters.TaskOutputFolderPrefix",
+              "type": "Expression"
+            },
+            "OutputStorageAccountName": {
+              "value": "@pipeline().parameters.OutputStorageAccountName",
+              "type": "Expression"
+            },
+            "OutputContainerName": {
+              "value": "@pipeline().parameters.OutputContainerName",
+              "type": "Expression"
+            },
+            "OutputFolderName": {
+              "value": "@pipeline().parameters.OutputFolderName",
+              "type": "Expression"
+            }
+          }
+        }
+      },
+      {
+        "name": "Monitor Batch Job",
+        "type": "ExecutePipeline",
+        "dependsOn": [
+          {
+            "activity": "Start Job",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "pipeline": {
+            "referenceName": "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true,
+          "parameters": {
+            "JobId": {
+              "value": "@pipeline().parameters.JobId",
+              "type": "Expression"
+            }
+          }
+        }
+      },
+      {
+        "name": "Start Job",
+        "type": "WebActivity",
+        "dependsOn": [
+          {
+            "activity": "Set Job Container URL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Set CommonEnvironmentSettings",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Set ManagerApplicationPackagePath",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Set WorkloadApplicationPackagePath",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          },
+          {
+            "activity": "Create Job Storage Container",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "relativeUrl": "/jobs?api-version=2022-10-01.16.0",
+          "method": "POST",
+          "headers": {
+            "x-ms-version": "2023-01-03",
+            "Content-Type": "application/json; odata=minimalmetadata"
+          },
+          "body": {
+            "value": "@concat('{\n    \"id\": \"', pipeline().parameters.JobId,'\",\n    \"priority\": 100,\n    \"constraints\": {\n        \"maxWallClockTime\":\"',pipeline().parameters.BatchJobTimeout,'\",\n        \"maxTaskRetryCount\": 0\n    },\n    \"jobManagerTask\": {\n        \"id\": \"Manager\",\n        \"displayName\": \"Manager\",\n        \"authenticationTokenSettings\": {\n            \"access\": [\n                \"job\"\n            ]\n        },\n        \"commandLine\": \"/bin/bash -c \\\"python3 -m ensurepip --upgrade && python3 -m pip install --user ',variables('ManagerApplicationPackagePath'),' && python3 -m pip install --user ',variables('WorkloadApplicationPackagePath'),' && python3 -m ',pipeline().parameters.WorkloadApplicationPackageName,' job ', pipeline().parameters.ManagerTaskParameters,'\\\"\",\n        \"applicationPackageReferences\": [\n            {\n                \"applicationId\": \"',pipeline().parameters.ManagerApplicationPackageName,'\",\n                \"version\": \"',pipeline().parameters.ManagerApplicationPackageVersion,'\"\n            },\n            {\n                \"applicationId\": \"',pipeline().parameters.WorkloadApplicationPackageName,'\",\n                \"version\": \"',pipeline().parameters.WorkloadApplicationPackageVersion,'\"\n            }\n        ],\n        \"outputFiles\": [\n            {\n                \"destination\": {\n                    \"container\": {\n                        \"containerUrl\": \"',variables('JobContainerURL'),'\",\n                        \"identityReference\": {\n                            \"resourceId\": \"',variables('UserAssignedIdentityReference'),'\"\n                        },\n                        \"path\": \"Manager/$TaskLog\"\n                    }\n                },\n                \"filePattern\": \"../*.txt\",\n                \"uploadOptions\": {\n                    \"uploadCondition\": \"taskcompletion\"\n                }\n            }\n        ],\n        \"environmentSettings\": [],\n        \"requiredSlots\": 1,\n        \"killJobOnCompletion\": false,\n        \"userIdentity\": {\n            \"username\": null,\n            \"autoUser\": {\n                \"scope\": \"pool\",\n                \"elevationLevel\": \"nonadmin\"\n            }\n        },\n        \"runExclusive\": true,\n        \"allowLowPriorityNode\": true\n    },\n    \"poolInfo\": {\n        \"poolId\": \"',pipeline().parameters.BatchPoolId,'\"\n    },\n    \"onAllTasksComplete\": \"terminatejob\",\n    \"onTaskFailure\": \"noaction\",\n    \"usesTaskDependencies\": true,\n    \"commonEnvironmentSettings\": ', string(union(variables('CommonEnvironmentSettings'), pipeline().parameters.JobAdditionalEnvironmentSettings)),\n'}')",
+            "type": "Expression"
+          }
+        },
+        "externalReferences": {
+          "connection": "6d70b649-d684-439b-a9c2-d2bb5241cd39"
+        }
+      }
+    ],
+    "parameters": {
+      "BatchPoolId": {
+        "type": "string"
+      },
+      "WorkloadApplicationPackageName": {
+        "type": "string"
+      },
+      "WorkloadApplicationPackageVersion": {
+        "type": "string"
+      },
+      "ManagerApplicationPackageName": {
+        "type": "string"
+      },
+      "ManagerApplicationPackageVersion": {
+        "type": "string"
+      },
+      "ManagerTaskParameters": {
+        "type": "string"
+      },
+      "JobId": {
+        "type": "string"
+      },
+      "TaskOutputFolderPrefix": {
+        "type": "string"
+      },
+      "WorkloadUserAssignedIdentityName": {
+        "type": "string"
+      },
+      "WorkloadUserAssignedIdentityClientId": {
+        "type": "string"
+      },
+      "JobAdditionalEnvironmentSettings": {
+        "type": "array"
+      },
+      "OutputStorageAccountName": {
+        "type": "string"
+      },
+      "OutputContainerName": {
+        "type": "string"
+      },
+      "OutputFolderName": {
+        "type": "string"
+      },
+      "BatchJobTimeout": {
+        "type": "string",
+        "defaultValue": "PT8H"
+      },
+      "BatchStorageAccountName": {
+        "type": "string"
+      },
+      "BatchURI": {
+        "type": "string"
+      },
+      "BatchAccountSubscription": {
+        "type": "string"
+      },
+      "BatchAccountResourceGroup": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "JobContainerName": {
+        "type": "String"
+      },
+      "ManagerApplicationPackagePath": {
+        "type": "String"
+      },
+      "WorkloadApplicationPackagePath": {
+        "type": "String"
+      },
+      "UserAssignedIdentityReference": {
+        "type": "String"
+      },
+      "CommonEnvironmentSettings": {
+        "type": "Array"
+      },
+      "JobContainerURL": {
+        "type": "String"
+      }
+    },
+    "annotations": []
+  }
+}

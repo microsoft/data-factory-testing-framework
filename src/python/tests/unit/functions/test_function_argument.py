@@ -2,7 +2,6 @@ import pytest
 
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     DependencyCondition,
-    VariableSpecification,
 )
 from azure_data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import (
     DatasetParameterNotFoundError,
@@ -15,7 +14,7 @@ from azure_data_factory_testing_framework.exceptions.linked_service_parameter_no
 )
 from azure_data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from azure_data_factory_testing_framework.functions.function_argument import FunctionArgument
-from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
+from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 
@@ -32,6 +31,7 @@ def test_evaluate_parameter_expression() -> None:
     # Assert
     assert evaluated == "parameterValue"
 
+
 def test_evaluate_parameter_returning_int_expression() -> None:
     # Arrange
     expression = "pipeline().parameters.parameterName"
@@ -44,6 +44,7 @@ def test_evaluate_parameter_returning_int_expression() -> None:
 
     # Assert
     assert evaluated == 1
+
 
 def test_evaluate_global_parameter_expression() -> None:
     # Arrange
@@ -64,9 +65,9 @@ def test_evaluate_variable_string_expression() -> None:
     expression = "variables('variableName')"
     argument = FunctionArgument(expression)
     state = PipelineRunState(
-        variable_specifications={
-            "variableName": VariableSpecification(type="String", default_value="variableValue"),
-        },
+        variables=[
+            PipelineRunVariable(name="variableName", default_value="variableValue"),
+        ],
     )
 
     # Act

@@ -7,7 +7,9 @@ from azure_data_factory_testing_framework.exceptions.expression_parameter_not_fo
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
-def find_and_replace_parameters(expression: str, parameter_type: RunParameterType, state: PipelineRunState) -> (Union[str, bool, int, float], bool):
+def find_and_replace_parameters(
+    expression: str, parameter_type: RunParameterType, state: PipelineRunState
+) -> (Union[str, bool, int, float], bool):
     pattern = rf"(@?{{?pipeline\(\)\.{_get_parameter_string_template(parameter_type)}\.(\w+)}}?)"
     matches = re.finditer(pattern, expression, re.MULTILINE)
     for match in matches:
@@ -18,7 +20,7 @@ def find_and_replace_parameters(expression: str, parameter_type: RunParameterTyp
         )
         if parameter is None:
             raise ExpressionParameterNotFoundError(parameter_name)
-        
+
         if expression == match.group(0):
             return parameter.value, True
 

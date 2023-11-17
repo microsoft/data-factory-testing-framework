@@ -1,17 +1,16 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     DataFactoryElement,
     Expression,
     ExpressionType,
     IfConditionActivity,
     SetVariableActivity,
-    VariableSpecification,
 )
-from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
-from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 
-TestFramework()
+DataFactoryTestFramework()
 
 
 def test_when_evaluated_should_evaluate_expression() -> None:
@@ -37,7 +36,7 @@ def test_when_evaluated_should_evaluate_correct_child_activities(
     expected_activity_name: str,
 ) -> None:
     # Arrange
-    test_framework = TestFramework()
+    test_framework = DataFactoryTestFramework()
     expression = "@equals(1, 1)" if expression_outcome else "@equals(1, 2)"
     activity = IfConditionActivity(
         name="IfConditionActivity",
@@ -59,9 +58,9 @@ def test_when_evaluated_should_evaluate_correct_child_activities(
     )
 
     state = PipelineRunState(
-        variable_specifications={
-            "variable": VariableSpecification(type="String"),
-        },
+        variables=[
+            PipelineRunVariable(name="variable", default_value=""),
+        ],
     )
 
     # Act

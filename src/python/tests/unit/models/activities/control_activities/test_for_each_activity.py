@@ -1,20 +1,19 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     DataFactoryElement,
     Expression,
     ExpressionType,
     ForEachActivity,
     SetVariableActivity,
-    VariableSpecification,
 )
-from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
-from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 
 
 def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated() -> None:
     # Arrange
-    test_framework = TestFramework()
+    test_framework = DataFactoryTestFramework()
     for_each_activity = ForEachActivity(
         name="ForEachActivity",
         items=Expression(type=ExpressionType.EXPRESSION, value="@split('a,b,c', ',')"),
@@ -29,9 +28,9 @@ def test_when_evaluate_child_activities_then_should_return_the_activity_with_ite
         depends_on=[],
     )
     state = PipelineRunState(
-        variable_specifications={
-            "variable": VariableSpecification(type="String"),
-        },
+        variables=[
+            PipelineRunVariable(name="variable", default_value=""),
+        ],
     )
 
     # Act

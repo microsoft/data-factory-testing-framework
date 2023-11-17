@@ -47,9 +47,9 @@ The samples seen below is the _only_ code that you need to write! The framework 
             RunParameter[str](RunParameterType.Global, "BaseUrl", "https://example.com"),
             RunParameter[str](RunParameterType.Pipeline, "JobId", "123"),
         ],
-        variable_specifications={
-            "JobName": VariableSpecification(type="String", default_value="Job-123"),
-        })
+        variables=[
+            PipelineVariable("JobName", "Job-123"),
+        ])
     state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
    
     # Act

@@ -19,7 +19,7 @@ from azure_data_factory_testing_framework.exceptions.pipeline_activities_circula
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameter
 
 
-class TestFramework:
+class DataFactoryTestFramework:
     def __init__(self, data_factory_folder_path: str = None, should_evaluate_child_pipelines: bool = False) -> None:
         """Initializes the test framework allowing you to evaluate pipelines and activities.
 
@@ -61,7 +61,7 @@ class TestFramework:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
         pipeline.validate_parameters(parameters)
-        state = PipelineRunState(parameters, pipeline.variables)
+        state = PipelineRunState(parameters, pipeline.get_run_variables())
         return self.evaluate_activities(pipeline.activities, state)
 
     def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> List[Activity]:
