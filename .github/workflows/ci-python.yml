@@ -62,7 +62,7 @@ jobs:
         working-directory: ./src/python
         run: |
           source .venv/bin/activate
-          pytest .
+          pytest tests
       - name: Set build version and build package
         working-directory: ./src/python
         run: |
