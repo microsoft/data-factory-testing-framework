@@ -1,13 +1,22 @@
 from typing import List
 
-from azure_data_factory_testing_framework.data_factory.generated.models import Activity, PipelineResource
 from azure_data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from azure_data_factory_testing_framework.state import PipelineRunVariable, RunParameterType
-from azure_data_factory_testing_framework.state.run_parameter import RunParameter
+from azure_data_factory_testing_framework.fabric.models.activities.fabric_activity import FabricActivity
+from azure_data_factory_testing_framework.state import PipelineRunVariable, RunParameter, RunParameterType
 
 
-class PipelineResource:
-    def get_activity_by_name(self: PipelineResource, name: str) -> Activity:
+class FabricPipeline:
+    def __init__(
+        self, name: str, parameters: dict, variables: dict, activity: List[FabricActivity], annotations: List
+    ) -> None:
+        """This is the class that represents the pipeline in the pipeline."""
+        self.name = name
+        self.parameters = parameters
+        self.variables = variables
+        self.activities = activity
+        self.annotations = annotations
+
+    def get_activity_by_name(self, name: str) -> FabricActivity:
         """Get an activity by name. Throws an exception if the activity is not found.
 
         Args:
@@ -19,7 +28,7 @@ class PipelineResource:
 
         raise ActivityNotFoundError(f"Activity with name {name} not found")
 
-    def validate_parameters(self: PipelineResource, parameters: List[RunParameter]) -> None:
+    def validate_parameters(self, parameters: List[RunParameter]) -> None:
         """Validate that all parameters are provided and that no duplicate parameters are provided.
 
         Args:
@@ -47,10 +56,8 @@ class PipelineResource:
 
     def get_run_variables(self) -> List[PipelineRunVariable]:
         """Get the run variables for the pipeline."""
-        if self.variables is None:
-            return []
-
         run_variables = []
         for variable_name, variable_value in self.variables.items():
-            run_variables.append(PipelineRunVariable(variable_name, variable_value.default_value))
+            run_variables.append(PipelineRunVariable(variable_name, variable_value.get("default_value", None)))
+
         return run_variables

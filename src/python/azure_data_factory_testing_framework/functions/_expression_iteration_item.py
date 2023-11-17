@@ -16,7 +16,7 @@ def find_and_replace_iteration_item(expression: str, state: PipelineRunState) ->
 
         if expression == match.group(0):
             return state.iteration_item, True
-        
+
         expression = expression.replace(match.group(0), state.iteration_item)
 
     return expression, False

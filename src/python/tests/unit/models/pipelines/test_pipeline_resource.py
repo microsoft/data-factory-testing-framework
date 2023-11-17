@@ -1,11 +1,11 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import ParameterSpecification, PipelineResource
-from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
-TestFramework()
+DataFactoryTestFramework()
 
 
 def test_when_validate_parameters_is_accurate_should_pass() -> None:

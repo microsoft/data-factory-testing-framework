@@ -1,13 +1,13 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory import TestFramework
+from azure_data_factory_testing_framework.data_factory import DataFactoryTestFramework
 from azure_data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
 from azure_data_factory_testing_framework.state import RunParameter, RunParameterType
 
 
 def test_execute_pipeline_activity_child_activities_executed() -> None:
     # Arrange
-    test_framework = TestFramework(
+    test_framework = DataFactoryTestFramework(
         data_factory_folder_path="./tests/functional/execute_child_pipeline/pipeline",
         should_evaluate_child_pipelines=True,
     )
@@ -35,7 +35,7 @@ def test_execute_pipeline_activity_child_activities_executed() -> None:
 
 def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_known_exception_thrown() -> None:
     # Arrange
-    test_framework = TestFramework(
+    test_framework = DataFactoryTestFramework(
         data_factory_folder_path="./tests/functional/execute_child_pipeline/pipeline",
         should_evaluate_child_pipelines=True,
     )

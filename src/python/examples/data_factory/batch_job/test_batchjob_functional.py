@@ -1,14 +1,14 @@
 import pytest
 
+from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.models import SetVariableActivity
-from azure_data_factory_testing_framework.data_factory.test_framework import TestFramework
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 
 def test_batch_job_pipeline() -> None:
     # Arrange
-    test_framework = TestFramework("./examples/batch_job/pipelines")
+    test_framework = DataFactoryTestFramework("./examples/data_factory/batch_job/pipelines")
     pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
 
     # Act

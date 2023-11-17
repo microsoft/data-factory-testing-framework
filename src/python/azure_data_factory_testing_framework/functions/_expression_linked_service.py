@@ -22,7 +22,7 @@ def find_and_replace_linked_services(expression: str, state: PipelineRunState) -
         )
         if linked_service is None:
             raise LinkedServiceParameterNotFoundError(linked_service_name)
-        
+
         if expression == match.group(0):
             return linked_service.value, True
 

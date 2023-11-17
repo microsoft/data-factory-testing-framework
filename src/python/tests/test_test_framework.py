@@ -1,6 +1,6 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory import TestFramework
+from azure_data_factory_testing_framework.data_factory import DataFactoryTestFramework
 from azure_data_factory_testing_framework.data_factory.generated.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     ActivityDependency,
@@ -14,10 +14,11 @@ from azure_data_factory_testing_framework.exceptions.pipeline_activities_circula
 
 def test_circular_dependency_between_activities_should_throw_error() -> None:
     # Arrange
-    test_framework = TestFramework()
+    test_framework = DataFactoryTestFramework()
     pipeline = PipelineResource(
         name="main",
         parameters={},
+        variables={},
         activities=[
             SetVariableActivity(
                 name="setVariable1",

@@ -2,13 +2,12 @@ import pytest
 
 from azure_data_factory_testing_framework.data_factory.generated.models import (
     DependencyCondition,
-    VariableSpecification,
 )
 from azure_data_factory_testing_framework.exceptions.function_call_invalid_arguments_count_error import (
     FunctionCallInvalidArgumentsCountError,
 )
 from azure_data_factory_testing_framework.functions.function_parser import parse_expression
-from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
+from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 
@@ -63,9 +62,9 @@ def test_evaluate_with_variable() -> None:
     raw_expression = "concat('https://example.com/jobs/', variables('abc'))"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(
-        variable_specifications={
-            "abc": VariableSpecification(type="String", default_value="123"),
-        },
+        variables=[
+            PipelineRunVariable(name="abc", default_value="123"),
+        ],
     )
 
     # Act
@@ -94,9 +93,9 @@ def test_evaluate_with_activity_output_and_variable() -> None:
     raw_expression = "concat('https://example.com/jobs/', activity('abc').output.abc, '/', variables('abc'))"
     expression = parse_expression(raw_expression)
     state = PipelineRunState(
-        variable_specifications={
-            "abc": VariableSpecification(type="String", default_value="456"),
-        },
+        variables=[
+            PipelineRunVariable(name="abc", default_value="456"),
+        ],
     )
     state.add_activity_result("abc", DependencyCondition.SUCCEEDED, {"abc": "123"})
 
@@ -115,9 +114,9 @@ def test_evaluate_with_activity_output_and_variable_and_parameters() -> None:
     )
     expression = parse_expression(raw_expression)
     state = PipelineRunState(
-        variable_specifications={
-            "abc": VariableSpecification(type="String", default_value="456"),
-        },
+        variables=[
+            PipelineRunVariable(name="abc", default_value="456"),
+        ],
         parameters=[
             RunParameter(RunParameterType.Pipeline, "abc", "789"),
             RunParameter(RunParameterType.Global, "abc", "10"),
