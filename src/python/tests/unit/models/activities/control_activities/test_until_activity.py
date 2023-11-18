@@ -1,27 +1,27 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    DataFactoryElement,
-    Expression,
-    ExpressionType,
-    SetVariableActivity,
-    UntilActivity,
-)
+from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from azure_data_factory_testing_framework.models.activities.until_activity import UntilActivity
+from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_evaluate_until_activity_should_repeat_until_expression_is_true() -> None:
     # Arrange
-    test_framework = DataFactoryTestFramework()
+    test_framework = TestFramework(framework_type="Fabric")
     until_activity = UntilActivity(
         name="UntilActivity",
-        expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"),
+        typeProperties={
+            "expression": DataFactoryElement("@equals(1, 1)"),
+        },
         activities=[
             SetVariableActivity(
                 name="setVariable",
-                variable_name="variable",
-                value=DataFactoryElement[str]("'1'"),
+                typeProperties={
+                    "variableName": "variable",
+                    "value": DataFactoryElement("'1'"),
+                },
                 depends_on=[],
             ),
         ],

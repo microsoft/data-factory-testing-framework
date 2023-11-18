@@ -1,24 +1,24 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    DataFactoryElement,
-    SetVariableActivity,
-)
 from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
+from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:
     # Arrange
-    DataFactoryTestFramework()
+    TestFramework(framework_type="Fabric")
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",
-        variable_name=variable_name,
-        value=DataFactoryElement("TestValue"),
+        typeProperties={
+            "variableName": variable_name,
+            "value": DataFactoryElement("TestValue"),
+        },
     )
     state = PipelineRunState(
         variables=[
@@ -36,12 +36,14 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> N
 
 def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
     # Arrange
-    DataFactoryTestFramework()
+    TestFramework(framework_type="Fabric")
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",
-        variable_name=variable_name,
-        value=DataFactoryElement("TestValue"),
+        typeProperties={
+            "variableName": variable_name,
+            "value": DataFactoryElement("TestValue"),
+        },
     )
     state = PipelineRunState()
 

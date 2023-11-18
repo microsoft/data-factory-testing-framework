@@ -1,8 +1,5 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    DependencyCondition,
-)
 from azure_data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import (
     DatasetParameterNotFoundError,
 )
@@ -15,6 +12,7 @@ from azure_data_factory_testing_framework.exceptions.linked_service_parameter_no
 from azure_data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from azure_data_factory_testing_framework.functions.function_argument import FunctionArgument
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameterType
+from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 

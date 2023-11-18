@@ -1,14 +1,14 @@
 import pytest
 
-from azure_data_factory_testing_framework.fabric.fabric_test_framework import FabricTestFramework
-from azure_data_factory_testing_framework.fabric.models.activities.fabric_activity import FabricActivity
+from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_batch_job_pipeline() -> None:
     # Arrange
-    test_framework = FabricTestFramework("./")
+    test_framework = TestFramework(framework_type=TestFrameworkType.Fabric, root_folder_path="./")
     pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
 
     # Act
@@ -59,7 +59,7 @@ def test_batch_job_pipeline() -> None:
     )
 
     # Assert
-    activity: FabricActivity = next(activities)
+    activity: Activity = next(activities)
     assert activity.name == "Set UserAssignedIdentityReference"
     assert activity.type_properties["variableName"] == "UserAssignedIdentityReference"
     assert (
