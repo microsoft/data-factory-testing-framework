@@ -1,20 +1,21 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
-from azure_data_factory_testing_framework.data_factory.generated.models import ParameterSpecification, PipelineResource
+from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
-
-DataFactoryTestFramework()
 
 
 def test_when_validate_parameters_is_accurate_should_pass() -> None:
     # Arrange
-    pipeline = PipelineResource(
+    pipeline = Pipeline(
         name="pipeline",
         parameters={
-            "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+            "pipelineParameterName": {
+                "type": "String",
+            },
+            "pipelineParameterName2": {
+                "type": "String",
+            },
         },
     )
 
@@ -29,10 +30,15 @@ def test_when_validate_parameters_is_accurate_should_pass() -> None:
 
 def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() -> None:
     # Arrange
-    pipeline = PipelineResource(
+    pipeline = Pipeline(
+        name="pipeline",
         parameters={
-            "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+            "pipelineParameterName": {
+                "type": "String",
+            },
+            "pipelineParameterName2": {
+                "type": "String",
+            },
         },
     )
     pipeline.name = "pipeline"
@@ -54,10 +60,15 @@ def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() 
 
 def test_when_duplicate_parameters_supplied_should_throw_error() -> None:
     # Arrange
-    pipeline = PipelineResource(
+    pipeline = Pipeline(
+        name="pipeline",
         parameters={
-            "pipelineParameterName": ParameterSpecification(type=RunParameterType.Pipeline),
-            "pipelineParameterName2": ParameterSpecification(type=RunParameterType.Pipeline),
+            "pipelineParameterName": {
+                "type": "String",
+            },
+            "pipelineParameterName2": {
+                "type": "String",
+            },
         },
     )
     pipeline.name = "pipeline"

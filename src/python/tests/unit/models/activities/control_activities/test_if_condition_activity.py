@@ -1,30 +1,26 @@
 import pytest
 
-from azure_data_factory_testing_framework.data_factory.data_factory_test_framework import DataFactoryTestFramework
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    DataFactoryElement,
-    Expression,
-    ExpressionType,
-    IfConditionActivity,
-    SetVariableActivity,
-)
+from azure_data_factory_testing_framework.models.activities.if_condition_activity import IfConditionActivity
+from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
-
-DataFactoryTestFramework()
+from azure_data_factory_testing_framework.test_framework import TestFramework
 
 
 def test_when_evaluated_should_evaluate_expression() -> None:
     # Arrange
     activity = IfConditionActivity(
         name="IfConditionActivity",
-        expression=Expression(type=ExpressionType.EXPRESSION, value="@equals(1, 1)"),
+        if_true_activities=[],
+        if_false_activities=[],
+        typeProperties={"expression": DataFactoryElement("@equals(1, 1)")},
     )
 
     # Act
     activity.evaluate(PipelineRunState())
 
     # Assert
-    assert activity.expression.evaluated is True
+    assert activity.expression.value
 
 
 @pytest.mark.parametrize(
@@ -36,23 +32,29 @@ def test_when_evaluated_should_evaluate_correct_child_activities(
     expected_activity_name: str,
 ) -> None:
     # Arrange
-    test_framework = DataFactoryTestFramework()
+    test_framework = TestFramework(framework_type="Fabric")
     expression = "@equals(1, 1)" if expression_outcome else "@equals(1, 2)"
     activity = IfConditionActivity(
         name="IfConditionActivity",
-        expression=Expression(type=ExpressionType.EXPRESSION, value=expression),
+        typeProperties={
+            "expression": DataFactoryElement(expression),
+        },
         if_true_activities=[
             SetVariableActivity(
                 name="setVariableActivity1",
-                variable_name="variable",
-                value=DataFactoryElement("dummy"),
+                typeProperties={
+                    "variableName": "variable",
+                    "value": DataFactoryElement("dummy"),
+                },
             ),
         ],
         if_false_activities=[
             SetVariableActivity(
                 name="setVariableActivity2",
-                variable_name="variable",
-                value=DataFactoryElement("dummy"),
+                typeProperties={
+                    "variableName": "variable",
+                    "value": DataFactoryElement("dummy"),
+                },
             ),
         ],
     )

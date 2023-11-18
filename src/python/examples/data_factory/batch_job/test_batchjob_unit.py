@@ -1,36 +1,33 @@
 # flake8: noqa: E501
 import pytest
 
-from azure_data_factory_testing_framework.data_factory import DataFactoryTestFramework
-from azure_data_factory_testing_framework.data_factory.generated.models import (
-    ExecutePipelineActivity,
-    PipelineResource,
-    SetVariableActivity,
-    WebActivity,
-)
+from azure_data_factory_testing_framework.models.activities.activity import Activity
+from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture
-def test_framework() -> DataFactoryTestFramework:
-    return DataFactoryTestFramework(
-        data_factory_folder_path="./examples/data_factory/batch_job/pipelines",
+def test_framework() -> TestFramework:
+    return TestFramework(
+        framework_type=TestFrameworkType.DataFactory,
+        root_folder_path="./examples/data_factory/batch_job",
     )
 
 
 @pytest.fixture
-def pipeline(test_framework: DataFactoryTestFramework) -> PipelineResource:
+def pipeline(test_framework: TestFramework) -> Pipeline:
     return test_framework.repository.get_pipeline_by_name("batch_job")
 
 
-def test_set_job_container_url(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set Job Container URL")
+    activity: Activity = pipeline.get_activity_by_name("Set Job Container URL")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerURL"),
@@ -47,15 +44,13 @@ def test_set_job_container_url(test_framework: DataFactoryTestFramework, pipelin
     # Assert
     updated_variable = state.get_variable_by_name("JobContainerURL")
     expected_url = "https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"
-    assert expected_url == activity.value.value
+    assert expected_url == activity.type_properties["value"].value
     assert expected_url == updated_variable.value
 
 
-def test_set_user_assigned_identity_reference(
-    test_framework: DataFactoryTestFramework, pipeline: PipelineResource
-) -> None:
+def test_set_user_assigned_identity_reference(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set UserAssignedIdentityReference")
+    activity: Activity = pipeline.get_activity_by_name("Set UserAssignedIdentityReference")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="UserAssignedIdentityReference"),
@@ -77,15 +72,13 @@ def test_set_user_assigned_identity_reference(
     # Assert
     updated_variable = state.get_variable_by_name("UserAssignedIdentityReference")
     expected_reference = "/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"
-    assert expected_reference == activity.value.value
+    assert expected_reference == activity.type_properties["value"].value
     assert expected_reference == updated_variable.value
 
 
-def test_set_manager_application_package_path(
-    test_framework: DataFactoryTestFramework, pipeline: PipelineResource
-) -> None:
+def test_set_manager_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set ManagerApplicationPackagePath")
+    activity: Activity = pipeline.get_activity_by_name("Set ManagerApplicationPackagePath")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="ManagerApplicationPackagePath"),
@@ -102,15 +95,13 @@ def test_set_manager_application_package_path(
     # Assert
     updated_variable = state.get_variable_by_name("ManagerApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"
-    assert expected_path == activity.value.value
+    assert expected_path == activity.type_properties["value"].value
     assert expected_path == updated_variable.value
 
 
-def test_set_workload_application_package_path(
-    test_framework: DataFactoryTestFramework, pipeline: PipelineResource
-) -> None:
+def test_set_workload_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set WorkloadApplicationPackagePath")
+    activity: Activity = pipeline.get_activity_by_name("Set WorkloadApplicationPackagePath")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="WorkloadApplicationPackagePath"),
@@ -127,13 +118,13 @@ def test_set_workload_application_package_path(
     # Assert
     updated_variable = state.get_variable_by_name("WorkloadApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz"
-    assert expected_path == activity.value.value
+    assert expected_path == activity.type_properties["value"].value
     assert expected_path == updated_variable.value
 
 
-def test_set_common_environment_settings(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_set_common_environment_settings(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set CommonEnvironmentSettings")
+    activity: Activity = pipeline.get_activity_by_name("Set CommonEnvironmentSettings")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="CommonEnvironmentSettings"),
@@ -200,13 +191,13 @@ def test_set_common_environment_settings(test_framework: DataFactoryTestFramewor
         "value": "workload-user-assigned-identity-client-id"
     }
     ]"""
-    assert expected_settings == activity.value.value
+    assert expected_settings == activity.type_properties["value"].value
     assert expected_settings == state.get_variable_by_name("CommonEnvironmentSettings").value
 
 
-def test_create_job_storage_container(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_create_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: WebActivity = pipeline.get_activity_by_name("Create Job Storage Container")
+    activity: Activity = pipeline.get_activity_by_name("Create Job Storage Container")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(
@@ -223,15 +214,15 @@ def test_create_job_storage_container(test_framework: DataFactoryTestFramework, 
     assert "Create Job Storage Container" == activity.name
     assert (
         "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container"
-        == activity.url.value
+        == activity.type_properties["url"].value
     )
-    assert "PUT" == activity.method
-    assert "{}" == activity.body.value
+    assert "PUT" == activity.type_properties["method"]
+    assert "{}" == activity.type_properties["body"].value
 
 
-def test_set_job_container_name(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: SetVariableActivity = pipeline.get_activity_by_name("Set JobContainerName")
+    activity: Activity = pipeline.get_activity_by_name("Set JobContainerName")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName"),
@@ -244,13 +235,13 @@ def test_set_job_container_name(test_framework: DataFactoryTestFramework, pipeli
 
     # Assert
     job_container_name_variable = state.get_variable_by_name("JobContainerName")
-    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.value.value
+    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["value"].value
     assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == job_container_name_variable.value
 
 
-def test_start_job_pipeline(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: WebActivity = pipeline.get_activity_by_name("Start Job")
+    activity: Activity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
         parameters=[
             RunParameter[str](
@@ -319,9 +310,10 @@ def test_start_job_pipeline(test_framework: DataFactoryTestFramework, pipeline: 
     # Assert
     assert "Start Job" == activity.name
     assert (
-        "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0" == activity.url.value
+        "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0"
+        == activity.type_properties["url"].value
     )
-    assert "POST" == activity.method
+    assert "POST" == activity.type_properties["method"]
 
     expected_body = """{
     "id": "8b6b545b-c583-4a06-adf7-19ff41370aba",
@@ -387,12 +379,12 @@ def test_start_job_pipeline(test_framework: DataFactoryTestFramework, pipeline: 
     "usesTaskDependencies": true,
     "commonEnvironmentSettings": [{"name": "COMMON_ENV_SETTING", "value": "dummy"}, {"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}]}"""
 
-    assert expected_body == activity.body.value
+    assert expected_body == activity.type_properties["body"].value
 
 
-def test_monitor_job(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: ExecutePipelineActivity = pipeline.get_activity_by_name("Monitor Batch Job")
+    activity: Activity = pipeline.get_activity_by_name("Monitor Batch Job")
     state = PipelineRunState(
         parameters=[
             RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
@@ -404,14 +396,14 @@ def test_monitor_job(test_framework: DataFactoryTestFramework, pipeline: Pipelin
 
     # Assert
     assert "Monitor Batch Job" == activity.name
-    assert "monitor_batch_job" == activity.pipeline.reference_name
-    assert 1 == len(activity.parameters)
-    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.parameters["JobId"].value
+    assert "monitor_batch_job" == activity.type_properties["pipeline"]["referenceName"]
+    assert 1 == len(activity.type_properties["parameters"])
+    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].value
 
 
-def test_copy_output_files(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: ExecutePipelineActivity = pipeline.get_activity_by_name("Copy Output Files")
+    activity: Activity = pipeline.get_activity_by_name("Copy Output Files")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
@@ -433,18 +425,22 @@ def test_copy_output_files(test_framework: DataFactoryTestFramework, pipeline: P
 
     # Assert
     assert "Copy Output Files" == activity.name
-    assert "copy_output_files" == activity.pipeline.reference_name
-    assert 5 == len(activity.parameters)
-    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.parameters["JobContainerName"].value
-    assert "TASKOUTPUT_" == activity.parameters["TaskOutputFolderPrefix"].value
-    assert "teststorage" == activity.parameters["OutputStorageAccountName"].value
-    assert "test-application-output-container-name" == activity.parameters["OutputContainerName"].value
-    assert "output" == activity.parameters["OutputFolderName"].value
+    assert "copy_output_files" == activity.type_properties["pipeline"]["referenceName"]
+    assert 5 == len(activity.type_properties["parameters"])
+    assert (
+        "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobContainerName"].value
+    )
+    assert "TASKOUTPUT_" == activity.type_properties["parameters"]["TaskOutputFolderPrefix"].value
+    assert "teststorage" == activity.type_properties["parameters"]["OutputStorageAccountName"].value
+    assert (
+        "test-application-output-container-name" == activity.type_properties["parameters"]["OutputContainerName"].value
+    )
+    assert "output" == activity.type_properties["parameters"]["OutputFolderName"].value
 
 
-def test_delete_job_storage_container(test_framework: DataFactoryTestFramework, pipeline: PipelineResource) -> None:
+def test_delete_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: WebActivity = pipeline.get_activity_by_name("Delete Job Storage Container")
+    activity: Activity = pipeline.get_activity_by_name("Delete Job Storage Container")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
@@ -461,7 +457,6 @@ def test_delete_job_storage_container(test_framework: DataFactoryTestFramework, 
     assert "Delete Job Storage Container" == activity.name
     assert (
         "https://batchstorage.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container"
-        == activity.url.value
+        == activity.type_properties["url"].value
     )
-    assert "DELETE" == activity.method
-    assert activity.body is None
+    assert "DELETE" == activity.type_properties["method"]

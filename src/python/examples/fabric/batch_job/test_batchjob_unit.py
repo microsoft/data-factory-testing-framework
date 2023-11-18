@@ -1,29 +1,30 @@
 # flake8: noqa: E501
 import pytest
 
-from azure_data_factory_testing_framework.fabric.fabric_test_framework import FabricTestFramework
-from azure_data_factory_testing_framework.fabric.models.fabric_pipeline import FabricPipeline
+from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture
-def test_framework() -> FabricTestFramework:
-    return FabricTestFramework(
-        fabric_root_folder_path="./",
+def test_framework() -> TestFramework:
+    return TestFramework(
+        framework_type=TestFrameworkType.Fabric,
+        root_folder_path="./",
     )
 
 
 @pytest.fixture
-def pipeline(test_framework: FabricTestFramework) -> FabricPipeline:
+def pipeline(test_framework: TestFramework) -> Pipeline:
     return test_framework.repository.get_pipeline_by_name("batch_job")
 
 
-def test_set_job_container_url(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
     int(1.1)
     # Arrange
     activity = pipeline.get_activity_by_name("Set Job Container URL")
@@ -47,7 +48,7 @@ def test_set_job_container_url(test_framework: FabricTestFramework, pipeline: Fa
     assert expected_url == updated_variable.value
 
 
-def test_set_user_assigned_identity_reference(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_user_assigned_identity_reference(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Set UserAssignedIdentityReference")
     state = PipelineRunState(
@@ -75,7 +76,7 @@ def test_set_user_assigned_identity_reference(test_framework: FabricTestFramewor
     assert expected_reference == updated_variable.value
 
 
-def test_set_manager_application_package_path(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_manager_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Set ManagerApplicationPackagePath")
     state = PipelineRunState(
@@ -98,7 +99,7 @@ def test_set_manager_application_package_path(test_framework: FabricTestFramewor
     assert expected_path == updated_variable.value
 
 
-def test_set_workload_application_package_path(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_workload_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Set WorkloadApplicationPackagePath")
     state = PipelineRunState(
@@ -121,7 +122,7 @@ def test_set_workload_application_package_path(test_framework: FabricTestFramewo
     assert expected_path == updated_variable.value
 
 
-def test_set_common_environment_settings(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_common_environment_settings(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Set CommonEnvironmentSettings")
     state = PipelineRunState(
@@ -194,7 +195,7 @@ def test_set_common_environment_settings(test_framework: FabricTestFramework, pi
     assert expected_settings == state.get_variable_by_name("CommonEnvironmentSettings").value
 
 
-def test_create_job_storage_container(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_create_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Create Job Storage Container")
     state = PipelineRunState(
@@ -215,7 +216,7 @@ def test_create_job_storage_container(test_framework: FabricTestFramework, pipel
     assert "{}" == activity.type_properties["body"].value
 
 
-def test_set_job_container_name(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Set JobContainerName")
     state = PipelineRunState(
@@ -234,7 +235,7 @@ def test_set_job_container_name(test_framework: FabricTestFramework, pipeline: F
     assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == job_container_name_variable.value
 
 
-def test_start_job_pipeline(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
@@ -371,7 +372,7 @@ def test_start_job_pipeline(test_framework: FabricTestFramework, pipeline: Fabri
     assert expected_body == activity.type_properties["body"].value
 
 
-def test_monitor_job(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Monitor Batch Job")
     state = PipelineRunState(
@@ -390,7 +391,7 @@ def test_monitor_job(test_framework: FabricTestFramework, pipeline: FabricPipeli
     assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].value
 
 
-def test_copy_output_files(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Copy Output Files")
     state = PipelineRunState(
@@ -427,7 +428,7 @@ def test_copy_output_files(test_framework: FabricTestFramework, pipeline: Fabric
     assert "output" == activity.type_properties["parameters"]["OutputFolderName"].value
 
 
-def test_delete_job_storage_container(test_framework: FabricTestFramework, pipeline: FabricPipeline) -> None:
+def test_delete_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("Delete Job Storage Container")
     state = PipelineRunState(
