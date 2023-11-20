@@ -1,7 +1,7 @@
 import os
 
-from azure_data_factory_testing_framework.data_factory_deserializer import parse_pipeline_from_json
-from azure_data_factory_testing_framework.models.repositories.data_factory_repository import (
+from azure_data_factory_testing_framework.deserializers.data_factory_deserializer import parse_pipeline_from_json
+from azure_data_factory_testing_framework.repositories.data_factory_repository import (
     DataFactoryRepository,
 )
 

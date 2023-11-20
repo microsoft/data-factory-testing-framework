@@ -14,7 +14,7 @@ class IfConditionActivity(ControlActivity):
         if_true_activities: List[Activity],
         if_false_activities: List[Activity],
         depends_on: List[ActivityDependency] = None,
-        **kwargs: Any, # noqa: ANN401
+        **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """This is the class that represents the If Condition activity in the pipeline."""
         if "type" not in kwargs:
