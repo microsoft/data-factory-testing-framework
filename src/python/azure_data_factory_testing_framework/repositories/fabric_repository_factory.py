@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from azure_data_factory_testing_framework.deserializers.fabric_deserializer import parse_pipeline_from_json
+from azure_data_factory_testing_framework.deserializers._deserializer_fabric import parse_pipeline_from_json
 from azure_data_factory_testing_framework.repositories.data_factory_repository import DataFactoryRepository
 
 
