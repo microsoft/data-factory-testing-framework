@@ -70,3 +70,4 @@ convention = "google"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
+pythonpath = ["."]
