@@ -30,12 +30,16 @@ from azure_data_factory_testing_framework.state import PipelineRunState, RunPara
 class TestFrameworkType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """TestFrameworkType."""
 
+    __test__ = False  # Prevent pytest from discovering this class as a test class
+
     DataFactory = "DataFactory"
     Fabric = "Fabric"
     Synapse = "Synapse"
 
 
 class TestFramework:
+    __test__ = False  # Prevent pytest from discovering this class as a test class
+
     def __init__(
         self,
         framework_type: TestFrameworkType,
