@@ -3,10 +3,9 @@
 // for contributors.
 {
     "python.testing.pytestArgs": [
-        "tests",
-        "examples"
+        "."
     ],
-    "python.testing.cwd": "${workspaceFolder}/src/python",
+    "python.testing.cwd": "${workspaceFolder}",
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
 }
