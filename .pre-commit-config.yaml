@@ -3,9 +3,9 @@ repos:
     rev: 1.6.1
     hooks:
     -   id: poetry-check
-        args: ["-C", "./src/python"]
+        args: ["-C", "./src"]
     -   id: poetry-lock
-        args: ["-C", "./src/python", "--no-update"]
+        args: ["-C", "./src", "--no-update"]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.1.5
   hooks:
@@ -16,7 +16,7 @@ repos:
     hooks:
     -   id: pytest
         name: pytest
-        entry: poetry -C src/python run pytest src/python
+        entry: poetry -C src run pytest src
         language: system
         types: [python]
         require_serial: true
