@@ -29,3 +29,7 @@ class FunctionsRepository:
         "empty": collection_functions.empty,
         "split": string_functions.split,
     }
+
+    @staticmethod
+    def register(function_name: str, function: Callable) -> None:
+        FunctionsRepository.functions[function_name] = function
