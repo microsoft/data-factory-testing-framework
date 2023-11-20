@@ -260,5 +260,5 @@ def test_function_call_wrong_arguments_error() -> None:
     # Assert
     assert (
         exception_info.value.args[0]
-        == 'FunctionCall trim has invalid arguments count. Evaluated arguments: "abc, a, b". Expected argument types: text, trim_argument'
+        == 'FunctionCall trim has invalid arguments count. Evaluated arguments: "abc, a, b". Expected argument types: text'
     )
