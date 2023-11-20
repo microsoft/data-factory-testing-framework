@@ -6,11 +6,11 @@ from azure_data_factory_testing_framework.state import RunParameter, RunParamete
 from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
-def test_execute_pipeline_activity_child_activities_executed() -> None:
+def test_execute_pipeline_activity_child_activities_executed(request: pytest.FixtureRequest) -> None:
     # Arrange
     test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory,
-        root_folder_path="./tests/functional/execute_child_pipeline",
+        root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
     pipeline = test_framework.repository.get_pipeline_by_name("main")
@@ -35,11 +35,13 @@ def test_execute_pipeline_activity_child_activities_executed() -> None:
         next(activities)
 
 
-def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_known_exception_thrown() -> None:
+def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_known_exception_thrown(
+    request: pytest.FixtureRequest
+) -> None:
     # Arrange
     test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory,
-        root_folder_path="./tests/functional/execute_child_pipeline",
+        root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
     test_framework.repository.pipelines.remove(test_framework.repository.get_pipeline_by_name("child"))
