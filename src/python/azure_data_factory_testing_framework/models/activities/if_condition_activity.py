@@ -20,8 +20,7 @@ class IfConditionActivity(ControlActivity):
             if_false_activities: The deserialized activities that will be executed if the condition is false.
             **kwargs: IfConditionActivity properties coming directly from the json representation of the activity.
         """
-        if "type" not in kwargs:
-            kwargs["type"] = "IfCondition"
+        kwargs["type"] = "IfCondition"
 
         super(ControlActivity, self).__init__(**kwargs)
 

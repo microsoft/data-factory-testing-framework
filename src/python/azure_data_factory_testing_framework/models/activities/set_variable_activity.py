@@ -12,8 +12,7 @@ class SetVariableActivity(ControlActivity):
         Args:
             **kwargs: SetVariableActivity properties coming directly from the json representation of the activity.
         """
-        if "type" not in kwargs:
-            kwargs["type"] = "SetVariable"
+        kwargs["type"] = "SetVariable"
 
         super(ControlActivity, self).__init__(**kwargs)
 

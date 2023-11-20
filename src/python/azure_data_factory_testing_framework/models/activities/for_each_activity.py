@@ -18,8 +18,7 @@ class ForEachActivity(ControlActivity):
             activities: The deserialized activities that will be executed for each item in the items array.
             **kwargs: ForEachActivity properties coming directly from the json representation of the activity.
         """
-        if "type" not in kwargs:
-            kwargs["type"] = "ForEach"
+        kwargs["type"] = "ForEach"
 
         super(ControlActivity, self).__init__(**kwargs)
 

@@ -18,8 +18,7 @@ class UntilActivity(ControlActivity):
             activities: The deserialized activities that will be executed until the expression evaluates to true.
             **kwargs: UntilActivity properties coming directly from the json representation of the activity.
         """
-        if "type" not in kwargs:
-            kwargs["type"] = "Until"
+        kwargs["type"] = "Until"
 
         super(ControlActivity, self).__init__(**kwargs)
 

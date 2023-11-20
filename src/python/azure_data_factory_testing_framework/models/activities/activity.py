@@ -9,21 +9,28 @@ from azure_data_factory_testing_framework.state.dependency_condition import Depe
 
 
 class Activity:
-    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+    def __init__(self, name: str, type: str, policy: dict = None, **kwargs: Any) -> None:  # noqa: ANN401, A002
         """Activity with dynamic dicts.
 
         Args:
+            name: Name of the activity.
+            type: Type of the activity.
+            policy: Policy of the activity.
             **kwargs: Activity properties coming directly from the json representation of the activity.
         """
-        self.name = kwargs["name"]
-        self.type = kwargs["type"]
+        if policy is None:
+            policy = {}
+
+        self.name = name
+        self.type = type
+        self.policy = policy
+        self.type_properties = kwargs["typeProperties"] if "typeProperties" in kwargs else {}
+
         self.depends_on: List[ActivityDependency] = []
         if "dependsOn" in kwargs:
             for dependency in kwargs["dependsOn"]:
                 self.depends_on.append(ActivityDependency(**dependency))
 
-        self.policy = kwargs["policy"] if "policy" in kwargs else {}
-        self.type_properties = kwargs["typeProperties"] if "typeProperties" in kwargs else {}
         self.all_properties = kwargs
 
         self.status: DependencyCondition = None

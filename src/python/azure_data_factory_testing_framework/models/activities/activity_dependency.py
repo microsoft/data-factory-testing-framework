@@ -1,15 +1,18 @@
-from typing import Any, List, Union
+from typing import List, Union
 
 from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 
 
 class ActivityDependency:
-    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+    def __init__(self, activity: str, dependencyConditions: List[Union[str, DependencyCondition]] = None) -> None:  # noqa: ANN401, N803
         """ActivityDependency.
 
         Args:
-            **kwargs: ActivityDependency properties coming directly from the json representation of the activity.
+            activity: Name of the activity.
+            dependencyConditions: List of dependency conditions.
         """
-        self.kwargs = kwargs
-        self.activity: str = kwargs["activity"]
-        self.dependency_conditions: List[Union[str, DependencyCondition]] = kwargs["dependencyConditions"]
+        if dependencyConditions is None:
+            dependencyConditions = []  # noqa: N806
+
+        self.activity: str = activity
+        self.dependency_conditions: List[DependencyCondition] = dependencyConditions
