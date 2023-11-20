@@ -12,8 +12,7 @@ class ExecutePipelineActivity(ControlActivity):
         Args:
             **kwargs: ExecutePipelineActivity properties coming directly from the json representation of the activity.
         """
-        if "type" not in kwargs:
-            kwargs["type"] = "ExecutePipeline"
+        kwargs["type"] = "ExecutePipeline"
 
         super(ControlActivity, self).__init__(**kwargs)
 
