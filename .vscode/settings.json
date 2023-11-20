@@ -1,0 +1,12 @@
+// VSCode settings for Python
+// We track these settings in the repository so that they are consistent across
+// for contributors.
+{
+    "python.testing.pytestArgs": [
+        "tests",
+        "examples"
+    ],
+    "python.testing.cwd": "${workspaceFolder}/src/python",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+}
