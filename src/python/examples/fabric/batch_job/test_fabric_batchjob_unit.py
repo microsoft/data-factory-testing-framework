@@ -12,10 +12,10 @@ from azure_data_factory_testing_framework.test_framework import TestFramework, T
 
 
 @pytest.fixture
-def test_framework() -> TestFramework:
+def test_framework(request: pytest.FixtureRequest) -> TestFramework:
     return TestFramework(
         framework_type=TestFrameworkType.Fabric,
-        root_folder_path="./",
+        root_folder_path=request.fspath.dirname,
     )
 
 

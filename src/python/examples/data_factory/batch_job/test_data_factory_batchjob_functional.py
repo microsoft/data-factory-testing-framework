@@ -6,10 +6,10 @@ from azure_data_factory_testing_framework.state.run_parameter import RunParamete
 from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
-def test_batch_job_pipeline() -> None:
+def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     # Arrange
     test_framework = TestFramework(
-        framework_type=TestFrameworkType.DataFactory, root_folder_path="./examples/data_factory/batch_job"
+        framework_type=TestFrameworkType.DataFactory, root_folder_path=request.fspath.dirname
     )
     pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
 
