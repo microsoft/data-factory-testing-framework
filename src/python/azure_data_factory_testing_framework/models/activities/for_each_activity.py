@@ -9,7 +9,11 @@ from azure_data_factory_testing_framework.state import PipelineRunState
 
 class ForEachActivity(ControlActivity):
     def __init__(
-        self, name: str, activities: List[Activity], depends_on: List[ActivityDependency] = None, **kwargs: Any # noqa: ANN401
+        self,
+        name: str,
+        activities: List[Activity],
+        depends_on: List[ActivityDependency] = None,
+        **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """This is the class that represents the For Each activity in the pipeline."""
         if "type" not in kwargs:

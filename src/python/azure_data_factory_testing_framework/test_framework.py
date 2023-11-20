@@ -17,11 +17,11 @@ from azure_data_factory_testing_framework.models.activities.if_condition_activit
 )
 from azure_data_factory_testing_framework.models.activities.until_activity import UntilActivity
 from azure_data_factory_testing_framework.models.pipeline import Pipeline
-from azure_data_factory_testing_framework.models.repositories.data_factory_repository import DataFactoryRepository
-from azure_data_factory_testing_framework.models.repositories.data_factory_repository_factory import (
+from azure_data_factory_testing_framework.repositories.data_factory_repository import DataFactoryRepository
+from azure_data_factory_testing_framework.repositories.data_factory_repository_factory import (
     DataFactoryRepositoryFactory,
 )
-from azure_data_factory_testing_framework.models.repositories.fabric_repository_factory import (
+from azure_data_factory_testing_framework.repositories.fabric_repository_factory import (
     FabricRepositoryFactory,
 )
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameter
