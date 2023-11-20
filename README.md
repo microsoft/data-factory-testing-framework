@@ -27,11 +27,11 @@ Azure Data Factory does not support unit testing out of the box. The only way to
 
 ## Getting started
 
-1. Create a .NET Unit Test project (xUnit is used in examples)
-2. Navigate in terminal to the project folder
-3. Add private github package nuget source:  `dotnet nuget add source https://nuget.pkg.github.com/arjendev/index.json --name arjendevfeed --username <GITHUB_HANDLE> --password <TOKEN>`
-4. Add package to project: `dotnet add package AzureDataFactory.TestingFramework --prerelease`
-5. Start writing tests
+1. Create a Python project (pytest is used in examples)
+2. Install the package using your preferred package manager:
+   * Pip: `pip install azure-datafactory-testingframework`
+   * Poetry: `poetry add azure-datafactory-testingframework`
+3. Start writing tests
 
 ## Features - Examples
 
@@ -39,95 +39,79 @@ The samples seen below is the _only_ code that you need to write! The framework 
 
 1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API), LinkedServices, Datasets and Triggers
 
-    ```csharp
-      // Arrange
-      var pipeline = PipelineFactory.ParseFromFile("Example/example-pipeline.json");
-      var activity = pipeline.GetActivityByName("Trigger Azure Batch Job") as WebHookActivity;
-      
-      _state.Parameters.Add(new RunParameter(ParameterType.Global, "BaseUrl", "https://example.com"));
-      _state.Parameters.Add(new RunParameter(ParameterType.Pipeline, "JobId", "123"));
-      _state.Variables.Add(new PipelineRunVariable("JobName", "Job-123"));
-      _state.AddActivityResult(new TestActivityResult("Get version", new
-      {
-        Version = "version1"
-      }));
-      
-      // Act
-      activity.Evaluate(_state);
-      
-      // Assert
-      Assert.Equal("https://example.com/jobs", activity.Uri);
-      Assert.Equal("POST", activity.Method);
-      Assert.Equal("{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}", activity.Body);
-    
+    ```python
+    # Arrange
+    activity: WebHookActivity = pipeline.get_activity_by_name("Trigger Azure Batch Job")
+    state = PipelineRunState(
+        parameters=[
+            RunParameter[str](RunParameterType.Global, "BaseUrl", "https://example.com"),
+            RunParameter[str](RunParameterType.Pipeline, "JobId", "123"),
+        ],
+        variables=[
+            PipelineVariable("JobName", "Job-123"),
+        ])
+    state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
+   
+    # Act
+    activity.evaluate(state)
+
+    # Assert
+    assert "https://example.com/jobs" == activity.url.value
+    assert "POST" == activity.method
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.body.value
     ```
    
 2. Evaluate Pipelines and test the flow of activities given a specific input
 
-    ```csharp
-    var testFramework = new TestFramework(dataFactoryFolderPath: "BatchJob");
-    var pipeline = testFramework.Repository.GetPipelineByName("batch_job");
-    Assert.Equal("example-pipeline", pipeline.Name);
-    Assert.Equal(6, pipeline.Activities.Count);
+    ```python
+    # Arrange
+    pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
+    assert "example-pipeline" == pipeline.name
+    assert 6 == len(pipeline.activities)
 
-    // Runs the pipeline with the provided parameters
-    var activities = testFramework.Evaluate(pipeline, new List<RunParameter>
-        {
-            new(ParameterType.Pipeline, "JobId", "123"),
-            new(ParameterType.Pipeline, "ContainerName", "test-container"),
-            new(ParameterType.Global, "BaseUrl", "https://example.com"),
-        });
+    # Runs the pipeline with the provided parameters
+    activities = test_framework.evaluate_pipeline(pipeline, [
+        RunParameter(RunParameterType.Pipeline, "JobId", "123"),
+        RunParameter(RunParameterType.Pipeline, "ContainerName", "test-container"),
+        RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
+    ])
 
-    var setVariableActivity = activities.GetNext<SetVariableActivity>();
-    Assert.NotNull(setVariableActivity);
-    Assert.Equal("Set JobName", setVariableActivity.Name);
-    Assert.Equal("JobName", setVariableActivity.VariableName);
-    Assert.Equal("Job-123", setVariableActivity.Value);
+    set_variable_activity: SetVariableActivity = next(activities)
+    assert set_variable_activity is not None
+    assert "Set JobName" == set_variable_activity.name
+    assert "JobName" == set_variable_activity.variable_name
+    assert "Job-123" == set_variable_activity.value.value
 
-    var getVersionActivity = activities.GetNext<WebActivity>();
-    Assert.NotNull(getVersionActivity);
-    Assert.Equal("Get version", getVersionActivity.Name);
-    Assert.Equal("https://example.com/version", getVersionActivity.Uri);
-    Assert.Equal("GET", getVersionActivity.Method);
-    Assert.Null(getVersionActivity.Body);
-    getVersionActivity.SetResult(DependencyCondition.Succeeded, new {
-        Version = "version1"
-    });
+    get_version_activity: WebActivity = next(activities)
+    assert get_version_activity is not None
+    assert "Get version" == get_version_activity.name
+    assert "https://example.com/version" == get_version_activity.url.value
+    assert "GET" == get_version_activity.method
+    assert get_version_activity.body is None
+    state.add_activity_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
 
-    var createBatchActivity = activities.GetNext<WebHookActivity>();
-    Assert.NotNull(createBatchActivity);
-    Assert.Equal("Trigger Azure Batch Job", createBatchActivity.Name);
-    Assert.Equal("https://example.com/jobs", createBatchActivity.Uri);
-    Assert.Equal("POST", createBatchActivity.Method);
-    Assert.Equal("{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}", createBatchActivity.Body);
-    createBatchActivity.SetResult(DependencyCondition.Succeeded, "OK");
-   
-    Assert.Throws<ActivityEnumeratorException>(() => activities.GetNext());
+    create_batch_activity: WebHookActivity = next(activities)
+    assert create_batch_activity is not None
+    assert "Trigger Azure Batch Job" == create_batch_activity.name
+    assert "https://example.com/jobs" == create_batch_activity.url.value
+    assert "POST" == create_batch_activity.method
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.body.value
+    state.add_activity_result(create_batch_activity.name, DependencyCondition.Succeeded, {"JobId": "123"})
+    create_batch_activity.set_result(DependencyCondition.Succeeded, "OK")
+
+    with pytest.raises(StopIteration):
+        next(activities)
     ```
-
-3. Evaluate expressions
-
-    ```csharp
-        // Arrange 
-        var expression = FunctionPart.Parse("concat('https://example.com/jobs/', '123', concat('&', 'abc'))");
-
-        // Act
-        var evaluated = expression.Evaluate();
-        
-        // Assert
-        Assert.Equal("https://example.com/jobs/123&abc", evaluated);
-    ``` 
-
    
-> See AzureDataFactory.TestingFramework.Example project for more samples
+> See Examples folder for more samples
 
 ## Registering missing expression functions
 
-As the framework is interpreting expressions containing functions, these functions need to be implemented in C#. The goal is to start supporting more and more functions, but if a function is not supported, then the following code can be used to register a missing function:
+As the framework is interpreting expressions containing functions, these functions need to be implemented in Python. The goal is to start supporting more and more functions, but if a function is not supported, then the following code can be used to register a missing function:
 
-```csharp
-   FunctionsRepository.Register("concat", (IEnumerable<object> arguments) => string.Concat(arguments));
-   FunctionsRepository.Register("trim", (string text, string trimArgument) => text.Trim(trimArgument[0]));
+```python
+   FunctionsRepository.register("concat", lambda arguments: "".join(arguments))
+   FunctionsRepository.register("trim", lambda text, trim_argument: text.strip(trim_argument[0]))
 ``` 
 
 On runtime when evaluating expressions, the framework will try to find a matching function and assert the expected amount of arguments are supplied. If no matching function is found, then an exception will be thrown.
