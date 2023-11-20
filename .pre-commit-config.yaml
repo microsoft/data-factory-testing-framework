@@ -17,8 +17,8 @@ repos:
     -   id: pytest
         name: pytest
         # we need to use bash to run poetry as we need to change directory
-        # before running the tests
-        entry: bash -c "cd src/python && poetry run pytest tests"
+        # before running the tests + examples
+        entry: bash -c "cd src/python && poetry run pytest ."
         language: system
         types: [python]
         require_serial: true
