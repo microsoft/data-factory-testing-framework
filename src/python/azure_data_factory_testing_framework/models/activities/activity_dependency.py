@@ -4,7 +4,7 @@ from azure_data_factory_testing_framework.state.dependency_condition import Depe
 
 
 class ActivityDependency:
-    def __init__(self, **kwargs: Any) -> None: # noqa: ANN401
+    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
         """ActivityDependency.
 
         Args:
