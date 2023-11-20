@@ -59,7 +59,7 @@ class Pipeline:
         for parameter in parameters:
             if sum(1 for p in parameters if p.name == parameter.name and p.type == parameter.type) > 1:
                 raise ValueError(
-                    f"Duplicate parameter with name '{parameter.name}' and type 'RunParameterType.{parameter.type}' found in pipeline '{self.name}'",
+                    f"Duplicate parameter with name '{parameter.name}' and type '{parameter.type}' found in pipeline '{self.name}'",
                 )
 
     def get_run_variables(self) -> List[PipelineRunVariable]:
