@@ -1,18 +1,21 @@
 from typing import Any, List
 
-from azure_data_factory_testing_framework.models.activities.activity_dependency import ActivityDependency
 from azure_data_factory_testing_framework.models.activities.control_activity import ControlActivity
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 
 
 class ExecutePipelineActivity(ControlActivity):
-    def __init__(self, name: str, depends_on: List[ActivityDependency] = None, **kwargs: Any) -> None:  # noqa: ANN401
-        """This is the class that represents the Execute Pipeline activity in the pipeline."""
+    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+        """This is the class that represents the Execute Pipeline activity in the pipeline.
+
+        Args:
+            **kwargs: ExecutePipelineActivity properties coming directly from the json representation of the activity.
+        """
         if "type" not in kwargs:
             kwargs["type"] = "ExecutePipeline"
 
-        super(ControlActivity, self).__init__(name, depends_on, **kwargs)
+        super(ControlActivity, self).__init__(**kwargs)
 
         self.parameters: dict = self.type_properties["parameters"]
 

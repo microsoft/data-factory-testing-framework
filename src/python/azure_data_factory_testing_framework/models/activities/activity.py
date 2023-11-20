@@ -9,37 +9,22 @@ from azure_data_factory_testing_framework.state.dependency_condition import Depe
 
 
 class Activity:
-    def __init__(self, name: str, depends_on: List[ActivityDependency] = None, **kwargs: Any) -> None:  # noqa: ANN401
-        """FabricActivity with dynamic dicts.
+    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+        """Activity with dynamic dicts.
 
         Args:
-            name: Name of the activity.
-            depends_on: List of activities that this activity depends on.
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
+            **kwargs: Activity properties coming directly from the json representation of the activity.
         """
-        if depends_on is None:
-            depends_on = []
-
-        self.name = name
-        self.type = type
-        self.depends_on = depends_on
+        self.name = kwargs["name"]
+        self.type = kwargs["type"]
+        self.depends_on: List[ActivityDependency] = []
         if "dependsOn" in kwargs:
-            self.depends_on = []
             for dependency in kwargs["dependsOn"]:
-                self.depends_on.append(
-                    ActivityDependency(
-                        activity=dependency["activity"], dependency_conditions=dependency["dependencyConditions"]
-                    )
-                )
+                self.depends_on.append(ActivityDependency(**dependency))
 
-        if "policy" in kwargs:
-            self.policy: dict = kwargs["policy"]
-
-        if "typeProperties" in kwargs:
-            self.type_properties: dict = kwargs["typeProperties"]
-        else:
-            self.type_properties: dict = {}
+        self.policy = kwargs["policy"] if "policy" in kwargs else {}
+        self.type_properties = kwargs["typeProperties"] if "typeProperties" in kwargs else {}
+        self.all_properties = kwargs
 
         self.status: DependencyCondition = None
 

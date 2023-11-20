@@ -11,7 +11,11 @@ class DataFactoryElement(Generic[T]):
     value: T
 
     def __init__(self, expression: str) -> None:
-        """DataFactoryElement."""
+        """DataFactoryElement.
+
+        Args:
+            expression: Expression to evaluate. (e.g. @concat(@pipeline().parameters.pipelineName, '-pipeline'))
+        """
         self.expression = expression
         self.value: Union[str, int, bool, float] = None
 

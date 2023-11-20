@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 from azure_data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
 from azure_data_factory_testing_framework.models.activities.activity import Activity
@@ -9,26 +9,20 @@ class Pipeline:
     def __init__(
         self,
         name: str,
-        parameters: dict,
-        variables: dict = None,
-        activities: List[Activity] = None,
-        annotations: List = None,
+        **kwargs: Any,  # noqa: ANN401
     ) -> None:
-        """This is the class that represents the pipeline in the pipeline."""
-        if variables is None:
-            variables = {}
+        """This is the class that represents a pipeline.
 
-        if activities is None:
-            activities = []
-
-        if annotations is None:
-            annotations = []
-
+        Args:
+            name: Name of the pipeline.
+            activities: List of activities in the pipeline.
+            **kwargs: Pipeline properties coming directly from the json representation of the pipeline.
+        """
         self.name = name
-        self.parameters = parameters
-        self.variables = variables
-        self.activities = activities
-        self.annotations = annotations
+        self.parameters: dict = kwargs["parameters"] if "parameters" in kwargs else {}
+        self.variables: dict = kwargs["variables"] if "variables" in kwargs else {}
+        self.activities = kwargs["activities"] if "activities" in kwargs else []
+        self.annotations = kwargs["annotations"] if "annotations" in kwargs else []
 
     def get_activity_by_name(self, name: str) -> Activity:
         """Get an activity by name. Throws an exception if the activity is not found.
@@ -69,7 +63,7 @@ class Pipeline:
                 )
 
     def get_run_variables(self) -> List[PipelineRunVariable]:
-        """Get the run variables for the pipeline."""
+        """Get the run variables for the pipeline. This can be used to generate the instance variables for a pipeline run."""
         run_variables = []
         for variable_name, variable_value in self.variables.items():
             run_variables.append(PipelineRunVariable(variable_name, variable_value.get("default_value", None)))
