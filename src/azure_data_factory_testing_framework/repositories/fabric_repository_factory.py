@@ -2,32 +2,34 @@ import os
 from typing import List
 
 from azure_data_factory_testing_framework.deserializers._deserializer_fabric import parse_pipeline_from_json
-from azure_data_factory_testing_framework.repositories.data_factory_repository import DataFactoryRepository
+from azure_data_factory_testing_framework.models.pipeline import Pipeline
+from azure_data_factory_testing_framework.repositories.base_repository_factory import BaseRepositoryFactory
 
 
-class FabricRepositoryFactory:
-    @staticmethod
-    def parse_from_folder(folder_path: str) -> DataFactoryRepository:
-        pipelines = FabricRepositoryFactory._get_data_factory_pipelines_by_folder_path(folder_path)
-        return DataFactoryRepository(pipelines)
-
-    @staticmethod
-    def _get_data_factory_pipelines_by_folder_path(folder_path: str) -> list:
-        pipeline_files = FabricRepositoryFactory._find_files_with_name_in_folder("pipeline-content.json", folder_path)
+class FabricRepositoryFactory(BaseRepositoryFactory):
+    def _get_data_factory_pipelines_by_folder_path(self, folder_path: str) -> list[Pipeline]:
+        pipeline_folders = FabricRepositoryFactory._find_folders_containing_pipeline(folder_path)
         pipelines = []
-        for pipeline_file in pipeline_files:
-            with open(pipeline_file, "r") as f:
-                pipelines.append(parse_pipeline_from_json(f.read()))
+        for pipeline_folder in pipeline_folders:
+            pipeline_file = os.path.join(pipeline_folder, "pipeline-content.json")
+            pipeline_metadata_file = os.path.join(pipeline_folder, "item.metadata.json")
+            with open(pipeline_file, "r") as pipeline_file, open(pipeline_metadata_file, "r") as pipeline_metadata_file:
+                pipelines.append(parse_pipeline_from_json(pipeline_metadata_file.read(), pipeline_file.read()))
 
         return pipelines
 
     @staticmethod
-    def _find_files_with_name_in_folder(filename: str, search_path: str) -> List[str]:
-        result = []
+    def _find_folders_containing_pipeline(search_path: str) -> List[str]:
+        pipeline_folders = []
 
-        # Walk through the directory tree
+        # Walk through the directory tree and fine pipeline folders
         for root, _, files in os.walk(search_path):
-            if filename in files:
-                result.append(os.path.join(root, filename))
+            if "pipeline-content.json" in files:
+                pipeline_folders.append(root)
 
-        return result
+        # Check if each folder contains metadata file
+        for pipeline_folder in pipeline_folders:
+            if "item.metadata.json" not in os.listdir(pipeline_folder):
+                raise FileNotFoundError(f"Pipeline folder {pipeline_folder} does not contain metadata file")
+
+        return pipeline_folders

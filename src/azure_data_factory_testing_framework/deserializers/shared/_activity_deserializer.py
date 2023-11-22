@@ -13,7 +13,6 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
         return SetVariableActivity(**activity_data)
     elif activity_data["type"] == "Until":
         activities = _get_activity_from_activities_data(activity_data["activities"])
-
         return UntilActivity(activities=activities, **activity_data)
     elif activity_data["type"] == "ExecutePipeline":
         return ExecutePipelineActivity(**activity_data)

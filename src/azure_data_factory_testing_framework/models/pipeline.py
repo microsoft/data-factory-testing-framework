@@ -9,6 +9,7 @@ class Pipeline:
     def __init__(
         self,
         name: str,
+        activities: List[Activity],
         **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """This is the class that represents a pipeline.
@@ -21,7 +22,7 @@ class Pipeline:
         self.name = name
         self.parameters: dict = kwargs["parameters"] if "parameters" in kwargs else {}
         self.variables: dict = kwargs["variables"] if "variables" in kwargs else {}
-        self.activities = kwargs["activities"] if "activities" in kwargs else []
+        self.activities = activities
         self.annotations = kwargs["annotations"] if "annotations" in kwargs else []
 
     def get_activity_by_name(self, name: str) -> Activity:

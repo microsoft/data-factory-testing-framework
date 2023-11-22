@@ -56,12 +56,12 @@ class TestFramework:
         """
         if framework_type == TestFrameworkType.Fabric:
             if root_folder_path is not None:
-                self.repository = FabricRepositoryFactory.parse_from_folder(root_folder_path)
+                self.repository = FabricRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self.repository = DataFactoryRepository([])
         elif framework_type == TestFrameworkType.DataFactory:
             if root_folder_path is not None:
-                self.repository = DataFactoryRepositoryFactory.parse_from_folder(root_folder_path)
+                self.repository = DataFactoryRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self.repository = DataFactoryRepository([])
         elif framework_type == TestFrameworkType.Synapse:

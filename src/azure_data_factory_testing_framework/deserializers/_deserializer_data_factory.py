@@ -14,13 +14,11 @@ def parse_pipeline_from_json(json_str: str) -> Pipeline:
 
     name = json_data["name"]
     properties = json_data.get("properties", {})
-    activities_data = properties.get("activities", [])
+    activities = properties.get("activities", [])
 
-    activities = []
-    for activity_data in activities_data:
-        activities.append(_get_activity_from_activity_data(activity_data))
+    for activity_data in activities:
+        activities[activities.index(activity_data)] = _get_activity_from_activity_data(activity_data)
 
-    properties["activities"] = activities
     pipeline = Pipeline(name, **properties)
 
     _find_and_replace_expressions_in_dict(pipeline)
