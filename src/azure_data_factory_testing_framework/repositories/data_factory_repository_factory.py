@@ -1,6 +1,8 @@
 import os
 
-from azure_data_factory_testing_framework.deserializers._deserializer_data_factory import parse_pipeline_from_json
+from azure_data_factory_testing_framework.deserializers._deserializer_data_factory import (
+    parse_data_factory_pipeline_from_pipeline_json,
+)
 from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.repositories.base_repository_factory import BaseRepositoryFactory
 
@@ -14,6 +16,6 @@ class DataFactoryRepositoryFactory(BaseRepositoryFactory):
             file_path = os.path.join(pipeline_path, file)
             if file.endswith(".json"):
                 with open(file_path, "r") as f:
-                    pipelines.append(parse_pipeline_from_json(f.read()))
+                    pipelines.append(parse_data_factory_pipeline_from_pipeline_json(f.read()))
 
         return pipelines
