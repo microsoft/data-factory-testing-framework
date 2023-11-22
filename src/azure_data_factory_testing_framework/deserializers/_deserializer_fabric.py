@@ -9,20 +9,18 @@ from azure_data_factory_testing_framework.deserializers.shared._data_factory_ele
 from azure_data_factory_testing_framework.models.pipeline import Pipeline
 
 
-def parse_pipeline_from_json(json_str: str) -> Pipeline:
-    json_data = json.loads(json_str)
+def parse_pipeline_from_json(metadata_json: str, pipeline_json: str) -> Pipeline:
+    metadata_json = json.loads(metadata_json)
+    pipeline_json = json.loads(pipeline_json)
 
-    properties = json_data.get("properties", {})
-    activities_data = properties.get("activities", [])
+    properties = pipeline_json.get("properties", {})
+    activities = properties.get("activities", [])
 
-    activities = []
-    for activity_data in activities_data:
-        activities.append(_get_activity_from_activity_data(activity_data))
+    for activity_data in activities:
+        activities[activities.index(activity_data)] = _get_activity_from_activity_data(activity_data)
 
-    # TODO: Load pipeline_name from item.metadata.json
-    properties["activities"] = activities
-    pipeline = Pipeline("batch_job", **properties)
+    pipeline_json = Pipeline(metadata_json["displayName"], **properties)
 
-    _find_and_replace_expressions_in_dict(pipeline)
+    _find_and_replace_expressions_in_dict(pipeline_json)
 
-    return pipeline
+    return pipeline_json

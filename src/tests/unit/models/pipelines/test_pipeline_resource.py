@@ -9,6 +9,7 @@ def test_when_validate_parameters_is_accurate_should_pass() -> None:
     # Arrange
     pipeline = Pipeline(
         name="pipeline",
+        activities=[],
         parameters={
             "pipelineParameterName": {
                 "type": "String",
@@ -32,6 +33,7 @@ def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() 
     # Arrange
     pipeline = Pipeline(
         name="pipeline",
+        activities=[],
         parameters={
             "pipelineParameterName": {
                 "type": "String",
@@ -62,6 +64,7 @@ def test_when_duplicate_parameters_supplied_should_throw_error() -> None:
     # Arrange
     pipeline = Pipeline(
         name="pipeline",
+        activities=[],
         parameters={
             "pipelineParameterName": {
                 "type": "String",
