@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generator, List
+from typing import Any, Callable, Iterator, List
 
 from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.models.activities.control_activity import ControlActivity
@@ -38,8 +38,8 @@ class IfConditionActivity(ControlActivity):
     def evaluate_control_activity_iterations(
         self,
         state: PipelineRunState,
-        evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ) -> Generator[Activity, None, None]:
+        evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
+    ) -> Iterator[Activity]:
         scoped_state = state.create_iteration_scope(None)
         activities = self.if_true_activities if self.expression.value else self.if_false_activities
         for activity in evaluate_activities(activities, scoped_state):

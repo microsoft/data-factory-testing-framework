@@ -5,9 +5,9 @@ from azure_data_factory_testing_framework.models.data_factory_element import Dat
 from azure_data_factory_testing_framework.state import PipelineRunState, RunParameterType
 from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
-from azure_data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
-TestFramework(framework_type="Fabric")
+TestFramework(framework_type=TestFrameworkType.Fabric)
 
 
 @pytest.mark.parametrize(

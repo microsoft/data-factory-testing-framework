@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import Iterator, List
 
 from azure.core import CaseInsensitiveEnumMeta
 
@@ -15,6 +15,7 @@ from azure_data_factory_testing_framework.models.activities.for_each_activity im
 from azure_data_factory_testing_framework.models.activities.if_condition_activity import (
     IfConditionActivity,
 )
+from azure_data_factory_testing_framework.models.activities.switch_activity import SwitchActivity
 from azure_data_factory_testing_framework.models.activities.until_activity import UntilActivity
 from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.repositories.data_factory_repository import DataFactoryRepository
@@ -69,7 +70,7 @@ class TestFramework:
 
         self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
-    def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> List[Activity]:
+    def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> Iterator[Activity]:
         """Evaluates a single activity given a state. Any expression part of the activity is evaluated based on the state of the pipeline.
 
         Args:
@@ -81,7 +82,7 @@ class TestFramework:
         """
         return self.evaluate_activities([activity], state)
 
-    def evaluate_pipeline(self, pipeline: Pipeline, parameters: List[RunParameter]) -> List[Activity]:
+    def evaluate_pipeline(self, pipeline: Pipeline, parameters: List[RunParameter]) -> Iterator[Activity]:
         """Evaluates all pipeline activities using the provided parameters.
 
         The order of activity execution is simulated based on the dependencies.
@@ -98,7 +99,7 @@ class TestFramework:
         state = PipelineRunState(parameters, pipeline.get_run_variables())
         return self.evaluate_activities(pipeline.activities, state)
 
-    def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> List[Activity]:
+    def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> Iterator[Activity]:
         """Evaluates all activities using the provided state.
 
         The order of activity execution is simulated based on the dependencies.
@@ -158,5 +159,6 @@ class TestFramework:
             isinstance(activity, UntilActivity)
             or isinstance(activity, ForEachActivity)
             or isinstance(activity, IfConditionActivity)
+            or isinstance(activity, SwitchActivity)
             or isinstance(activity, ExecutePipelineActivity)
         )

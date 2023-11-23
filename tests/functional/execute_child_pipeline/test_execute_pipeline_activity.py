@@ -1,6 +1,5 @@
 import pytest
 from azure_data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
-from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.state import RunParameter, RunParameterType
 from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
@@ -22,7 +21,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
             RunParameter(RunParameterType.Pipeline, "Body", '{ "key": "value" }'),
         ],
     )
-    child_web_activity: Activity = next(activities)
+    child_web_activity = next(activities)
 
     # Assert
     assert child_web_activity is not None

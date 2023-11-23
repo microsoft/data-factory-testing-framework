@@ -1,5 +1,4 @@
 import pytest
-from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.state import RunParameterType
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
@@ -58,7 +57,7 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     )
 
     # Assert
-    activity: Activity = next(activities)
+    activity = next(activities)
     assert activity.name == "Set UserAssignedIdentityReference"
     assert activity.type_properties["variableName"] == "UserAssignedIdentityReference"
     assert (
