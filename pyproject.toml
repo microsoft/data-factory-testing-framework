@@ -1,0 +1,75 @@
+[tool.poetry]
+name = "azure-data-factory-testing-framework"
+version = "0.0.0"
+description = ""
+authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>", "Yennifer Santos <ysantos@microsoft.com>", "Jaya Kumar <kumarjaya@microsoft.com>", "Leonard Herold <lherold@microsoft.com>"]
+readme = "README.md"
+license = "MIT"
+include = [ "README.md", "LICENSE" ]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+azure-mgmt-datafactory = "^3.1.0"
+azure-identity = "^1.14.1"
+astor = "^0.8.1"
+docstring-parser = "^0.15"
+
+[tool.poetry.group.dev.dependencies]
+mutatest = "^3.1.0"
+pytest = "^7.4.3"
+ruff = "^0.1.5"
+pre-commit = "^3.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+select = [
+    "A", # flake8 builtins
+    "ANN", # annotations
+    "B", # bugbear
+    "COM", # flake8 commas
+    "D", # Pydoc style docstrings
+    "E", # PEP8 conventions 
+    "F", # pyflakes
+    "N", # PEP8 naming conventions
+    "I"
+]
+ignore = [
+    "ANN101", # Ignore missing type annotation for self in method
+    "D100", # Ignore missing docstring in public module
+    "D101",
+    "D102",
+    "D103",
+    "D104", # Ignore missing docstring in public package
+    # ruff format conflicts certain rules (see https://docs.astral.sh/ruff/formatter/#format-suppression)
+    "E111",
+    "E114",
+    "E117",
+    "COM812",
+    "COM819",
+    "D206",
+    "D300",
+    "ISC001",
+    "ISC002",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "W191",
+]
+extend-exclude = ["azure_data_factory_testing_framework/data_factory/generated/**"]
+line-length = 120
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 160 # relax line length limit to 140 characters (wrapping happens at 120)
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+pythonpath = ["."]
