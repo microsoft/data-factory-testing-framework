@@ -54,24 +54,24 @@ The samples seen below is the _only_ code that you need to write! The framework 
 
     ```python
     # Arrange
-    activity: WebHookActivity = pipeline.get_activity_by_name("Trigger Azure Batch Job")
+    activity: Activity = pipeline.get_activity_by_name("Trigger Azure Batch Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](RunParameterType.Global, "BaseUrl", "https://example.com"),
-            RunParameter[str](RunParameterType.Pipeline, "JobId", "123"),
+            RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "123"),
         ],
         variables=[
-            PipelineVariable("JobName", "Job-123"),
+            PipelineRunVariable("JobName", "Job-123"),
         ])
     state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
-   
+
     # Act
     activity.evaluate(state)
 
     # Assert
-    assert "https://example.com/jobs" == activity.url.value
-    assert "POST" == activity.method
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.body.value
+    assert "https://example.com/jobs" == activity.type_properties["url"].value
+    assert "POST" == activity.type_properties["method"].value
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.type_properties["body"].value
     ```
    
 2. Evaluate Pipelines and test the flow of activities given a specific input
@@ -79,8 +79,6 @@ The samples seen below is the _only_ code that you need to write! The framework 
     ```python
     # Arrange
     pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
-    assert "example-pipeline" == pipeline.name
-    assert 6 == len(pipeline.activities)
 
     # Runs the pipeline with the provided parameters
     activities = test_framework.evaluate_pipeline(pipeline, [
@@ -89,28 +87,25 @@ The samples seen below is the _only_ code that you need to write! The framework 
         RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
     ])
 
-    set_variable_activity: SetVariableActivity = next(activities)
+    set_variable_activity: Activity = next(activities)
     assert set_variable_activity is not None
     assert "Set JobName" == set_variable_activity.name
-    assert "JobName" == set_variable_activity.variable_name
-    assert "Job-123" == set_variable_activity.value.value
+    assert "JobName" == activity.type_properties["variableName"]
+    assert "Job-123" == activity.type_properties["value"].value
 
-    get_version_activity: WebActivity = next(activities)
+    get_version_activity = next(activities)
     assert get_version_activity is not None
     assert "Get version" == get_version_activity.name
-    assert "https://example.com/version" == get_version_activity.url.value
-    assert "GET" == get_version_activity.method
-    assert get_version_activity.body is None
-    state.add_activity_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
+    assert "https://example.com/version" == get_version_activity.type_properties["url"].value
+    assert "GET" == get_version_activity.type_properties["method"]
+    get_version_activity.set_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
 
-    create_batch_activity: WebHookActivity = next(activities)
+    create_batch_activity = next(activities)
     assert create_batch_activity is not None
     assert "Trigger Azure Batch Job" == create_batch_activity.name
-    assert "https://example.com/jobs" == create_batch_activity.url.value
-    assert "POST" == create_batch_activity.method
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.body.value
-    state.add_activity_result(create_batch_activity.name, DependencyCondition.Succeeded, {"JobId": "123"})
-    create_batch_activity.set_result(DependencyCondition.Succeeded, "OK")
+    assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].value
+    assert "POST" == create_batch_activity.type_properties["method"]
+    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.type_properties["body"].value
 
     with pytest.raises(StopIteration):
         next(activities)
