@@ -125,7 +125,7 @@ class TestFramework:
                     yield evaluated_activity
 
                 any_activity_evaluated = True
-                state.add_activity_result(activity.name, activity.status)
+                state.add_activity_result(activity.name, activity.status, activity.output)
 
                 if self._is_iteration_activity(activity):
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:

@@ -98,7 +98,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
     assert "Get version" == get_version_activity.name
     assert "https://example.com/version" == get_version_activity.type_properties["url"].value
     assert "GET" == get_version_activity.type_properties["method"]
-    get_version_activity.set_result(get_version_activity.name, DependencyCondition.Succeeded, {"Version": "version1"})
+    get_version_activity.set_result(DependencyCondition.Succeeded,{"Version": "version1"})
 
     create_batch_activity = next(activities)
     assert create_batch_activity is not None

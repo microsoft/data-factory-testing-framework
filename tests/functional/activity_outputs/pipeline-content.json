@@ -1,0 +1,58 @@
+{
+    "name": "set_version",
+    "properties": {
+        "activities": [
+            {
+                "name": "SetVersion",
+                "description": "",
+                "type": "SetVariable",
+                "state": "Active",
+                "onInactiveMarkAs": "Succeeded",
+                "dependsOn": [
+                    {
+                        "activity": "GetVersion",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "version",
+                    "value": {
+                        "value": "@activity('GetVersion').output.version",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "GetVersion",
+                "type": "WebActivity",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "relativeUrl": "version",
+                    "method": "GET"
+                },
+                "externalReferences": {
+                    "connection": "6d70b649-d684-439b-a9c2-d2bb5241cd39"
+                }
+            }
+        ],
+        "variables": {
+            "version": {
+                "type": "String"
+            }
+        },
+        "annotations": []
+    }
+}

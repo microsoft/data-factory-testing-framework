@@ -34,6 +34,7 @@ class Activity:
         self.all_properties = kwargs
 
         self.status: DependencyCondition = None
+        self.output = {}
 
     def evaluate(self, state: PipelineRunState) -> "Activity":
         self._evaluate_expressions(self, state, types_to_ignore=[Activity])
@@ -105,3 +106,7 @@ class Activity:
                     continue
 
                 self._evaluate_expressions(item, state, visited, types_to_ignore)
+
+    def set_result(self, result: DependencyCondition, output: Any) -> None:  # noqa: ANN401
+        self.status = result
+        self.output = output
