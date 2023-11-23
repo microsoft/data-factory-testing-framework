@@ -6,9 +6,8 @@ from azure_data_factory_testing_framework.state import PipelineRunState
 
 
 def find_and_replace_activity(expression: str, state: PipelineRunState) -> (Union[str, bool, int, float], bool):
-    pattern = r"activity\('(?P<activity_name>.*?)'\)(?:\.(\w+))+$"
-    match = re.match(pattern, expression)
-    if match:
+    pattern = r"@?activity\('(?P<activity_name>.*?)'\)(?:\.(\w+))+$"
+    for match in re.finditer(pattern, expression, re.MULTILINE):
         activity_name = match.group("activity_name")
         fields = match.group(0).split(".")[1:]
 
