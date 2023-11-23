@@ -1,5 +1,4 @@
 import pytest
-from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
@@ -18,7 +17,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
         pipeline,
         [],
     )
-    activity: Activity = next(activities)
+    activity = next(activities)
 
     # Assert
     assert activity is not None

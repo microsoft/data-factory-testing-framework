@@ -5,12 +5,12 @@ from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_do
 from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
 from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
-from azure_data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:
     # Arrange
-    TestFramework(framework_type="Fabric")
+    TestFramework(framework_type=TestFrameworkType.Fabric)
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",
@@ -35,7 +35,7 @@ def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> N
 
 def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
     # Arrange
-    TestFramework(framework_type="Fabric")
+    TestFramework(framework_type=TestFrameworkType.Fabric)
     variable_name = "TestVariable"
     set_variable_activity = SetVariableActivity(
         name="SetVariableActivity",

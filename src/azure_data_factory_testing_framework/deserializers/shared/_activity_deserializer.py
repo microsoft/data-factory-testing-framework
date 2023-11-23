@@ -5,6 +5,7 @@ from azure_data_factory_testing_framework.models.activities.execute_pipeline_act
 from azure_data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
 from azure_data_factory_testing_framework.models.activities.if_condition_activity import IfConditionActivity
 from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from azure_data_factory_testing_framework.models.activities.switch_activity import SwitchActivity
 from azure_data_factory_testing_framework.models.activities.until_activity import UntilActivity
 
 
@@ -25,6 +26,15 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
     elif activity_data["type"] == "ForEach":
         child_activities = _get_activity_from_activities_data(activity_data["activities"])
         return ForEachActivity(activities=child_activities, **activity_data)
+    elif activity_data["type"] == "Switch":
+        default_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["defaultActivities"])
+        cases_activities = {}
+        for case in activity_data["typeProperties"]["cases"]:
+            case_value = case["value"]
+            activities = case["activities"]
+            cases_activities[case_value] = _get_activity_from_activities_data(activities)
+
+        return SwitchActivity(default_activities=default_activities, cases_activities=cases_activities, **activity_data)
     else:
         return Activity(**activity_data)
 

@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generator
+from typing import Any, Callable, Iterator, List
 
 from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.state import PipelineRunState
@@ -16,6 +16,6 @@ class ControlActivity(Activity):
     def evaluate_control_activity_iterations(
         self,
         state: PipelineRunState,
-        evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ) -> Generator[Activity, None, None]:
+        evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
+    ) -> Iterator[Activity]:
         yield from list()

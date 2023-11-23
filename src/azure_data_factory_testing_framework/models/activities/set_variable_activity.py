@@ -25,6 +25,11 @@ class SetVariableActivity(ControlActivity):
         if self.type_properties["variableName"] == "pipelineReturnValue":
             return self
 
-        state.set_variable(self.type_properties["variableName"], self.type_properties["value"].evaluate(state))
+        if isinstance(self.value, DataFactoryElement):
+            evaluated_value = self.value.evaluate(state)
+        else:
+            evaluated_value = self.value
+
+        state.set_variable(self.type_properties["variableName"], evaluated_value)
 
         return self

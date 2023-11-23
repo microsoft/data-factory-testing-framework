@@ -1,6 +1,5 @@
 # flake8: noqa: E501
 import pytest
-from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.models.pipeline import Pipeline
 from azure_data_factory_testing_framework.state import (
     PipelineRunState,
@@ -26,7 +25,7 @@ def pipeline(test_framework: TestFramework) -> Pipeline:
 
 def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set Job Container URL")
+    activity = pipeline.get_activity_by_name("Set Job Container URL")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerURL"),
@@ -49,7 +48,7 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
 
 def test_set_user_assigned_identity_reference(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set UserAssignedIdentityReference")
+    activity = pipeline.get_activity_by_name("Set UserAssignedIdentityReference")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="UserAssignedIdentityReference"),
@@ -77,7 +76,7 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
 
 def test_set_manager_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set ManagerApplicationPackagePath")
+    activity = pipeline.get_activity_by_name("Set ManagerApplicationPackagePath")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="ManagerApplicationPackagePath"),
@@ -100,7 +99,7 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
 
 def test_set_workload_application_package_path(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set WorkloadApplicationPackagePath")
+    activity = pipeline.get_activity_by_name("Set WorkloadApplicationPackagePath")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="WorkloadApplicationPackagePath"),
@@ -123,7 +122,7 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
 
 def test_set_common_environment_settings(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set CommonEnvironmentSettings")
+    activity = pipeline.get_activity_by_name("Set CommonEnvironmentSettings")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="CommonEnvironmentSettings"),
@@ -196,7 +195,7 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
 
 def test_create_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Create Job Storage Container")
+    activity = pipeline.get_activity_by_name("Create Job Storage Container")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(
@@ -221,7 +220,7 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
 
 def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Set JobContainerName")
+    activity = pipeline.get_activity_by_name("Set JobContainerName")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName"),
@@ -240,7 +239,7 @@ def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipelin
 
 def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Start Job")
+    activity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
         parameters=[
             RunParameter[str](
@@ -383,7 +382,7 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
 
 def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Monitor Batch Job")
+    activity = pipeline.get_activity_by_name("Monitor Batch Job")
     state = PipelineRunState(
         parameters=[
             RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
@@ -402,7 +401,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
 
 def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Copy Output Files")
+    activity = pipeline.get_activity_by_name("Copy Output Files")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
@@ -439,7 +438,7 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) ->
 
 def test_delete_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Delete Job Storage Container")
+    activity = pipeline.get_activity_by_name("Delete Job Storage Container")
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),

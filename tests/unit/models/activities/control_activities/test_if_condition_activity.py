@@ -3,7 +3,7 @@ from azure_data_factory_testing_framework.models.activities.if_condition_activit
 from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
 from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
-from azure_data_factory_testing_framework.test_framework import TestFramework
+from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_when_evaluated_should_evaluate_expression() -> None:
@@ -31,7 +31,7 @@ def test_when_evaluated_should_evaluate_correct_child_activities(
     expected_activity_name: str,
 ) -> None:
     # Arrange
-    test_framework = TestFramework(framework_type="Fabric")
+    test_framework = TestFramework(framework_type=TestFrameworkType.Fabric)
     expression = "@equals(1, 1)" if expression_outcome else "@equals(1, 2)"
     activity = IfConditionActivity(
         name="IfConditionActivity",

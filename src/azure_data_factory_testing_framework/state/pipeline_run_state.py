@@ -57,7 +57,7 @@ class PipelineRunState(RunState):
             "output": output,
         }
 
-    def create_iteration_scope(self, iteration_item: str) -> "PipelineRunState":
+    def create_iteration_scope(self, iteration_item: str = None) -> "PipelineRunState":
         """Used to create a new scope for a ControlActivity like ForEach, If and Until activities.
 
         Args:

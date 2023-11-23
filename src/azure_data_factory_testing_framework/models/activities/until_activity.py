@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generator, List
+from typing import Any, Callable, Iterator, List
 
 from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.models.activities.control_activity import ControlActivity
@@ -35,8 +35,8 @@ class UntilActivity(ControlActivity):
     def evaluate_control_activity_iterations(
         self,
         state: PipelineRunState,
-        evaluate_activities: Callable[[PipelineRunState], Generator[Activity, None, None]],
-    ) -> Generator[Activity, None, None]:
+        evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
+    ) -> Iterator[Activity]:
         while True:
             scoped_state = state.create_iteration_scope(None)
             for activity in evaluate_activities(self.activities, scoped_state):
