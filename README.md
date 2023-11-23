@@ -1,43 +1,56 @@
-# Azure Data Factory v2 - Unit Testing Framework
+# Data Factory - Unit Testing Framework
 
-A unit test framework that allows you to write unit and functional tests for Azure Data Factory v2 against the git integrated json resource files.
+A unit test framework that allows you to write unit and functional tests for Data Factory pipelines against the git integrated json resource files.
+
+Supporting currently:
+* [Fabric Data Factory](https://learn.microsoft.com/en-us/fabric/data-factory/)
+* [Azure Data Factory v2](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory)
+
+Planned:
+* [Azure Synapse Analytics](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext&tabs=data-factory/)
+
 
 ## Disclaimer
 
-This unit test framework is not officially supported. It is currently in experimental state and has not been tested with every single data factory resource. It should support all data factory resources, but has not been thoroughly tested, please report any issues in the issues section and include an example of the data factory pipeline that is not working as expected.
+This unit test framework is not officially supported. It is currently in experimental state and has not been tested with every single data factory resource. It should support all activities out-of-the-box, but has not been thoroughly tested, please report any issues in the issues section and include an example of the pipeline that is not working as expected.
 
-If there's a lot of interest in this framework, then I will continue to improve it and move it to a production ready state. 
+If there's a lot of interest in this framework, then we will continue to improve it and move it to a production ready state. 
 
 ## Features
 
-1. Evaluate the outcome of any data factory resource result given a set of input parameters. The framework will evaluate parameters, globalParameters, variables, activityOutputs and their expressions, so that the final result can be asserted.
-2. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
-3. Automatically parse the entire data factory folder and parse any data factory entity into the correct typed class (1500+ classes available).
-4. Evaluate expressions, but not all functions are supported yet. You can always easily register your own custom functions.
+Goal: Validate that the evaluated pipeline configuration with its expressions are behaving as expected on runtime.
+
+1. Evaluate expressions with their functions and arguments instantly by using the framework's internal expression parser.
+2. Test a pipeline or activity against any state to assert expected outcome. State can be configured with pipeline parameters, global parameters, variables and activity outputs.
+3. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
+4. Dynamically supports all activity types with all their attributes.
+
+> Pipelines and activities are not executed on any Data Factory environment, but the evaluation of the pipeline configuration is validated locally. This is different from the "validation" functionality present in the UI, which only validates the syntax of the pipeline configuration.
+
 
 ## Why
 
-Azure Data Factory does not support unit testing out of the box. The only way to validate your changes is through manual testing or running e2e tests against a deployed data factory. These tests are great to have, but miss the following benefits that unit tests, like using this unit test framework, provides:
+Data Factory does not support unit testing out of the box. The only way to validate your changes is through manual testing or running e2e tests against a deployed data factory. These tests are great to have, but miss the following benefits that unit tests, like using this unit test framework, provides:
 
 * Shift left with immediate feedback on changes - Evaluate any individual data factory resource (pipelines, activities, triggers, datasets, linkedServices etc..), including (complex) expressions
 * Allows testing individual resources (e.g. activity) for many different input values to cover more scenarios.
 * Less issues in production - due to the fast nature of writing and running unit tests, you will write more tests in less time and therefore have a higher test coverage. This means more confidence in new changes, less risks in breaking existing features (regression tests) and thus far less issues in production.
 
-> Even though Azure Data Factory is a UI-driven tool and writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and existing pipelines will not break, without writing unit tests?
+> Even though Data Factory is UI-driven and writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and existing pipelines will not break, without writing unit tests?
 
 ## Getting started
 
-1. Create a Python project (pytest is used in examples)
+1. Set up an empty Python project with your favorite testing library
 2. Install the package using your preferred package manager:
-   * Pip: `pip install azure-datafactory-testingframework`
-   * Poetry: `poetry add azure-datafactory-testingframework`
+   * Pip: `pip install azure-data-factory-testing-framework`
+   * Poetry: `poetry add azure-data-factory-testing-framework`
 3. Start writing tests
 
 ## Features - Examples
 
 The samples seen below is the _only_ code that you need to write! The framework will take care of the rest. 
 
-1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API), LinkedServices, Datasets and Triggers
+1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API)
 
     ```python
     # Arrange
@@ -122,7 +135,7 @@ On runtime when evaluating expressions, the framework will try to find a matchin
 
 1. After parsing a data factory resource file, you can use the debugger to easily discover which classes are actually initialized so that you can cast them to the correct type.
 
-## Recommended development workflow
+## Recommended development workflow for Azure Data Factory v2
 
 * Use ADF Git integration
 * Use UI to create feature branch, build initial pipeline and save to feature branch
