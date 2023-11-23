@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "azure-data-factory-testing-framework"
 version = "0.0.0"
-description = ""
+description = "A unit test framework that allows you to write unit and functional tests for Data Factory pipelines against the git integrated json resource files."
 authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>", "Yennifer Santos <ysantos@microsoft.com>", "Jaya Kumar <kumarjaya@microsoft.com>", "Leonard Herold <lherold@microsoft.com>"]
 readme = "README.md"
 license = "MIT"
 include = [ "README.md", "LICENSE" ]
+keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
