@@ -1,0 +1,63 @@
+{
+    "name": "filter-test",
+    "properties": {
+        "activities": [
+            {
+                "name": "Filter1",
+                "type": "Filter",
+                "dependsOn": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@pipeline().parameters.input_values",
+                        "type": "Expression"
+                    },
+                    "condition": {
+                        "value": "@lessOrEquals(item(), 3)",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "Set variable1",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "Filter1",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "filtered_values",
+                    "value": {
+                        "value": "@activity('Filter1').output.value",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "input_values": {
+                "type": "array",
+                "defaultValue": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ]
+            }
+        },
+        "variables": {
+            "filtered_values": {
+                "type": "Array"
+            }
+        },
+        "annotations": []
+    }
+}

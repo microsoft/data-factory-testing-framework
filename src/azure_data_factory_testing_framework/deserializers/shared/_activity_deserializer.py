@@ -2,6 +2,7 @@ from typing import List
 
 from azure_data_factory_testing_framework.models.activities.activity import Activity
 from azure_data_factory_testing_framework.models.activities.execute_pipeline_activity import ExecutePipelineActivity
+from azure_data_factory_testing_framework.models.activities.filter_activity import FilterActivity
 from azure_data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
 from azure_data_factory_testing_framework.models.activities.if_condition_activity import IfConditionActivity
 from azure_data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
@@ -33,8 +34,9 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
             case_value = case["value"]
             activities = case["activities"]
             cases_activities[case_value] = _get_activity_from_activities_data(activities)
-
         return SwitchActivity(default_activities=default_activities, cases_activities=cases_activities, **activity_data)
+    elif activity_data["type"] == "Filter":
+        return FilterActivity(**activity_data)
     else:
         return Activity(**activity_data)
 
