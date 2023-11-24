@@ -144,7 +144,7 @@ class TestFramework:
 
                     if isinstance(activity, ControlActivity):
                         control_activity: ControlActivity = activity
-                        for child_activity in control_activity.evaluate_control_activity_iterations(
+                        for child_activity in control_activity.evaluate_control_activities(
                             state,
                             self.evaluate_activities,
                         ):

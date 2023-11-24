@@ -35,7 +35,7 @@ class IfConditionActivity(ControlActivity):
 
         return self
 
-    def evaluate_control_activity_iterations(
+    def evaluate_control_activities(
         self,
         state: PipelineRunState,
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
