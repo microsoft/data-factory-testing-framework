@@ -14,8 +14,6 @@ class FilterActivity(ControlActivity):
         """This is the class that represents the If Condition activity in the pipeline.
 
         Args:
-            if_true_activities: The deserialized activities that will be executed if the condition is true.
-            if_false_activities: The deserialized activities that will be executed if the condition is false.
             **kwargs: FilterActivity properties coming directly from the json representation of the activity.
         """
         kwargs["type"] = "Filter"
