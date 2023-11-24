@@ -107,6 +107,6 @@ class Activity:
 
                 self._evaluate_expressions(item, state, visited, types_to_ignore)
 
-    def set_result(self, result: DependencyCondition, output: Any) -> None:  # noqa: ANN401
+    def set_result(self, result: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
         self.status = result
         self.output = output

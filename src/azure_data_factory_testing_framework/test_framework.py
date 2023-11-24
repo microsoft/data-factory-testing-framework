@@ -11,6 +11,7 @@ from azure_data_factory_testing_framework.models.activities.control_activity imp
 from azure_data_factory_testing_framework.models.activities.execute_pipeline_activity import (
     ExecutePipelineActivity,
 )
+from azure_data_factory_testing_framework.models.activities.fail_activity import FailActivity
 from azure_data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
 from azure_data_factory_testing_framework.models.activities.if_condition_activity import (
     IfConditionActivity,
@@ -112,6 +113,7 @@ class TestFramework:
         Returns:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
+        fail_activity_evaluated = False
         while len(state.scoped_pipeline_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
@@ -125,30 +127,41 @@ class TestFramework:
                 ):
                     yield evaluated_activity
 
+                if isinstance(activity, FailActivity):
+                    fail_activity_evaluated = True
+                    break
+
                 any_activity_evaluated = True
                 state.add_activity_result(activity.name, activity.status, activity.output)
 
+                # Check if there are any child activities to evaluate
                 if self._is_iteration_activity(activity):
+                    activities_iterator = []
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:
                         execute_pipeline_activity: ExecutePipelineActivity = activity
                         pipeline = self.repository.get_pipeline_by_name(
                             execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
                         )
-
-                        # Evaluate the pipeline with its own scope
-                        for child_activity in self.evaluate_pipeline(
+                        activities_iterator = self.evaluate_pipeline(
                             pipeline,
                             activity.get_child_run_parameters(state),
-                        ):
-                            yield child_activity
+                        )
 
-                    if isinstance(activity, ControlActivity):
+                    if not isinstance(activity, ExecutePipelineActivity) and isinstance(activity, ControlActivity):
                         control_activity: ControlActivity = activity
-                        for child_activity in control_activity.evaluate_control_activities(
+                        activities_iterator = control_activity.evaluate_control_activities(
                             state,
                             self.evaluate_activities,
-                        ):
-                            yield child_activity
+                        )
+
+                    for child_activity in activities_iterator:
+                        yield child_activity
+                        if isinstance(child_activity, FailActivity):
+                            fail_activity_evaluated = True
+                            break
+
+            if fail_activity_evaluated:
+                break
 
             if not any_activity_evaluated:
                 raise PipelineActivitiesCircularDependencyError()
