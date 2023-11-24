@@ -4,6 +4,7 @@
 {
     "python.testing.pytestArgs": [
         "."
+        "-vv"
     ],
     "python.testing.cwd": "${workspaceFolder}",
     "python.testing.pytestEnabled": true,
