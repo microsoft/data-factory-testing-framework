@@ -13,7 +13,7 @@ class ControlActivity(Activity):
         """
         super(Activity, self).__init__(**kwargs)
 
-    def evaluate_control_activity_iterations(
+    def evaluate_control_activities(
         self,
         state: PipelineRunState,
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
