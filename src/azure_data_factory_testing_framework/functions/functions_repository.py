@@ -25,6 +25,7 @@ class FunctionsRepository:
         "sub": math_functions.sub,
         "div": math_functions.div,
         "greaterOrEquals": logical_functions.greater_or_equals,
+        "lessOrEquals": logical_functions.less_or_equals,
         "not": logical_functions.not_,
         "empty": collection_functions.empty,
         "split": string_functions.split,
