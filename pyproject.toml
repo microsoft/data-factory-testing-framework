@@ -11,6 +11,12 @@ keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azur
 [tool.poetry.dependencies]
 python = "^3.9"
 azure-core = "^1.29.5"
+azure-mgmt-datafactory = "^3.1.0"
+azure-identity = "^1.14.1"
+astor = "^0.8.1"
+docstring-parser = "^0.15"
+xmltodict = "^0.13.0"
+lxml = "^4.9.3"
 
 [tool.poetry.group.dev.dependencies]
 mutatest = "^3.1.0"
