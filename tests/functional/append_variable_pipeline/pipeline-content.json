@@ -1,0 +1,58 @@
+{
+  "name": "append-variable-test",
+  "properties": {
+    "activities": [
+      {
+        "name": "Append variable1",
+        "type": "AppendVariable",
+        "dependsOn": [
+          {
+            "activity": "Set variable1",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "variableName": "values",
+          "value": {
+            "value": "@pipeline().parameters.appended_value",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Set variable1",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "values",
+          "value": {
+            "value": "@pipeline().parameters.initial_value",
+            "type": "Expression"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "initial_value": {
+        "type": "array",
+        "defaultValue": []
+      },
+      "appended_value": {
+        "type": "int"
+      }
+    },
+    "variables": {
+      "values": {
+        "type": "Array",
+        "defaultValue": []
+      }
+    },
+    "annotations": []
+  }
+}
