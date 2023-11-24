@@ -104,6 +104,23 @@ class PipelineRunState(RunState):
 
         raise VariableBeingEvaluatedDoesNotExistError(variable_name)
 
+    def append_variable(self, variable_name: str, value: Union[str, int, bool, float]) -> None:
+        """Appends a value to a variable if it exists and is an array. Otherwise, throws an exception.
+
+        Args:
+            variable_name: Name of the variable.
+            value: Appended value of the variable.
+        """
+        for variable in self.variables:
+            if variable.name == variable_name:
+                if not isinstance(variable.value, list):
+                    raise ValueError(f"Variable {variable_name} is not an array.")
+
+                variable.value.append(value)
+                return
+
+        raise VariableBeingEvaluatedDoesNotExistError(variable_name)
+
     def get_variable_by_name(self, variable_name: str) -> PipelineRunVariable:
         """Gets a variable by name. Throws an exception if the variable is not found.
 

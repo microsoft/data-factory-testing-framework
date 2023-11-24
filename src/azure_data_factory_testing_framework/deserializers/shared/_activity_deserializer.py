@@ -1,6 +1,7 @@
 from typing import List
 
 from azure_data_factory_testing_framework.models.activities.activity import Activity
+from azure_data_factory_testing_framework.models.activities.append_variable_activity import AppendVariableActivity
 from azure_data_factory_testing_framework.models.activities.execute_pipeline_activity import ExecutePipelineActivity
 from azure_data_factory_testing_framework.models.activities.filter_activity import FilterActivity
 from azure_data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
@@ -13,6 +14,8 @@ from azure_data_factory_testing_framework.models.activities.until_activity impor
 def _get_activity_from_activity_data(activity_data: dict) -> Activity:
     if activity_data["type"] == "SetVariable":
         return SetVariableActivity(**activity_data)
+    if activity_data["type"] == "AppendVariable":
+        return AppendVariableActivity(**activity_data)
     elif activity_data["type"] == "Until":
         activities = _get_activity_from_activities_data(activity_data["activities"])
         return UntilActivity(activities=activities, **activity_data)
