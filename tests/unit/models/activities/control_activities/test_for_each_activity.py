@@ -19,7 +19,7 @@ def test_when_evaluate_child_activities_then_should_return_the_activity_with_ite
                 name="setVariable",
                 typeProperties={
                     "variableName": "variable",
-                    "value": DataFactoryElement[str]("item()"),
+                    "value": DataFactoryElement[str]("@item()"),
                 },
                 depends_on=[],
             ),

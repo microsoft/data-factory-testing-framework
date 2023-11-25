@@ -1,6 +1,6 @@
 from typing import Generic, TypeVar, Union
 
-from azure_data_factory_testing_framework.functions import parse_expression
+from azure_data_factory_testing_framework.functions.expression_evaluator import ExpressionEvaluator
 from azure_data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")
@@ -20,5 +20,7 @@ class DataFactoryElement(Generic[T]):
         self.value: Union[str, int, bool, float] = None
 
     def evaluate(self, state: RunState) -> Union[str, int, bool, float]:
-        self.value = parse_expression(self.expression).evaluate(state)
+        """Evaluate the expression."""
+        evaluator = ExpressionEvaluator()
+        self.value = evaluator.evaluate(self.expression, state)
         return self.value

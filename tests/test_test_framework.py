@@ -85,7 +85,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
             FailActivity(
                 name="failActivity",
                 typeProperties={
-                    "message": DataFactoryElement("concat('Error code: ', '500')"),
+                    "message": DataFactoryElement("@concat('Error code: ', '500')"),
                     "errorCode": "500",
                 },
                 dependsOn=[],

@@ -13,7 +13,7 @@ def test_when_evaluated_should_evaluate_expression() -> None:
         name="SwitchActivity",
         default_activities=[],
         cases_activities={},
-        typeProperties={"on": DataFactoryElement("concat('case_', '1')")},
+        typeProperties={"on": DataFactoryElement("@concat('case_', '1')")},
     )
 
     # Act

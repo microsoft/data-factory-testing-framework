@@ -71,7 +71,7 @@ def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
         typeProperties={
             "pipeline": {"referenceName": "dummy"},
             "parameters": {
-                "url": DataFactoryElement("pipeline().parameters.url"),
+                "url": DataFactoryElement("@pipeline().parameters.url"),
             },
         },
         depends_on=[],
