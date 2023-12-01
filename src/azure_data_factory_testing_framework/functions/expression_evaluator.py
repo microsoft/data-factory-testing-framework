@@ -24,7 +24,7 @@ class ExpressionEvaluator:
                                | LITERAL_NULL
                                | literal_array
             literal_array: "[" literal_evaluation ("," literal_evaluation)* "]"
-            literal_interpolation: LITERAL_LETTER* "@{" expression_evaluation "}" LITERAL_LETTER*
+            literal_interpolation: (LITERAL_LETTER* "@{" expression_evaluation "}" LITERAL_LETTER*)*
 
 
             // literal terminals:

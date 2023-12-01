@@ -445,6 +445,43 @@ from pytest import param as p
             ),
             id="string_interpolation",
         ),
+        p(
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
+            Tree(
+                Token("RULE", "literal_interpolation"),
+                [
+                    Token("LITERAL_LETTER", "/repos/"),
+                    Tree(
+                        Token("RULE", "expression_evaluation"),
+                        [
+                            Tree(
+                                Token("RULE", "expression_pipeline_reference"),
+                                [
+                                    Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
+                                    Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
+                                ],
+                            ),
+                            Tree(Token("RULE", "expression_array_indices"), [None]),
+                        ],
+                    ),
+                    Token("LITERAL_LETTER", "/"),
+                    Tree(
+                        Token("RULE", "expression_evaluation"),
+                        [
+                            Tree(
+                                Token("RULE", "expression_pipeline_reference"),
+                                [
+                                    Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
+                                    Token("EXPRESSION_PARAMETER_NAME", "SubPath"),
+                                ],
+                            ),
+                            Tree(Token("RULE", "expression_array_indices"), [None]),
+                        ],
+                    ),
+                ],
+            ),
+            id="string_interpolation_multiple_expressions",
+        ),
     ],
 )
 def test_parse(expression: str, expected: Tree[Token]) -> None:
@@ -654,6 +691,17 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
             "/Repos/dummyId/",
             id="string_interpolation_with_literals",
+        ),
+        p(
+            "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId"),
+                    RunParameter(RunParameterType.Pipeline, "SubPath", "dummyPath"),
+                ]
+            ),
+            "/Repos/dummyId/dummyPath",
+            id="string_interpolation_with_multiple_expressions",
         ),
     ],
 )
