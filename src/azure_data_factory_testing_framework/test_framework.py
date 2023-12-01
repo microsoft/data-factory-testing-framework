@@ -96,7 +96,7 @@ class TestFramework:
         Returns:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
-        pipeline.validate_parameters(parameters)
+        parameters = pipeline.validate_and_append_default_parameters(parameters)
         state = PipelineRunState(parameters, pipeline.get_run_variables())
         return self.evaluate_activities(pipeline.activities, state)
 

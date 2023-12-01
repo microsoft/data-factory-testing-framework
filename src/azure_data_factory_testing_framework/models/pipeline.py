@@ -37,14 +37,15 @@ class Pipeline:
 
         raise ActivityNotFoundError(f"Activity with name {name} not found")
 
-    def validate_parameters(self, parameters: List[RunParameter]) -> None:
+    def validate_and_append_default_parameters(self, parameters: List[RunParameter]) -> List[RunParameter]:
         """Validate that all parameters are provided and that no duplicate parameters are provided.
 
         Args:
             parameters: List of parameters.
         """
         # Check if all parameters are provided
-        for pipeline_parameter_name, _ in self.parameters.items():
+        run_parameters = parameters
+        for pipeline_parameter_name, pipeline_parameter in self.parameters.items():
             found = False
             for parameter in parameters:
                 if pipeline_parameter_name == parameter.name and parameter.type == RunParameterType.Pipeline:
@@ -52,6 +53,14 @@ class Pipeline:
                     break
 
             if not found:
+                if "defaultValue" in pipeline_parameter:
+                    run_parameters.append(
+                        RunParameter(
+                            RunParameterType.Pipeline, pipeline_parameter_name, pipeline_parameter["defaultValue"]
+                        )
+                    )
+                    continue
+
                 raise ValueError(
                     f"Parameter with name '{pipeline_parameter_name}' and type 'RunParameterType.Pipeline' not found in pipeline '{self.name}'",
                 )
@@ -62,6 +71,8 @@ class Pipeline:
                 raise ValueError(
                     f"Duplicate parameter with name '{parameter.name}' and type '{parameter.type}' found in pipeline '{self.name}'",
                 )
+
+        return parameters
 
     def get_run_variables(self) -> List[PipelineRunVariable]:
         """Get the run variables for the pipeline. This can be used to generate the instance variables for a pipeline run."""
