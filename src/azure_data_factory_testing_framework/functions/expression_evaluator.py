@@ -24,6 +24,8 @@ class ExpressionEvaluator:
                                | LITERAL_NULL
                                | literal_array
             literal_array: "[" literal_evaluation ("," literal_evaluation)* "]"
+            literal_interpolation: LITERAL_LETTER* "@{" expression_evaluation "}" LITERAL_LETTER*
+
 
             // literal terminals:
             LITERAL_LETTER: /[^@]+/
@@ -56,7 +58,7 @@ class ExpressionEvaluator:
             expression_linked_service_reference: "linkedService" "(" EXPRESSION_LINKED_SERVICE_NAME ")"
             expression_item_reference: "item()"
             expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
-
+            
             // function call rules
             expression_function_call: EXPRESSION_FUNCTION_NAME  "(" [expression_function_parameters] ")"
             expression_function_parameters: expression_parameter ("," expression_parameter )*
@@ -81,7 +83,7 @@ class ExpressionEvaluator:
         """  # noqa: E501
 
         base_grammar = """
-            ?start: ("@" expression_start) | (["@@"] literal_start)
+            ?start: ("@" expression_start) | (["@@"] literal_start) | (literal_interpolation)
             
             // shared custom basic data type rules:
             ARRAY_INDEX: "[" /[0-9]+/ "]"
