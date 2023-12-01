@@ -1,8 +1,9 @@
 from typing import Union
 
-from lark import Lark, Token, Tree
+from lark import Lark, Token, Tree, UnexpectedCharacters
 from lark.exceptions import VisitError
 
+from azure_data_factory_testing_framework.exceptions.expression_parsing_error import ExpressionParsingError
 from azure_data_factory_testing_framework.functions._expression_transformer import ExpressionTransformer
 from azure_data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 from azure_data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
@@ -107,7 +108,19 @@ class ExpressionEvaluator:
         return tree
 
     def evaluate(self, expression: str, state: PipelineRunState) -> Union[str, int, float, bool]:
-        tree: Tree = self.parse(expression)
+        try:
+            tree = self.parse(expression)
+        except UnexpectedCharacters as uc:
+            msg = f"""
+            Expression could not be parsed.
+
+            expression: {expression}
+            line: {uc.line}
+            column: {uc.column}
+            char: {uc.char}
+            """
+            raise ExpressionParsingError(msg) from uc
+
         transformer = ExpressionTransformer(state)
         try:
             result: Tree = transformer.transform(tree)
