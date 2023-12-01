@@ -4,6 +4,9 @@ from typing import Callable, Optional
 from lark import Discard, Token, Transformer
 
 from azure_data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
+from azure_data_factory_testing_framework.exceptions.activity_output_field_not_found_error import (
+    ActivityOutputFieldNotFoundError,
+)
 from azure_data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import (
     DatasetParameterNotFoundError,
 )
@@ -172,6 +175,9 @@ class ExpressionTransformer(Transformer):
         while len(property_tokens) > 0:
             current_token = property_tokens.pop(0)
             if current_token.type == "EXPRESSION_PARAMETER_NAME":
+                if current_token.value not in current_output:
+                    raise ActivityOutputFieldNotFoundError(activity_name, current_token.value)
+
                 current_output = current_output[current_token.value]
                 continue
             if current_token.type == "EXPRESSION_ARRAY_INDEX":
