@@ -18,7 +18,7 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
     if activity_data["type"] == "AppendVariable":
         return AppendVariableActivity(**activity_data)
     elif activity_data["type"] == "Until":
-        activities = _get_activity_from_activities_data(activity_data["activities"])
+        activities = _get_activity_from_activities_data(activity_data["typeProperties"]["activities"])
         return UntilActivity(activities=activities, **activity_data)
     elif activity_data["type"] == "ExecutePipeline":
         return ExecutePipelineActivity(**activity_data)
@@ -29,7 +29,7 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
             if_true_activities=if_true_activities, if_false_activities=if_false_activities, **activity_data
         )
     elif activity_data["type"] == "ForEach":
-        child_activities = _get_activity_from_activities_data(activity_data["activities"])
+        child_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["activities"])
         return ForEachActivity(activities=child_activities, **activity_data)
     elif activity_data["type"] == "Switch":
         default_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["defaultActivities"])
