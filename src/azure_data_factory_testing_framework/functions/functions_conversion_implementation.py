@@ -45,10 +45,10 @@ def bool_(value: Any) -> bool:  # noqa: ANN401
 def coalesce(*objects: Any) -> Any:  # noqa: ANN401
     """Return the first non-null value from one or more parameters.
 
-    Empty strings, empty arrays, and empty objects are not null.
+    Returns the first non-null (or non-empty for string) expression
     """
     for obj in objects:
-        if obj is not None:
+        if obj is not None and obj != "":
             return obj
 
     return None

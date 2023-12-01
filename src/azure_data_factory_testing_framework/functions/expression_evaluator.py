@@ -12,7 +12,7 @@ from azure_data_factory_testing_framework.state.pipeline_run_state import Pipeli
 class ExpressionEvaluator:
     def __init__(self) -> None:
         """Evaluator for the expression language."""
-        literal_grammer = """
+        literal_grammar = """
 
             // literal rules
             ?literal_start: literal_evaluation
@@ -34,7 +34,7 @@ class ExpressionEvaluator:
             LITERAL_NULL: NULL
         """
 
-        expression_grammer = f"""
+        expression_grammar = f"""
             // TODO: add support for array index
             ?expression_start: expression_evaluation
             expression_evaluation: expression_call [expression_array_indices]
@@ -45,6 +45,7 @@ class ExpressionEvaluator:
                                     | expression_dataset_reference
                                     | expression_linked_service_reference
                                     | expression_item_reference
+                                    | expression_system_variable_reference
             expression_array_indices: [EXPRESSION_ARRAY_INDEX]*
 
             // reference rules:
@@ -54,9 +55,10 @@ class ExpressionEvaluator:
             expression_dataset_reference: "dataset" "(" EXPRESSION_DATASET_NAME ")"
             expression_linked_service_reference: "linkedService" "(" EXPRESSION_LINKED_SERVICE_NAME ")"
             expression_item_reference: "item()"
+            expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
 
             // function call rules
-            expression_function_call: EXPRESSION_FUNCTION_NAME  "(" expression_function_parameters ")"
+            expression_function_call: EXPRESSION_FUNCTION_NAME  "(" [expression_function_parameters] ")"
             expression_function_parameters: expression_parameter ("," expression_parameter )*
             expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
             
@@ -67,6 +69,7 @@ class ExpressionEvaluator:
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_DATASET_NAME: "'" /[^']*/ "'"
             EXPRESSION_LINKED_SERVICE_NAME: "'" /[^']*/ "'"
+            EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
             EXPRESSION_NULL: NULL
             EXPRESSION_STRING: SINGLE_QUOTED_STRING
@@ -93,7 +96,7 @@ class ExpressionEvaluator:
             %import common.WS
         """
 
-        grammer = base_grammar + literal_grammer + expression_grammer
+        grammer = base_grammar + literal_grammar + expression_grammar
         self.lark_parser = Lark(grammer, start="start")
 
     def _supported_functions(self) -> str:
