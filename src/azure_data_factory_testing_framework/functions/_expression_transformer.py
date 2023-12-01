@@ -154,23 +154,32 @@ class ExpressionTransformer(Transformer):
         activity_name = values[0].value
         activity_name = activity_name[1:-1]  # remove quotes
 
-        if not all(isinstance(value, Token) and value.type == "EXPRESSION_PARAMETER_NAME" for value in values[1:]):
+        if not all(
+            isinstance(value, Token) and value.type in ["EXPRESSION_PARAMETER_NAME", "EXPRESSION_ARRAY_INDEX"]
+            for value in values[1:]
+        ):
             raise ExpressionEvaluationError(
-                'Activity property and fields should be of type "EXPRESSION_PARAMETER_NAME"'
+                'Activity property and fields should be of type "EXPRESSION_PARAMETER_NAME" or "EXPRESSION_ARRAY_INDEX"'
             )
-
-        activity_property = values[1]
-        property_fields = values[2:]
 
         activity = self.state.try_get_scoped_activity_result_by_name(activity_name)
         if activity is None:
             raise ActivityNotFoundError(activity_name)
 
-        activity_property_parameter = activity[activity_property]
-        for field in property_fields:
-            field_value = field.value
-            activity_property_parameter = activity_property_parameter[field_value]
-        return activity_property_parameter
+        property_tokens = values[1:]
+        current_output = activity
+
+        while len(property_tokens) > 0:
+            current_token = property_tokens.pop(0)
+            if current_token.type == "EXPRESSION_PARAMETER_NAME":
+                current_output = current_output[current_token.value]
+                continue
+            if current_token.type == "EXPRESSION_ARRAY_INDEX":
+                if not isinstance(current_output, list):
+                    raise ExpressionEvaluationError("Array index can only be used on lists")
+                current_output = current_output[current_token.value]
+                continue
+        return current_output
 
     def expression_item_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
         item = self.state.iteration_item
@@ -229,6 +238,6 @@ class ExpressionTransformer(Transformer):
 
         pos_or_keyword_values = fn_parameters[: len(pos_or_keyword_parameters)]
         var_positional_values = fn_parameters[len(pos_or_keyword_parameters) :]  # should be 0 or 1
-
+        # TODO: implement automatic conversion of parameters based on type hints
         result = function(*pos_or_keyword_values, *var_positional_values)
         return result

@@ -50,7 +50,7 @@ class ExpressionEvaluator:
             // reference rules:
             expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME 
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")" ("." EXPRESSION_PARAMETER_NAME)+
+            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")" ("." EXPRESSION_PARAMETER_NAME [EXPRESSION_ARRAY_INDEX]*)+
             expression_dataset_reference: "dataset" "(" EXPRESSION_DATASET_NAME ")"
             expression_linked_service_reference: "linkedService" "(" EXPRESSION_LINKED_SERVICE_NAME ")"
             expression_item_reference: "item()"
