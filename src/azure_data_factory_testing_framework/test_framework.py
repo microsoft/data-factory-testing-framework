@@ -142,9 +142,10 @@ class TestFramework:
                         pipeline = self.repository.get_pipeline_by_name(
                             execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
                         )
-                        activities_iterator = self.evaluate_pipeline(
+                        activities_iterator = execute_pipeline_activity.evaluate_pipeline(
                             pipeline,
                             activity.get_child_run_parameters(state),
+                            self.evaluate_activities,
                         )
 
                     if not isinstance(activity, ExecutePipelineActivity) and isinstance(activity, ControlActivity):

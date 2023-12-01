@@ -39,6 +39,7 @@ class PipelineRunState(RunState):
         self.pipeline_activity_results: Dict[str, Any] = pipeline_activity_results
         self.scoped_pipeline_activity_results: Dict[str, Any] = {}
         self.iteration_item = iteration_item
+        self.return_values: Dict[str, Any] = {}
 
     def add_activity_result(self, activity_name: str, status: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
         """Registers the result of an activity to the pipeline run state.
@@ -132,3 +133,6 @@ class PipelineRunState(RunState):
                 return variable
 
         raise VariableDoesNotExistError(variable_name)
+
+    def set_return_value(self, param: str, evaluated_value: Any) -> None:  # noqa: ANN401
+        self.return_values[param] = evaluated_value
