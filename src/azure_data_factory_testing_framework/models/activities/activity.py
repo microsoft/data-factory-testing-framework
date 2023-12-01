@@ -39,6 +39,7 @@ class Activity:
     def evaluate(self, state: PipelineRunState) -> "Activity":
         self._evaluate_expressions(self, state, types_to_ignore=[Activity])
         self.status = DependencyCondition.Succeeded
+        self.output = {}
         return self
 
     def are_dependency_condition_met(self, state: PipelineRunState) -> bool:

@@ -700,7 +700,7 @@ def test_evaluate_raises_exception_when_activity_not_found() -> None:
         evaluator.evaluate(expression, state)
 
     # Assert
-    assert str(exinfo.value) == "Activity with name activityName not found"
+    assert str(exinfo.value) == "Activity with name 'activityName' not found"
 
 
 def test_evaluate_raises_exception_when_state_iteration_item_not_set() -> None:
