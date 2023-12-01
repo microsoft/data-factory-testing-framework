@@ -61,6 +61,16 @@ class ExpressionTransformer(Transformer):
             raise ExpressionEvaluationError("Literal evaluation only supports string, int, float, bool and None")
         return value[0]
 
+    def literal_interpolation(self, value: list[Token, str, int, float, bool]) -> str:
+        result = ""
+        for item in value:
+            if type(item) not in [str, int, float, bool, None]:
+                raise ExpressionEvaluationError("Literal interpolation only supports string, int, float, bool and None")
+
+            result += str(item)
+
+        return result
+
     def EXPRESSION_NULL(self, token: Token) -> Optional[None]:  # noqa: N802
         return None
 
@@ -241,6 +251,11 @@ class ExpressionTransformer(Transformer):
         for array_index in array_indices:
             eval_value = eval_value[array_index.value]
         return eval_value
+
+    def expression_interpolation_evaluation(
+        self, values: list[Token, str, int, float, bool, list]
+    ) -> [str, int, float, bool]:
+        return values[0]
 
     def expression_array_indices(self, values: list[Token, str, int, float, bool]) -> Optional[list[Token]]:
         if values[0] is None:

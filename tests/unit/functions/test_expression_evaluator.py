@@ -421,6 +421,30 @@ from pytest import param as p
             ),
             id="function_call_with_nested_array_index",
         ),
+        p(
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
+            Tree(
+                Token("RULE", "literal_interpolation"),
+                [
+                    Token("LITERAL_LETTER", "/repos/"),
+                    Tree(
+                        Token("RULE", "expression_evaluation"),
+                        [
+                            Tree(
+                                Token("RULE", "expression_pipeline_reference"),
+                                [
+                                    Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
+                                    Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
+                                ],
+                            ),
+                            Tree(Token("RULE", "expression_array_indices"), [None]),
+                        ],
+                    ),
+                    Token("LITERAL_LETTER", "/"),
+                ],
+            ),
+            id="string_interpolation",
+        ),
     ],
 )
 def test_parse(expression: str, expected: Tree[Token]) -> None:
@@ -618,6 +642,18 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
             PipelineRunState(),
             None,
             id="function_call_with_null_parameter",
+        ),
+        p(
+            "@{pipeline().globalParameters.OpsPrincipalClientId}",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
+            "dummyId",
+            id="string_interpolation_with_no_surrounding_literals",
+        ),
+        p(
+            "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
+            "/Repos/dummyId/",
+            id="string_interpolation_with_literals",
         ),
     ],
 )
