@@ -80,10 +80,8 @@ class ExpressionEvaluator:
         base_grammar = """
             ?start: ("@" expression_start) | (["@@"] literal_start)
             
-            // shared rules
-            ARRAY_INDEX: "[" /[0-9]+/ "]"
-
             // shared custom basic data type rules:
+            ARRAY_INDEX: "[" /[0-9]+/ "]"
             NULL: "null"
             BOOLEAN: "true" | "false"
             SINGLE_QUOTED_STRING: "'" /([^']|'')*/ "'"
