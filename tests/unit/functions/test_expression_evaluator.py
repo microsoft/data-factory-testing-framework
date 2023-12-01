@@ -568,6 +568,44 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
             "x1x2x3",
             id="function_call_with_ws_and_newline",
         ),
+        p(
+            "@concat(activity('Sample').output.float, 'test')",
+            PipelineRunState(
+                pipeline_activity_results={
+                    "Sample": {
+                        "output": {
+                            "float": 0.016666666666666666,
+                        },
+                        "status": DependencyCondition.SUCCEEDED,
+                    }
+                }
+            ),
+            "0.016666666666666666test",
+            id="function_call_with_nested_property",
+            marks=pytest.mark.xfail(
+                reason="We do not support automatic type conversion yet. Here float is passed to concat (which expects str)."
+            ),
+        ),
+        p(
+            "@activity('Sample').output.billingReference.billableDuration[0].duration",
+            PipelineRunState(
+                pipeline_activity_results={
+                    "Sample": {
+                        "output": {
+                            "billingReference": {
+                                "activityType": "ExternalActivity",
+                                "billableDuration": [
+                                    {"meterType": "AzureIR", "duration": 0.016666666666666666, "unit": "Hours"}
+                                ],
+                            }
+                        },
+                        "status": DependencyCondition.SUCCEEDED,
+                    }
+                }
+            ),
+            0.016666666666666666,
+            id="activity_reference_with_nested_property_and_array_index",
+        ),
     ],
 )
 def test_evaluate(expression: str, state: PipelineRunState, expected: Union[str, int, bool, float]) -> None:
