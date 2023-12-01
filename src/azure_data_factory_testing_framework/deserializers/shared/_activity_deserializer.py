@@ -13,28 +13,37 @@ from azure_data_factory_testing_framework.models.activities.until_activity impor
 
 
 def _get_activity_from_activity_data(activity_data: dict) -> Activity:
+    type_properties = activity_data["typeProperties"]
     if activity_data["type"] == "SetVariable":
         return SetVariableActivity(**activity_data)
     if activity_data["type"] == "AppendVariable":
         return AppendVariableActivity(**activity_data)
     elif activity_data["type"] == "Until":
-        activities = _get_activity_from_activities_data(activity_data["typeProperties"]["activities"])
+        activities = _get_activity_from_activities_data(type_properties["activities"])
         return UntilActivity(activities=activities, **activity_data)
     elif activity_data["type"] == "ExecutePipeline":
         return ExecutePipelineActivity(**activity_data)
     elif activity_data["type"] == "IfCondition":
-        if_true_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["ifTrueActivities"])
-        if_false_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["ifFalseActivities"])
+        if_true_activities = (
+            _get_activity_from_activities_data(type_properties["ifTrueActivities"])
+            if "ifTrueActivities" in type_properties
+            else []
+        )
+        if_false_activities = (
+            _get_activity_from_activities_data(type_properties["ifFalseActivities"])
+            if "ifFalseActivities" in type_properties
+            else []
+        )
         return IfConditionActivity(
             if_true_activities=if_true_activities, if_false_activities=if_false_activities, **activity_data
         )
     elif activity_data["type"] == "ForEach":
-        child_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["activities"])
+        child_activities = _get_activity_from_activities_data(type_properties["activities"])
         return ForEachActivity(activities=child_activities, **activity_data)
     elif activity_data["type"] == "Switch":
-        default_activities = _get_activity_from_activities_data(activity_data["typeProperties"]["defaultActivities"])
+        default_activities = _get_activity_from_activities_data(type_properties["defaultActivities"])
         cases_activities = {}
-        for case in activity_data["typeProperties"]["cases"]:
+        for case in type_properties["cases"]:
             case_value = case["value"]
             activities = case["activities"]
             cases_activities[case_value] = _get_activity_from_activities_data(activities)
