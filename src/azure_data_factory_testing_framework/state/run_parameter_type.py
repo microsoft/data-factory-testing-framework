@@ -8,6 +8,7 @@ class RunParameterType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     Global = "Global"
     Dataset = "Dataset"
     LinkedService = "LinkedService"
+    System = "System"
 
     def __str__(self) -> str:
         """Get the string representation of the enum.

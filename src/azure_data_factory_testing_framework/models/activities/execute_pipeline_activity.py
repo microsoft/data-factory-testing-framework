@@ -24,8 +24,8 @@ class ExecutePipelineActivity(ControlActivity):
     def get_child_run_parameters(self, state: PipelineRunState) -> List[RunParameter]:
         child_parameters = []
         for parameter in state.parameters:
-            if parameter.type == RunParameterType.Global:
-                child_parameters.append(RunParameter(RunParameterType.Global, parameter.name, parameter.value))
+            if parameter.type == RunParameterType.Global or parameter.type == RunParameterType.System:
+                child_parameters.append(RunParameter(parameter.type, parameter.name, parameter.value))
 
         for parameter_name, parameter_value in self.parameters.items():
             parameter_value = (

@@ -2,6 +2,7 @@ import inspect
 from typing import Callable, Optional
 
 from lark import Discard, Token, Transformer
+from lxml.etree import _Element
 
 from azure_data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
 from azure_data_factory_testing_framework.exceptions.activity_output_field_not_found_error import (
@@ -193,17 +194,37 @@ class ExpressionTransformer(Transformer):
             raise StateIterationItemNotSetError()
         return item
 
+    def expression_system_variable_reference(
+        self, value: list[Token, str, int, float, bool]
+    ) -> [str, int, float, bool]:
+        if not (isinstance(value[0], Token) and value[0].type == "EXPRESSION_SYSTEM_VARIABLE_NAME"):
+            raise ExpressionEvaluationError(
+                'System variable reference requires Token "EXPRESSION_SYSTEM_VARIABLE_NAME"'
+            )
+
+        system_variable_name: Token = value[0]
+
+        system_variable_parameters: list[RunParameter] = list(
+            filter(lambda p: p.type == RunParameterType.System, self.state.parameters)
+        )
+
+        system_parameters = list(filter(lambda p: p.name == system_variable_name, system_variable_parameters))
+        if len(system_parameters) == 0:
+            raise ExpressionParameterNotFoundError(system_variable_name)
+
+        return system_parameters[0].value
+
     def expression_function_parameters(self, values: list[Token, str, int, float, bool]) -> list:
-        if not all(type(value) in [str, int, float, bool, list] for value in values):
-            raise ExpressionEvaluationError("Function parameters should be string, int, float, bool or list")
+        if not all(type(value) in [str, int, float, bool, list, _Element] or value is None for value in values):
+            raise ExpressionEvaluationError("Function parameters should be string, int, float, bool, list or _Element")
         return values
 
     def expression_parameter(self, values: list[Token, str, int, float, bool, list]) -> str:
         if len(values) != 1:
             raise ExpressionEvaluationError("Function parameter must have only one value")
         parameter = values[0]
-        if type(parameter) not in [str, int, float, bool, list]:
-            raise ExpressionEvaluationError("Function parameters should be string, int, float, bool or list")
+        if type(parameter) not in [str, int, float, bool, list, _Element, None] and parameter is not None:
+            raise ExpressionEvaluationError("Function parameters should be string, int, float, bool, list or _Element")
         return parameter
 
     def expression_evaluation(self, values: list[Token, str, int, float, bool, list]) -> [str, int, float, bool]:
@@ -230,7 +251,7 @@ class ExpressionTransformer(Transformer):
 
     def expression_function_call(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
         fn = values[0]
-        fn_parameters = values[1]
+        fn_parameters = values[1] if values[1] is not None else []
         function: Callable = FunctionsRepository.functions.get(fn.value)
 
         pos_or_keyword_parameters = []

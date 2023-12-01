@@ -84,6 +84,9 @@ class Activity:
             if not attribute.startswith("_") and not callable(getattr(obj, attribute))
         ]
         for attribute_name in attribute_names:
+            if "activities" in attribute_name:
+                continue
+
             attribute = getattr(obj, attribute_name)
             if attribute is None:
                 continue
@@ -93,6 +96,9 @@ class Activity:
         # Dictionary
         if isinstance(obj, dict):
             for key in obj.keys():
+                if "activities" in key:
+                    continue
+
                 self._evaluate_expressions(obj[key], state, visited, types_to_ignore)
 
         # List

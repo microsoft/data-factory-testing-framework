@@ -4,6 +4,7 @@ from azure_data_factory_testing_framework.models.activities.activity import Acti
 from azure_data_factory_testing_framework.models.activities.control_activity import ControlActivity
 from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from azure_data_factory_testing_framework.state import PipelineRunState
+from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
 
 
 class UntilActivity(ControlActivity):
@@ -26,10 +27,7 @@ class UntilActivity(ControlActivity):
         self.activities = activities
 
     def evaluate(self, state: PipelineRunState) -> "UntilActivity":
-        self.expression.evaluate(state)
-
-        super(ControlActivity, self).evaluate(state)
-
+        # Explicitly not evaluate here, but in the evaluate_control_activities method after the first iteration
         return self
 
     def evaluate_control_activities(
@@ -45,4 +43,6 @@ class UntilActivity(ControlActivity):
             state.add_scoped_activity_results_from_scoped_state(scoped_state)
 
             if self.expression.evaluate(state):
+                state.add_activity_result(self.name, DependencyCondition.Succeeded)
+                self.set_result(DependencyCondition.Succeeded)
                 break

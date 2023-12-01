@@ -21,6 +21,7 @@ from azure_data_factory_testing_framework.state.pipeline_run_state import Pipeli
 from azure_data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
 from azure_data_factory_testing_framework.state.run_parameter import RunParameter
 from azure_data_factory_testing_framework.state.run_parameter_type import RunParameterType
+from freezegun import freeze_time
 from lark import Token, Tree
 from pytest import param as p
 
@@ -606,8 +607,21 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
             0.016666666666666666,
             id="activity_reference_with_nested_property_and_array_index",
         ),
+        p(
+            "@utcNow()",
+            PipelineRunState(),
+            "2021-11-24T12:11:49.753132Z",
+            id="function_call_with_zero_parameters",
+        ),
+        p(
+            "@coalesce(null)",
+            PipelineRunState(),
+            None,
+            id="function_call_with_null_parameter",
+        ),
     ],
 )
+@freeze_time("2021-11-24 12:11:49.753132")
 def test_evaluate(expression: str, state: PipelineRunState, expected: Union[str, int, bool, float]) -> None:
     # Arrange
     evaluator = ExpressionEvaluator()
@@ -715,3 +729,34 @@ def test_evaluate_raises_exception_when_state_iteration_item_not_set() -> None:
 
     # Assert
     assert str(exinfo.value) == "Iteration item not set."
+
+
+def test_evaluate_system_variable() -> None:
+    # Arrange
+    expression = "@pipeline().RunId"
+    evaluator = ExpressionEvaluator()
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(RunParameterType.System, "RunId", "123"),
+        ]
+    )
+
+    # Act
+    actual = evaluator.evaluate(expression, state)
+
+    # Assert
+    assert actual == "123"
+
+
+def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> None:
+    # Arrange
+    expression = "@pipeline().RunId"
+    evaluator = ExpressionEvaluator()
+    state = PipelineRunState()
+
+    # Act
+    with pytest.raises(ExpressionParameterNotFoundError) as exinfo:
+        evaluator.evaluate(expression, state)
+
+    # Assert
+    assert str(exinfo.value) == "Parameter 'RunId' not found"
