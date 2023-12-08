@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-import azure_data_factory_testing_framework.functions.functions_conversion_implementation as conversion_functions
+import data_factory_testing_framework.functions.functions_conversion_implementation as conversion_functions
 import pytest
 from lxml import etree
 from pytest import param

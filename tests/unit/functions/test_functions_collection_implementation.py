@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-import azure_data_factory_testing_framework.functions.functions_collection_implementation as collection_functions
+import data_factory_testing_framework.functions.functions_collection_implementation as collection_functions
 import pytest
 from pytest import param
 

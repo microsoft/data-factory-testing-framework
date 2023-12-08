@@ -1,13 +1,13 @@
 # flake8: noqa: E501
 import pytest
-from azure_data_factory_testing_framework.models.pipeline import Pipeline
-from azure_data_factory_testing_framework.state import (
+from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
-from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture

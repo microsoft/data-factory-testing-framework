@@ -1,7 +1,7 @@
 import pytest
-from azure_data_factory_testing_framework.models.pipeline import Pipeline
-from azure_data_factory_testing_framework.state import RunParameterType
-from azure_data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework.state import RunParameterType
+from data_factory_testing_framework.state.run_parameter import RunParameter
 
 
 def test_when_validate_parameters_is_accurate_should_pass() -> None:

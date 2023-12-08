@@ -1,7 +1,7 @@
-from azure_data_factory_testing_framework.models.activities.fail_activity import FailActivity
-from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from azure_data_factory_testing_framework.state import PipelineRunState
-from azure_data_factory_testing_framework.state.dependency_condition import DependencyCondition
+from data_factory_testing_framework.models.activities.fail_activity import FailActivity
+from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 
 
 def test_fail_activity_evaluates_to_failed_result() -> None:
