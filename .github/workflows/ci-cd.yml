@@ -34,39 +34,23 @@ jobs:
           installer-parallel: true
 
       #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: |
-            source .venv/bin/activate
-            poetry install --no-interaction --no-root
+        run: poetry install --no-interaction --no-root
       #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
       - name: Install project
-        run: |
-          source .venv/bin/activate
-          poetry install --no-interaction
+        run: poetry install --no-interaction
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
       - name: Run tests
-        run: |
-          source .venv/bin/activate
-          poetry run pytest .
+        run: poetry run pytest .
       - name: Set build version and build package
         run: |
-          source .venv/bin/activate
           poetry version 0.0.0.alpha${{ github.run_number}}
           poetry build
       - name: Publish package distributions to PyPI
