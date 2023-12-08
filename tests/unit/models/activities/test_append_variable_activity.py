@@ -1,13 +1,13 @@
 from typing import List
 
 import pytest
-from azure_data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
+from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from azure_data_factory_testing_framework.models.activities.append_variable_activity import AppendVariableActivity
-from azure_data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from azure_data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
-from azure_data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models.activities.append_variable_activity import AppendVariableActivity
+from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
+from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.mark.parametrize(
