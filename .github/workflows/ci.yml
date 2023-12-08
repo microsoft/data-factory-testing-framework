@@ -66,6 +66,7 @@ jobs:
           poetry version 0.0.0.alpha${{ github.run_number}}
           poetry build
       - name: Publish package distributions to PyPI
+        if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: ./dist
