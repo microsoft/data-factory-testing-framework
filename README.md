@@ -1,6 +1,6 @@
-# Data Factory - Unit Testing Framework
+# Data Factory - Testing Framework
 
-A unit test framework that allows you to write unit and functional tests for Data Factory pipelines against the git integrated json resource files.
+A test framework that allows you to write unit and functional tests for Data Factory pipelines against the git integrated json resource files.
 
 Supporting currently:
 * [Fabric Data Factory](https://learn.microsoft.com/en-us/fabric/data-factory/)
