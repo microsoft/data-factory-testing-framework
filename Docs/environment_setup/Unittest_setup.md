@@ -43,7 +43,7 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 ```python
 pip install pytest
 ```
-You could also use Poetry is a package management library:
+You could also use Poetry as a package management library:
 
 ```python
 pip install poetry
