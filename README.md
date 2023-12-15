@@ -54,9 +54,9 @@ Data Factory does not support unit testing out of the box. The only way to valid
 
 ## Examples
 
-###  Examples - Loading your JSON file with the Framework and Pytest library:
+**Loading your JSON file with the Framework and Pytest library:**
 
-####  Libraries
+Libraries
 
 ```python
 import pytest
@@ -68,7 +68,7 @@ from data_factory_testing_framework.state.run_parameter import RunParameter
 from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 ```
 
-#### Function example
+**Function**
 The piece of the function example will get the JSON file by the name pipeline_fabric_test1 which is the JSON pipeline locally saved in the project using pytest.
 
 
@@ -89,7 +89,7 @@ def test_pipeline(request: pytest.FixtureRequest) -> None:
 
   ```
 
-### Features - Examples
+**Features - Examples**
 
 The samples seen below are the _only_ code that you need to write! The framework will take care of the rest. 
 
