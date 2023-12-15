@@ -33,11 +33,11 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
 
 
-	### Testing Libraries
+	### Additional Libraries
 
 
 
-**Additionally** you could use for example <u>pytest even another</u> library that you prefer for the Unit test: 
+**Additionally** you could use for example <u>pytest even another</u> test library that you prefer for the Unit test: 
 
 
 ```python
