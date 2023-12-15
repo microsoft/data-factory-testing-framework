@@ -2,24 +2,20 @@
 
 ## JSON Files
 
-This is also a piece of extra information you case you need more details on how to get the JSON Files from ADF, Synapse, or Fabric to proceed with the testing. Again this is an extra step in case you find it challenging to find this information, if you do not need or if you already have this information from your repository. Feel free to skip.
+Ideally, you would integrate your project with a repository such as GIT. Once this is done you will have the JSON files for the Pipelines. If you need extra guidance on that the Microsoft Documentation provides very detailed information how to do it:
 
-### Step by Step 
-
-Here we will follow step by step for each option mentioned before:
-
-#### Fabric
-
-You can open and save the JSON file that you will use for your pipeline from the designer for Pipeline.
-
- 
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/babc8daa-4a8b-4491-8d75-0161851ee414)
+Fabric
+[Git integration process - Microsoft Fabric | Microsoft Learn](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-integration-process)
 
 
-1. Open your pipeline inside of Microsoft Fabric Environment
-2. Click to open the JSON and copy the content
-3. Save as JSON file in your repository
 
+ADF
+[Source control - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/source-control)
+
+
+
+### Manual steps for testing purposes
+If you want just download one JSON file for a small test purpose and check how the framework here are some ideas on how to do it:
 
 #### ADF 
 
