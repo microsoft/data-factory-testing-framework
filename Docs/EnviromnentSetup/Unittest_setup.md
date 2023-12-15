@@ -20,21 +20,7 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
    References about the vs code terminal : [Integrated Terminal in Visual Studio Code](https://code.visualstudio.com/docs/terminal/basics)
 
    
-
-   Please note, that the data-factory-testing-framework has dependencies on the following libraries:
-   
-   
-   ```python
-   pip install sentence-transformers
-   
-   pip install Flask
-   
-   pip install tensorflow 
-   
-   pip install Werkzeug
-   ```
-
-   
+    
 
    ### **Then data-factory-testing-framework:**
 
