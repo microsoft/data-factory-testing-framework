@@ -37,11 +37,15 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
 
 
-**Additionally** you could use for example <u>pytest or poetry( or both) or even another</u> library that you prefer for the Unit test: 
+**Additionally** you could use for example <u>pytest even another</u> library that you prefer for the Unit test: 
 
 
 ```python
 pip install pytest
+```
+You could also use Poetry is a package management library:
+
+```python
 pip install poetry
 ```
 
