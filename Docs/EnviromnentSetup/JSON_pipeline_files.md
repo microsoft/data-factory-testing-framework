@@ -21,24 +21,6 @@ You can open and save the JSON file that you will use for your pipeline from the
 3. Save as JSON file in your repository
 
 
-
-#### Synapse
-
-Refer to the docs if needed: [Load data into Azure Synapse Analytics - Azure Data Factory & Azure Synapse | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/load-azure-sql-data-warehouse?tabs=data-factory)
-
-[Download Azure Data Factory support files - Microsoft Community Hub](https://techcommunity.microsoft.com/t5/azure-data-factory-blog/download-azure-data-factory-support-files/ba-p/1042848)
-
-1. Open your Synapse/ ADF Environment, and open the resource you want the JSON.
-2. Click on the action ellipses
-3. Click "Download support files" and select the download location in local storage
-4. The Zip file contains the JSON Definition
-
-
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/c2f6427c-1676-4182-b5fa-da33cd0729cc)
-
-
-
-
 #### ADF 
 
 Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/)
