@@ -12,16 +12,16 @@ Planned:
 
 ## Disclaimer
 
-This unit test framework is not officially supported. It is currently in experimental state and has not been tested with every single data factory resource. It should support all activities out-of-the-box, but has not been thoroughly tested, please report any issues in the issues section and include an example of the pipeline that is not working as expected.
+This unit test framework is not officially supported. It is currently in an experimental state and has not been tested with every single data factory resource. It should support all activities out-of-the-box but has not been thoroughly tested, please report any issues in the issues section and include an example of the pipeline that is not working as expected.
 
-If there's a lot of interest in this framework, then we will continue to improve it and move it to a production ready state. 
+If there's a lot of interest in this framework, then we will continue to improve it and move it to a production-ready state. 
 
 ## Features
 
-Goal: Validate that the evaluated pipeline configuration with its expressions are behaving as expected on runtime.
+Goal: Validate that the evaluated pipeline configuration with its expressions is behaving as expected on runtime.
 
 1. Evaluate expressions with their functions and arguments instantly by using the framework's internal expression parser.
-2. Test a pipeline or activity against any state to assert expected outcome. State can be configured with pipeline parameters, global parameters, variables and activity outputs.
+2. Test a pipeline or activity against any state to assert the expected outcome. A state can be configured with pipeline parameters, global parameters, variables and activity outputs.
 3. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
 4. Dynamically supports all activity types with all their attributes.
 
@@ -30,25 +30,68 @@ Goal: Validate that the evaluated pipeline configuration with its expressions ar
 
 ## Why
 
-Data Factory does not support unit testing out of the box. The only way to validate your changes is through manual testing or running e2e tests against a deployed data factory. These tests are great to have, but miss the following benefits that unit tests, like using this unit test framework, provides:
+Data Factory does not support unit testing out of the box. The only way to validate your changes is through manual testing or running e2e tests against a deployed data factory. These tests are great to have, but miss the following benefits that unit tests, like using this unit test framework, provide:
 
-* Shift left with immediate feedback on changes - Evaluate any individual data factory resource (pipelines, activities, triggers, datasets, linkedServices etc..), including (complex) expressions
+* Shift left with immediate feedback on changes - Evaluate any individual data factory resource (pipelines, activities, triggers, datasets, linked services etc..), including (complex) expressions
 * Allows testing individual resources (e.g. activity) for many different input values to cover more scenarios.
-* Less issues in production - due to the fast nature of writing and running unit tests, you will write more tests in less time and therefore have a higher test coverage. This means more confidence in new changes, less risks in breaking existing features (regression tests) and thus far less issues in production.
+* Less issues in production - due to the fast nature of writing and running unit tests, you will write more tests in less time and therefore have a higher test coverage. This means more confidence in new changes, fewer risks in breaking existing features (regression tests), and thus far fewer issues in production.
 
-> Even though Data Factory is UI-driven and writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and existing pipelines will not break, without writing unit tests?
+> Even though Data Factory is UI-driven writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and that existing pipelines will not break, without writing unit tests?
 
 ## Getting started
 
 1. Set up an empty Python project with your favorite testing library
+   In case you want some suggestions about the setup or libraries that can be used. Please use our following setup suggestion: Docs/EnviromnentSetup/Unittest_setup.md
+   [Docs_Setup](https://github.com/data-factory-testing-framework/blob/main/Docs/EnviromnentSetup/Unittest_setup.md)
 2. Install the package using your preferred package manager:
-   * Pip: `pip install data-factory-testing-framework`
-   * Poetry: `poetry add data-factory-testing-framework`
-3. Start writing tests
+    Pip: `pip install data-factory-testing-framework`
+   
+3. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
+   In case you need some extra guidance in this affair please check our documentation: Docs/EnviromnentSetup/JSON_pipeline_files.md
+   [Docs Json](https://github.com/data-factory-testing-framework/blob/main/Docs/EnviromnentSetup/JSON_pipeline_files.md)
+  
+4. Start writing tests
 
-## Features - Examples
+## Examples
 
-The samples seen below is the _only_ code that you need to write! The framework will take care of the rest. 
+###  Examples - Loading your JSON file with the Framework and Pytest library:
+
+####  Libraries
+
+```python
+import pytest
+
+from data_factory_testing_framework.state import RunParameterType
+
+from data_factory_testing_framework.state.run_parameter import RunParameter
+
+from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
+```
+
+#### Function example
+The piece of the function example will get the JSON file by the name pipeline_fabric_test1 which is the JSON pipeline locally saved in the project using pytest.
+
+
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/f878dddb-a9ce-40e1-a130-7da51ac67936)
+
+
+
+```python
+def test_pipeline(request: pytest.FixtureRequest) -> None:
+
+  test_framework = TestFramework(
+
+      framework_type=TestFrameworkType.DataFactory, root_folder_path=request.fspath.dirname
+
+    )
+
+  pipeline = test_framework.repository.get_pipeline_by_name("pipeline_fabric_test1")
+
+  ```
+
+### Features - Examples
+
+The samples seen below are the _only_ code that you need to write! The framework will take care of the rest. 
 
 1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API)
 
@@ -111,7 +154,7 @@ The samples seen below is the _only_ code that you need to write! The framework 
         next(activities)
     ```
    
-> See Examples folder for more samples
+> See the Examples folder for more samples
 
 ## Registering missing expression functions
 
@@ -133,14 +176,14 @@ On runtime when evaluating expressions, the framework will try to find a matchin
 ## Recommended development workflow for Azure Data Factory v2
 
 * Use ADF Git integration
-* Use UI to create feature branch, build initial pipeline and save to feature branch
+* Use UI to create a feature branch, build the initial pipeline, and save it to the feature branch
 * Pull feature branch locally
-* Start writing tests unit and functional tests, run them locally for immediate feedback and fix bugs
-* Push changes to feature branch
-* Test the new features manually through the UI in sandbox environment
+* Start writing tests unit and functional tests, run them locally for immediate feedback, and fix bugs
+* Push changes to the feature branch
+* Test the new features manually through the UI in a sandbox environment
 * Create PR, which will run the tests in the CI pipeline
 * Approve PR
-* Merge to main and start deploying to dev/test/prd environments
+* Merge to main and start deploying to dev/test/prod environments
 * Run e2e tests after each deployment to validate all happy flows work on that specific environment
 
 ## Contributing
