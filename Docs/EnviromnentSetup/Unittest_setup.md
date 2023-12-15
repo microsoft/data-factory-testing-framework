@@ -23,7 +23,8 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
    Please note, that the data-factory-testing-framework has dependencies on the following libraries:
    
-   ```
+   
+   ```python
    pip install sentence-transformers
    
    pip install Flask
@@ -39,7 +40,8 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
    
    
-   ```
+   
+   ```python
    pip install data-factory-testing-framework
    ```
 
@@ -51,7 +53,8 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
 **Additionally** you could use for example <u>pytest or poetry( or both) or even another</u> library that you prefer for the Unit test: 
 
-```
+
+```python
 pip install pytest
 pip install poetry
 ```
