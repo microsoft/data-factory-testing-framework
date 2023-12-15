@@ -36,7 +36,7 @@ Data Factory does not support unit testing out of the box. The only way to valid
 * Allows testing individual resources (e.g. activity) for many different input values to cover more scenarios.
 * Less issues in production - due to the fast nature of writing and running unit tests, you will write more tests in less time and therefore have a higher test coverage. This means more confidence in new changes, fewer risks in breaking existing features (regression tests), and thus far fewer issues in production.
 
-> Even though Data Factory is UI-driven writing unit tests might not be in the nature of it. How can you be confident that your changes will work as expected, and that existing pipelines will not break, without writing unit tests?
+> Even though Data Factory is UI-driven writing unit tests, and might not be in the nature of it. How can you be confident that your changes will work as expected, and that existing pipelines will not break, without writing unit tests?
 
 ## Getting started
 
