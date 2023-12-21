@@ -32,7 +32,7 @@ Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Fact
 4. The Zip file contains the JSON Definition
    
 
-   ![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/86c98352-a9f4-4b8e-932e-bc57c2b457bc)
+   ![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/DownloadSupportFiles.png)
  
 
    
