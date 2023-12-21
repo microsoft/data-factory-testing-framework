@@ -10,12 +10,13 @@ If for example you are using Visual Studio Code:
 
 For more references: [Get Started Tutorial for Python in Visual Studio Code](https://code.visualstudio.com/docs/python/python-tutorial)
 
-1. Open your new Python project. 
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/9f76474d-b365-43e5-8fb0-dc074cdb1584)
+1. Open your new Python project.
+   
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/New_vs_project.png)
 
 
 
-2. Pip install the following libraries from the terminal - data-factory-testing-framework:
+3. Pip install the following libraries from the terminal - data-factory-testing-framework:
 
    References about the vs code terminal : [Integrated Terminal in Visual Studio Code](https://code.visualstudio.com/docs/terminal/basics)
 
@@ -56,7 +57,7 @@ Library Docs for reference:
 [pytest: helps you write better programs — pytest documentation](https://docs.pytest.org/en/7.4.x/)
 
 
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/2d40fa37-36d4-4315-8613-24b701210855)
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/pipinstall_poetry.png)
 
 
 
@@ -73,16 +74,19 @@ Library Docs for reference:
 (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python
 ```
 
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/7e640198-8d37-46eb-97d1-d82765633eb0)
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/power_shell_invoke.png)
 
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/installing_poetry_power_shell.png)
 
 2. Add the bin to the PATH environment variable to the path
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/43c1f4e8-b57a-4a19-adc2-d122c90d8713)
+   
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/env_variable.png)
 
 
-3. Add the unit test framework for testing. 
+4. Add the unit test framework for testing. 
 
 `poetry add data-factory-testing-framework`poetry 
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/2043c19f-b34d-4d29-af96-b505c3f96e82)
+
+![image](https://github.com/LiliamLeme/data-factory-testing-framework/blob/main/Docs/environment_setup/images/poetry_framework.png)
 
 Let's Start testing!
