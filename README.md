@@ -16,6 +16,37 @@ This unit test framework is not officially supported. It is currently in experim
 
 If there's a lot of interest in this framework, then we will continue to improve it and move it to a production ready state. 
 
+## Unit Testing and Functional Testing
+
+Unit and functional testing are known terms when it comes to software development. As Data pipelines are being targeted in this project is important to clarify what Unit and Functional testing means in their context for this particular framework.
+
+### Unit Testing
+
+“Unit testing is a software testing method by which individual units of source code—sets of one or more computer program modules together with associated control data, usage procedures, and operating procedures—are tested to determine whether they are fit for use.” (*)
+ 
+(*) Definition taken from Wikipedia.
+ 
+When applying the same concept to a Data pipeline, unit testing means to be able to test the individual activities to determine whether if each individual activity is functioning as expected. An activity might be composed of expressions, variables, parameters and many other configuration fields. As a user and author of your own pipelines, you have the freedom of deciding which aspects of the activity you want to test. The unit test should target the portion or portions of the activity that otherwise might be challenging to test. A classic example, is testing expressions as for example, testing that the target folder path is built correctly within the expression and given the input parameters:
+
+```json
+ "folderPath": {
+      "value": "@concat('nyc_taxi_data','/',pipeline().parameters.dynamicyear,'/',pipeline().parameters.dynamicmonth)",
+       "type": "Expression"
+ }
+ ```
+
+ ### Functional Testing
+
+"In software development, functional testing is a quality assurance (QA) process and a type of black-box testing that bases its test cases on the specifications of the software component under test. Functions are tested by feeding them input and examining the output, and internal program structure is rarely considered (unlike white-box testing). Functional software testing is conducted to evaluate the compliance of a system or component with specified functional requirements. Functional testing usually describes what the system does." (*)
+
+(*) Definition taken from Wikipedia.
+
+In te context of the Testing framework, functional testing means being able to test the end-to-end json definition of the pipeline. That means making sure that outputs from initial activities are plugged in into inputs of upcoming activities and the final result of the pipeline flow is as expected taking into account these values.
+
+The functional test is not going to test if the end-2-end execution is accurate, for example if the framework is testing a copy activity, it doesn't tests if the data was successfully copied, what it tests is if the source configurations and target configurations are accurate for the copy.
+
+To test the successful execution itself, integration tests can be used but they are out-of-scope for this repository.
+
 ## Features
 
 Goal: Validate that the evaluated pipeline configuration with its expressions are behaving as expected on runtime.
