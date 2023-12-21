@@ -37,7 +37,7 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
                 "WorkloadUserAssignedIdentityClientId",
                 "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name",
             ),
-            RunParameter(RunParameterType.Pipeline, "JobAdditionalEnvironmentSettings", "[]"),
+            RunParameter(RunParameterType.Pipeline, "JobAdditionalEnvironmentSettings", []),
             RunParameter(
                 RunParameterType.Pipeline,
                 "OutputStorageAccountName",
@@ -82,7 +82,7 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert activity.name == "Set CommonEnvironmentSettings"
     assert activity.type_properties["variableName"] == "CommonEnvironmentSettings"
 
-    common_environment_settings = activity.type_properties["value"].get_json_value()
+    common_environment_settings = activity.type_properties["value"].value
     assert len(common_environment_settings) == 8
     assert common_environment_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert common_environment_settings[0]["value"] == "test-application"

@@ -2,8 +2,6 @@
 
 See https://learn.microsoft.com/en-us/azure/data-factory/control-flow-expression-language-functions
 """
-
-
 import uuid
 from typing import Literal, Optional
 

@@ -124,14 +124,12 @@ def json(value: Union[str, etree.ElementBase]) -> Any:  # noqa: ANN401
         obj = xmltodict.parse(elem_str)
         return obj
 
-    # TODO: we do not support objects yet (e.g., list, dict, complex objects) thus flatten to string
-    # return json_lib.loads(value)
-    return value
+    return json_lib.loads(value)
 
 
 def string(value: Any) -> str:  # noqa: ANN401
     """Return the string version for a value."""
-    if isinstance(value, dict):
+    if isinstance(value, dict) or isinstance(value, list):
         return json_lib.dumps(value)
 
     return str(value)

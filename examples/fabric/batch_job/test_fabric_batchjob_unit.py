@@ -156,7 +156,7 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
     activity.evaluate(state)
 
     # Assert
-    env_settings = activity.type_properties["value"].get_json_value()
+    env_settings = activity.type_properties["value"].value
     assert env_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert env_settings[0]["value"] == "workload"
     assert env_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
