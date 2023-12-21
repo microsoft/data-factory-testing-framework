@@ -1,32 +1,17 @@
 import inspect
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
-from lark import Discard, Token, Transformer
+from lark import Discard, Token, Transformer, Tree
 from lxml.etree import _Element
 
-from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from data_factory_testing_framework.exceptions.activity_output_field_not_found_error import (
-    ActivityOutputFieldNotFoundError,
-)
-from data_factory_testing_framework.exceptions.dataset_parameter_not_found_error import (
-    DatasetParameterNotFoundError,
-)
 from data_factory_testing_framework.exceptions.expression_evaluation_error import (
     ExpressionEvaluationError,
-)
-from data_factory_testing_framework.exceptions.expression_parameter_not_found_error import (
-    ExpressionParameterNotFoundError,
-)
-from data_factory_testing_framework.exceptions.linked_service_parameter_not_found_error import (
-    LinkedServiceParameterNotFoundError,
 )
 from data_factory_testing_framework.exceptions.state_iteration_item_not_set_error import (
     StateIterationItemNotSetError,
 )
-from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.state.run_parameter import RunParameter
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
 
 
@@ -98,111 +83,92 @@ class ExpressionTransformer(Transformer):
         token.value = int(token.value[1:-1])
         return token
 
-    def expression_pipeline_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
-        if not (isinstance(value[0], Token) and value[0].type == "EXPRESSION_PIPELINE_PROPERTY"):
+    def expression_pipeline_reference(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
+        if not (isinstance(values[0], Token) and values[0].type == "EXPRESSION_PIPELINE_PROPERTY"):
             raise ExpressionEvaluationError('Pipeline reference requires Token "EXPRESSION_PIPELINE_PROPERTY"')
 
-        if not (isinstance(value[1], Token) and value[1].type == "EXPRESSION_PARAMETER_NAME"):
+        if not (isinstance(values[1], Token) and values[1].type == "EXPRESSION_PARAMETER_NAME"):
             raise ExpressionEvaluationError('Pipeline reference requires Token "EXPRESSION_PARAMETER_NAME"')
-        pipeline_reference_property: Token = value[0]
-        pipeline_reference_property_parameter: Token = value[1]
 
-        global_parameters: list[RunParameter] = list(
-            filter(lambda p: p.type == RunParameterType.Global, self.state.parameters)
+        parameter_name = values[1]
+        parameter_type = self._parse_run_parameter_type(values[0])
+        parameter_value = self.state.get_parameter_by_type_and_name(
+            parameter_type,
+            parameter_name,
         )
-        pipeline_parameters = list(filter(lambda p: p.type == RunParameterType.Pipeline, self.state.parameters))
 
-        first = None
-        if pipeline_reference_property == "parameters":
-            first = list(filter(lambda p: p.name == pipeline_reference_property_parameter, pipeline_parameters))
-        else:
-            first = list(filter(lambda p: p.name == pipeline_reference_property_parameter, global_parameters))
+        remaining_fields = values[2:]
+        return self._evaluate_expression_object_accessors(parameter_value, remaining_fields)
 
-        if len(first) == 0:
-            raise ExpressionParameterNotFoundError(pipeline_reference_property_parameter)
-
-        return first[0].value
-
-    def expression_variable_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
-        if not (isinstance(value[0], Token) and value[0].type == "EXPRESSION_VARIABLE_NAME"):
+    def expression_variable_reference(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
+        if not (isinstance(values[0], Token) and values[0].type == "EXPRESSION_VARIABLE_NAME"):
             raise ExpressionEvaluationError('Variable reference requires Token "EXPRESSION_VARIABLE_NAME"')
 
-        variable_name = value[0].value
+        variable_name = values[0].value
         variable_name = variable_name[1:-1]  # remove quotes
-        variable = list(filter(lambda p: p.name == variable_name, self.state.variables))
 
-        if len(variable) == 0:
-            raise VariableNotFoundError(variable_name)
-        return variable[0].value
+        variable = self.state.get_variable_by_name(variable_name)
 
-    def expression_dataset_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
-        if not (isinstance(value[0], Token) and value[0].type == "EXPRESSION_DATASET_NAME"):
+        remaining_fields = values[1:]
+        return self._evaluate_expression_object_accessors(variable.value, remaining_fields)
+
+    def expression_dataset_reference(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
+        if not (isinstance(values[0], Token) and values[0].type == "EXPRESSION_DATASET_NAME"):
             raise ExpressionEvaluationError('Dataset reference requires Token "EXPRESSION_DATASET_NAME"')
 
-        dataset_name = value[0].value
+        dataset_name = values[0].value
         dataset_name = dataset_name[1:-1]  # remove quotes
-        datasets = list(filter(lambda p: p.type == RunParameterType.Dataset, self.state.parameters))
-        dataset = list(filter(lambda p: p.name == dataset_name, datasets))
 
-        if len(dataset) == 0:
-            raise DatasetParameterNotFoundError(dataset_name)
-        return dataset[0].value
+        dataset = self.state.get_parameter_by_type_and_name(
+            RunParameterType.Dataset,
+            dataset_name,
+        )
 
-    def expression_linked_service_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
-        if not (isinstance(value[0], Token) and value[0].type == "EXPRESSION_LINKED_SERVICE_NAME"):
+        remaining_fields = values[2:]
+        return self._evaluate_expression_object_accessors(dataset, remaining_fields)
+
+    def expression_linked_service_reference(
+        self, values: list[Token, str, int, float, bool]
+    ) -> [str, int, float, bool]:
+        if not (isinstance(values[0], Token) and values[0].type == "EXPRESSION_LINKED_SERVICE_NAME"):
             raise ExpressionEvaluationError('Linked service reference requires Token "EXPRESSION_LINKED_SERVICE_NAME"')
 
-        linked_service_name = value[0].value
+        linked_service_name = values[0].value
         linked_service_name = linked_service_name[1:-1]  # remove quotes
-        linked_services = list(filter(lambda p: p.type == RunParameterType.LinkedService, self.state.parameters))
-        linked_service = list(filter(lambda p: p.name == linked_service_name, linked_services))
 
-        if len(linked_service) == 0:
-            raise LinkedServiceParameterNotFoundError(linked_service_name)
-        return linked_service[0].value
+        linked_service = self.state.get_parameter_by_type_and_name(
+            RunParameterType.LinkedService,
+            linked_service_name,
+        )
 
-    def expression_activity_reference(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
-        if not (isinstance(values[0], Token) and values[0].type == "EXPRESSION_ACTIVITY_NAME"):
+        remaining_fields = values[2:]
+        return self._evaluate_expression_object_accessors(linked_service, remaining_fields)
+
+    def expression_activity_reference(
+        self, values: list[Tree, Token, str, int, float, bool]
+    ) -> [str, int, float, bool]:
+        expression_activity_name = values[0]
+        if not isinstance(expression_activity_name, Token):
+            raise ExpressionEvaluationError("Activity reference requires Token")
+
+        if not expression_activity_name.type == "EXPRESSION_ACTIVITY_NAME":
             raise ExpressionEvaluationError('Activity reference requires Token "EXPRESSION_ACTIVITY_NAME"')
 
-        activity_name = values[0].value
+        activity_name = expression_activity_name.value
         activity_name = activity_name[1:-1]  # remove quotes
 
-        if not all(
-            isinstance(value, Token) and value.type in ["EXPRESSION_PARAMETER_NAME", "EXPRESSION_ARRAY_INDEX"]
-            for value in values[1:]
-        ):
-            raise ExpressionEvaluationError(
-                'Activity property and fields should be of type "EXPRESSION_PARAMETER_NAME" or "EXPRESSION_ARRAY_INDEX"'
-            )
+        activity = self.state.get_activity_result_by_name(activity_name)
 
-        activity = self.state.try_get_scoped_activity_result_by_name(activity_name)
-        if activity is None:
-            raise ActivityNotFoundError(activity_name)
+        remaining_fields = values[1:]
+        return self._evaluate_expression_object_accessors(activity, remaining_fields)
 
-        property_tokens = values[1:]
-        current_output = activity
-
-        while len(property_tokens) > 0:
-            current_token = property_tokens.pop(0)
-            if current_token.type == "EXPRESSION_PARAMETER_NAME":
-                if current_token.value not in current_output:
-                    raise ActivityOutputFieldNotFoundError(activity_name, current_token.value)
-
-                current_output = current_output[current_token.value]
-                continue
-            if current_token.type == "EXPRESSION_ARRAY_INDEX":
-                if not isinstance(current_output, list):
-                    raise ExpressionEvaluationError("Array index can only be used on lists")
-                current_output = current_output[current_token.value]
-                continue
-        return current_output
-
-    def expression_item_reference(self, value: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
+    def expression_item_reference(self, values: list[Tree, Token, str, int, float, bool]) -> [str, int, float, bool]:
         item = self.state.iteration_item
         if item is None:
             raise StateIterationItemNotSetError()
-        return item
+
+        remaining_fields = values
+        return self._evaluate_expression_object_accessors(item, remaining_fields)
 
     def expression_system_variable_reference(
         self, value: list[Token, str, int, float, bool]
@@ -213,16 +179,47 @@ class ExpressionTransformer(Transformer):
             )
 
         system_variable_name: Token = value[0]
-
-        system_variable_parameters: list[RunParameter] = list(
-            filter(lambda p: p.type == RunParameterType.System, self.state.parameters)
+        system_variable = self.state.get_parameter_by_type_and_name(
+            RunParameterType.System,
+            system_variable_name,
         )
 
-        system_parameters = list(filter(lambda p: p.name == system_variable_name, system_variable_parameters))
-        if len(system_parameters) == 0:
-            raise ExpressionParameterNotFoundError(system_variable_name)
+        return system_variable
 
-        return system_parameters[0].value
+    @staticmethod
+    def _evaluate_expression_object_accessors(current_item: Any, expression_object_accessors: list[Tree]) -> Any:  # noqa: ANN401
+        if not all(
+            isinstance(expression_object_accessor, Tree)
+            and isinstance(expression_object_accessor.data, Token)
+            and expression_object_accessor.data.value == "expression_object_accessor"
+            for expression_object_accessor in expression_object_accessors
+        ):
+            raise ExpressionEvaluationError('Fields should be of type "expression_object_accessor"')
+
+        for expression_object_accessor in expression_object_accessors:
+            for field_token in expression_object_accessor.children:
+                # If start was not ARRAY_INDEX then first field_token can be None. Perhaps fixable in grammar.
+                if field_token is None:
+                    continue
+
+                if not isinstance(field_token, Token):
+                    raise ExpressionEvaluationError('Fields should be of type "Token"')
+                if field_token.type == "EXPRESSION_PARAMETER_NAME":
+                    if field_token.value not in current_item:
+                        raise ValueError(field_token.value)
+
+                    current_item = current_item[field_token.value]
+                elif field_token.type == "EXPRESSION_ARRAY_INDEX":
+                    if not isinstance(current_item, list):
+                        raise ExpressionEvaluationError("Array index can only be used on lists")
+
+                    current_item = current_item[field_token.value]
+                else:
+                    raise ExpressionEvaluationError(
+                        'Fields should be of type "EXPRESSION_PARAMETER_NAME" or "EXPRESSION_ARRAY_INDEX"'
+                    )
+
+        return current_item
 
     def expression_function_parameters(self, values: list[Token, str, int, float, bool]) -> list:
         if not all(type(value) in [str, int, float, bool, list, _Element] or value is None for value in values):
@@ -283,3 +280,12 @@ class ExpressionTransformer(Transformer):
         # TODO: implement automatic conversion of parameters based on type hints
         result = function(*pos_or_keyword_values, *var_positional_values)
         return result
+
+    @staticmethod
+    def _parse_run_parameter_type(run_parameter_type: str) -> RunParameterType:
+        if run_parameter_type == "parameters":
+            return RunParameterType.Pipeline
+        elif run_parameter_type == "globalParameters":
+            return RunParameterType.Global
+        else:
+            raise ValueError(f"Unsupported run parameter type: {run_parameter_type}")
