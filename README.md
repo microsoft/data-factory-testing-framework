@@ -41,16 +41,20 @@ Data Factory does not support unit testing out of the box. The only way to valid
 ## Getting started
 
 1. Set up an empty Python project with your favorite testing library
-   More information: Docs/environment_setup/Unittest_setup.md
-   [Docs_Setup](https://github.com/data-factory-testing-framework/blob/main/Docs/EnviromnentSetup/Unittest_setup.md)
-2. Install the package using your preferred package manager:
+   
+   More information: 
+   [docs_Setup](/docs/environment_setup/Unittest_setup.md)
+   
+3. Install the package using your preferred package manager:
+   
     Pip: `pip install data-factory-testing-framework`
    
-3. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
-   More information:: Docs/environment_setup/JSON_pipeline_files.md
-   [Docs Json](https://github.com/data-factory-testing-framework/blob/main/Docs/EnviromnentSetup/JSON_pipeline_files.md)
+5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
+   
+   More information: 
+   [docs Json](/docs/environment_setup/JSON_pipeline_files.md)
   
-4. Start writing tests
+7. Start writing tests
 
 ## Examples
 
@@ -70,11 +74,6 @@ from data_factory_testing_framework.test_framework import TestFramework, TestFra
 
 **Function**
 The piece of the function example will get the JSON file by the name pipeline_fabric_test1 which is the JSON pipeline locally saved in the project using pytest.
-
-
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/f878dddb-a9ce-40e1-a130-7da51ac67936)
-
-
 
 ```python
 def test_pipeline(request: pytest.FixtureRequest) -> None:
