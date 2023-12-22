@@ -13,7 +13,7 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 1. Open your new Python project.
 
 
-![image](/docs/environment_setup/images/New_vs_project.png)
+![image](/docs/environment_setup/images/new_vs_project.png)
 
 
 3. Pip install the following libraries from the terminal - data-factory-testing-framework:
