@@ -81,61 +81,63 @@ The samples seen below are the _only_ code that you need to write! The framework
     # Assert
     assert "https://example.com/jobs" == activity.type_properties["url"].value
     assert "POST" == activity.type_properties["method"].value
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == activity.type_properties["body"].value
-    ```
+    body = activity.type_properties["body"].get_json_value()
+    assert "123" == body["JobId"]
+    assert "Job-123" == body["JobName"]
+    assert "version1" == body["Version"]
+   ```
    
-2. Evaluate Pipelines and test the flow of activities given a specific input
+   2. Evaluate Pipelines and test the flow of activities given a specific input
 
-    ```python
-    # Arrange
-    pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
+       ```python
+       # Arrange
+       pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
 
-    # Runs the pipeline with the provided parameters
-    activities = test_framework.evaluate_pipeline(pipeline, [
-        RunParameter(RunParameterType.Pipeline, "JobId", "123"),
-        RunParameter(RunParameterType.Pipeline, "ContainerName", "test-container"),
-        RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
-    ])
+       # Runs the pipeline with the provided parameters
+       activities = test_framework.evaluate_pipeline(pipeline, [
+           RunParameter(RunParameterType.Pipeline, "JobId", "123"),
+           RunParameter(RunParameterType.Pipeline, "ContainerName", "test-container"),
+           RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
+       ])
 
-    set_variable_activity: Activity = next(activities)
-    assert set_variable_activity is not None
-    assert "Set JobName" == set_variable_activity.name
-    assert "JobName" == activity.type_properties["variableName"]
-    assert "Job-123" == activity.type_properties["value"].value
+       set_variable_activity: Activity = next(activities)
+       assert set_variable_activity is not None
+       assert "Set JobName" == set_variable_activity.name
+       assert "JobName" == activity.type_properties["variableName"]
+       assert "Job-123" == activity.type_properties["value"].value
 
-    get_version_activity = next(activities)
-    assert get_version_activity is not None
-    assert "Get version" == get_version_activity.name
-    assert "https://example.com/version" == get_version_activity.type_properties["url"].value
-    assert "GET" == get_version_activity.type_properties["method"]
-    get_version_activity.set_result(DependencyCondition.Succeeded,{"Version": "version1"})
+       get_version_activity = next(activities)
+       assert get_version_activity is not None
+       assert "Get version" == get_version_activity.name
+       assert "https://example.com/version" == get_version_activity.type_properties["url"].value
+       assert "GET" == get_version_activity.type_properties["method"]
+       get_version_activity.set_result(DependencyCondition.Succeeded,{"Version": "version1"})
 
-    create_batch_activity = next(activities)
-    assert create_batch_activity is not None
-    assert "Trigger Azure Batch Job" == create_batch_activity.name
-    assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].value
-    assert "POST" == create_batch_activity.type_properties["method"]
-    assert "{ \n    \"JobId\": \"123\",\n    \"JobName\": \"Job-123\",\n    \"Version\": \"version1\",\n}" == create_batch_activity.type_properties["body"].value
+       create_batch_activity = next(activities)
+       assert create_batch_activity is not None
+       assert "Trigger Azure Batch Job" == create_batch_activity.name
+       assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].value
+       assert "POST" == create_batch_activity.type_properties["method"]
+       body = create_batch_activity.type_properties["body"].get_json_value()
+       assert "123" == body["JobId"]
+       assert "Job-123" == body["JobName"]
+       assert "version1" == body["Version"]
 
-    with pytest.raises(StopIteration):
-        next(activities)
-    ```
+       with pytest.raises(StopIteration):
+           next(activities)
+       ```
    
 > See the [Examples](/examples) folder for more samples 
 
 
 ## Registering missing expression functions
 
-As the framework is interpreting expressions containing functions, these functions need to be implemented in Python. The goal is to start supporting more and more functions, but if a function is not supported, then the following code can be used to register a missing function:
+As the framework is interpreting expressions containing functions, these functions are implemented in the framework, but there may be bugs in some of them. You can override their implementation through:
 
 ```python
    FunctionsRepository.register("concat", lambda arguments: "".join(arguments))
    FunctionsRepository.register("trim", lambda text, trim_argument: text.strip(trim_argument[0]))
-``` 
-
-On runtime when evaluating expressions, the framework will try to find a matching function and assert the expected amount of arguments are supplied. If no matching function is found, then an exception will be thrown.
-
-> Feel free to add a pull request with your own custom functions, so that they can be added to the framework and enjoyed by everyone.
+```
 
 ## Tips
 

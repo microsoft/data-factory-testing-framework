@@ -7,8 +7,11 @@ import xmltodict
 from lxml import etree
 
 
-def array(value: str) -> list:
+def array(value: Union[str, list]) -> list:
     """Return an array from a single specified input. For multiple inputs, see createArray()."""
+    if isinstance(value, list):
+        return value
+
     return [value]
 
 

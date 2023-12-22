@@ -81,43 +81,30 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     activity = next(activities)
     assert activity.name == "Set CommonEnvironmentSettings"
     assert activity.type_properties["variableName"] == "CommonEnvironmentSettings"
-    # noqa: E501
+
+    common_environment_settings = activity.type_properties["value"].get_json_value()
+    assert len(common_environment_settings) == 8
+    assert common_environment_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
+    assert common_environment_settings[0]["value"] == "test-application"
+    assert common_environment_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
+    assert common_environment_settings[1]["value"] == "1.5.0"
+    assert common_environment_settings[2]["name"] == "MANAGER_APP_PACKAGE"
+    assert common_environment_settings[2]["value"] == "batchmanager"
+    assert common_environment_settings[3]["name"] == "MANAGER_APP_PACKAGE_VERSION"
+    assert common_environment_settings[3]["value"] == "2.0.0"
+    assert common_environment_settings[4]["name"] == "BATCH_JOB_TIMEOUT"
+    assert common_environment_settings[4]["value"] == "PT4H"
+    assert common_environment_settings[5]["name"] == "WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME"
+    assert common_environment_settings[5]["value"] == "batch-account-name"
+    assert common_environment_settings[6]["name"] == "WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID"
     assert (
-        activity.type_properties["value"].value
-        == """[
-    {
-        "name": "WORKLOAD_APP_PACKAGE",
-        "value": "test-application"
-    },
-    {
-        "name": "WORKLOAD_APP_PACKAGE_VERSION",
-        "value": "1.5.0"
-    },
-    {
-        "name": "MANAGER_APP_PACKAGE",
-        "value": "batchmanager"
-    },
-    {
-        "name": "MANAGER_APP_PACKAGE_VERSION",
-        "value": "2.0.0"
-    },
-    {
-        "name": "BATCH_JOB_TIMEOUT",
-        "value": "PT4H"
-    },
-    {
-        "name": "WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME",
-        "value": "batch-account-name"
-    },
-    {
-        "name": "WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID",
-        "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"
-    },
-    {
-        "name": "WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID",
-        "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"
-    }
-    ]"""  # noqa: E501
+        common_environment_settings[6]["value"]
+        == "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"  # noqa: E501
+    )
+    assert common_environment_settings[7]["name"] == "WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID"
+    assert (
+        common_environment_settings[7]["value"]
+        == "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"  # noqa: E501
     )
 
     activity = next(activities)
@@ -149,72 +136,57 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
         == "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0"
     )
     assert activity.type_properties["method"] == "POST"
+
+    body = activity.type_properties["body"].get_json_value()
+    assert body["id"] == "802100a5-ec79-4a52-be62-8d6109f3ff9a"
+    assert body["priority"] == 100
+    assert body["constraints"]["maxWallClockTime"] == "PT4H"
+    assert body["constraints"]["maxTaskRetryCount"] == 0
+    job_manager_task = body["jobManagerTask"]
+    assert job_manager_task["id"] == "Manager"
+    assert job_manager_task["displayName"] == "Manager"
+    assert job_manager_task["authenticationTokenSettings"]["access"] == ["job"]
     assert (
-        activity.type_properties["body"].value
-        == """{
-    "id": "802100a5-ec79-4a52-be62-8d6109f3ff9a",
-    "priority": 100,
-    "constraints": {
-        "maxWallClockTime":"PT4H",
-        "maxTaskRetryCount": 0
-    },
-    "jobManagerTask": {
-        "id": "Manager",
-        "displayName": "Manager",
-        "authenticationTokenSettings": {
-            "access": [
-                "job"
-            ]
-        },
-        "commandLine": "/bin/bash -c \\"python3 -m ensurepip --upgrade && python3 -m pip install --user $AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz && python3 -m pip install --user $AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz && python3 -m test-application job --parameter1 dummy --parameter2 another-dummy\\"",
-        "applicationPackageReferences": [
-            {
-                "applicationId": "batchmanager",
-                "version": "2.0.0"
-            },
-            {
-                "applicationId": "test-application",
-                "version": "1.5.0"
-            }
-        ],
-        "outputFiles": [
-            {
-                "destination": {
-                    "container": {
-                        "containerUrl": "https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a",
-                        "identityReference": {
-                            "resourceId": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"
-                        },
-                        "path": "Manager/$TaskLog"
-                    }
-                },
-                "filePattern": "../*.txt",
-                "uploadOptions": {
-                    "uploadCondition": "taskcompletion"
-                }
-            }
-        ],
-        "environmentSettings": [],
-        "requiredSlots": 1,
-        "killJobOnCompletion": false,
-        "userIdentity": {
-            "username": null,
-            "autoUser": {
-                "scope": "pool",
-                "elevationLevel": "nonadmin"
-            }
-        },
-        "runExclusive": true,
-        "allowLowPriorityNode": true
-    },
-    "poolInfo": {
-        "poolId": "batch-pool-id"
-    },
-    "onAllTasksComplete": "terminatejob",
-    "onTaskFailure": "noaction",
-    "usesTaskDependencies": true,
-    "commonEnvironmentSettings": [{"name": "WORKLOAD_APP_PACKAGE", "value": "test-application"}, {"name": "WORKLOAD_APP_PACKAGE_VERSION", "value": "1.5.0"}, {"name": "MANAGER_APP_PACKAGE", "value": "batchmanager"}, {"name": "MANAGER_APP_PACKAGE_VERSION", "value": "2.0.0"}, {"name": "BATCH_JOB_TIMEOUT", "value": "PT4H"}, {"name": "WORKLOAD_AUTO_STORAGE_ACCOUNT_NAME", "value": "batch-account-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_RESOURCE_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}, {"name": "WORKLOAD_USER_ASSIGNED_IDENTITY_CLIENT_ID", "value": "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"}]}"""  # noqa: E501
+        job_manager_task["commandLine"]
+        == '/bin/bash -c "python3 -m ensurepip --upgrade && python3 -m pip install --user $AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz && python3 -m pip install --user $AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz && python3 -m test-application job --parameter1 dummy --parameter2 another-dummy"'  # noqa: E501
     )
+    application_package_references = job_manager_task["applicationPackageReferences"]
+    assert len(application_package_references) == 2
+    assert application_package_references[0]["applicationId"] == "batchmanager"
+    assert application_package_references[0]["version"] == "2.0.0"
+    assert application_package_references[1]["applicationId"] == "test-application"
+    assert application_package_references[1]["version"] == "1.5.0"
+    output_files = job_manager_task["outputFiles"]
+    assert len(output_files) == 1
+    assert (
+        output_files[0]["destination"]["container"]["containerUrl"]
+        == "https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
+    )
+    assert (
+        output_files[0]["destination"]["container"]["identityReference"]["resourceId"]
+        == "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"  # noqa: E501
+    )
+    assert output_files[0]["destination"]["container"]["path"] == "Manager/$TaskLog"
+    assert output_files[0]["filePattern"] == "../*.txt"
+    assert output_files[0]["uploadOptions"]["uploadCondition"] == "taskcompletion"
+    assert len(job_manager_task["environmentSettings"]) == 0
+    assert job_manager_task["requiredSlots"] == 1
+    assert job_manager_task["killJobOnCompletion"] is False
+    assert job_manager_task["userIdentity"]["username"] is None
+    assert job_manager_task["userIdentity"]["autoUser"]["scope"] == "pool"
+    assert job_manager_task["userIdentity"]["autoUser"]["elevationLevel"] == "nonadmin"
+    assert job_manager_task["runExclusive"] is True
+    assert job_manager_task["allowLowPriorityNode"] is True
+    assert body["poolInfo"]["poolId"] == "batch-pool-id"
+    assert body["onAllTasksComplete"] == "terminatejob"
+    assert body["onTaskFailure"] == "noaction"
+    assert body["usesTaskDependencies"] is True
+    assert len(body["commonEnvironmentSettings"]) == 8
+    common_environment_settings = body["commonEnvironmentSettings"]
+    assert common_environment_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
+    assert common_environment_settings[0]["value"] == "test-application"
+    assert common_environment_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
+    assert common_environment_settings[1]["value"] == "1.5.0"
 
     activity = next(activities)
     assert activity.name == "Monitor Batch Job"

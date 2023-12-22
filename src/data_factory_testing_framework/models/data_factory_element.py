@@ -1,4 +1,5 @@
-from typing import Generic, TypeVar, Union
+import json
+from typing import Any, Generic, TypeVar, Union
 
 from data_factory_testing_framework.functions.expression_evaluator import ExpressionEvaluator
 from data_factory_testing_framework.state import RunState
@@ -24,3 +25,10 @@ class DataFactoryElement(Generic[T]):
         evaluator = ExpressionEvaluator()
         self.value = evaluator.evaluate(self.expression, state)
         return self.value
+
+    def get_json_value(self) -> Any:  # noqa: ANN401
+        """Loads the value as a json object."""
+        if self.value:
+            return json.loads(self.value)
+
+        return None
