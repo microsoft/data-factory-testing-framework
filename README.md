@@ -71,11 +71,6 @@ from data_factory_testing_framework.test_framework import TestFramework, TestFra
 **Function**
 The piece of the function example will get the JSON file by the name pipeline_fabric_test1 which is the JSON pipeline locally saved in the project using pytest.
 
-
-![image](https://github.com/LiliamLeme/data-factory-testing-framework/assets/62876278/f878dddb-a9ce-40e1-a130-7da51ac67936)
-
-
-
 ```python
 def test_pipeline(request: pytest.FixtureRequest) -> None:
 
