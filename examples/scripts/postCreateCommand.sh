@@ -1,3 +1,3 @@
 #!/bin/bash
 python -m pip install --upgrade pip
-pip install -r src/requirements.txt
+pip install -r examples/requirements.txt

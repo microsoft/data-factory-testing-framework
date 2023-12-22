@@ -40,29 +40,11 @@ Data Factory does not support unit testing out of the box. The only way to valid
 
 ## Getting started
 
-### Running without a Dev Container
-1. Set up an empty Python project with your favorite testing library
-2. Install the package using your preferred package manager:
-   * Pip: `pip install data-factory-testing-framework`
-   * Poetry: `poetry add data-factory-testing-framework`
-3. Start writing tests
+### Start writting tests
 
-### Running with  a Dev Container
+To get started using the tests, refer to the following [README](./examples/README.md)
 
-#### Pre-requirements using Dev Containers
-To use a Dev Container, you need to have the following software in addition to the previous pre-requisites:
-
-- Docker
-- Visual Studio Code Remote Development Extension Pack
-
-In order to open the project in a container follow the following steps:
-
-- Open Visual Studio Code and clone the repository.
-- Hit Control-Shift-P to open the command palette and type Dev Containers: Open Folder in Container ...
-- When prompted, select the root directory of the Project
-- Wait for the container to build, check the logs for more information.
-
-When the container successfully starts you can start writting your data factory pipeline tests.
+### Start contributing to the framework (PLACEHOLDER - TO BE UPDATED)
 
 ## Features - Examples
 
