@@ -11,35 +11,24 @@ If for example you are using Visual Studio Code:
 For more references: [Get Started Tutorial for Python in Visual Studio Code](https://code.visualstudio.com/docs/python/python-tutorial)
 
 1. Open your new Python project.
-   
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/New_vs_project.png)
 
+
+![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/New_vs_project.png)
 
 
 3. Pip install the following libraries from the terminal - data-factory-testing-framework:
 
    References about the vs code terminal : [Integrated Terminal in Visual Studio Code](https://code.visualstudio.com/docs/terminal/basics)
-
-   
-    
-
+  
    ### **Then data-factory-testing-framework:**
-
-   
-   
    
    ```python
    pip install data-factory-testing-framework
    ```
 
-
-
 	### Additional Libraries
 
-
-
 **Additionally** you could use for example <u>pytest even another</u> test library that you prefer for the Unit test: 
-
 
 ```python
 pip install pytest
@@ -59,9 +48,6 @@ Library Docs for reference:
 
 ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/pipinstall_poetry.png)
 
-
-
-
 #### Poetry Configuration 
 
  If you decide to use poetry, please follow some additional steps. Also, use this reference for more information: [Introduction | Documentation | Poetry - Python dependency management and packaging made easy (python-poetry.org)](https://python-poetry.org/docs/#installation)
@@ -76,10 +62,13 @@ Library Docs for reference:
 
 ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/power_shell_invoke.png)
 
+
 ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/installing_poetry_power_shell.png)
 
+
 2. Add the bin to the PATH environment variable to the path
-   
+
+
 ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/env_variable.png)
 
 
@@ -87,6 +76,8 @@ Library Docs for reference:
 
 `poetry add data-factory-testing-framework`poetry 
 
+
 ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/poetry_framework.png)
+
 
 Let's Start testing!

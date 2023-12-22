@@ -7,12 +7,8 @@ Ideally, you would integrate your project with a repository such as GIT. Once th
 Fabric
 [Git integration process - Microsoft Fabric | Microsoft Learn](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-integration-process)
 
-
-
 ADF
 [Source control - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/source-control)
-
-
 
 ### Manual steps for testing purposes
 If you want just download one JSON file for a small test purpose and check how the framework here are some ideas on how to do it:
@@ -30,7 +26,7 @@ Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Fact
 3. Click "Download support files" and select the download location in local storage
 
 4. The Zip file contains the JSON Definition
-   
+
 
    ![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/DownloadSupportFiles.png)
  
