@@ -69,8 +69,6 @@ class ExpressionEvaluator:
             EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
-            EXPRESSION_DATASET_NAME: "'" /[^']*/ "'"
-            EXPRESSION_LINKED_SERVICE_NAME: "'" /[^']*/ "'"
             EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
             EXPRESSION_NULL: NULL
