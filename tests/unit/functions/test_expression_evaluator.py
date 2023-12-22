@@ -41,6 +41,7 @@ from pytest import param as p
                             Token("EXPRESSION_PARAMETER_NAME", "parameter"),
                         ],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="pipeline_parameters_reference",
@@ -57,6 +58,7 @@ from pytest import param as p
                             Token("EXPRESSION_PARAMETER_NAME", "parameter"),
                         ],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="pipeline_global_parameters_reference",
@@ -70,6 +72,7 @@ from pytest import param as p
                         Token("RULE", "expression_variable_reference"),
                         [Token("EXPRESSION_VARIABLE_NAME", "'variable'")],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="variables_reference",
@@ -85,46 +88,41 @@ from pytest import param as p
                             Token("EXPRESSION_ACTIVITY_NAME", "'activityName'"),
                             Tree(
                                 Token("RULE", "expression_object_accessor"),
-                                [
-                                    None,
-                                    Token("EXPRESSION_PARAMETER_NAME", "output"),
-                                    Token("EXPRESSION_PARAMETER_NAME", "outputName"),
-                                ],
+                                [Token("EXPRESSION_PARAMETER_NAME", "output")],
                             ),
                         ],
-                    )
+                    ),
+                    Tree(
+                        Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_PARAMETER_NAME", "outputName")]
+                    ),
                 ],
             ),
             id="activity_reference",
         ),
         p(
-            "@dataset('datasetName').parameterName",
+            "@dataset().parameterName",
             Tree(
                 Token("RULE", "expression_evaluation"),
                 [
                     Tree(
                         Token("RULE", "expression_dataset_reference"),
-                        [
-                            Token("EXPRESSION_DATASET_NAME", "'datasetName'"),
-                            Token("EXPRESSION_PARAMETER_NAME", "parameterName"),
-                        ],
+                        [Token("EXPRESSION_PARAMETER_NAME", "parameterName")],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="dataset_reference",
         ),
         p(
-            "@linkedService('linkedServiceName').parameterName",
+            "@linkedService().parameterName",
             Tree(
                 Token("RULE", "expression_evaluation"),
                 [
                     Tree(
                         Token("RULE", "expression_linked_service_reference"),
-                        [
-                            Token("EXPRESSION_LINKED_SERVICE_NAME", "'linkedServiceName'"),
-                            Token("EXPRESSION_PARAMETER_NAME", "parameterName"),
-                        ],
+                        [Token("EXPRESSION_PARAMETER_NAME", "parameterName")],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="linked_service_reference",
@@ -135,6 +133,7 @@ from pytest import param as p
                 Token("RULE", "expression_evaluation"),
                 [
                     Tree(Token("RULE", "expression_item_reference"), []),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="item_reference",
@@ -164,6 +163,7 @@ from pytest import param as p
                             ),
                         ],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="function_call",
@@ -193,6 +193,7 @@ from pytest import param as p
                             ),
                         ],
                     ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="function_call",
@@ -245,7 +246,8 @@ from pytest import param as p
                                                                 ],
                                                             ),
                                                         ],
-                                                    )
+                                                    ),
+                                                    Tree(Token("RULE", "expression_object_accessor"), []),
                                                 ],
                                             ),
                                         ],
@@ -253,7 +255,8 @@ from pytest import param as p
                                 ],
                             ),
                         ],
-                    )
+                    ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="function_call_with_nested_function_and_single_quote",
@@ -301,7 +304,8 @@ from pytest import param as p
                                                     Tree(
                                                         Token("RULE", "expression_variable_reference"),
                                                         [Token("EXPRESSION_VARIABLE_NAME", "'abc'")],
-                                                    )
+                                                    ),
+                                                    Tree(Token("RULE", "expression_object_accessor"), []),
                                                 ],
                                             ),
                                         ],
@@ -319,7 +323,8 @@ from pytest import param as p
                                                             Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
                                                             Token("EXPRESSION_PARAMETER_NAME", "abc"),
                                                         ],
-                                                    )
+                                                    ),
+                                                    Tree(Token("RULE", "expression_object_accessor"), []),
                                                 ],
                                             ),
                                         ],
@@ -337,14 +342,14 @@ from pytest import param as p
                                                             Token("EXPRESSION_ACTIVITY_NAME", "'abc'"),
                                                             Tree(
                                                                 Token("RULE", "expression_object_accessor"),
-                                                                [
-                                                                    None,
-                                                                    Token("EXPRESSION_PARAMETER_NAME", "output"),
-                                                                    Token("EXPRESSION_PARAMETER_NAME", "abc"),
-                                                                ],
+                                                                [Token("EXPRESSION_PARAMETER_NAME", "output")],
                                                             ),
                                                         ],
-                                                    )
+                                                    ),
+                                                    Tree(
+                                                        Token("RULE", "expression_object_accessor"),
+                                                        [Token("EXPRESSION_PARAMETER_NAME", "abc")],
+                                                    ),
                                                 ],
                                             ),
                                         ],
@@ -352,7 +357,8 @@ from pytest import param as p
                                 ],
                             ),
                         ],
-                    )
+                    ),
+                    Tree(Token("RULE", "expression_object_accessor"), []),
                 ],
             ),
             id="function_call_with_adf_native_functions",
@@ -398,19 +404,20 @@ from pytest import param as p
                                                                 ],
                                                             ),
                                                         ],
-                                                    )
+                                                    ),
+                                                    Tree(Token("RULE", "expression_object_accessor"), []),
                                                 ],
                                             ),
                                         ],
                                     ),
                                 ],
                             ),
-                            Tree(
-                                Token("RULE", "expression_object_accessor"),
-                                [Token("EXPRESSION_ARRAY_INDEX", "[1]"), Token("EXPRESSION_ARRAY_INDEX", "[1]")],
-                            ),
                         ],
-                    )
+                    ),
+                    Tree(
+                        Token("RULE", "expression_object_accessor"),
+                        [Token("EXPRESSION_ARRAY_INDEX", "[1]"), Token("EXPRESSION_ARRAY_INDEX", "[1]")],
+                    ),
                 ],
             ),
             id="function_call_with_nested_array_index",
@@ -430,7 +437,8 @@ from pytest import param as p
                                     Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
                                     Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
                                 ],
-                            )
+                            ),
+                            Tree(Token("RULE", "expression_object_accessor"), []),
                         ],
                     ),
                     Token("LITERAL_LETTER", "/"),
@@ -453,7 +461,8 @@ from pytest import param as p
                                     Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
                                     Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
                                 ],
-                            )
+                            ),
+                            Tree(Token("RULE", "expression_object_accessor"), []),
                         ],
                     ),
                     Token("LITERAL_LETTER", "/"),
@@ -466,7 +475,8 @@ from pytest import param as p
                                     Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
                                     Token("EXPRESSION_PARAMETER_NAME", "SubPath"),
                                 ],
-                            )
+                            ),
+                            Tree(Token("RULE", "expression_object_accessor"), []),
                         ],
                     ),
                 ],
@@ -548,17 +558,17 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
             id="activity_reference",
         ),
         p(
-            "@dataset('datasetName').parameterName",
-            PipelineRunState(parameters=[RunParameter(RunParameterType.Dataset, "datasetName", "datasetNameValue")]),
+            "@dataset().parameterName",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Dataset, "parameterName", "datasetNameValue")]),
             "datasetNameValue",
             id="dataset_reference",
         ),
         p(
-            "@linkedService('linkedServiceName').parameterName",
+            "@linkedService().parameterName",
             PipelineRunState(
-                parameters=[RunParameter(RunParameterType.LinkedService, "linkedServiceName", "linkedServiceNameValue")]
+                parameters=[RunParameter(RunParameterType.LinkedService, "parameterName", "parameterValue")]
             ),
-            "linkedServiceNameValue",
+            "parameterValue",
             id="linked_service_reference",
         ),
         p("@item()", PipelineRunState(iteration_item="value"), "value", id="item_reference"),
@@ -801,13 +811,13 @@ def test_evaluate_raises_exception_when_variable_not_found() -> None:
 
 def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
     # Arrange
-    expression = "@dataset('datasetName').parameterName[0].field1.field2"
+    expression = "@dataset().parameterName[0].field1.field2"
     evaluator = ExpressionEvaluator()
     state = PipelineRunState(
         parameters=[
             RunParameter(
                 RunParameterType.Dataset,
-                "datasetName",
+                "parameterName",
                 [
                     {
                         "field1": {"field2": "value1"},
@@ -826,7 +836,7 @@ def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
 
 def test_evaluate_raises_exception_when_dataset_not_found() -> None:
     # Arrange
-    expression = "@dataset('datasetName').parameterName"
+    expression = "@dataset().parameterName"
     evaluator = ExpressionEvaluator()
     state = PipelineRunState()
 
@@ -835,18 +845,18 @@ def test_evaluate_raises_exception_when_dataset_not_found() -> None:
         evaluator.evaluate(expression, state)
 
     # Assert
-    assert str(exinfo.value) == "Parameter: 'datasetName' of type 'RunParameterType.Dataset' not found"
+    assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.Dataset' not found"
 
 
 def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
     # Arrange
-    expression = "@linkedService('linkedServiceName').parameterName[0].field1.field2"
+    expression = "@linkedService().parameterName[0].field1.field2"
     evaluator = ExpressionEvaluator()
     state = PipelineRunState(
         parameters=[
             RunParameter(
                 RunParameterType.LinkedService,
-                "linkedServiceName",
+                "parameterName",
                 [
                     {
                         "field1": {"field2": "value1"},
@@ -865,7 +875,7 @@ def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
 
 def test_evaluate_raises_exception_when_linked_service_not_found() -> None:
     # Arrange
-    expression = "@linkedService('linkedServiceName').parameterName"
+    expression = "@linkedService().parameterName"
     evaluator = ExpressionEvaluator()
     state = PipelineRunState()
 
@@ -874,7 +884,7 @@ def test_evaluate_raises_exception_when_linked_service_not_found() -> None:
         evaluator.evaluate(expression, state)
 
     # Assert
-    assert str(exinfo.value) == "Parameter: 'linkedServiceName' of type 'RunParameterType.LinkedService' not found"
+    assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.LinkedService' not found"
 
 
 def test_evaluate_raises_exception_when_activity_not_found() -> None:
