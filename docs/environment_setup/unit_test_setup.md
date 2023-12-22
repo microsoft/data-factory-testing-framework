@@ -16,17 +16,17 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 ![image](/docs/environment_setup/images/new_project.png)
 
 
-3. Pip install the following libraries from the terminal - data-factory-testing-framework:
+2. Pip install the following libraries from the terminal - data-factory-testing-framework:
 
    References about the vs code terminal : [Integrated Terminal in Visual Studio Code](https://code.visualstudio.com/docs/terminal/basics)
   
-   ### **Then data-factory-testing-framework:**
+**Then data-factory-testing-framework:**
    
    ```python
    pip install data-factory-testing-framework
    ```
 
-	### Additional Libraries
+### Additional Libraries
 
 **Additionally** you could use for example <u>pytest even another</u> test library that you prefer for the Unit test: 
 
@@ -48,13 +48,12 @@ Library Docs for reference:
 
 ![image](/docs/environment_setup/images/pipinstall_poetry.png)
 
-#### Poetry Configuration 
+#### Poetry Configuration - steps 
 
- If you decide to use poetry, please follow some additional steps. Also, use this reference for more information: [Introduction | Documentation | Poetry - Python dependency management and packaging made easy (python-poetry.org)](https://python-poetry.org/docs/#installation)
+1. If you decide to use poetry(this is optional), please follow some additional steps to configure. Also, please consider using this reference for more information: [Introduction | Documentation | Poetry - Python dependency management and packaging made easy (python-poetry.org)](https://python-poetry.org/docs/#installation)
 
- If you decide not to use it, feel free to ignore those steps.
 
-1. Run the following on the power shell, if you are using Windows:
+Run the following on the power shell, if you are using Windows:
 
 ```
 (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python
@@ -72,7 +71,7 @@ Library Docs for reference:
 ![image](/docs/environment_setup/images/env_variable.png)
 
 
-4. Add the unit test framework for testing. 
+3. Add the unit test framework for testing. 
 
 `poetry add data-factory-testing-framework`poetry 
 
