@@ -28,7 +28,7 @@ Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Fact
 4. The Zip file contains the JSON Definition
 
 
-   ![image](/docs/environment_setup/images/DownloadSupportFiles.png)
+   ![image](/docs/environment_setup/images/download_support_files.png)
  
 
    
