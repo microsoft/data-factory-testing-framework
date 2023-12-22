@@ -121,8 +121,8 @@ The samples seen below are the _only_ code that you need to write! The framework
         next(activities)
     ```
    
-> See the Examples folder for more samples 
-[examples](/examples)
+> See the [Examples](/examples) folder for more samples 
+
 
 ## Registering missing expression functions
 
