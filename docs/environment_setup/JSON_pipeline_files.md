@@ -8,7 +8,7 @@ Fabric
 [Git integration process - Microsoft Fabric | Microsoft Learn](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-integration-process)
 
 ADF
-[Source control - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/source-control)
+[Source control - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/azure/data-factory/source-control)
 
 ### Manual steps for testing purposes
 If you want just download one JSON file for a small test purpose and check how the framework here are some ideas on how to do it:
