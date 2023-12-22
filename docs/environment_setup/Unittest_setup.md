@@ -13,7 +13,7 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 1. Open your new Python project.
 
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/New_vs_project.png)
+![image](/docs/environment_setup/images/New_vs_project.png)
 
 
 3. Pip install the following libraries from the terminal - data-factory-testing-framework:
@@ -46,7 +46,7 @@ Library Docs for reference:
 [pytest: helps you write better programs — pytest documentation](https://docs.pytest.org/en/7.4.x/)
 
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/pipinstall_poetry.png)
+![image](/docs/environment_setup/images/pipinstall_poetry.png)
 
 #### Poetry Configuration 
 
@@ -60,16 +60,16 @@ Library Docs for reference:
 (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python
 ```
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/power_shell_invoke.png)
+![image](/docs/environment_setup/images/power_shell_invoke.png)
 
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/installing_poetry_power_shell.png)
+![image](/docs/environment_setup/images/installing_poetry_power_shell.png)
 
 
 2. Add the bin to the PATH environment variable to the path
 
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/env_variable.png)
+![image](/docs/environment_setup/images/env_variable.png)
 
 
 4. Add the unit test framework for testing. 
@@ -77,7 +77,7 @@ Library Docs for reference:
 `poetry add data-factory-testing-framework`poetry 
 
 
-![image](https://github.com/data-factory-testing-framework/blob/main/Docs/environment_setup/images/poetry_framework.png)
+![image](/docs/environment_setup/images/poetry_framework.png)
 
 
 Let's Start testing!
