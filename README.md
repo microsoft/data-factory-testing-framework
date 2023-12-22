@@ -45,16 +45,16 @@ Data Factory does not support unit testing out of the box. The only way to valid
    More information: 
    [docs_Setup](/docs/environment_setup/unit_test_setup.md)
    
-3. Install the package using your preferred package manager:
+2. Install the package using your preferred package manager:
    
     Pip: `pip install data-factory-testing-framework`
    
-5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
+3. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
    
    More information: 
    [docs Json](/docs/environment_setup/json_pipeline_files.md)
   
-7. Start writing tests
+4. Start writing tests
 
 ## Features - Examples
 
@@ -121,7 +121,7 @@ The samples seen below are the _only_ code that you need to write! The framework
         next(activities)
     ```
    
-> See the Examples folder for more samples
+> See the Examples folder for more samples -  [examples](/examples)
 
 ## Registering missing expression functions
 
