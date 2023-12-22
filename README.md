@@ -42,7 +42,7 @@ Data Factory does not support unit testing out of the box. The only way to valid
 
 1. Set up an empty Python project with your favorite testing library
    
-   More information: Docs/environment_setup/Unittest_setup.md
+   More information: 
    [docs_Setup](/docs/environment_setup/Unittest_setup.md)
    
 3. Install the package using your preferred package manager:
@@ -50,10 +50,11 @@ Data Factory does not support unit testing out of the box. The only way to valid
     Pip: `pip install data-factory-testing-framework`
    
 5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
-   More information: Doc/environment_setup/JSON_pipeline_files.md
+   
+   More information: 
    [docs Json](/docs/environment_setup/JSON_pipeline_files.md)
   
-6. Start writing tests
+7. Start writing tests
 
 ## Examples
 
