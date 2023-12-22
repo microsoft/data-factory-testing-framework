@@ -123,6 +123,7 @@ The samples seen below are the _only_ code that you need to write! The framework
    
 > See the Examples folder for more samples 
 [examples](/examples)
+
 ## Registering missing expression functions
 
 As the framework is interpreting expressions containing functions, these functions need to be implemented in Python. The goal is to start supporting more and more functions, but if a function is not supported, then the following code can be used to register a missing function:
