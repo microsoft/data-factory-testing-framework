@@ -40,11 +40,9 @@ Data Factory does not support unit testing out of the box. The only way to valid
 
 ## Getting started
 
-1. Set up an empty Python project with your favorite testing library
-2. Install the package using your preferred package manager:
-   * Pip: `pip install data-factory-testing-framework`
-   * Poetry: `poetry add data-factory-testing-framework`
-3. Start writing tests
+### Start writing tests
+
+To get started using the tests, refer to the following [README](./examples/README.md)
 
 ## Features - Examples
 
