@@ -52,7 +52,7 @@ Data Factory does not support unit testing out of the box. The only way to valid
 5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
    
    More information: 
-   [docs Json](/docs/environment_setup/JSON_pipeline_files.md)
+   [docs Json](/docs/environment_setup/json_pipeline_files.md)
   
 7. Start writing tests
 
