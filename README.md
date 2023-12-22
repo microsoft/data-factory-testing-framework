@@ -40,7 +40,7 @@ Data Factory does not support unit testing out of the box. The only way to valid
 
 ## Getting started
 
-### Start writting tests
+### Start writing tests
 
 To get started using the tests, refer to the following [README](./examples/README.md)
 

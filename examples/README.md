@@ -3,16 +3,16 @@
 
 To use the Testing Framework, is enough to import the published package resulting from the developement in the current repo located in src/data_factory_testing_framework.
 
-## Getting started with writting tests
+## Getting started with writing tests
 
 ### Running without a Dev Container
 1. Set up an empty Python project with your favorite testing library
-2. Install the package using your preferred package manager:
+2. To use the Testing Framework, install the data-factory-testing-framework package from PyPI via your preferred package manager:
    * Pip: `pip install data-factory-testing-framework`
    * Poetry: `poetry add data-factory-testing-framework`
-3. Start writing tests
+3. Start writting tests
 
-### Running with  a Dev Container
+### Running within a Dev Container
 
 #### Pre-requirements using Dev Containers
 To use a Dev Container, you need to have the following software in addition to the previous pre-requisites:
@@ -27,7 +27,7 @@ In order to open the project in a container follow the following steps:
 - When prompted, select the *examples* directory of the Project
 - Wait for the container to build, check the logs for more information.
 
-When the container successfully starts you can start writting your data factory pipeline tests.
+When the container successfully starts you can start writing your data factory pipeline tests.
 
 
 ## Features - Examples
