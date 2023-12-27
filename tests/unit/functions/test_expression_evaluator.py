@@ -963,11 +963,88 @@ def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> N
     assert str(exinfo.value) == "Parameter: 'RunId' of type 'RunParameterType.System' not found"
 
 
-def test_json_nested_object_with_list_and_attributes() -> None:
-    expression = '@json(\'{ "test": { "fieldlist": [ { "objattr": "test" } ] } }\').test.fieldlist[0].objattr'
+@pytest.mark.parametrize(
+    ["json_expression", "accessor", "expected"],
+    [
+        p(
+            '[ "field0", "field1" ]',
+            "[1]",
+            "field1",
+            id="list",
+        ),
+        p(
+            '{ "field0": "value0", "field1": "value1" }',
+            ".field1",
+            "value1",
+            id="field",
+        ),
+        p(
+            '[ { "field0": "value0" }, { "field1": "value1" } ]',
+            "[1].field1",
+            "value1",
+            id="field_in_list",
+        ),
+        p(
+            '[ [ "field0", "value0" ], [ "field1", "value1" ] ]',
+            "[1][1]",
+            "value1",
+            id="list_in_list",
+        ),
+        p(
+            '[ [ { "field0": "value0" }, { "field1": "value1" } ] ]',
+            "[0][1].field1",
+            "value1",
+            id="field_in_nested_list",
+        ),
+        p(
+            '{ "field0": [ "value0", "value1", "value2" ] }',
+            ".field0[1]",
+            "value1",
+            id="list_in_field",
+        ),
+        p(
+            '{ "field0": { "field1": "value1" } }',
+            ".field0.field1",
+            "value1",
+            id="field_in_field",
+        ),
+        p(
+            '{ "field0": { "field1": [ "value1", "value2" ] } }',
+            ".field0.field1[1]",
+            "value2",
+            id="list_in_field_in_field",
+        ),
+        p(
+            '{ "field0": [ { "field1": "value1" }, { "field2": "value2" } ] }',
+            ".field0[1].field2",
+            "value2",
+            id="field_in_list_in_field",
+        ),
+        p(
+            '{ "field0": [ { "field1": [ "value1", "value2" ] } ] }',
+            ".field0[0].field1[1]",
+            "value2",
+            id="list_in_field_in_list_in_field",
+        ),
+        p(
+            '{ "field0": { "field1": [ [ "value0", "value1" ] ] } }',
+            ".field0.field1[0][1]",
+            "value1",
+            id="field_in_field_in_list_in_list",
+        ),
+        p(
+            '[ [ { "field0": "value0" }, { "field1": "value1" } ] ]',
+            "[0][1].field1",
+            "value1",
+            id="list_in_list_in_field_in_field",
+        ),
+    ],
+)
+def test_json_nested_object_with_list_and_attributes(json_expression: str, accessor: str, expected: str) -> None:
+    expression = f"@json('{json_expression}'){accessor}"
 
     evaluator = ExpressionEvaluator()
     state = PipelineRunState()
     actual = evaluator.evaluate(expression, state)
 
-    assert actual == "test"
+    assert actual == expected
