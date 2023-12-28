@@ -48,7 +48,7 @@ class ExpressionEvaluator:
                                     | expression_linked_service_reference
                                     | expression_item_reference
                                     | expression_system_variable_reference
-            expression_object_accessor: ("." EXPRESSION_PARAMETER_NAME)* EXPRESSION_ARRAY_INDEX*
+            expression_object_accessor: ["." EXPRESSION_PARAMETER_NAME] | [EXPRESSION_ARRAY_INDEX]
 
             // reference rules:
             expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME
@@ -65,6 +65,7 @@ class ExpressionEvaluator:
             expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
             
             // expression terminals
+            // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
             EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
             EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
@@ -97,7 +98,7 @@ class ExpressionEvaluator:
         """
 
         grammer = base_grammar + literal_grammar + expression_grammar
-        self.lark_parser = Lark(grammer, start="start")
+        self.lark_parser = Lark(grammer, start="start", maybe_placeholders=False)
 
     def _supported_functions(self) -> str:
         functions = list(FunctionsRepository.functions.keys())

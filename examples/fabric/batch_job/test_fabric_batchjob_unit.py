@@ -254,10 +254,10 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
                 "WorkloadUserAssignedIdentityClientId",
                 "test-application-identity-client-id",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "JobAdditionalEnvironmentSettings",
-                '[{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}]',
+                [{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}],
             ),
         ],
         variables=[
@@ -275,7 +275,7 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
                 default_value="$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz",
             ),
             PipelineRunVariable(
-                name="CommonEnvironmentSettings", default_value='[{"name": "COMMON_ENV_SETTING", "value": "dummy"}]'
+                name="CommonEnvironmentSettings", default_value=[{"name": "COMMON_ENV_SETTING", "value": "dummy"}]
             ),
         ],
     )

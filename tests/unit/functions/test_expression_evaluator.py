@@ -414,10 +414,8 @@ from pytest import param as p
                             ),
                         ],
                     ),
-                    Tree(
-                        Token("RULE", "expression_object_accessor"),
-                        [Token("EXPRESSION_ARRAY_INDEX", "[1]"), Token("EXPRESSION_ARRAY_INDEX", "[1]")],
-                    ),
+                    Tree(Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_ARRAY_INDEX", "[1]")]),
+                    Tree(Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_ARRAY_INDEX", "[1]")]),
                 ],
             ),
             id="function_call_with_nested_array_index",

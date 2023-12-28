@@ -165,12 +165,12 @@ class ExpressionTransformer(Transformer):
         return self._evaluate_expression_object_accessors(activity, [values[1]])
 
     def expression_item_reference(self, values: list[Tree, Token, str, int, float, bool]) -> [str, int, float, bool]:
+        if len(values) != 0:
+            raise ExpressionEvaluationError("Item reference should not have any values")
+
         item = self.state.iteration_item
         if item is None:
             raise StateIterationItemNotSetError()
-
-        if len(values) != 0:
-            raise ExpressionEvaluationError("Item reference should not have any values")
 
         return item
 
@@ -231,7 +231,7 @@ class ExpressionTransformer(Transformer):
 
     def expression_function_call(self, values: list[Token, str, int, float, bool]) -> [str, int, float, bool]:
         fn = values[0]
-        fn_parameters = values[1] if values[1] is not None else []
+        fn_parameters = values[1] if len(values) == 2 and values[1] is not None else []
         function: Callable = FunctionsRepository.functions.get(fn.value)
 
         pos_or_keyword_parameters = []

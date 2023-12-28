@@ -1,4 +1,3 @@
-import json
 from typing import Any, List, Union
 
 
@@ -152,57 +151,21 @@ def union(*collections: list) -> list:  # noqa: ANN401
             )
         )
 
-    # todo: need to check how we can support objects (as they handled as str right now)
-    # if not all([isinstance(collection, list) for collection in collections]):
-    #     raise ValueError("All collections must be of type list")
+    if not all([isinstance(collection, list) for collection in collections]):
+        raise ValueError("All collections must be of type list. Ensure the arguments passed to union are lists.")
 
-    base_collection = collections[0]
     union_collection = []
-    if isinstance(base_collection, list):
-        # filter duplicates with order preserved
-        for collection in collections:
-            if not isinstance(collection, list):
-                raise ValueError(
-                    "All collections must be of type list. Ensure the arguments passed to union are lists."
-                )
+    for collection in collections:
+        union_collection = _remove_duplicates(union_collection + collection)
 
-            union_collection = _remove_duplicates(union_collection + collection)
-
-        return union_collection
-
-    # todo: need to check how we can support objects (as they handled as str right now)
-    # if not all([isinstance(collection, list) for collection in collections]):
-    #     raise ValueError("All collections must be of type list")
-
-    # for objects (currently handled as str)
-    json_obs = [json.loads(arg) for arg in collections]
-    merged_json = json_obs[0]
-    for json_ob in json_obs[1:]:
-        merged_json = merged_json + json_ob
-
-    return json.dumps(merged_json)
+    return union_collection
 
 
 def _remove_duplicates(collection: List[Any]) -> List[Any]:
-    seen_values = set()
     unique_list = []
 
     for collection_item in collection:
-        # Convert the dictionary to a frozenset to make it hashable
-        hashable = _get_hashable(collection_item)
-
-        # Check if the values are unique
-        if hashable not in seen_values:
-            seen_values.add(hashable)
+        if collection_item not in unique_list:
             unique_list.append(collection_item)
 
     return unique_list
-
-
-def _get_hashable(input_dict: Any) -> int:  # noqa: ANN401
-    if isinstance(input_dict, dict):
-        return frozenset(input_dict.items())
-    if isinstance(input_dict, list):
-        return tuple(input_dict)
-
-    return input_dict
