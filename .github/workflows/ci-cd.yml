@@ -51,7 +51,7 @@ jobs:
         run: poetry run pytest .
       - name: Set build version and build package
         run: |
-          poetry version 0.0.0.alpha${{ github.run_number}}
+          poetry version 0.0.1.alpha${{ github.run_number}}
           poetry build
       - name: Publish package distributions to PyPI
         if: github.ref == 'refs/heads/main'

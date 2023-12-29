@@ -1,5 +1,4 @@
-import json
-from typing import Any, Union
+from typing import Any, List, Union
 
 
 def contains(collection: Union[str, list, dict], value: Any) -> bool:  # noqa: ANN401
@@ -152,28 +151,21 @@ def union(*collections: list) -> list:  # noqa: ANN401
             )
         )
 
-    # todo: need to check how we can support objects (as they handled as str right now)
-    # if not all([isinstance(collection, list) for collection in collections]):
-    #     raise ValueError("All collections must be of type list")
+    if not all([isinstance(collection, list) for collection in collections]):
+        raise ValueError("All collections must be of type list. Ensure the arguments passed to union are lists.")
 
-    base_collection = collections[0]
-    if isinstance(base_collection, list):
-        # filter duplicates with order preserved
-        base_collection = list(dict.fromkeys(base_collection))
+    union_collection = []
+    for collection in collections:
+        union_collection = _remove_duplicates(union_collection + collection)
 
-        for collection in collections[1:]:
-            base_collection = list(dict.fromkeys(base_collection + collection))
+    return union_collection
 
-        return base_collection
 
-    # todo: need to check how we can support objects (as they handled as str right now)
-    # if not all([isinstance(collection, list) for collection in collections]):
-    #     raise ValueError("All collections must be of type list")
+def _remove_duplicates(collection: List[Any]) -> List[Any]:
+    unique_list = []
 
-    # for objects (currently handled as str)
-    json_obs = [json.loads(arg) for arg in collections]
-    merged_json = json_obs[0]
-    for json_ob in json_obs[1:]:
-        merged_json = merged_json + json_ob
+    for collection_item in collection:
+        if collection_item not in unique_list:
+            unique_list.append(collection_item)
 
-    return json.dumps(merged_json)
+    return unique_list
