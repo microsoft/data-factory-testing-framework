@@ -39,10 +39,10 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
         result=DependencyCondition.SUCCEEDED,
         output={
             "Response": """
-                    <EnumerationResults ServiceEndpoint="http://myaccount.blob.core.windows.net/"  ContainerName="mycontainer">  
-                        <Prefix>testfolder</Prefix>  
-                        <Delimiter>$SourceBlobDelimiter</Delimiter>  
-                        <Blobs>  
+                    <EnumerationResults ServiceEndpoint="http://myaccount.blob.core.windows.net/"  ContainerName="mycontainer">
+                        <Prefix>testfolder</Prefix>
+                        <Delimiter>$SourceBlobDelimiter</Delimiter>
+                        <Blobs>
                             <BlobPrefix>
                                 <Name>testfolder_1/$SourceBlobDelimiter</Name>
                             </BlobPrefix>

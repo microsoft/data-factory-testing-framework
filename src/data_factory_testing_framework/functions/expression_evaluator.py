@@ -40,7 +40,7 @@ class ExpressionEvaluator:
             // TODO: add support for array index
             ?expression_start: expression_evaluation
             expression_evaluation: expression_call [expression_object_accessor]*
-            ?expression_call: expression_function_call 
+            ?expression_call: expression_function_call
                                     | expression_pipeline_reference
                                     | expression_variable_reference
                                     | expression_activity_reference
@@ -58,12 +58,12 @@ class ExpressionEvaluator:
             expression_linked_service_reference: "linkedService" "()" "." EXPRESSION_PARAMETER_NAME
             expression_item_reference: "item" "()"
             expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
-            
+
             // function call rules
             expression_function_call: EXPRESSION_FUNCTION_NAME  "(" [expression_function_parameters] ")"
             expression_function_parameters: expression_parameter ("," expression_parameter )*
             expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
-            
+
             // expression terminals
             // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
             EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
@@ -83,7 +83,7 @@ class ExpressionEvaluator:
 
         base_grammar = """
             ?start: ("@" expression_start) | (["@@"] literal_start) | (literal_interpolation)
-            
+
             // shared custom basic data type rules:
             ARRAY_INDEX: "[" /[0-9]+/ "]"
             NULL: "null"

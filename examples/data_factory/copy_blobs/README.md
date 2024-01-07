@@ -2,7 +2,7 @@
 
 This is an example pipeline which intends to list all the blobs in a given container and copies these blobs to another container
 
-<image src="copy_blobs.png"></img>
+![image](copy_blobs.png)
 
 The pipeline has two activities:
 

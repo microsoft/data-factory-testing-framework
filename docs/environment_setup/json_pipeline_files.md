@@ -2,7 +2,9 @@
 
 ## JSON Files
 
-Ideally, you would integrate your project with a repository such as GIT. Once this is done you will have the JSON files for the Pipelines. If you need extra guidance on that the Microsoft Documentation provides very detailed information on how to do it:
+Ideally, you would integrate your project with a repository such as GIT.
+Once this is done you will have the JSON files for the Pipelines.
+If you need extra guidance on that the Microsoft Documentation provides very detailed information on how to do it:
 
 Fabric
 [Git integration process - Microsoft Fabric | Microsoft Learn](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-integration-process)
@@ -11,9 +13,11 @@ ADF
 [Source control - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/azure/data-factory/source-control)
 
 ### Manual steps for testing purposes
-If you want just download one JSON file for a small test purpose and check how the framework works, here are some ideas on how to do it:
 
-#### ADF 
+If you want just download one JSON file for a small test purpose and check how the framework works,
+here are some ideas on how to do it:
+
+#### ADF
 
 Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Factory | Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-factory/)
 
@@ -27,8 +31,4 @@ Refer to the docs if needed: [Azure Data Factory Documentation - Azure Data Fact
 
 4. The Zip file contains the JSON Definition
 
-
    ![image](/docs/environment_setup/images/download_support_files.png)
- 
-
-   
