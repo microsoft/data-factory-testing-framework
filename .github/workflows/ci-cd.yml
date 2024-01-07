@@ -40,10 +40,13 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
       #----------------------------------------------
-      #              run test suite
+      #              run linting and tests
       #----------------------------------------------
-      - name: Run tests
-        run: poetry run pytest .
+      - name: Run linting and tests
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
+      #----------------------------------------------
+      #              build package
+      #----------------------------------------------
       - name: Set build version and build package
         run: |
           poetry version 0.0.1.alpha${{ github.run_number}}
