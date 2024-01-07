@@ -37,7 +37,7 @@ select = [
     "B", # bugbear
     "COM", # flake8 commas
     "D", # Pydoc style docstrings
-    "E", # PEP8 conventions 
+    "E", # PEP8 conventions
     "F", # pyflakes
     "N", # PEP8 naming conventions
     "I"
