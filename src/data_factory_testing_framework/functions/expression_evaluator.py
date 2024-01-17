@@ -39,7 +39,7 @@ class ExpressionEvaluator:
         expression_grammar = f"""
             // TODO: add support for array index
             ?expression_start: expression_evaluation
-            expression_evaluation: expression_call [expression_array_indices]
+            expression_evaluation: expression_call [expression_object_accessor]*
             ?expression_call: expression_function_call 
                                     | expression_pipeline_reference
                                     | expression_variable_reference
@@ -48,15 +48,15 @@ class ExpressionEvaluator:
                                     | expression_linked_service_reference
                                     | expression_item_reference
                                     | expression_system_variable_reference
-            expression_array_indices: [EXPRESSION_ARRAY_INDEX]*
+            expression_object_accessor: ["." EXPRESSION_PARAMETER_NAME] | [EXPRESSION_ARRAY_INDEX]
 
             // reference rules:
-            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME 
+            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")" ("." EXPRESSION_PARAMETER_NAME [EXPRESSION_ARRAY_INDEX]*)+
-            expression_dataset_reference: "dataset" "(" EXPRESSION_DATASET_NAME ")"
-            expression_linked_service_reference: "linkedService" "(" EXPRESSION_LINKED_SERVICE_NAME ")"
-            expression_item_reference: "item()"
+            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")" expression_object_accessor
+            expression_dataset_reference: "dataset" "()" "." EXPRESSION_PARAMETER_NAME
+            expression_linked_service_reference: "linkedService" "()" "." EXPRESSION_PARAMETER_NAME
+            expression_item_reference: "item" "()"
             expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
             
             // function call rules
@@ -65,12 +65,11 @@ class ExpressionEvaluator:
             expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
             
             // expression terminals
-            EXPRESSION_PIPELINE_PROPERTY: "parameters" | "globalParameters"
+            // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
+            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
             EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
-            EXPRESSION_DATASET_NAME: "'" /[^']*/ "'"
-            EXPRESSION_LINKED_SERVICE_NAME: "'" /[^']*/ "'"
             EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
             EXPRESSION_NULL: NULL
@@ -99,7 +98,7 @@ class ExpressionEvaluator:
         """
 
         grammer = base_grammar + literal_grammar + expression_grammar
-        self.lark_parser = Lark(grammer, start="start")
+        self.lark_parser = Lark(grammer, start="start", maybe_placeholders=False)
 
     def _supported_functions(self) -> str:
         functions = list(FunctionsRepository.functions.keys())

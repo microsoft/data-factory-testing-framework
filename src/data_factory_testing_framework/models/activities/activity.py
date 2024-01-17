@@ -47,7 +47,7 @@ class Activity:
             return True
 
         for dependency in self.depends_on:
-            dependency_activity = state.try_get_scoped_activity_result_by_name(dependency.activity)
+            dependency_activity = state.try_get_activity_result_by_name(dependency.activity)
 
             if dependency_activity is None:
                 return False

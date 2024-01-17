@@ -3,15 +3,10 @@ name: CI-CD
 on: [push]
 
 jobs:
-  build_and_publish:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
-      id-token: write
-    environment:
-      name: pypi
-      url: https://pypi.org/p/data-factory-testing-framework
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -45,16 +40,41 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
       #----------------------------------------------
-      #              run test suite
+      #              run linting and tests
       #----------------------------------------------
-      - name: Run tests
-        run: poetry run pytest .
+      - name: Run linting and tests
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
+      #----------------------------------------------
+      #              build package
+      #----------------------------------------------
       - name: Set build version and build package
         run: |
-          poetry version 0.0.0.alpha${{ github.run_number}}
+          poetry version 0.0.1.alpha${{ github.run_number}}
           poetry build
+      #----------------------------------------------
+      # upload dist
+      #----------------------------------------------
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/data-factory-testing-framework
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
       - name: Publish package distributions to PyPI
-        if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: ./dist

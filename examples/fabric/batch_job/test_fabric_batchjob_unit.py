@@ -156,7 +156,7 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
     activity.evaluate(state)
 
     # Assert
-    env_settings = activity.type_properties["value"].get_json_value()
+    env_settings = activity.type_properties["value"].value
     assert env_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert env_settings[0]["value"] == "workload"
     assert env_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
@@ -254,10 +254,10 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
                 "WorkloadUserAssignedIdentityClientId",
                 "test-application-identity-client-id",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "JobAdditionalEnvironmentSettings",
-                '[{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}]',
+                [{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}],
             ),
         ],
         variables=[
@@ -275,7 +275,7 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
                 default_value="$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz",
             ),
             PipelineRunVariable(
-                name="CommonEnvironmentSettings", default_value='[{"name": "COMMON_ENV_SETTING", "value": "dummy"}]'
+                name="CommonEnvironmentSettings", default_value=[{"name": "COMMON_ENV_SETTING", "value": "dummy"}]
             ),
         ],
     )

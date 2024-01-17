@@ -404,7 +404,7 @@ def test_xml(value: object, expected: etree.Element) -> None:
             "root/person/name",
             "Sophia Owen",
             marks=pytest.mark.xfail(
-                reason="TODO: xpath implementation does work yet due to different xml capabilities"
+                reason="TODO: xpath implementation does not work yet due to different xml capabilities"
             ),
         ),
         param(
@@ -427,7 +427,7 @@ def test_xml(value: object, expected: etree.Element) -> None:
             '/*[name()="file"]/*[name()="location"]',
             '<location xmlns="https://contoso.com">Paris</location>',
             marks=pytest.mark.xfail(
-                reason="TODO: xpath implementation does work yet due to different xml capabilities"
+                reason="TODO: xpath implementation does not work yet due to different xml capabilities"
             ),
         ),
         param(
@@ -437,7 +437,7 @@ def test_xml(value: object, expected: etree.Element) -> None:
             '/*[local-name()="file" and namespace-uri()="http://contoso.com"]/*[local-name()="location"]',
             '<location xmlns="https://contoso.com">Paris</location>',
             marks=pytest.mark.xfail(
-                reason="TODO: xpath implementation does work yet due to different xml capabilities"
+                reason="TODO: xpath implementation does not work yet due to different xml capabilities"
             ),
         ),
         param(
@@ -447,7 +447,7 @@ def test_xml(value: object, expected: etree.Element) -> None:
             '/*[local-name()="file"]/*[local-name()="location"]',
             'string(/*[name()="file"]/*[name()="location"])',
             marks=pytest.mark.xfail(
-                reason="TODO: xpath implementation does work yet due to different xml capabilities"
+                reason="TODO: xpath implementation does not work yet due to different xml capabilities"
             ),
         ),
     ],

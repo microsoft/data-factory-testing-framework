@@ -1,0 +1,153 @@
+{
+	"name": "copy_blobs",
+	"properties": {
+		"activities": [
+			{
+				"name": "List Folders",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://',pipeline().globalParameters.SourceStorageAccountName,'.blob.core.windows.net/',pipeline().parameters.SourceContainerName,'?restype=container&comp=list&prefix=',pipeline().parameters.SourceFolderPrefix,'&delimiter=$SourceBlobDelimiter')",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"headers": {
+						"x-ms-version": "2023-01-03"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://storage.azure.com"
+					}
+				}
+			},
+			{
+				"name": "For Each SourceFolder",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "List Folders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@xpath(xml(activity('List Folders').output.Response),'/EnumerationResults/Blobs/BlobPrefix/Name/text()')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy files to Destination",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "BinarySource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFolderPath": {
+											"value": "@item()",
+											"type": "Expression"
+										},
+										"deleteFilesAfterCompletion": false
+									},
+									"formatSettings": {
+										"type": "BinaryReadSettings"
+									}
+								},
+								"sink": {
+									"type": "BinarySink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DynamicBlobStorage",
+									"type": "DatasetReference",
+									"parameters": {
+										"ServiceURI": {
+											"value": "@concat('https://',pipeline().globalParameters.SourceStorageAccountName,'.blob.core.windows.net')",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().parameters.SourceContainerName",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@coalesce(null)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DynamicBlobStorage",
+									"type": "DatasetReference",
+									"parameters": {
+										"ServiceURI": {
+											"value": "@concat('https://',pipeline().parameters.SinkStorageAccountName,'.blob.core.windows.net')",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().parameters.SinkContainerName",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@pipeline().parameters.SinkFolderName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"SourceContainerName": {
+				"type": "string"
+			},
+			"SourceFolderPrefix": {
+				"type": "string"
+			},
+			"SinkStorageAccountName": {
+				"type": "string"
+			},
+			"SinkContainerName": {
+				"type": "string"
+			},
+			"SinkFolderName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "batch"
+		},
+		"annotations": []
+	}
+}
