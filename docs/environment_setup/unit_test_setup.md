@@ -16,9 +16,9 @@ For more references: [Get Started Tutorial for Python in Visual Studio Code](htt
 
 1. Open your new Python project.
 
-![image](/docs/environment_setup/images/new_project.png)
+   ![image](/docs/environment_setup/images/new_project.png)
 
-1. Pip install the following libraries from the terminal - data-factory-testing-framework:
+2. Pip install the following libraries from the terminal - data-factory-testing-framework:
 
    References about the vs code terminal : [Integrated Terminal in Visual Studio Code](https://code.visualstudio.com/docs/terminal/basics)
 
@@ -56,24 +56,24 @@ Library Docs for reference:
    Also, please consider using this reference for more information:
    [Introduction | Documentation | Poetry - Python dependency management and packaging made easy (python-poetry.org)](https://python-poetry.org/docs/#installation)
 
-Run the following on the power shell, if you are using Windows:
+   Run the following on the power shell, if you are using Windows:
 
-```powershell
-(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python
-```
+   ```powershell
+   (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python
+   ```
 
-![image](/docs/environment_setup/images/power_shell_invoke.png)
+   ![image](/docs/environment_setup/images/power_shell_invoke.png)
 
-![image](/docs/environment_setup/images/installing_poetry_power_shell.png)
+   ![image](/docs/environment_setup/images/installing_poetry_power_shell.png)
 
-1. Add the bin to the PATH environment variable to the path
+2. Add the bin to the PATH environment variable to the path
 
-![image](/docs/environment_setup/images/env_variable.png)
+   ![image](/docs/environment_setup/images/env_variable.png)
 
-1. Add the unit test framework for testing.
+3. Add the unit test framework for testing.
 
-`poetry add data-factory-testing-framework`poetry
+   `poetry add data-factory-testing-framework`poetry
 
-![image](/docs/environment_setup/images/poetry_framework.png)
+   ![image](/docs/environment_setup/images/poetry_framework.png)
 
-Let's Start testing!
+   Let's Start testing!

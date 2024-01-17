@@ -26,10 +26,10 @@ If there's a lot of interest in this framework, then we will continue to improve
 Goal: Validate that the evaluated pipeline configuration with its expressions is behaving as expected on runtime.
 
 1. Evaluate expressions with their functions and arguments instantly by using the framework's internal expression parser.
-1. Test a pipeline or activity against any state to assert the expected outcome.
+2. Test a pipeline or activity against any state to assert the expected outcome.
    A state can be configured with pipeline parameters, global parameters, variables and activity outputs.
-1. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
-1. Dynamically supports all activity types with all their attributes.
+3. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
+4. Dynamically supports all activity types with all their attributes.
 
 > Pipelines and activities are not executed on any Data Factory environment,
 > but the evaluation of the pipeline configuration is validated locally.
@@ -103,7 +103,7 @@ The samples seen below are the _only_ code that you need to write! The framework
     assert "version1" == body["Version"]
    ```
 
-1. Evaluate Pipelines and test the flow of activities given a specific input
+2. Evaluate Pipelines and test the flow of activities given a specific input
 
     ```python
     # Arrange
