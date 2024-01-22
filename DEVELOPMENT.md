@@ -32,3 +32,8 @@ To run linting, run the following command:
 ```bash
 poetry run ruff .
 ```
+
+### Updating lock file
+
+When updating Poetry's lock file your local cache can become outdated.
+You can clear your cache with `poetry cache clear PyPI --all`
