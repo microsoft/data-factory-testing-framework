@@ -1,10 +1,17 @@
 from typing import Union
 
 from lark import Lark, Token, Tree, UnexpectedCharacters
-from lark.exceptions import VisitError
 
+from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
 from data_factory_testing_framework.exceptions.expression_parsing_error import ExpressionParsingError
-from data_factory_testing_framework.functions._expression_transformer import ExpressionTransformer
+from data_factory_testing_framework.functions.evaluator.expression_rule_transformer import (
+    ExpressionRuleTransformer,
+)
+from data_factory_testing_framework.functions.evaluator.expression_terminal_transformer import (
+    ExpressionTerminalTransformer,
+)
+from data_factory_testing_framework.functions.evaluator.rules import ExpressionRuleEvaluator
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 
@@ -39,7 +46,8 @@ class ExpressionEvaluator:
         expression_grammar = f"""
             // TODO: add support for array index
             ?expression_start: expression_evaluation
-            expression_evaluation: expression_call [expression_object_accessor]*
+            # TODO: probably object accessor does not apply to all below in expression_evaluation
+            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
             ?expression_call: expression_function_call
                                     | expression_pipeline_reference
                                     | expression_variable_reference
@@ -48,37 +56,40 @@ class ExpressionEvaluator:
                                     | expression_linked_service_reference
                                     | expression_item_reference
                                     | expression_system_variable_reference
-            expression_object_accessor: ["." EXPRESSION_PARAMETER_NAME] | [EXPRESSION_ARRAY_INDEX]
 
             // reference rules:
             expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")" expression_object_accessor
+            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_dataset_reference: "dataset" "()" "." EXPRESSION_PARAMETER_NAME
             expression_linked_service_reference: "linkedService" "()" "." EXPRESSION_PARAMETER_NAME
             expression_item_reference: "item" "()"
             expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
+            // branch rules
+            expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
+            expression_branch: "if" "(" expression_parameter "," expression_parameter "," expression_parameter ")"
+
 
             // function call rules
-            expression_function_call: EXPRESSION_FUNCTION_NAME  "(" [expression_function_parameters] ")"
-            expression_function_parameters: expression_parameter ("," expression_parameter )*
-            expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
+            expression_function_call: EXPRESSION_FUNCTION_NAME "(" [expression_parameter ("," expression_parameter )*] ")"
+            ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
 
             // expression terminals
             // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
-            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
-            EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
-            EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
-            EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
-            EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
-            EXPRESSION_NULL: NULL
-            EXPRESSION_STRING: SINGLE_QUOTED_STRING
-            EXPRESSION_INTEGER: SIGNED_INT
-            EXPRESSION_FLOAT: SIGNED_FLOAT
-            EXPRESSION_BOOLEAN: BOOLEAN
-            EXPRESSION_WS: WS
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX
+            EXPRESSION_BOOLEAN: BOOLEAN
+            EXPRESSION_FLOAT: SIGNED_FLOAT
+            EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
+            EXPRESSION_INTEGER: SIGNED_INT
+            EXPRESSION_LOGICAL_BOOL: "or" | "and"
+            EXPRESSION_NULL: NULL
+            EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
+            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
+            EXPRESSION_STRING: SINGLE_QUOTED_STRING
+            EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
+            EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
+            EXPRESSION_WS: WS
         """  # noqa: E501
 
         base_grammar = """
@@ -105,13 +116,14 @@ class ExpressionEvaluator:
         functions = [f'"{f}"' for f in functions]
         return " | ".join(functions)
 
-    def parse(self, expression: str) -> Tree[Token]:
+    def _parse(self, expression: str) -> Tree[Token]:
         tree = self.lark_parser.parse(expression)
         return tree
 
     def evaluate(self, expression: str, state: PipelineRunState) -> Union[str, int, float, bool]:
         try:
-            tree = self.parse(expression)
+            parse_tree = self._parse(expression)
+
         except UnexpectedCharacters as uc:
             msg = f"""
             Expression could not be parsed.
@@ -122,10 +134,14 @@ class ExpressionEvaluator:
             char: {uc.char}
             """
             raise ExpressionParsingError(msg) from uc
-
-        transformer = ExpressionTransformer(state)
-        try:
-            result: Tree = transformer.transform(tree)
-        except VisitError as ve:
-            raise ve.orig_exc from ve
-        return result
+        # we start with a raw parse tree for the lark grammer
+        # and then semantically analysis it (in our case transforming values step by step)
+        ast = parse_tree
+        ast = ExpressionTerminalTransformer().transform(ast)
+        ast = ExpressionRuleTransformer(state).transform(ast)
+        if not isinstance(ast, ExpressionRuleEvaluator):
+            raise ExpressionEvaluationError()
+        result = ast.evaluate()
+        if not isinstance(result, EvaluatedExpression):
+            raise ExpressionEvaluationError()
+        return result.value

@@ -7,491 +7,14 @@ from data_factory_testing_framework.exceptions.state_iteration_item_not_set_erro
     StateIterationItemNotSetError,
 )
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
-from data_factory_testing_framework.functions.expression_evaluator import ExpressionEvaluator
+from data_factory_testing_framework.functions import ExpressionEvaluator
 from data_factory_testing_framework.pythonnet.csharp_datetime import CSharpDateTime
 from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
 from data_factory_testing_framework.state.run_parameter import RunParameter
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
-from lark import Token, Tree
 from pytest import param as p
-
-
-@pytest.mark.parametrize(
-    ["expression", "expected"],
-    [
-        p("value", Tree(Token("RULE", "literal_evaluation"), [Token("LITERAL_LETTER", "value")]), id="string_literal"),
-        p(
-            " value ",
-            Tree(Token("RULE", "literal_evaluation"), [Token("LITERAL_LETTER", "value")]),
-            id="string_with_ws_literal",
-            marks=pytest.mark.skip(""),
-        ),
-        p("11", Tree(Token("RULE", "literal_evaluation"), [Token("LITERAL_INT", "11")]), id="integer_literal"),
-        p(
-            "@pipeline().parameters.parameter",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_pipeline_reference"),
-                        [
-                            Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
-                            Token("EXPRESSION_PARAMETER_NAME", "parameter"),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="pipeline_parameters_reference",
-        ),
-        p(
-            "@pipeline().globalParameters.parameter",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_pipeline_reference"),
-                        [
-                            Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
-                            Token("EXPRESSION_PARAMETER_NAME", "parameter"),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="pipeline_global_parameters_reference",
-        ),
-        p(
-            "@variables('variable')",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_variable_reference"),
-                        [Token("EXPRESSION_VARIABLE_NAME", "'variable'")],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="variables_reference",
-        ),
-        p(
-            "@activity('activityName').output.outputName",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_activity_reference"),
-                        [
-                            Token("EXPRESSION_ACTIVITY_NAME", "'activityName'"),
-                            Tree(
-                                Token("RULE", "expression_object_accessor"),
-                                [Token("EXPRESSION_PARAMETER_NAME", "output")],
-                            ),
-                        ],
-                    ),
-                    Tree(
-                        Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_PARAMETER_NAME", "outputName")]
-                    ),
-                ],
-            ),
-            id="activity_reference",
-        ),
-        p(
-            "@dataset().parameterName",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_dataset_reference"),
-                        [Token("EXPRESSION_PARAMETER_NAME", "parameterName")],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="dataset_reference",
-        ),
-        p(
-            "@linkedService().parameterName",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_linked_service_reference"),
-                        [Token("EXPRESSION_PARAMETER_NAME", "parameterName")],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="linked_service_reference",
-        ),
-        p(
-            "@item()",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(Token("RULE", "expression_item_reference"), []),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="item_reference",
-        ),
-        p(
-            "@concat('a', 'b' )",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_function_call"),
-                        [
-                            Token("EXPRESSION_FUNCTION_NAME", "concat"),
-                            Tree(
-                                Token("RULE", "expression_function_parameters"),
-                                [
-                                    Tree(Token("RULE", "expression_parameter"), [Token("EXPRESSION_STRING", "'a'")]),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Token("EXPRESSION_STRING", "'b'"),
-                                            Token("EXPRESSION_WS", " "),
-                                        ],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="function_call",
-        ),
-        p(
-            "@concat('a', 'b' )",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_function_call"),
-                        [
-                            Token("EXPRESSION_FUNCTION_NAME", "concat"),
-                            Tree(
-                                Token("RULE", "expression_function_parameters"),
-                                [
-                                    Tree(Token("RULE", "expression_parameter"), [Token("EXPRESSION_STRING", "'a'")]),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Token("EXPRESSION_STRING", "'b'"),
-                                            Token("EXPRESSION_WS", " "),
-                                        ],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="function_call",
-        ),
-        p(
-            "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_function_call"),
-                        [
-                            Token("EXPRESSION_FUNCTION_NAME", "concat"),
-                            Tree(
-                                Token("RULE", "expression_function_parameters"),
-                                [
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [Token("EXPRESSION_STRING", "'https://example.com/jobs/'")],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [Token("EXPRESSION_WS", " "), Token("EXPRESSION_STRING", "'123'''")],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Tree(
-                                                Token("RULE", "expression_evaluation"),
-                                                [
-                                                    Tree(
-                                                        Token("RULE", "expression_function_call"),
-                                                        [
-                                                            Token("EXPRESSION_FUNCTION_NAME", "concat"),
-                                                            Tree(
-                                                                Token("RULE", "expression_function_parameters"),
-                                                                [
-                                                                    Tree(
-                                                                        Token("RULE", "expression_parameter"),
-                                                                        [Token("EXPRESSION_STRING", "'&'")],
-                                                                    ),
-                                                                    Tree(
-                                                                        Token("RULE", "expression_parameter"),
-                                                                        [
-                                                                            Token("EXPRESSION_WS", " "),
-                                                                            Token("EXPRESSION_STRING", "'abc,'"),
-                                                                        ],
-                                                                    ),
-                                                                ],
-                                                            ),
-                                                        ],
-                                                    ),
-                                                    Tree(Token("RULE", "expression_object_accessor"), []),
-                                                ],
-                                            ),
-                                        ],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="function_call_with_nested_function_and_single_quote",
-        ),
-        p(
-            "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
-            Tree(
-                Token("RULE", "literal_evaluation"),
-                [
-                    Token(
-                        "LITERAL_LETTER",
-                        "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
-                    )
-                ],
-            ),
-            id="literal_function_call_with_nested_function_and_single_quote",
-        ),
-        p(
-            "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_function_call"),
-                        [
-                            Token("EXPRESSION_FUNCTION_NAME", "concat"),
-                            Tree(
-                                Token("RULE", "expression_function_parameters"),
-                                [
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [Token("EXPRESSION_STRING", "'https://example.com/jobs/'")],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [Token("EXPRESSION_WS", " "), Token("EXPRESSION_STRING", "'123'''")],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Tree(
-                                                Token("RULE", "expression_evaluation"),
-                                                [
-                                                    Tree(
-                                                        Token("RULE", "expression_variable_reference"),
-                                                        [Token("EXPRESSION_VARIABLE_NAME", "'abc'")],
-                                                    ),
-                                                    Tree(Token("RULE", "expression_object_accessor"), []),
-                                                ],
-                                            ),
-                                        ],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Tree(
-                                                Token("RULE", "expression_evaluation"),
-                                                [
-                                                    Tree(
-                                                        Token("RULE", "expression_pipeline_reference"),
-                                                        [
-                                                            Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
-                                                            Token("EXPRESSION_PARAMETER_NAME", "abc"),
-                                                        ],
-                                                    ),
-                                                    Tree(Token("RULE", "expression_object_accessor"), []),
-                                                ],
-                                            ),
-                                        ],
-                                    ),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Tree(
-                                                Token("RULE", "expression_evaluation"),
-                                                [
-                                                    Tree(
-                                                        Token("RULE", "expression_activity_reference"),
-                                                        [
-                                                            Token("EXPRESSION_ACTIVITY_NAME", "'abc'"),
-                                                            Tree(
-                                                                Token("RULE", "expression_object_accessor"),
-                                                                [Token("EXPRESSION_PARAMETER_NAME", "output")],
-                                                            ),
-                                                        ],
-                                                    ),
-                                                    Tree(
-                                                        Token("RULE", "expression_object_accessor"),
-                                                        [Token("EXPRESSION_PARAMETER_NAME", "abc")],
-                                                    ),
-                                                ],
-                                            ),
-                                        ],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), []),
-                ],
-            ),
-            id="function_call_with_adf_native_functions",
-        ),
-        p(
-            "@createArray('a', createArray('a', 'b'))[1][1]",
-            Tree(
-                Token("RULE", "expression_evaluation"),
-                [
-                    Tree(
-                        Token("RULE", "expression_function_call"),
-                        [
-                            Token("EXPRESSION_FUNCTION_NAME", "createArray"),
-                            Tree(
-                                Token("RULE", "expression_function_parameters"),
-                                [
-                                    Tree(Token("RULE", "expression_parameter"), [Token("EXPRESSION_STRING", "'a'")]),
-                                    Tree(
-                                        Token("RULE", "expression_parameter"),
-                                        [
-                                            Token("EXPRESSION_WS", " "),
-                                            Tree(
-                                                Token("RULE", "expression_evaluation"),
-                                                [
-                                                    Tree(
-                                                        Token("RULE", "expression_function_call"),
-                                                        [
-                                                            Token("EXPRESSION_FUNCTION_NAME", "createArray"),
-                                                            Tree(
-                                                                Token("RULE", "expression_function_parameters"),
-                                                                [
-                                                                    Tree(
-                                                                        Token("RULE", "expression_parameter"),
-                                                                        [Token("EXPRESSION_STRING", "'a'")],
-                                                                    ),
-                                                                    Tree(
-                                                                        Token("RULE", "expression_parameter"),
-                                                                        [
-                                                                            Token("EXPRESSION_WS", " "),
-                                                                            Token("EXPRESSION_STRING", "'b'"),
-                                                                        ],
-                                                                    ),
-                                                                ],
-                                                            ),
-                                                        ],
-                                                    ),
-                                                    Tree(Token("RULE", "expression_object_accessor"), []),
-                                                ],
-                                            ),
-                                        ],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    Tree(Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_ARRAY_INDEX", "[1]")]),
-                    Tree(Token("RULE", "expression_object_accessor"), [Token("EXPRESSION_ARRAY_INDEX", "[1]")]),
-                ],
-            ),
-            id="function_call_with_nested_array_index",
-        ),
-        p(
-            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
-            Tree(
-                Token("RULE", "literal_interpolation"),
-                [
-                    Token("LITERAL_LETTER", "/repos/"),
-                    Tree(
-                        Token("RULE", "expression_evaluation"),
-                        [
-                            Tree(
-                                Token("RULE", "expression_pipeline_reference"),
-                                [
-                                    Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
-                                    Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
-                                ],
-                            ),
-                            Tree(Token("RULE", "expression_object_accessor"), []),
-                        ],
-                    ),
-                    Token("LITERAL_LETTER", "/"),
-                ],
-            ),
-            id="string_interpolation",
-        ),
-        p(
-            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
-            Tree(
-                Token("RULE", "literal_interpolation"),
-                [
-                    Token("LITERAL_LETTER", "/repos/"),
-                    Tree(
-                        Token("RULE", "expression_evaluation"),
-                        [
-                            Tree(
-                                Token("RULE", "expression_pipeline_reference"),
-                                [
-                                    Token("EXPRESSION_PIPELINE_PROPERTY", "globalParameters"),
-                                    Token("EXPRESSION_PARAMETER_NAME", "OpsPrincipalClientId"),
-                                ],
-                            ),
-                            Tree(Token("RULE", "expression_object_accessor"), []),
-                        ],
-                    ),
-                    Token("LITERAL_LETTER", "/"),
-                    Tree(
-                        Token("RULE", "expression_evaluation"),
-                        [
-                            Tree(
-                                Token("RULE", "expression_pipeline_reference"),
-                                [
-                                    Token("EXPRESSION_PIPELINE_PROPERTY", "parameters"),
-                                    Token("EXPRESSION_PARAMETER_NAME", "SubPath"),
-                                ],
-                            ),
-                            Tree(Token("RULE", "expression_object_accessor"), []),
-                        ],
-                    ),
-                ],
-            ),
-            id="string_interpolation_multiple_expressions",
-        ),
-    ],
-)
-def test_parse(expression: str, expected: Tree[Token]) -> None:
-    # Arrange
-    evaluator = ExpressionEvaluator()
-
-    # Act
-    actual = evaluator.parse(expression)
-
-    # Assert
-    assert actual == expected
 
 
 @pytest.mark.parametrize(
@@ -641,11 +164,42 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
                     }
                 }
             ),
+            # TODO: fix this
             "0.016666666666666666test",
             id="function_call_with_nested_property",
             marks=pytest.mark.xfail(
                 reason="We do not support automatic type conversion yet. Here float is passed to concat (which expects str)."
             ),
+        ),
+        p(
+            "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
+            PipelineRunState(),
+            "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
+        ),
+        p(
+            "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
+            PipelineRunState(
+                variables=[PipelineRunVariable("abc", "defaultvalue_")],
+                parameters=[RunParameter(RunParameterType.Pipeline, "abc", "testvalue_02")],
+                pipeline_activity_results={"abc": {"output": {"abc": "_testvalue_01"}}},
+            ),
+            "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
+        ),
+        p("@createArray('a', createArray('a', 'b'))[1][1]", PipelineRunState(), "b"),
+        p(
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "id")]),
+            "/repos/id/",
+        ),
+        p(
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "id"),
+                    RunParameter(RunParameterType.Pipeline, "SubPath", "apath"),
+                ]
+            ),
+            "/repos/id/apath",
         ),
         p(
             "@activity('Sample').output.billingReference.billableDuration[0].duration",
@@ -1048,3 +602,154 @@ def test_json_nested_object_with_list_and_attributes(json_expression: str, acces
     actual = evaluator.evaluate(expression, state)
 
     assert actual == expected
+
+
+@pytest.mark.parametrize(
+    ["logical_operator", "parameter_left", "parameter_right", "state", "expected"],
+    [
+        p(
+            "or",
+            "aval",
+            "bval",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "aval")]),
+            True,
+            id="or_true_with_left_parameter_short_circuit",
+        ),
+        p(
+            "or",
+            "OTHER",
+            "bval",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "aval")]),
+            ParameterNotFoundError,
+            id="or_false_with_right_parameter_exception",
+        ),
+        p(
+            "or",
+            "OTHER",
+            "bval",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Pipeline, "a", "aval"),
+                    RunParameter(RunParameterType.Pipeline, "b", "bval"),
+                ]
+            ),
+            True,
+            id="or_true_with_right_parameter",
+        ),
+        p(
+            "or",
+            "OTHER",
+            "OTHER",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "aval")]),
+            ParameterNotFoundError,
+            id="or_false_with_both_parameters_right_exception",
+        ),
+        p(
+            "or",
+            "OTHER",
+            "OTHER",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Pipeline, "a", "aval"),
+                    RunParameter(RunParameterType.Pipeline, "b", "bval"),
+                ]
+            ),
+            False,
+            id="or_false_with_both_parameters",
+        ),
+        p(
+            "and",
+            "aval",
+            "bval",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "aval")]),
+            ParameterNotFoundError,
+            id="and_false_with_right_parameter_exception",
+        ),
+        p(
+            "and",
+            "OTHER",
+            "bval",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "aval")]),
+            False,
+            id="and_false_with_left_parameter_short_circuit",
+        ),
+        p(
+            "and",
+            "OTHER",
+            "bval",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Pipeline, "a", "aval"),
+                    RunParameter(RunParameterType.Pipeline, "b", "bval"),
+                ]
+            ),
+            False,
+            id="and_false_with_right_parameter",
+        ),
+    ],
+)
+def test_boolean_operators_short_circuit(
+    logical_operator: str,
+    parameter_left: str,
+    parameter_right: str,
+    state: PipelineRunState,
+    expected: Union[bool, Exception],
+) -> None:
+    # Arrange
+    expression = f"@{logical_operator}(equals(pipeline().parameters.a,'{parameter_left}'),equals(pipeline().parameters.b,'{parameter_right}'))"
+
+    evaluator = ExpressionEvaluator()
+
+    # Act / Assert
+    if isinstance(expected, bool):
+        actual = evaluator.evaluate(expression, state)
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            evaluator.evaluate(expression, state)
+
+
+@pytest.mark.parametrize(
+    ["expression", "state", "expected"],
+    [
+        p(
+            "@if(equals(pipeline().parameters.a, 'MATCH'), 'LEFT_BRANCH', 'RIGHT_BRANCH')",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "MATCH")]),
+            "LEFT_BRANCH",
+            id="if_true",
+        ),
+        p(
+            "@if(equals(pipeline().parameters.a, 'NO_MATCH'), 'LEFT_BRANCH', 'RIGHT_BRANCH')",
+            PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "a", "MATCH")]),
+            "RIGHT_BRANCH",
+            id="if_false",
+        ),
+        p(
+            "@if(equals('MATCH', 'MATCH'), pipeline().parameters.b, 'RIGHT_BRANCH')",
+            PipelineRunState(),
+            ParameterNotFoundError,
+            id="if_false_left_no_parameter",
+        ),
+        p(
+            "@if(equals('MATCH', 'MATCH'), 'LEFT_BRANCH', pipeline().parameters.b)",
+            PipelineRunState(),
+            "LEFT_BRANCH",
+            id="if_true_right_no_parameter",
+        ),
+    ],
+)
+def test_conditional_expression_with_branching(
+    expression: str, state: PipelineRunState, expected: Union[str, int, bool, float, Exception]
+) -> None:
+    # Arrange
+    evaluator = ExpressionEvaluator()
+
+    # Act / Assert
+    if isinstance(expected, (str, int, bool, float)):
+        actual = evaluator.evaluate(expression, state)
+
+        # Assert
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            evaluator.evaluate(expression, state)
