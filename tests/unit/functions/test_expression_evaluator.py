@@ -8,12 +8,12 @@ from data_factory_testing_framework.exceptions.state_iteration_item_not_set_erro
 )
 from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
 from data_factory_testing_framework.functions.expression_evaluator import ExpressionEvaluator
+from data_factory_testing_framework.pythonnet.csharp_datetime import CSharpDateTime
 from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
 from data_factory_testing_framework.state.run_parameter import RunParameter
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
-from freezegun import freeze_time
 from lark import Token, Tree
 from pytest import param as p
 
@@ -670,7 +670,7 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
         p(
             "@utcNow()",
             PipelineRunState(),
-            "2021-11-24T12:11:49.753132Z",
+            "2021-11-24T12:11:49.7531321Z",
             id="function_call_with_zero_parameters",
         ),
         p(
@@ -704,9 +704,11 @@ def test_parse(expression: str, expected: Tree[Token]) -> None:
         ),
     ],
 )
-@freeze_time("2021-11-24 12:11:49.753132")
-def test_evaluate(expression: str, state: PipelineRunState, expected: Union[str, int, bool, float]) -> None:
+def test_evaluate(
+    expression: str, state: PipelineRunState, expected: Union[str, int, bool, float], monkeypatch: pytest.MonkeyPatch
+) -> None:
     # Arrange
+    monkeypatch.setattr(CSharpDateTime, "utcnow", lambda: CSharpDateTime.parse("2021-11-24T12:11:49.7531321Z"))
     evaluator = ExpressionEvaluator()
 
     # Act
