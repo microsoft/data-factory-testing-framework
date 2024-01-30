@@ -46,7 +46,7 @@ class FunctionsRepository:
         "equals": logical_functions.equals,
         "first": collection_functions.first,
         "float": conversion_functions.float_,
-        "formatDataTime": date_functions.format_date_time,
+        "formatDateTime": date_functions.format_date_time,
         "getFutureTime": date_functions.get_future_time,
         "getPastTime": date_functions.get_past_time,
         "greater": logical_functions.greater,
