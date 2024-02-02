@@ -1,0 +1,4 @@
+python-dateutil
+python-dotenv
+pytest
+data-factory-testing-framework

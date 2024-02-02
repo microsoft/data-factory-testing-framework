@@ -56,24 +56,30 @@ These tests are great to have, but miss the following benefits that unit tests, 
 
 ## Getting started
 
-1. Install the dotnet runtime from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
+### Start writing tests with a Dev Container
+
+To get started using the tests, refer to the following [README](./examples/README.md)
+
+### Start writing tests without a Dev Container
+
+1. Set up an empty Python project with your favorite testing library
+2. Install the dotnet runtime from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
    Using only the runtime and not the SDK should be sufficient.
    This is required to run some expression functions on dotnet just like in Data Factory.
-2. Set up an empty Python project with your favorite testing library
-
+3. Set up an empty Python project with your favorite testing library
    More information:
    [docs_Setup](/docs/environment_setup/unit_test_setup.md)
 
-3. Install the package using your preferred package manager:
+4. Install the package using your preferred package manager:
 
     Pip: `pip install data-factory-testing-framework`
 
-4. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
+5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
 
    More information:
-   [docs Json](/docs/environment_setup/json_pipeline_files.md)
+   [Json Guidance](/docs/environment_setup/json_pipeline_files.md)
 
-5. Start writing tests
+6. Start writing tests
 
 ## Features - Examples
 
