@@ -1,7 +1,8 @@
 
 # Data Factory - Using the Testing Framework
 
-To use the Testing Framework, is enough to import the published package resulting from the development in the current repo.
+To use the Testing Framework, is enough to import the published package resulting from the development
+in the current repo.
 The package is located in src/data_factory_testing_framework.
 
 ## Getting started with writing tests
