@@ -1,21 +1,4 @@
-from datetime import datetime, timedelta
-from typing import Union
-
-from dateutil.relativedelta import relativedelta
-
-
-def _datetime_from_isoformat(timestamp: str, fmt: str = None) -> datetime:
-    return datetime.fromisoformat(timestamp.rstrip("Z"))
-
-
-def _datetime_to_isoformat(date_time: datetime, fmt: str = None) -> str:
-    # TODO: Implement other fmt's if valuable. Use cases where you need to assert certain format should be rare.
-    return date_time.isoformat(timespec="microseconds") + "Z"
-
-
-def _add_time_delta_to_iso_timestamp(timestamp: str, time_delta: Union[timedelta, relativedelta]) -> str:
-    date_time = _datetime_from_isoformat(timestamp) + time_delta
-    return _datetime_to_isoformat(date_time)
+from data_factory_testing_framework.pythonnet.csharp_datetime import CSharpDateTime
 
 
 def utcnow(fmt: str = None) -> str:
@@ -26,7 +9,7 @@ def utcnow(fmt: str = None) -> str:
 
     Note: This function does not implement formatting for now and
     """
-    return _datetime_to_isoformat(datetime.utcnow())
+    return CSharpDateTime.utcnow().format_date_time(fmt)
 
 
 def ticks(timestamp: str) -> int:
@@ -35,9 +18,7 @@ def ticks(timestamp: str) -> int:
     Args:
         timestamp (str): The string for a timestamp
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    delta = date_time - datetime(1, 1, 1)
-    return int(delta.total_seconds()) * 10000000 + delta.microseconds * 10
+    return CSharpDateTime.parse(timestamp).ticks()
 
 
 def add_days(timestamp: str, days: int, fmt: str = None) -> str:
@@ -48,7 +29,7 @@ def add_days(timestamp: str, days: int, fmt: str = None) -> str:
         days (int): The positive or negative number of days to add
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    return _add_time_delta_to_iso_timestamp(timestamp, timedelta(days=days))
+    return CSharpDateTime.parse(timestamp).add_days(days).format_date_time(fmt)
 
 
 def add_hours(timestamp: str, hours: int, fmt: str = None) -> str:
@@ -59,7 +40,7 @@ def add_hours(timestamp: str, hours: int, fmt: str = None) -> str:
         hours (int): The positive or negative number of hours to add
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    return _add_time_delta_to_iso_timestamp(timestamp, timedelta(hours=hours))
+    return CSharpDateTime.parse(timestamp).add_hours(hours).format_date_time(fmt)
 
 
 def add_minutes(timestamp: str, minutes: int, fmt: str = None) -> str:
@@ -70,7 +51,7 @@ def add_minutes(timestamp: str, minutes: int, fmt: str = None) -> str:
         minutes (int): The positive or negative number of minutes to add
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    return _add_time_delta_to_iso_timestamp(timestamp, timedelta(minutes=minutes))
+    return CSharpDateTime.parse(timestamp).add_minutes(minutes).format_date_time(fmt)
 
 
 def add_seconds(timestamp: str, seconds: int, fmt: str = None) -> str:
@@ -81,7 +62,7 @@ def add_seconds(timestamp: str, seconds: int, fmt: str = None) -> str:
         seconds (int): The positive or negative number of seconds to add
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    return _add_time_delta_to_iso_timestamp(timestamp, timedelta(seconds=seconds))
+    return CSharpDateTime.parse(timestamp).add_seconds(seconds).format_date_time(fmt)
 
 
 def add_to_time(timestamp: str, interval: int, time_unit: str, fmt: str = None) -> str:
@@ -102,11 +83,11 @@ def add_to_time(timestamp: str, interval: int, time_unit: str, fmt: str = None) 
     elif time_unit == "Day":
         return add_days(timestamp, interval, fmt)
     elif time_unit == "Week":
-        return _add_time_delta_to_iso_timestamp(timestamp, timedelta(weeks=interval))
+        return CSharpDateTime.parse(timestamp).add_days(7 * interval).format_date_time(fmt)
     elif time_unit == "Month":
-        return _add_time_delta_to_iso_timestamp(timestamp, relativedelta(months=interval))
+        return CSharpDateTime.parse(timestamp).add_months(interval).format_date_time(fmt)
     elif time_unit == "Year":
-        return _add_time_delta_to_iso_timestamp(timestamp, relativedelta(years=interval))
+        return CSharpDateTime.parse(timestamp).add_years(interval).format_date_time(fmt)
     else:
         raise ValueError(f"Invalid time unit: {time_unit}")
 
@@ -120,8 +101,9 @@ def convert_from_utc(timestamp: str, destination_timezone: str, fmt: str = None)
         For time zone names, see Microsoft Time Zone Values, but you might have to remove any punctuation from the time zone name.
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    # TODO: Implement other fmt's if valuable. Use cases where you need to assert certain format should be rare.
-    return timestamp
+    return (
+        CSharpDateTime.parse(timestamp).convert_timestamp_to_target_timezone(destination_timezone).format_date_time(fmt)
+    )
 
 
 def convert_time_zone(timestamp: str, source_timezone: str, destination_timezone: str, fmt: str = None) -> str:
@@ -135,8 +117,11 @@ def convert_time_zone(timestamp: str, source_timezone: str, destination_timezone
         For time zone names, see Microsoft Time Zone Values, but you might have to remove any punctuation from the time zone name.
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    # TODO: Implement other fmt's if valuable. Use cases where you need to assert certain format should be rare.
-    return timestamp
+    return (
+        CSharpDateTime.parse(timestamp)
+        .convert_timestamp_from_timezone_to_target_timezone(source_timezone, destination_timezone)
+        .format_date_time(fmt)
+    )
 
 
 def convert_to_utc(timestamp: str, source_timezone: str, fmt: str = None) -> str:
@@ -148,8 +133,7 @@ def convert_to_utc(timestamp: str, source_timezone: str, fmt: str = None) -> str
         For time zone names, see Microsoft Time Zone Values, but you might have to remove any punctuation from the time zone name.
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    # TODO: Implement other fmt's if valuable. Use cases where you need to assert certain format should be rare.
-    return timestamp
+    return CSharpDateTime.parse(timestamp).convert_timestamp_from_timezone_to_utc(source_timezone).format_date_time(fmt)
 
 
 def day_of_month(timestamp: str) -> int:
@@ -158,8 +142,7 @@ def day_of_month(timestamp: str) -> int:
     Args:
         timestamp (str): The string that contains the timestamp
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    return date_time.day
+    return CSharpDateTime.parse(timestamp).day_of_month()
 
 
 def day_of_week(timestamp: str) -> int:
@@ -168,8 +151,7 @@ def day_of_week(timestamp: str) -> int:
     Args:
         timestamp (str): The string that contains the timestamp
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    return date_time.weekday() + 1
+    return CSharpDateTime.parse(timestamp).day_of_week()
 
 
 def day_of_year(timestamp: str) -> int:
@@ -178,8 +160,7 @@ def day_of_year(timestamp: str) -> int:
     Args:
         timestamp (str): The string that contains the timestamp
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    return date_time.timetuple().tm_yday
+    return CSharpDateTime.parse(timestamp).day_of_year()
 
 
 def format_date_time(timestamp: str, fmt: str = None) -> str:
@@ -189,8 +170,7 @@ def format_date_time(timestamp: str, fmt: str = None) -> str:
         timestamp (str): The string that contains the timestamp
         fmt (str): The format to use when converting the timestamp to a string
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    return _datetime_to_isoformat(date_time, fmt)
+    return CSharpDateTime.parse(timestamp).format_date_time(fmt)
 
 
 def get_future_time(interval: int, time_unit: str, fmt: str = None) -> str:
@@ -222,9 +202,7 @@ def start_of_day(timestamp: str, fmt: str = None) -> str:
         timestamp (str): The string that contains the timestamp
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    date_time = date_time.replace(hour=0, minute=0, second=0, microsecond=0)
-    return _datetime_to_isoformat(date_time, fmt)
+    return CSharpDateTime.parse(timestamp).start_of_day().format_date_time(fmt)
 
 
 def start_of_hour(timestamp: str, fmt: str = None) -> str:
@@ -234,9 +212,7 @@ def start_of_hour(timestamp: str, fmt: str = None) -> str:
         timestamp (str): The string that contains the timestamp
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    date_time = date_time.replace(minute=0, second=0, microsecond=0)
-    return _datetime_to_isoformat(date_time, fmt)
+    return CSharpDateTime.parse(timestamp).start_of_hour().format_date_time(fmt)
 
 
 def start_of_month(timestamp: str, fmt: str = None) -> str:
@@ -246,9 +222,7 @@ def start_of_month(timestamp: str, fmt: str = None) -> str:
         timestamp (str): The string that contains the timestamp
         fmt (str, optional): Optionally, you can specify a different format with the <format> parameter.
     """
-    date_time = _datetime_from_isoformat(timestamp)
-    date_time = date_time.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    return _datetime_to_isoformat(date_time, fmt)
+    return CSharpDateTime.parse(timestamp).start_of_month().format_date_time(fmt)
 
 
 def subtract_from_time(timestamp: str, interval: int, time_unit: str, fmt: str = None) -> str:

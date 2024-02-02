@@ -9,11 +9,12 @@ include = [ "README.md", "LICENSE" ]
 keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.13"
 azure-core = "^1.29.5"
 xmltodict = "^0.13.0"
 lxml = "^4.9.3"
 lark = "^1.1.8"
+pythonnet = "^3.0.3"
 
 [tool.poetry.group.dev.dependencies]
 mutatest = "^3.1.0"
@@ -22,7 +23,6 @@ ruff = "^0.1.5"
 pre-commit = "^3.5.0"
 astor = "^0.8.1"
 docstring-parser = "^0.15"
-freezegun = "^1.2.2"
 
 
 [build-system]
@@ -37,7 +37,7 @@ select = [
     "B", # bugbear
     "COM", # flake8 commas
     "D", # Pydoc style docstrings
-    "E", # PEP8 conventions 
+    "E", # PEP8 conventions
     "F", # pyflakes
     "N", # PEP8 naming conventions
     "I"

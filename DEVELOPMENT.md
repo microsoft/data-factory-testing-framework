@@ -24,10 +24,16 @@ poetry run pre-commit run
 
 ### Run Linting
 
-We use Ruff to lint our code as it provides similar rule sets to well-established linters into one (e.g., black, flake8, isort, and pydocstyle).
+We use Ruff to lint our code as it provides similar rule sets to well-established linters into one
+(e.g., black, flake8, isort, and pydocstyle).
 
 To run linting, run the following command:
 
 ```bash
 poetry run ruff .
 ```
+
+### Updating lock file
+
+When updating Poetry's lock file your local cache can become outdated.
+You can clear your cache with `poetry cache clear PyPI --all`
