@@ -3,7 +3,8 @@
 // for contributors.
 {
     "python.testing.pytestArgs": [
-        "."
+        "tests",
+        "examples",
         "-vv"
     ],
     "python.testing.cwd": "${workspaceFolder}",
