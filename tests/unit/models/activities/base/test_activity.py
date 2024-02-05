@@ -16,12 +16,12 @@ TestFramework(framework_type=TestFrameworkType.Fabric)
         ("Succeeded", "Succeeded", True),
         ("Failed", "Succeeded", False),
         ("Skipped", "Succeeded", False),
-        ("Completed", "Succeeded", False),
+        ("Completed", "Succeeded", True),
         ("Failed", "Failed", True),
         ("Skipped", "Failed", False),
-        ("Completed", "Failed", False),
+        ("Completed", "Failed", True),
         ("Skipped", "Skipped", True),
-        ("Completed", "Skipped", False),
+        ("Completed", "Skipped", True),
         ("Completed", "Completed", True),
     ],
 )
@@ -50,6 +50,27 @@ def test_dependency_conditions_when_called_returns_expected(
 
     # Assert
     assert result == expected
+
+
+def test_dependency_condition_completed_is_false_when_no_activity_result_is_set() -> None:
+    # Arrange
+    pipeline_activity = Activity(
+        name="activity",
+        type="WebActivity",
+        dependsOn=[
+            {
+                "activity": "otherActivity",
+                "dependencyConditions": ["Completed"],
+            }
+        ],
+    )
+    state = PipelineRunState()
+
+    # Act
+    result = pipeline_activity.are_dependency_condition_met(state)
+
+    # Assert
+    assert result is False
 
 
 def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded() -> None:

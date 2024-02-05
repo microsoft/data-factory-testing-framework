@@ -53,7 +53,10 @@ class Activity:
                 return False
 
             for dependency_condition in dependency.dependency_conditions:
-                if dependency_activity["status"] != dependency_condition:
+                if (
+                    dependency_activity["status"] != dependency_condition
+                    and dependency_condition != DependencyCondition.COMPLETED
+                ):
                     return False
 
         return True
