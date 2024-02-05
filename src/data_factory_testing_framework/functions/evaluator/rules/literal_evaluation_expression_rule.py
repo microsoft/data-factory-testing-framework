@@ -23,6 +23,7 @@ class LiteralEvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 expected_types=(EvaluatedExpression, ExpressionRuleEvaluator),
                 actual_type=type(self.children[0]),
             )
+        self.literal = self.children[0].value
 
     def evaluate(self) -> EvaluatedExpression:
-        return EvaluatedExpression(self.children[0].value)
+        return EvaluatedExpression(self.literal)

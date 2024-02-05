@@ -23,24 +23,22 @@ class LogicalBoolExpressionEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 3:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=3, actual=len(self.children))
 
-        for i, child in enumerate(self.children):
+        if not isinstance(self.children[0], EvaluatedExpression):
+            raise ExpressionEvaluationInvalidChildTypeError(
+                child_index=0,
+                expected_types=(EvaluatedExpression,),
+                actual_type=type(self.children[0]),
+            )
+
+        for i, child in enumerate(self.children[1:]):
             self._check_child_type(child, i)
 
         if self.children[0].value not in (self.OR, self.AND):
             self._raise_invalid_operator(self.children[0].value)
 
-    def evaluate(self) -> EvaluatedExpression:
-        logical_operator: EvaluatedExpression = self.children[0]
-        left_expression = self.children[1]
-        right_expression = self.children[2]
-
-        if logical_operator.value == self.OR:
-            result = self._evaluate_expression(left_expression) or self._evaluate_expression(right_expression)
-        elif logical_operator.value == self.AND:
-            result = self._evaluate_expression(left_expression) and self._evaluate_expression(right_expression)
-        else:
-            self._raise_invalid_operator(logical_operator.value)
-        return EvaluatedExpression(value=result)
+        self.logical_operator = self.children[0].value
+        self.left_expression = self.children[1]
+        self.right_expression = self.children[2]
 
     def _raise_invalid_operator(self, logical_operator: str) -> None:
         raise ExpressionEvaluationError(f"Invalid logical operator: {logical_operator}")
@@ -52,6 +50,15 @@ class LogicalBoolExpressionEvaluator(ExpressionRuleEvaluator):
                 expected_types=(ExpressionRuleEvaluator, EvaluatedExpression),
                 actual_type=type(child),
             )
+
+    def evaluate(self) -> EvaluatedExpression:
+        if self.logical_operator == self.OR:
+            value = self._evaluate_expression(self.left_expression) or self._evaluate_expression(self.right_expression)
+        elif self.logical_operator == self.AND:
+            value = self._evaluate_expression(self.left_expression) and self._evaluate_expression(self.right_expression)
+        else:
+            self._raise_invalid_operator(self.logical_operator)
+        return EvaluatedExpression(value)
 
     def _evaluate_expression(self, expression: Union[ExpressionRuleEvaluator, EvaluatedExpression]) -> bool:
         if isinstance(expression, ExpressionRuleEvaluator):

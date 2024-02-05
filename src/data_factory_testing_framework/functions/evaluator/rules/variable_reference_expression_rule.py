@@ -23,8 +23,8 @@ class VariableReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
             )
+        self.variable_name = self.children[0].value
 
     def evaluate(self) -> EvaluatedExpression:
-        variable_name = self.children[0].value
-        variable = self.state.get_variable_by_name(variable_name)
+        variable = self.state.get_variable_by_name(self.variable_name)
         return EvaluatedExpression(variable.value)

@@ -25,10 +25,11 @@ class DatasetReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
             )
 
+        self.parameter_name = self.children[0].value
+
     def evaluate(self) -> EvaluatedExpression:
-        parameter_name = self.children[0].value
         result = self.state.get_parameter_by_type_and_name(
             RunParameterType.Dataset,
-            parameter_name,
+            self.parameter_name,
         )
         return EvaluatedExpression(result)

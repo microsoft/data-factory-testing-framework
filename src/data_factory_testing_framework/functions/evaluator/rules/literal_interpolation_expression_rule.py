@@ -20,9 +20,11 @@ class LiteralInterpolationExpressionRuleEvaluator(ExpressionRuleEvaluator):
                     actual_type=type(child),
                 )
 
+        self.literal_interpolation_items = self.children
+
     def evaluate(self) -> EvaluatedExpression:
         evaluation_result = ""
-        for item in self.children:
+        for item in self.literal_interpolation_items:
             value = item.value if isinstance(item, EvaluatedExpression) else item.evaluate().value
             if not isinstance(value, (str, int, float, bool, None)):
                 raise ExpressionEvaluationError("Literal interpolation only supports string, int, float, bool and None")

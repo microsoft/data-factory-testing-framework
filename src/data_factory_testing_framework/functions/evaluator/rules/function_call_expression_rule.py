@@ -1,14 +1,15 @@
 import inspect
-from typing import Callable, List, Union
+from typing import Callable, Union
 
 from lark import Tree
 
 from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
 from data_factory_testing_framework.functions.evaluator.exceptions import ExpressionEvaluationInvalidChildTypeError
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import (
+    EvaluatedExpression,
+    ExpressionRuleEvaluator,
+)
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
-
-from .expression_rule import ExpressionRuleEvaluator
 
 
 class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
@@ -34,13 +35,12 @@ class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=i, expected_types=(EvaluatedExpression, ExpressionRuleEvaluator), actual_type=type(child)
             )
 
-    def evaluate(self) -> EvaluatedExpression:
-        function_name_aste: EvaluatedExpression = self.children[0]
-        function_name: str = function_name_aste.value
-        parameters: List[Union[ExpressionRuleEvaluator, EvaluatedExpression]] = self.children[1:]
-        evaluated_parameters = self._evaluated_parameters(parameters)
+        self.function_name = self.children[0].value
+        self.parameters = self.children[1:]
 
-        function: Callable = FunctionsRepository.functions.get(function_name)
+    def evaluate(self) -> EvaluatedExpression:
+        evaluated_parameters = self._evaluated_parameters(self.parameters)
+        function: Callable = FunctionsRepository.functions.get(self.function_name)
 
         pos_or_kw_params, var_pos_params = self._build_function_call_parameters(function, evaluated_parameters)
         result = function(*pos_or_kw_params, *var_pos_params)

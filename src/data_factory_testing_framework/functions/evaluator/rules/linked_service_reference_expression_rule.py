@@ -25,7 +25,8 @@ class LinkedServiceReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
             )
 
+        self.parameter_name = self.children[0].value
+
     def evaluate(self) -> EvaluatedExpression:
-        parameter_name = self.children[0].value
-        activity = self.state.get_parameter_by_type_and_name(RunParameterType.LinkedService, parameter_name)
+        activity = self.state.get_parameter_by_type_and_name(RunParameterType.LinkedService, self.parameter_name)
         return EvaluatedExpression(activity)

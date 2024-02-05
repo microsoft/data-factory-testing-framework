@@ -28,12 +28,12 @@ class PipelineReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=1, expected_types=EvaluatedExpression, actual_type=type(self.children[1])
             )
+        self.parameter_type = self.children[0].value
+        self.parameter_name = self.children[1].value
 
     def evaluate(self) -> EvaluatedExpression:
-        parameter_type: EvaluatedExpression = self.children[0]
-        parameter_name: EvaluatedExpression = self.children[1]
         result = self.state.get_parameter_by_type_and_name(
-            parameter_type.value,
-            parameter_name.value,
+            self.parameter_type,
+            self.parameter_name,
         )
         return EvaluatedExpression(result)

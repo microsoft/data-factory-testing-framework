@@ -22,19 +22,22 @@ class EvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=0, expected_types=ExpressionRuleEvaluator, actual_type=type(self.children[0])
             )
 
-    def evaluate(self) -> EvaluatedExpression:
-        expression = self.children[0]
-        accessors = self.children[1:]
+        for i, child in enumerate(self.children[1:]):
+            if not isinstance(child, EvaluatedExpression):
+                raise ExpressionEvaluationInvalidChildTypeError(
+                    child_index=i + 1, expected_types=EvaluatedExpression, actual_type=type(child)
+                )
 
-        expression_value = expression.evaluate()
+        self.expression = self.children[0]
+        self.accessors = self.children[1:]
+
+    def evaluate(self) -> EvaluatedExpression:
+        expression_value = self.expression.evaluate()
         if not isinstance(expression_value, EvaluatedExpression):
             raise ExpressionEvaluationError("Not an evaluated expression.")
 
         current_value = expression_value.value
-        for accessor in accessors:
-            if not isinstance(accessor, EvaluatedExpression):
-                raise ExpressionEvaluationError("Not an evaluated expression.")
-
+        for accessor in self.accessors:
             current_value = current_value[accessor.value]
 
         return EvaluatedExpression(current_value)

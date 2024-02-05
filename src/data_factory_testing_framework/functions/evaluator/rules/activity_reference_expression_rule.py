@@ -24,7 +24,8 @@ class ActivityReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
             )
 
+        self.activity_name = self.children[0].value
+
     def evaluate(self) -> EvaluatedExpression:
-        activity_name = self.children[0].value
-        activity = self.state.get_activity_result_by_name(activity_name)
+        activity = self.state.get_activity_result_by_name(self.activity_name)
         return EvaluatedExpression(activity)

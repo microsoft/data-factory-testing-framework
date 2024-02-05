@@ -23,6 +23,10 @@ class BranchExpressionRuleEvaluator(ExpressionRuleEvaluator):
         for i, child in enumerate(self.children):
             self._check_child_type(child, i)
 
+        self.condition = self.children[0]
+        self.true_expression_branch = self.children[1]
+        self.false_expression_branch = self.children[2]
+
     def _check_child_type(self, child: Union[EvaluatedExpression, ExpressionRuleEvaluator], child_index: int) -> None:
         if not isinstance(child, (EvaluatedExpression, ExpressionRuleEvaluator)):
             raise ExpressionEvaluationInvalidChildTypeError(
@@ -31,19 +35,19 @@ class BranchExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 actual_type=type(child),
             )
 
+    def evaluate(self) -> EvaluatedExpression:
+        condition_result = self._evaluate_child(self.condition)
+
+        if not isinstance(condition_result, EvaluatedExpression) and not isinstance(condition_result.value, bool):
+            raise ExpressionEvaluationError("Expression result must be a boolean value.")
+
+        if condition_result.value:
+            return self._evaluate_child(self.true_expression_branch)
+        else:
+            return self._evaluate_child(self.false_expression_branch)
+
     def _evaluate_child(self, child: Union[EvaluatedExpression, ExpressionRuleEvaluator]) -> EvaluatedExpression:
         if isinstance(child, ExpressionRuleEvaluator):
             return child.evaluate()
         else:
             return child.value
-
-    def evaluate(self) -> EvaluatedExpression:
-        expression_result = self._evaluate_child(self.children[0])
-
-        if not isinstance(expression_result, EvaluatedExpression) and not isinstance(expression_result.value, bool):
-            raise ExpressionEvaluationError("Expression result must be a boolean value.")
-
-        if expression_result.value:
-            return self._evaluate_child(self.children[1])
-        else:
-            return self._evaluate_child(self.children[2])

@@ -25,11 +25,11 @@ class SystemVariableReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
             )
 
+        self.system_variable_name = self.children[0].value
+
     def evaluate(self) -> EvaluatedExpression:
-        system_variable_name = self.children[0].value
         system_variable = self.state.get_parameter_by_type_and_name(
             RunParameterType.System,
-            system_variable_name,
+            self.system_variable_name,
         )
-
         return EvaluatedExpression(system_variable)
