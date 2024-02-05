@@ -11,7 +11,7 @@ from data_factory_testing_framework.functions.evaluator.expression_terminal_tran
     ExpressionTerminalTransformer,
 )
 from data_factory_testing_framework.functions.evaluator.rules import ExpressionRuleEvaluator
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 

@@ -4,11 +4,11 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
 
-from .expression_rule import ExpressionRuleEvaluator
+from .expression_rule_evaluator import ExpressionRuleEvaluator
 
 
 class LinkedServiceReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):

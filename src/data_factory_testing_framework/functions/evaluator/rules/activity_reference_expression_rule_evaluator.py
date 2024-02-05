@@ -4,13 +4,13 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 
-from .expression_rule import ExpressionRuleEvaluator
+from .expression_rule_evaluator import ExpressionRuleEvaluator
 
 
-class VariableReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
+class ActivityReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
     def __init__(self, tree: Tree, state: PipelineRunState) -> None:
         """Initialize expression rule evaluator."""
         super().__init__(tree)
@@ -23,8 +23,9 @@ class VariableReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=0, expected_types=EvaluationResult, actual_type=type(self.children[0])
             )
-        self.variable_name = self.children[0].value
+
+        self.activity_name = self.children[0].value
 
     def evaluate(self) -> EvaluationResult:
-        variable = self.state.get_variable_by_name(self.variable_name)
-        return EvaluationResult(variable.value)
+        activity_result = self.state.get_activity_result_by_name(self.activity_name)
+        return EvaluationResult(activity_result)
