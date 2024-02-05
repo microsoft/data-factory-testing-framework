@@ -19,7 +19,9 @@ class ExecutePipelineActivity(ControlActivity):
 
         super(ControlActivity, self).__init__(**kwargs)
 
-        self.parameters: dict = self.type_properties["parameters"]
+        self.parameters: dict = {}
+        if "parameters" in self.type_properties:
+            self.parameters = self.type_properties["parameters"]
 
     def get_child_run_parameters(self, state: PipelineRunState) -> List[RunParameter]:
         child_parameters = []
