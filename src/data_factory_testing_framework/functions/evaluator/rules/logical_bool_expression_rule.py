@@ -61,13 +61,7 @@ class LogicalBoolExpressionEvaluator(ExpressionRuleEvaluator):
         return EvaluatedExpression(value)
 
     def _evaluate_expression(self, expression: Union[ExpressionRuleEvaluator, EvaluatedExpression]) -> bool:
-        if isinstance(expression, ExpressionRuleEvaluator):
-            result = expression.evaluate()
-        elif isinstance(expression, EvaluatedExpression):
-            result = expression.value
-        else:
-            raise ExpressionEvaluationError(f"Invalid expression type: {type(expression)}")
-
+        result = self.ensure_evaluated_expression(expression)
         if not isinstance(result.value, bool):
             raise ExpressionEvaluationError(f"Evaluating expression resulted in non-boolean value: {result.value}")
 

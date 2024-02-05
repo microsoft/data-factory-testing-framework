@@ -42,3 +42,11 @@ class ExpressionRuleEvaluator(ABC):
     def children(self) -> list[Union["ExpressionRuleEvaluator", EvaluatedExpression]]:
         """Returns the children of the expression rule."""
         return self._tree.children
+
+    def ensure_evaluated_expression(
+        self, child: Union[EvaluatedExpression, "ExpressionRuleEvaluator"]
+    ) -> EvaluatedExpression:
+        if isinstance(child, ExpressionRuleEvaluator):
+            return child.evaluate()
+        else:
+            return child

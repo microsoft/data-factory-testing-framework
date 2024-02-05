@@ -72,13 +72,6 @@ class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
     ) -> list[EvaluatedExpression]:
         evaluated_parameters = []
         for p in parameters:
-            if isinstance(p, EvaluatedExpression):
-                evaluated_expression = p
-            else:
-                evaluated_expression = p.evaluate()
-
-            if not isinstance(evaluated_expression, EvaluatedExpression):
-                raise ExpressionEvaluationError("Not an evaluated expression.")
-
+            evaluated_expression = self.ensure_evaluated_expression(p)
             evaluated_parameters.append(evaluated_expression.value)
         return evaluated_parameters

@@ -26,7 +26,4 @@ class ExpressionParameterExpressionRuleEvaluator(ExpressionRuleEvaluator):
         self.parameter_name_expression = self.children[0]
 
     def evaluate(self) -> EvaluatedExpression:
-        if isinstance(self.parameter_name_expression, EvaluatedExpression):
-            return self.children[0]
-
-        return self.parameter_name_expression.evaluate()
+        return self.ensure_evaluated_expression(self.parameter_name_expression)

@@ -32,9 +32,7 @@ class EvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
         self.accessors = self.children[1:]
 
     def evaluate(self) -> EvaluatedExpression:
-        expression_value = self.expression.evaluate()
-        if not isinstance(expression_value, EvaluatedExpression):
-            raise ExpressionEvaluationError("Not an evaluated expression.")
+        expression_value = self.ensure_evaluated_expression(self.expression)
 
         current_value = expression_value.value
         for accessor in self.accessors:
