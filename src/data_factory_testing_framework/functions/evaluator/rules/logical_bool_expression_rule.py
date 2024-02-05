@@ -7,7 +7,7 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 
 from .expression_rule import ExpressionRuleEvaluator
 
@@ -23,10 +23,10 @@ class LogicalBoolExpressionEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 3:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=3, actual=len(self.children))
 
-        if not isinstance(self.children[0], EvaluatedExpression):
+        if not isinstance(self.children[0], EvaluationResult):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=0,
-                expected_types=(EvaluatedExpression,),
+                expected_types=(EvaluationResult,),
                 actual_type=type(self.children[0]),
             )
 
@@ -43,25 +43,25 @@ class LogicalBoolExpressionEvaluator(ExpressionRuleEvaluator):
     def _raise_invalid_operator(self, logical_operator: str) -> None:
         raise ExpressionEvaluationError(f"Invalid logical operator: {logical_operator}")
 
-    def _check_child_type(self, child: Union[EvaluatedExpression, ExpressionRuleEvaluator], child_index: int) -> None:
-        if not isinstance(child, (ExpressionRuleEvaluator, EvaluatedExpression)):
+    def _check_child_type(self, child: Union[EvaluationResult, ExpressionRuleEvaluator], child_index: int) -> None:
+        if not isinstance(child, (ExpressionRuleEvaluator, EvaluationResult)):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=child_index,
-                expected_types=(ExpressionRuleEvaluator, EvaluatedExpression),
+                expected_types=(ExpressionRuleEvaluator, EvaluationResult),
                 actual_type=type(child),
             )
 
-    def evaluate(self) -> EvaluatedExpression:
+    def evaluate(self) -> EvaluationResult:
         if self.logical_operator == self.OR:
             value = self._evaluate_expression(self.left_expression) or self._evaluate_expression(self.right_expression)
         elif self.logical_operator == self.AND:
             value = self._evaluate_expression(self.left_expression) and self._evaluate_expression(self.right_expression)
         else:
             self._raise_invalid_operator(self.logical_operator)
-        return EvaluatedExpression(value)
+        return EvaluationResult(value)
 
-    def _evaluate_expression(self, expression: Union[ExpressionRuleEvaluator, EvaluatedExpression]) -> bool:
-        result = self.ensure_evaluated_expression(expression)
+    def _evaluate_expression(self, expression: Union[ExpressionRuleEvaluator, EvaluationResult]) -> bool:
+        result = self.evaluate_child(expression)
         if not isinstance(result.value, bool):
             raise ExpressionEvaluationError(f"Evaluating expression resulted in non-boolean value: {result.value}")
 

@@ -7,7 +7,7 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 
 from .expression_rule import ExpressionRuleEvaluator
 
@@ -27,21 +27,21 @@ class BranchExpressionRuleEvaluator(ExpressionRuleEvaluator):
         self.true_expression_branch = self.children[1]
         self.false_expression_branch = self.children[2]
 
-    def _check_child_type(self, child: Union[EvaluatedExpression, ExpressionRuleEvaluator], child_index: int) -> None:
-        if not isinstance(child, (EvaluatedExpression, ExpressionRuleEvaluator)):
+    def _check_child_type(self, child: Union[EvaluationResult, ExpressionRuleEvaluator], child_index: int) -> None:
+        if not isinstance(child, (EvaluationResult, ExpressionRuleEvaluator)):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=child_index,
-                expected_types=(EvaluatedExpression, ExpressionRuleEvaluator),
+                expected_types=(EvaluationResult, ExpressionRuleEvaluator),
                 actual_type=type(child),
             )
 
-    def evaluate(self) -> EvaluatedExpression:
-        condition_result = self.ensure_evaluated_expression(self.condition)
+    def evaluate(self) -> EvaluationResult:
+        condition_result = self.evaluate_child(self.condition)
 
         if not isinstance(condition_result.value, bool):
             raise ExpressionEvaluationError("Expression result must be a boolean value.")
 
         if condition_result.value:
-            return self.ensure_evaluated_expression(self.true_expression_branch)
+            return self.evaluate_child(self.true_expression_branch)
         else:
-            return self.ensure_evaluated_expression(self.false_expression_branch)
+            return self.evaluate_child(self.false_expression_branch)

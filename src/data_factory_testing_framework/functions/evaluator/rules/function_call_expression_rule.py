@@ -6,7 +6,7 @@ from lark import Tree
 from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
 from data_factory_testing_framework.functions.evaluator.exceptions import ExpressionEvaluationInvalidChildTypeError
 from data_factory_testing_framework.functions.evaluator.rules.expression_rule import (
-    EvaluatedExpression,
+    EvaluationResult,
     ExpressionRuleEvaluator,
 )
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
@@ -22,37 +22,37 @@ class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 f"Invalid number of children. Minimum required: 1, Actual: {len(self.children)}"
             )
 
-        if not isinstance(self.children[0], EvaluatedExpression):
+        if not isinstance(self.children[0], EvaluationResult):
             raise ExpressionEvaluationInvalidChildTypeError(
-                child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
+                child_index=0, expected_types=EvaluationResult, actual_type=type(self.children[0])
             )
 
         for i, child in enumerate(self.children[1:]):
-            if isinstance(child, (EvaluatedExpression, ExpressionRuleEvaluator)):
+            if isinstance(child, (EvaluationResult, ExpressionRuleEvaluator)):
                 continue
 
             raise ExpressionEvaluationInvalidChildTypeError(
-                child_index=i, expected_types=(EvaluatedExpression, ExpressionRuleEvaluator), actual_type=type(child)
+                child_index=i, expected_types=(EvaluationResult, ExpressionRuleEvaluator), actual_type=type(child)
             )
 
         self.function_name = self.children[0].value
         self.parameters = self.children[1:]
 
-    def evaluate(self) -> EvaluatedExpression:
+    def evaluate(self) -> EvaluationResult:
         evaluated_parameters = self._evaluated_parameters(self.parameters)
         function: Callable = FunctionsRepository.functions.get(self.function_name)
 
         pos_or_kw_params, var_pos_params = self._build_function_call_parameters(function, evaluated_parameters)
         result = function(*pos_or_kw_params, *var_pos_params)
 
-        return EvaluatedExpression(result)
+        return EvaluationResult(result)
 
     def _build_function_call_parameters(
-        self, function: Callable, parameters: list[Union[EvaluatedExpression, ExpressionRuleEvaluator]]
+        self, function: Callable, parameters: list[Union[EvaluationResult, ExpressionRuleEvaluator]]
     ) -> tuple[
         Union[
-            list[Union[EvaluatedExpression, ExpressionRuleEvaluator]],
-            list[Union[EvaluatedExpression, ExpressionRuleEvaluator]],
+            list[Union[EvaluationResult, ExpressionRuleEvaluator]],
+            list[Union[EvaluationResult, ExpressionRuleEvaluator]],
         ]
     ]:
         function_signature = inspect.signature(function)
@@ -68,10 +68,10 @@ class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
         return pos_or_keyword_values, var_positional_values
 
     def _evaluated_parameters(
-        self, parameters: list[Union[EvaluatedExpression, ExpressionRuleEvaluator]]
-    ) -> list[EvaluatedExpression]:
+        self, parameters: list[Union[EvaluationResult, ExpressionRuleEvaluator]]
+    ) -> list[EvaluationResult]:
         evaluated_parameters = []
         for p in parameters:
-            evaluated_expression = self.ensure_evaluated_expression(p)
+            evaluated_expression = self.evaluate_child(p)
             evaluated_parameters.append(evaluated_expression.value)
         return evaluated_parameters

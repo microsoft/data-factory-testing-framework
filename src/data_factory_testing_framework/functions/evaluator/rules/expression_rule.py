@@ -8,7 +8,7 @@ from data_factory_testing_framework.functions.evaluator.exceptions import Expres
 
 
 @dataclass
-class EvaluatedExpression:
+class EvaluationResult:
     """Evaluated expression data class."""
 
     value: Any
@@ -27,25 +27,27 @@ class ExpressionRuleEvaluator(ABC):
         self._tree = tree
 
         # check that children are of the correct type
-        if not all(isinstance(child, (EvaluatedExpression, ExpressionRuleEvaluator)) for child in self.children):
+        if not all(isinstance(child, (EvaluationResult, ExpressionRuleEvaluator)) for child in self.children):
             raise ExpressionEvaluationInvalidChildTypeError(
-                expected_types=(EvaluatedExpression, ExpressionRuleEvaluator),
+                expected_types=(EvaluationResult, ExpressionRuleEvaluator),
                 actual_types=[type(child) for child in self.children],
             )
 
     @abstractmethod
-    def evaluate(self) -> EvaluatedExpression:
+    def evaluate(self) -> EvaluationResult:
         """Evaluates the expression rule."""
         pass
 
     @property
-    def children(self) -> list[Union["ExpressionRuleEvaluator", EvaluatedExpression]]:
+    def children(self) -> list[Union["ExpressionRuleEvaluator", EvaluationResult]]:
         """Returns the children of the expression rule."""
         return self._tree.children
 
-    def ensure_evaluated_expression(
-        self, child: Union[EvaluatedExpression, "ExpressionRuleEvaluator"]
-    ) -> EvaluatedExpression:
+    def evaluate_child(self, child: Union[EvaluationResult, "ExpressionRuleEvaluator"]) -> EvaluationResult:
+        """Evaluates a child of the expression rule.
+
+        If the child is an expression rule evaluator, it is evaluated so that the result is always an EvaluationResult.
+        """
         if isinstance(child, ExpressionRuleEvaluator):
             return child.evaluate()
         else:

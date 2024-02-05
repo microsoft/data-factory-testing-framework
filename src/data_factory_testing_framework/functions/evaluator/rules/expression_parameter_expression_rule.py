@@ -4,7 +4,7 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 
 from .expression_rule import ExpressionRuleEvaluator
 
@@ -17,13 +17,13 @@ class ExpressionParameterExpressionRuleEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 1:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=1, actual=len(self.children))
 
-        if not isinstance(self.children[0], (EvaluatedExpression, ExpressionRuleEvaluator)):
+        if not isinstance(self.children[0], (EvaluationResult, ExpressionRuleEvaluator)):
             raise ExpressionEvaluationInvalidChildTypeError(
                 child_index=0,
-                expected_types=(EvaluatedExpression, ExpressionRuleEvaluator),
+                expected_types=(EvaluationResult, ExpressionRuleEvaluator),
                 actual_type=type(self.children[0]),
             )
         self.parameter_name_expression = self.children[0]
 
-    def evaluate(self) -> EvaluatedExpression:
-        return self.ensure_evaluated_expression(self.parameter_name_expression)
+    def evaluate(self) -> EvaluationResult:
+        return self.evaluate_child(self.parameter_name_expression)

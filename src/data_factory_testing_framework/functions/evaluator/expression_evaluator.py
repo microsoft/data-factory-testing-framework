@@ -11,7 +11,7 @@ from data_factory_testing_framework.functions.evaluator.expression_terminal_tran
     ExpressionTerminalTransformer,
 )
 from data_factory_testing_framework.functions.evaluator.rules import ExpressionRuleEvaluator
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 from data_factory_testing_framework.functions.functions_repository import FunctionsRepository
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 
@@ -142,6 +142,6 @@ class ExpressionEvaluator:
         if not isinstance(ast, ExpressionRuleEvaluator):
             raise ExpressionEvaluationError()
         result = ast.evaluate()
-        if not isinstance(result, EvaluatedExpression):
+        if not isinstance(result, EvaluationResult):
             raise ExpressionEvaluationError()
         return result.value

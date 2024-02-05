@@ -4,7 +4,7 @@ from data_factory_testing_framework.exceptions.state_iteration_item_not_set_erro
 from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 
 from .expression_rule import ExpressionRuleEvaluator
@@ -19,8 +19,8 @@ class ItemReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 0:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=0, actual=len(self.children))
 
-    def evaluate(self) -> EvaluatedExpression:
+    def evaluate(self) -> EvaluationResult:
         item = self.state.iteration_item
         if item is None:
             raise StateIterationItemNotSetError()
-        return EvaluatedExpression(item)
+        return EvaluationResult(item)

@@ -4,7 +4,7 @@ from data_factory_testing_framework.functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
 
@@ -20,13 +20,13 @@ class LinkedServiceReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 1:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=1, actual=len(self.children))
 
-        if not isinstance(self.children[0], EvaluatedExpression):
+        if not isinstance(self.children[0], EvaluationResult):
             raise ExpressionEvaluationInvalidChildTypeError(
-                child_index=0, expected_types=EvaluatedExpression, actual_type=type(self.children[0])
+                child_index=0, expected_types=EvaluationResult, actual_type=type(self.children[0])
             )
 
         self.parameter_name = self.children[0].value
 
-    def evaluate(self) -> EvaluatedExpression:
-        activity = self.state.get_parameter_by_type_and_name(RunParameterType.LinkedService, self.parameter_name)
-        return EvaluatedExpression(activity)
+    def evaluate(self) -> EvaluationResult:
+        parameter = self.state.get_parameter_by_type_and_name(RunParameterType.LinkedService, self.parameter_name)
+        return EvaluationResult(parameter)

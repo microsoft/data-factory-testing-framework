@@ -2,7 +2,7 @@ from lark import Tree
 
 from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
 from data_factory_testing_framework.functions.evaluator.exceptions import ExpressionEvaluationInvalidChildTypeError
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluatedExpression
+from data_factory_testing_framework.functions.evaluator.rules.expression_rule import EvaluationResult
 
 from .expression_rule import ExpressionRuleEvaluator
 
@@ -23,19 +23,19 @@ class EvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
             )
 
         for i, child in enumerate(self.children[1:]):
-            if not isinstance(child, EvaluatedExpression):
+            if not isinstance(child, EvaluationResult):
                 raise ExpressionEvaluationInvalidChildTypeError(
-                    child_index=i + 1, expected_types=EvaluatedExpression, actual_type=type(child)
+                    child_index=i + 1, expected_types=EvaluationResult, actual_type=type(child)
                 )
 
         self.expression = self.children[0]
         self.accessors = self.children[1:]
 
-    def evaluate(self) -> EvaluatedExpression:
-        expression_value = self.ensure_evaluated_expression(self.expression)
+    def evaluate(self) -> EvaluationResult:
+        expression_value = self.evaluate_child(self.expression)
 
         current_value = expression_value.value
         for accessor in self.accessors:
             current_value = current_value[accessor.value]
 
-        return EvaluatedExpression(current_value)
+        return EvaluationResult(current_value)
