@@ -20,7 +20,7 @@ def test_when_evaluated_should_evaluate_expression() -> None:
     activity.evaluate(PipelineRunState())
 
     # Assert
-    assert activity.on.value == "case_1"
+    assert activity.on.result == "case_1"
 
 
 @pytest.mark.parametrize(

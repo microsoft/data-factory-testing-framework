@@ -39,17 +39,17 @@ def test_when_evaluate_child_activities_then_should_return_the_activity_with_ite
     set_variable_activity: SetVariableActivity = next(activities)
     assert set_variable_activity is not None
     assert set_variable_activity.name == "setVariable"
-    assert set_variable_activity.type_properties["value"].value == "a"
+    assert set_variable_activity.type_properties["value"].result == "a"
 
     set_variable_activity = next(activities)
     assert set_variable_activity is not None
     assert set_variable_activity.name == "setVariable"
-    assert set_variable_activity.type_properties["value"].value == "b"
+    assert set_variable_activity.type_properties["value"].result == "b"
 
     set_variable_activity = next(activities)
     assert set_variable_activity is not None
     assert set_variable_activity.name == "setVariable"
-    assert set_variable_activity.type_properties["value"].value == "c"
+    assert set_variable_activity.type_properties["value"].result == "c"
 
     # Assert that there are no more activities
     with pytest.raises(StopIteration):

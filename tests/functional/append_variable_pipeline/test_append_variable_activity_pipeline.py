@@ -38,8 +38,8 @@ def test_append_variable_activity(
     # Assert
     activity: SetVariableActivity = next(activities)
     assert activity.type == "SetVariable"
-    assert activity.value.value == initial_value
+    assert activity.value.result == initial_value
 
     activity: AppendVariableActivity = next(activities)
     assert activity.type == "AppendVariable"
-    assert activity.value.value == appended_value
+    assert activity.value.result == appended_value

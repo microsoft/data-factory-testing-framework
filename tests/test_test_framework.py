@@ -103,7 +103,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
     assert activity.name == "failActivity"
     assert activity.type == "Fail"
     assert activity.status == "Failed"
-    assert activity.type_properties["message"].value == "Error code: 500"
+    assert activity.type_properties["message"].result == "Error code: 500"
     assert activity.type_properties["errorCode"] == "500"
 
     # Assert that there are no more activities

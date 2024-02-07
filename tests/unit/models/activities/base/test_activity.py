@@ -107,4 +107,4 @@ def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
     pipeline_activity.evaluate(state)
 
     # Assert
-    assert pipeline_activity.type_properties["parameters"]["url"].value == "example.com"
+    assert pipeline_activity.type_properties["parameters"]["url"].result == "example.com"

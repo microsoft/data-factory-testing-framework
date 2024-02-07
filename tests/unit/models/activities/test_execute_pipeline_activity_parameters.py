@@ -26,7 +26,7 @@ def test_execute_pipeline_activity_evaluates_parameters() -> None:
     # Assert
     assert activity is not None
     assert activity.name == "ExecutePipelineActivity"
-    assert activity.parameters["url"].value == "value1"
+    assert activity.parameters["url"].result == "value1"
 
 
 def test_execute_pipeline_activity_evaluates_no_parameters() -> None:

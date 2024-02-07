@@ -41,7 +41,7 @@ class SwitchActivity(ControlActivity):
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
     ) -> Iterator[Activity]:
         for case, activities in self.cases_activities.items():
-            if case == self.on.value:
+            if case == self.on.result:
                 return self._run_activities_in_scope(state, activities, evaluate_activities)
 
         return self._run_activities_in_scope(state, self.default_activities, evaluate_activities)

@@ -36,9 +36,9 @@ def test_filter_activity(input_values: [], expected_filtered_values: [], request
     # Assert
     activity: FilterActivity = next(activities)
     assert activity.type == "Filter"
-    assert activity.items.value == input_values
+    assert activity.items.result == input_values
     assert activity.output["value"] == expected_filtered_values
 
     activity: Activity = next(activities)
     assert activity.type == "SetVariable"
-    assert activity.type_properties["value"].value == expected_filtered_values
+    assert activity.type_properties["value"].result == expected_filtered_values

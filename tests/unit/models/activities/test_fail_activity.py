@@ -24,5 +24,5 @@ def test_fail_activity_evaluates_to_failed_result() -> None:
     assert activity is not None
     assert activity.name == "FailActivity"
     assert activity.status == DependencyCondition.FAILED
-    assert activity.type_properties["message"].value == "Error code: 500"
+    assert activity.type_properties["message"].result == "Error code: 500"
     assert activity.type_properties["errorCode"] == "500"

@@ -26,8 +26,8 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
     # Assert
     assert child_web_activity is not None
     assert child_web_activity.name == "API Call"
-    assert child_web_activity.type_properties["url"].value == "https://example.com"
-    assert child_web_activity.type_properties["body"].value == '{ "key": "value" }'
+    assert child_web_activity.type_properties["url"].result == "https://example.com"
+    assert child_web_activity.type_properties["body"].result == '{ "key": "value" }'
 
     with pytest.raises(StopIteration):
         next(activities)

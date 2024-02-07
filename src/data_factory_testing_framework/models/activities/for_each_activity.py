@@ -37,7 +37,7 @@ class ForEachActivity(ControlActivity):
         state: PipelineRunState,
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
     ) -> Iterator[Activity]:
-        for item in self.items.value:
+        for item in self.items.result:
             scoped_state = state.create_iteration_scope(item)
             for activity in evaluate_activities(self.activities, scoped_state):
                 yield activity

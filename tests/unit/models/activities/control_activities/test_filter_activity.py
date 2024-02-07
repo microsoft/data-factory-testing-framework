@@ -51,5 +51,5 @@ def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_
     # Assert
     activity = next(activities)
     assert activity.type == "Filter"
-    assert activity.type_properties["items"].value == input_values
+    assert activity.type_properties["items"].result == input_values
     assert activity.output["value"] == expected_filtered_values

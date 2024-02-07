@@ -37,7 +37,7 @@ A simple test to validate that the concatenation is working as expected could lo
     activity.evaluate(state)
 
     # Assert
-    assert "https://example.com/some-path" == activity.type_properties["url"].value
+    assert "https://example.com/some-path" == activity.type_properties["url"].result
    ```
 
 ## Why

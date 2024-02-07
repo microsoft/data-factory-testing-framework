@@ -61,20 +61,20 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert activity.name == "Set UserAssignedIdentityReference"
     assert activity.type_properties["variableName"] == "UserAssignedIdentityReference"
     assert (
-        activity.type_properties["value"].value
+        activity.type_properties["value"].result
         == "/subscriptions/SUBSCRIPTION_ID/resourcegroups/RESOURCE_GROUP/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test-application-identity-name"  # noqa: E501
     )
 
     activity = next(activities)
     assert activity.name == "Set ManagerApplicationPackagePath"
     assert activity.type_properties["variableName"] == "ManagerApplicationPackagePath"
-    assert activity.type_properties["value"].value == "$AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz"
+    assert activity.type_properties["value"].result == "$AZ_BATCH_APP_PACKAGE_batchmanager_2_0_0/batchmanager.tar.gz"
 
     activity = next(activities)
     assert activity.name == "Set WorkloadApplicationPackagePath"
     assert activity.type_properties["variableName"] == "WorkloadApplicationPackagePath"
     assert (
-        activity.type_properties["value"].value
+        activity.type_properties["value"].result
         == "$AZ_BATCH_APP_PACKAGE_test-application_1_5_0/test-application.tar.gz"
     )
 
@@ -82,7 +82,7 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert activity.name == "Set CommonEnvironmentSettings"
     assert activity.type_properties["variableName"] == "CommonEnvironmentSettings"
 
-    common_environment_settings = activity.type_properties["value"].value
+    common_environment_settings = activity.type_properties["value"].result
     assert len(common_environment_settings) == 8
     assert common_environment_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert common_environment_settings[0]["value"] == "test-application"
@@ -110,29 +110,29 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     activity = next(activities)
     assert activity.name == "Set JobContainerName"
     assert activity.type_properties["variableName"] == "JobContainerName"
-    assert activity.type_properties["value"].value == "job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
+    assert activity.type_properties["value"].result == "job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
 
     activity = next(activities)
     assert activity.name == "Set Job Container URL"
     assert activity.type_properties["variableName"] == "JobContainerURL"
     assert (
-        activity.type_properties["value"].value
+        activity.type_properties["value"].result
         == "https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
     )
 
     activity = next(activities)
     assert activity.name == "Create Job Storage Container"
     assert (
-        activity.type_properties["url"].value
+        activity.type_properties["url"].result
         == "https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container"
     )
     assert activity.type_properties["method"] == "PUT"
-    assert activity.type_properties["body"].value == "{}"
+    assert activity.type_properties["body"].result == "{}"
 
     activity = next(activities)
     assert activity.name == "Start Job"
     assert (
-        activity.type_properties["url"].value
+        activity.type_properties["url"].result
         == "https://batch-account-name.westeurope.batch.azure.com/jobs?api-version=2022-10-01.16.0"
     )
     assert activity.type_properties["method"] == "POST"
@@ -192,29 +192,29 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert activity.name == "Monitor Batch Job"
     assert activity.type_properties["pipeline"]["referenceName"] == "monitor_batch_job"
     assert len(activity.type_properties["parameters"]) == 1
-    assert activity.type_properties["parameters"]["JobId"].value == "802100a5-ec79-4a52-be62-8d6109f3ff9a"
+    assert activity.type_properties["parameters"]["JobId"].result == "802100a5-ec79-4a52-be62-8d6109f3ff9a"
 
     activity = next(activities)
     assert activity.name == "Copy Output Files"
     assert activity.type_properties["pipeline"]["referenceName"] == "copy_output_files"
     assert len(activity.type_properties["parameters"]) == 5
     assert (
-        activity.type_properties["parameters"]["JobContainerName"].value == "job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
+        activity.type_properties["parameters"]["JobContainerName"].result == "job-802100a5-ec79-4a52-be62-8d6109f3ff9a"
     )
-    assert activity.type_properties["parameters"]["TaskOutputFolderPrefix"].value == "TASKOUTPUT_"
+    assert activity.type_properties["parameters"]["TaskOutputFolderPrefix"].result == "TASKOUTPUT_"
     assert (
-        activity.type_properties["parameters"]["OutputStorageAccountName"].value
+        activity.type_properties["parameters"]["OutputStorageAccountName"].result
         == "test-application-output-storage-account-name"
     )
     assert (
-        activity.type_properties["parameters"]["OutputContainerName"].value == "test-application-output-container-name"
+        activity.type_properties["parameters"]["OutputContainerName"].result == "test-application-output-container-name"
     )
-    assert activity.type_properties["parameters"]["OutputFolderName"].value == "TEMP"
+    assert activity.type_properties["parameters"]["OutputFolderName"].result == "TEMP"
 
     activity = next(activities)
     assert activity.name == "Delete Job Storage Container"
     assert (
-        activity.type_properties["url"].value
+        activity.type_properties["url"].result
         == "https://batch-account-name.blob.core.windows.net/job-802100a5-ec79-4a52-be62-8d6109f3ff9a?restype=container"
     )
     assert activity.type_properties["method"] == "DELETE"

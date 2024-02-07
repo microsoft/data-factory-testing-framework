@@ -31,7 +31,7 @@ class ExecutePipelineActivity(ControlActivity):
 
         for parameter_name, parameter_value in self.parameters.items():
             parameter_value = (
-                parameter_value.value if isinstance(parameter_value, DataFactoryElement) else parameter_value
+                parameter_value.result if isinstance(parameter_value, DataFactoryElement) else parameter_value
             )
             child_parameters.append(RunParameter(RunParameterType.Pipeline, parameter_name, parameter_value))
 

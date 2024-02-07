@@ -33,7 +33,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
     assert activity.name == "SetVersion"
     assert activity.type == "SetVariable"
     assert activity.type_properties["variableName"] == "version"
-    assert activity.type_properties["value"].value == "1.2.3"
+    assert activity.type_properties["value"].result == "1.2.3"
 
     with pytest.raises(StopIteration):
         next(activities)

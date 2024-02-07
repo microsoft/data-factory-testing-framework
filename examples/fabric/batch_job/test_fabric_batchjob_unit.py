@@ -43,7 +43,7 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
     # Assert
     updated_variable = state.get_variable_by_name("JobContainerURL")
     expected_url = "https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"
-    assert expected_url == activity.type_properties["value"].value
+    assert expected_url == activity.type_properties["value"].result
     assert expected_url == updated_variable.value
 
 
@@ -71,7 +71,7 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
     # Assert
     updated_variable = state.get_variable_by_name("UserAssignedIdentityReference")
     expected_reference = "/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"
-    assert expected_reference == activity.type_properties["value"].value
+    assert expected_reference == activity.type_properties["value"].result
     assert expected_reference == updated_variable.value
 
 
@@ -94,7 +94,7 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
     # Assert
     updated_variable = state.get_variable_by_name("ManagerApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"
-    assert expected_path == activity.type_properties["value"].value
+    assert expected_path == activity.type_properties["value"].result
     assert expected_path == updated_variable.value
 
 
@@ -117,7 +117,7 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
     # Assert
     updated_variable = state.get_variable_by_name("WorkloadApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz"
-    assert expected_path == activity.type_properties["value"].value
+    assert expected_path == activity.type_properties["value"].result
     assert expected_path == updated_variable.value
 
 
@@ -156,7 +156,7 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
     activity.evaluate(state)
 
     # Assert
-    env_settings = activity.type_properties["value"].value
+    env_settings = activity.type_properties["value"].result
     assert env_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert env_settings[0]["value"] == "workload"
     assert env_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
@@ -193,10 +193,10 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
     # Assert
     assert "Create Job Storage Container" == activity.name
     assert (
-        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].value
+        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].result
     )
     assert "PUT" == activity.type_properties["method"]
-    assert "{}" == activity.type_properties["body"].value
+    assert "{}" == activity.type_properties["body"].result
 
 
 def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -214,7 +214,7 @@ def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipelin
 
     # Assert
     job_container_name_variable = state.get_variable_by_name("JobContainerName")
-    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["value"].value
+    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["value"].result
     assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == job_container_name_variable.value
 
 
@@ -352,7 +352,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     assert "Monitor Batch Job" == activity.name
     assert "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a" == activity.type_properties["pipeline"]["referenceName"]
     assert 1 == len(activity.type_properties["parameters"])
-    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].value
+    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].result
 
 
 def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -382,14 +382,14 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) ->
     assert "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a" == activity.type_properties["pipeline"]["referenceName"]
     assert 5 == len(activity.type_properties["parameters"])
     assert (
-        "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobContainerName"].value
+        "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobContainerName"].result
     )
-    assert "TASKOUTPUT_" == activity.type_properties["parameters"]["TaskOutputFolderPrefix"].value
-    assert "teststorage" == activity.type_properties["parameters"]["OutputStorageAccountName"].value
+    assert "TASKOUTPUT_" == activity.type_properties["parameters"]["TaskOutputFolderPrefix"].result
+    assert "teststorage" == activity.type_properties["parameters"]["OutputStorageAccountName"].result
     assert (
-        "test-application-output-container-name" == activity.type_properties["parameters"]["OutputContainerName"].value
+        "test-application-output-container-name" == activity.type_properties["parameters"]["OutputContainerName"].result
     )
-    assert "output" == activity.type_properties["parameters"]["OutputFolderName"].value
+    assert "output" == activity.type_properties["parameters"]["OutputFolderName"].result
 
 
 def test_delete_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -410,6 +410,6 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
     # Assert
     assert "Delete Job Storage Container" == activity.name
     assert (
-        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].value
+        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].result
     )
     assert "DELETE" == activity.type_properties["method"]

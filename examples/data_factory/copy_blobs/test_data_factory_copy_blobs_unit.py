@@ -46,7 +46,7 @@ def test_list_blobs(pipeline: Pipeline) -> None:
     # Assert
     assert activity.name == "List Folders"
     assert (
-        activity.type_properties["url"].value
+        activity.type_properties["url"].result
         == "https://sourcestorage.blob.core.windows.net/container-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container&comp=list&prefix=testfolder&delimiter=$SourceBlobDelimiter"
     )
     assert activity.type_properties["method"] == "GET"
@@ -93,7 +93,7 @@ def test_for_each(pipeline: Pipeline) -> None:
 
     # Assert
     assert activity.name == "For Each SourceFolder"
-    assert activity.type_properties["items"].value == [
+    assert activity.type_properties["items"].result == [
         "testfolder_1/$SourceBlobDelimiter",
         "testfolder_2/$SourceBlobDelimiter",
     ]
@@ -135,4 +135,4 @@ def test_copy_blobs_activity(pipeline: Pipeline, wildcardfolderpath: str) -> Non
 
     # Assert
     assert activity.name == "Copy files to Destination"
-    assert activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].value == wildcardfolderpath
+    assert activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].result == wildcardfolderpath
