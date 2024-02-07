@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@v4
       - name: PR Linting
         run: |
-          .conventional-commits/scripts/lint-pull-request.sh '${{ github.event.pull_request.title }}' '${{ github.event.pull_request.body }}' '${{ github.workspace }}/.conventional-commits/commitlint.pr.config.js'
+          .conventional-commits/scripts/lint-pull-request.sh '${{ github.event.pull_request.title }}' '${{ github.workspace }}/.conventional-commits/commitlint.pr.config.js'
