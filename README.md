@@ -1,186 +1,86 @@
 # Data Factory - Testing Framework
 
-A test framework that allows you to write unit and functional tests for Data Factory
-pipelines against the git integrated json resource files.
-
-Supporting currently:
-
-* [Fabric Data Factory](https://learn.microsoft.com/en-us/fabric/data-factory/)
-* [Azure Data Factory v2](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory)
-
-Planned:
-
-* [Azure Synapse Analytics](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext&tabs=data-factory/)
-
-## Disclaimer
-
-This unit test framework is not officially supported.
-It is currently in an experimental state and has not been tested with every single data factory resource.
-It should support all activities out-of-the-box but has not been thoroughly tested,
-please report any issues in the issues section and include an example of the pipeline that is not working as expected.
-
-If there's a lot of interest in this framework, then we will continue to improve it and move it to a production-ready state.
+A stand-alone test framework that allows to write unit tests for Data Factory pipelines on [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/) and [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory).
 
 ## Features
 
-Goal: Validate that the evaluated pipeline configuration with its expressions is behaving as expected on runtime.
+The framework evaluates pipeline and activity definitions which can be asserted. It does so by providing the following features:
 
-1. Evaluate expressions with their functions and arguments instantly by using the framework's internal expression parser.
-2. Test a pipeline or activity against any state to assert the expected outcome.
-   A state can be configured with pipeline parameters, global parameters, variables and activity outputs.
-3. Simulate a pipeline run and evaluate the execution flow and outcome of each activity.
-4. Dynamically supports all activity types with all their attributes.
+1. Evaluate expressions by using the framework's internal expression parser. It supports all the functions and arguments that are available in the Data Factory expression language.
+2. Test an activity with a specific state and assert the evaluated expressions.
+3. Test a pipeline run by verifying the execution flow of activities for specific input parameters and assert the evaluated expressions of each activity.
 
-> Pipelines and activities are not executed on any Data Factory environment,
-> but the evaluation of the pipeline configuration is validated locally.
-> This is different from the "validation" functionality present in the UI,
-> which only validates the syntax of the pipeline configuration.
+> The framework does not support running the actual pipeline. It only gives you the ability to test the pipeline and activity definitions.
 
-## Why
+### High-level example
 
-Data Factory does not support unit testing out of the box.
-The only way to validate your changes is through manual testing or running e2e tests against a deployed data factory.
-These tests are great to have, but miss the following benefits that unit tests, like using this unit test framework, provide:
+Given a `WebActivity` with a `typeProperties.url` property containing the following expression:
 
-* Shift left with immediate feedback on changes - Evaluate any individual data factory resource
-  (pipelines, activities, triggers, datasets, linked services etc..), including (complex) expressions
-* Allows testing individual resources (e.g. activity) for many different input values to cover more scenarios.
-* Less issues in production - due to the fast nature of writing and running unit tests,
-  you will write more tests in less time and therefore have a higher test coverage.
-  This means more confidence in new changes, fewer risks in breaking existing features (regression tests),
-  and thus far fewer issues in production.
+```datafactoryexpression
+@concat(pipeline().globalParameters.baseUrl, variables('JobName'))
+```
 
-> Even though Data Factory is UI-driven writing unit tests, and might not be in the nature of it.
-> How can you be confident that your changes will work as expected,
-> and that existing pipelines will not break, without writing unit tests?
+A simple test to validate that the concatenation is working as expected could look like this:
 
-## Getting started
-
-### Start writing tests with a Dev Container
-
-To get started using the tests, refer to the following [README](./examples/README.md)
-
-### Start writing tests without a Dev Container
-
-1. Set up an empty Python project with your favorite testing library
-2. Install the dotnet runtime from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
-   Using only the runtime and not the SDK should be sufficient.
-   This is required to run some expression functions on dotnet just like in Data Factory.
-3. Set up an empty Python project with your favorite testing library
-   More information:
-   [docs_Setup](/docs/environment_setup/unit_test_setup.md)
-
-4. Install the package using your preferred package manager:
-
-    Pip: `pip install data-factory-testing-framework`
-
-5. Create a Folder in your project and copy the JSON Files with the pipeline definitions locally.
-
-   More information:
-   [Json Guidance](/docs/environment_setup/json_pipeline_files.md)
-
-6. Start writing tests
-
-## Features - Examples
-
-The samples seen below are the _only_ code that you need to write! The framework will take care of the rest.
-
-1. Evaluate activities (e.g. a WebActivity that calls Azure Batch API)
-
-    ```python
+```python
     # Arrange
-    activity: Activity = pipeline.get_activity_by_name("Trigger Azure Batch Job")
+    activity = pipeline.get_activity_by_name("webactivity_name")
     state = PipelineRunState(
         parameters=[
             RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
-            RunParameter(RunParameterType.Pipeline, "JobId", "123"),
         ],
         variables=[
-            PipelineRunVariable("JobName", "Job-123"),
+            PipelineRunVariable("Path", "some-path"),
         ])
-    state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
 
     # Act
     activity.evaluate(state)
 
     # Assert
-    assert "https://example.com/jobs" == activity.type_properties["url"].value
-    assert "POST" == activity.type_properties["method"].value
-    body = activity.type_properties["body"].get_json_value()
-    assert "123" == body["JobId"]
-    assert "Job-123" == body["JobName"]
-    assert "version1" == body["Version"]
+    assert "https://example.com/some-path" == activity.type_properties["url"].value
    ```
 
-2. Evaluate Pipelines and test the flow of activities given a specific input
+## Why
 
-    ```python
-    # Arrange
-    pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
+Data Factory does not support unit testing, nor testing of pipelines locally. Having integration and e2e tests running on an actual Data Factory instance is great, but having unit tests on top of them provides additional means of quick iteration, validation and regression testing. Unit testing with the _Data Factory Testing Framework_ has the following benefits:
 
-    # Runs the pipeline with the provided parameters
-    activities = test_framework.evaluate_pipeline(pipeline, [
-        RunParameter(RunParameterType.Pipeline, "JobId", "123"),
-        RunParameter(RunParameterType.Pipeline, "ContainerName", "test-container"),
-        RunParameter(RunParameterType.Global, "BaseUrl", "https://example.com"),
-    ])
+* Runs locally with immediate feedback
+* Easier to cover a lot of different scenarios and edge cases
+* Regression testing
 
-    set_variable_activity: Activity = next(activities)
-    assert set_variable_activity is not None
-    assert "Set JobName" == set_variable_activity.name
-    assert "JobName" == activity.type_properties["variableName"]
-    assert "Job-123" == activity.type_properties["value"].value
+## Concepts
 
-    get_version_activity = next(activities)
-    assert get_version_activity is not None
-    assert "Get version" == get_version_activity.name
-    assert "https://example.com/version" == get_version_activity.type_properties["url"].value
-    assert "GET" == get_version_activity.type_properties["method"]
-    get_version_activity.set_result(DependencyCondition.Succeeded,{"Version": "version1"})
+The following pages go deeper into different topics and concepts of the framework to help in getting you started.
 
-    create_batch_activity = next(activities)
-    assert create_batch_activity is not None
-    assert "Trigger Azure Batch Job" == create_batch_activity.name
-    assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].value
-    assert "POST" == create_batch_activity.type_properties["method"]
-    body = create_batch_activity.type_properties["body"].get_json_value()
-    assert "123" == body["JobId"]
-    assert "Job-123" == body["JobName"]
-    assert "version1" == body["Version"]
+### Basic
 
-    with pytest.raises(StopIteration):
-        next(activities)
-    ```
+1. [Repository setup](docs/basic/repository_setup.md)
+2. [Installing and initializing the framework](docs/basic/installing_and_initializing_framework.md)
+3. [State](docs/basic/state.md)
+4. [Activity testing](docs/basic/activity_testing.md)
+5. [Pipeline testing](docs/basic/pipeline_testing.md)
 
-> See the [Examples](/examples) folder for more samples
+> If you are a not that experienced with Python, you can follow the [Getting started](docs/basic/getting_started.md) guide to get started with the framework.
 
-## Registering missing expression functions
+### Advanced
 
-As the framework is interpreting expressions containing functions, these functions are implemented in the framework,
-but there may be bugs in some of them. You can override their implementation through:
+1. [Debugging your activities and pipelines](docs/advanced/debugging.md)
+2. [Development workflow](docs/advanced/development_workflow.md)
+3. [Overriding expression functions](docs/advanced/overriding_expression_functions.md)
+4. [Framework internals](docs/advanced/framework_internals.md)
 
-```python
-   FunctionsRepository.register("concat", lambda arguments: "".join(arguments))
-   FunctionsRepository.register("trim", lambda text, trim_argument: text.strip(trim_argument[0]))
-```
+## Examples
 
-## Tips
+More advanced examples demonstrating the capabilities of the framework:
 
-1. After parsing a data factory resource file, you can use the debugger to easily discover which classes are actually
-   initialized so that you can cast them to the correct type.
+Fabric:
 
-## Recommended development workflow for Azure Data Factory v2
+1. [Batch job example](examples/fabric/batch_job/README.md)
 
-* Use ADF Git integration
-* Use UI to create a feature branch, build the initial pipeline, and save it to the feature branch
-* Pull feature branch locally
-* Start writing tests unit and functional tests, run them locally for immediate feedback, and fix bugs
-* Push changes to the feature branch
-* Test the new features manually through the UI in a sandbox environment
-* Create PR, which will run the tests in the CI pipeline
-* Approve PR
-* Merge to main and start deploying to dev/test/prod environments
-* Run e2e tests after each deployment to validate all happy flows work on that specific environment
+Azure Data Factory:
+
+1. [Copy blobs example](examples/data_factory/copy_blobs/README.md)
+2. [Batch job example](examples/data_factory/batch_job/README.md)
 
 ## Contributing
 
@@ -195,6 +95,15 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Disclaimer
+
+This unit test framework is not officially supported.
+It is currently in an experimental state and has not been tested with every single data factory resource.
+It should support all activities out-of-the-box but has not been thoroughly tested,
+please report any issues in the issues section and include an example of the pipeline that is not working as expected.
+
+If there's a lot of interest in this framework, then we will continue to improve it and move it to a production-ready state.
 
 ## Trademarks
 
