@@ -4,7 +4,7 @@ from typing import Iterator, List
 from azure.core import CaseInsensitiveEnumMeta
 
 from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
-    PipelineActivitiesCircularDependencyError,
+    NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
 from data_factory_testing_framework.models.activities.activity import Activity
 from data_factory_testing_framework.models.activities.control_activity import ControlActivity
@@ -165,7 +165,7 @@ class TestFramework:
                 break
 
             if not any_activity_evaluated:
-                raise PipelineActivitiesCircularDependencyError()
+                raise NoRemainingPipelineActivitiesMeetDependencyConditionsError()
 
     @staticmethod
     def _is_iteration_activity(activity: Activity) -> bool:

@@ -1,4 +1,7 @@
-class ActivityOutputFieldNotFoundError(Exception):
+from data_factory_testing_framework.exceptions.user_error import UserError
+
+
+class ActivityOutputFieldNotFoundError(UserError):
     def __init__(self, activity_name: str, output_field_name: str) -> None:
         """Exception raised when an activity does not have an expected output field."""
         super().__init__(

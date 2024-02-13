@@ -1,6 +1,6 @@
 import pytest
 from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
-    PipelineActivitiesCircularDependencyError,
+    NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
 from data_factory_testing_framework.models.activities.fail_activity import FailActivity
 from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
@@ -54,7 +54,7 @@ def test_circular_dependency_between_activities_should_throw_error() -> None:
     test_framework.repository.pipelines.append(pipeline)
 
     # Act & Assert
-    with pytest.raises(PipelineActivitiesCircularDependencyError):
+    with pytest.raises(NoRemainingPipelineActivitiesMeetDependencyConditionsError):
         next(test_framework.evaluate_pipeline(pipeline, []))
 
 

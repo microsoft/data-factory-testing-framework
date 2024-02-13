@@ -5,6 +5,7 @@ from data_factory_testing_framework._functions.evaluator import ExpressionEvalua
 from data_factory_testing_framework.exceptions.data_factory_element_evaluation_error import (
     DataFactoryElementEvaluationError,
 )
+from data_factory_testing_framework.exceptions.user_error import UserError
 from data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")
@@ -28,6 +29,8 @@ class DataFactoryElement(Generic[T]):
         try:
             evaluator = ExpressionEvaluator()
             self.result = evaluator.evaluate(self.expression, state)
+        except UserError as e:
+            raise e from e
         except Exception as e:
             raise DataFactoryElementEvaluationError(f"Error evaluating expression: {self.expression}") from e
 
