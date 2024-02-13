@@ -1,7 +1,7 @@
-from data_factory_testing_framework.deserializers.shared._activity_deserializer import (
+from data_factory_testing_framework._deserializers.shared._activity_deserializer import (
     _get_activity_from_activity_data,
 )
-from data_factory_testing_framework.deserializers.shared._data_factory_element_replacer import (
+from data_factory_testing_framework._deserializers.shared._data_factory_element_replacer import (
     _find_and_replace_expressions_in_dict,
 )
 from data_factory_testing_framework.models.pipeline import Pipeline

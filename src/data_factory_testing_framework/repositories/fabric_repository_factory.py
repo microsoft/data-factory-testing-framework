@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from data_factory_testing_framework.deserializers._deserializer_fabric import (
+from data_factory_testing_framework._deserializers._deserializer_fabric import (
     parse_fabric_pipeline_from_pipeline_json_files,
 )
 from data_factory_testing_framework.models.pipeline import Pipeline

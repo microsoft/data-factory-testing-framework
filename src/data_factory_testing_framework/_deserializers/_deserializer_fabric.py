@@ -1,6 +1,6 @@
 import json
 
-from data_factory_testing_framework.deserializers._deserializer_base import _parse_pipeline_from_json
+from data_factory_testing_framework._deserializers._deserializer_base import _parse_pipeline_from_json
 from data_factory_testing_framework.models.pipeline import Pipeline
 
 
