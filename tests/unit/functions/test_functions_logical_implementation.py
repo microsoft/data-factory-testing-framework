@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-import data_factory_testing_framework.functions.functions_logical_implementation as logical_functions
+import data_factory_testing_framework._functions.functions_logical_implementation as logical_functions
 import pytest
 from pytest import param
 

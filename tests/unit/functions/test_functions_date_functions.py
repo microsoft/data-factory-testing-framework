@@ -1,4 +1,4 @@
-import data_factory_testing_framework.functions.functions_date_implementation as date_functions
+import data_factory_testing_framework._functions.functions_date_implementation as date_functions
 import pytest
 from _pytest.mark import param
 from data_factory_testing_framework.pythonnet.csharp_datetime import CSharpDateTime

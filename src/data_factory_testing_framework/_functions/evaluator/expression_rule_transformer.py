@@ -1,6 +1,6 @@
 from lark import Transformer, Tree, v_args
 
-from data_factory_testing_framework.functions.evaluator.rules import (
+from data_factory_testing_framework._functions.evaluator.rules import (
     ActivityReferenceExpressionRuleEvaluator,
     BranchExpressionRuleEvaluator,
     DatasetReferenceExpressionRuleEvaluator,

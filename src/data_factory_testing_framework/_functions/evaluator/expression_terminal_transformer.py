@@ -3,8 +3,8 @@
 
 from lark import Discard, Token, Transformer
 
+from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework.state.run_parameter_type import RunParameterType
 
 

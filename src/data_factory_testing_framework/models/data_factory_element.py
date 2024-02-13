@@ -1,7 +1,7 @@
 import json
 from typing import Any, Generic, TypeVar, Union
 
-from data_factory_testing_framework.functions import ExpressionEvaluator
+from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
 from data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")

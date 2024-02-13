@@ -1,4 +1,4 @@
-import data_factory_testing_framework.functions.functions_string_implementation as string_functions
+import data_factory_testing_framework._functions.functions_string_implementation as string_functions
 import pytest
 
 

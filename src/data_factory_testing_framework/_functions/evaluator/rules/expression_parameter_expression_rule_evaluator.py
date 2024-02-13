@@ -1,15 +1,15 @@
 from lark import Tree
 
-from data_factory_testing_framework.functions.evaluator.exceptions import (
+from data_factory_testing_framework._functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework.functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
+from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 
 from .expression_rule_evaluator import ExpressionRuleEvaluator
 
 
-class LiteralEvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
+class ExpressionParameterExpressionRuleEvaluator(ExpressionRuleEvaluator):
     def __init__(self, tree: Tree) -> None:
         """Initializes the expression rule evaluator."""
         super().__init__(tree)
@@ -23,7 +23,7 @@ class LiteralEvaluationExpressionRuleEvaluator(ExpressionRuleEvaluator):
                 expected_types=(EvaluationResult, ExpressionRuleEvaluator),
                 actual_type=type(self.children[0]),
             )
-        self.literal = self.children[0].value
+        self.parameter_name_expression = self.children[0]
 
     def evaluate(self) -> EvaluationResult:
-        return EvaluationResult(self.literal)
+        return self.evaluate_child(self.parameter_name_expression)
