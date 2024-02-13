@@ -2,6 +2,9 @@ import json
 from typing import Any, Generic, TypeVar, Union
 
 from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
+from data_factory_testing_framework.exceptions.data_factory_element_evaluation_error import (
+    DataFactoryElementEvaluationError,
+)
 from data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")
@@ -22,8 +25,12 @@ class DataFactoryElement(Generic[T]):
 
     def evaluate(self, state: RunState) -> Union[str, int, bool, float]:
         """Evaluate the expression."""
-        evaluator = ExpressionEvaluator()
-        self.result = evaluator.evaluate(self.expression, state)
+        try:
+            evaluator = ExpressionEvaluator()
+            self.result = evaluator.evaluate(self.expression, state)
+        except Exception as e:
+            raise DataFactoryElementEvaluationError(f"Error evaluating expression: {self.expression}") from e
+
         return self.result
 
     def get_json_value(self) -> Any:  # noqa: ANN401

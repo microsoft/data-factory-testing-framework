@@ -1,6 +1,8 @@
 from typing import Union
 
-from data_factory_testing_framework.exceptions.expression_evaluation_error import ExpressionEvaluationError
+
+class ExpressionEvaluationError(Exception):
+    pass
 
 
 class ExpressionEvaluationInvalidNumberOfChildrenError(ExpressionEvaluationError):
@@ -19,3 +21,9 @@ class ExpressionEvaluationInvalidChildTypeError(ExpressionEvaluationError):
         super().__init__(
             f"Invalid child type at index {child_index}. Expected: {expected_types}, Actual: {actual_type}"
         )
+
+
+class ExpressionParsingError(Exception):
+    """Exception raised when an expression cannot be parsed."""
+
+    pass
