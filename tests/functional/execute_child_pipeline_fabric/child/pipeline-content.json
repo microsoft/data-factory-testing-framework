@@ -1,0 +1,43 @@
+{
+  "name": "child",
+  "properties": {
+    "activities": [
+      {
+        "name": "API Call",
+        "type": "WebActivity",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [],
+        "typeProperties": {
+          "relativeUrl": {
+            "type": "Expression",
+            "value": "@pipeline().parameters.Url"
+          },
+          "method": "POST",
+          "body": {
+            "value": "@pipeline().parameters.Body",
+            "type": "Expression"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Url": {
+        "type": "string"
+      },
+      "Body": {
+        "type": "string"
+      }
+    },
+    "folder": {
+      "name": "tests"
+    },
+    "annotations": []
+  }
+}

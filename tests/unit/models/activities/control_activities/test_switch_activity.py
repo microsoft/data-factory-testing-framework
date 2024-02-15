@@ -35,6 +35,7 @@ def test_correct_case_evaluated(on_value: str, expected_outcome: str) -> None:
     # Arrange
     test_framework = TestFramework(framework_type=TestFrameworkType.Fabric)
     pipeline = Pipeline(
+        id_="some-id",
         name="pipeline",
         variables={
             "variable": {

@@ -21,7 +21,8 @@ repos:
       - id: end-of-file-fixer
         exclude: |
           (?x)^(
-            tests/functional/utf_16_encoding/pipeline-content.json
+            tests/functional/utf_16_encoding/pipeline-content.json|
+            examples/fabric/simple-web-hook/fabric/ExamplePipeline.DataPipeline/pipeline-content.json
           )$
       - id: trailing-whitespace
       - id: mixed-line-ending
@@ -35,6 +36,10 @@ repos:
     rev: v0.38.0
     hooks:
       - id: markdownlint-fix
+        exclude: |
+          (?x)^(
+            examples/fabric/simple-web-hook/fabric/Readme.md
+          )$
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.5
     hooks:

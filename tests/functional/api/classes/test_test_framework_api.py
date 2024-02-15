@@ -23,6 +23,7 @@ def test_test_framework_api() -> None:
         "evaluate_activities",
         "evaluate_activity",
         "evaluate_pipeline",
+        "get_pipeline_by_id",
         "get_pipeline_by_name",
         "should_evaluate_child_pipelines",
     ]
@@ -40,6 +41,7 @@ def test_test_framework_method_types() -> None:
         "evaluate_activities": types.FunctionType,
         "evaluate_activity": types.FunctionType,
         "evaluate_pipeline": types.FunctionType,
+        "get_pipeline_by_id": types.FunctionType,
         "get_pipeline_by_name": types.FunctionType,
         "should_evaluate_child_pipelines": property,
     }
@@ -122,6 +124,13 @@ def test_test_framework_method_signatures() -> None:
                 ),
             ],
             return_annotation=typing.Iterator[Activity],
+        ),
+        "get_pipeline_by_id": inspect.Signature(
+            parameters=[
+                inspect.Parameter(name="self", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD),
+                inspect.Parameter(name="id_", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str),
+            ],
+            return_annotation=Pipeline,
         ),
         "get_pipeline_by_name": inspect.Signature(
             parameters=[

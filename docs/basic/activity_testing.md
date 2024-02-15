@@ -60,7 +60,7 @@ Let's write a test for validating correct evaluation of the `url` property.
 Get a reference to the activity to be tested using the `get_activity_by_name` method on the `Pipeline` instance.
 
 ```python
-pipeline = test_framework.repository.get_pipeline_by_name("trigger_job_pipeline")
+pipeline = test_framework.get_pipeline_by_name("trigger_job_pipeline")
 activity = pipeline.get_activity_by_name("Trigger job")
 ```
 
@@ -93,7 +93,7 @@ The `evaluate` method might throw an exception if the expression is invalid or i
 Verify that the output of the activity matches the expected result.
 
 ```python
-assert "https://example.com/jobs" == activity.type_properties["url"].value
+assert "https://example.com/jobs" == activity.type_properties["url"].result
 ```
 
 ## Control activities
@@ -117,7 +117,7 @@ state = PipelineRunState(
 activity.evaluate(state)
 
 # Assert
-assert activity.expression.value == True
+assert activity.expression.result == True
 ```
 
 ### Testing child activities

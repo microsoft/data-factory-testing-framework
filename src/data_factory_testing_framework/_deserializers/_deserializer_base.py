@@ -7,14 +7,14 @@ from data_factory_testing_framework._deserializers.shared._data_factory_element_
 from data_factory_testing_framework.models import Pipeline
 
 
-def _parse_pipeline_from_json(name: str, json_data: dict) -> Pipeline:
+def _parse_pipeline_from_json(id_: str, name: str, json_data: dict) -> Pipeline:
     properties = json_data.get("properties", {})
     activities = properties.get("activities", [])
 
     for activity_data in activities:
         activities[activities.index(activity_data)] = _get_activity_from_activity_data(activity_data)
 
-    pipeline = Pipeline(name, **properties)
+    pipeline = Pipeline(id_, name, **properties)
 
     _find_and_replace_expressions_in_dict(pipeline)
 

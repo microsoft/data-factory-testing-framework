@@ -20,6 +20,7 @@ def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_
     # Arrange
     test_framework = TestFramework(framework_type=TestFrameworkType.Fabric)
     pipeline = Pipeline(
+        id_="some-id",
         name="pipeline",
         parameters={
             "input_values": {
