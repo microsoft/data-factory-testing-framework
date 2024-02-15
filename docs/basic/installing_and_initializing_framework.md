@@ -1,5 +1,9 @@
 # Installing and initializing the framework
 
+## Install dotnet runtime
+
+Install the dotnet runtime (not SDK) from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). This is required to run some expression functions on dotnet just like in Data Factory.
+
 ## Installing the framework
 
 The framework is available as a Python package on PyPI. You can install it using your preferred package manager: [data-factory-testing-framework](https://pypi.org/project/data-factory-testing-framework/).
@@ -9,7 +13,7 @@ The framework is available as a Python package on PyPI. You can install it using
 To initialize the framework, you need to create a `TestFramework` instance. This instance is the entry point to the framework and provides access to the pipeline and activity definitions. Specify the type of data factory (i.e. Fabric or DataFactory for Azure Data Factory) and pass the path to the folder containing the pipeline definitions to the `TestFramework` constructor.
 
 ```python
-from data_factory_testing_framework import TestFramework
+from data_factory_testing_framework.test_framework import TestFramework
 
 test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory,

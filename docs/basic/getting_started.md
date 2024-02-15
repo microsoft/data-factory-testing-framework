@@ -4,6 +4,10 @@ This _getting started_ focuses on novice users who are not familiar with Python 
 
 >For experienced Python and package management users, you can skip this page and go directly to the [repository setup](repository_setup.md) page.
 
+## Install dotnet runtime
+
+Install the dotnet runtime (not SDK) from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). This is required to run some expression functions on dotnet just like in Data Factory.
+
 ## Data Factory pipeline files
 
 The framework is designed to work with the `json` files that define the data factory pipelines and activities. Files from the data factory environment can be downloaded from your data factory environment as described in the [repository setup](repository_setup.md) page.
