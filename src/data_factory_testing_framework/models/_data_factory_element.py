@@ -2,10 +2,10 @@ import json
 from typing import Any, Generic, TypeVar, Union
 
 from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
-from data_factory_testing_framework.exceptions.data_factory_element_evaluation_error import (
+from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
 )
-from data_factory_testing_framework.exceptions.user_error import UserError
+from data_factory_testing_framework.exceptions._user_error import UserError
 from data_factory_testing_framework.state import RunState
 
 T = TypeVar("T")

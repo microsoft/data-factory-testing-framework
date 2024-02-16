@@ -1,9 +1,9 @@
 import pytest
-from data_factory_testing_framework.exceptions.data_factory_element_evaluation_error import (
+from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
+    ParameterNotFoundError,
 )
-from data_factory_testing_framework.exceptions.parameter_not_found_error import ParameterNotFoundError
-from data_factory_testing_framework.exceptions.user_error import UserError
+from data_factory_testing_framework.exceptions._user_error import UserError
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
 

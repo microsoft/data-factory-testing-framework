@@ -10,7 +10,7 @@ from data_factory_testing_framework._repositories._factories.data_factory_reposi
 from data_factory_testing_framework._repositories._factories.fabric_repository_factory import (
     FabricRepositoryFactory,
 )
-from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
+from data_factory_testing_framework.exceptions import (
     NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
 from data_factory_testing_framework.models import Pipeline

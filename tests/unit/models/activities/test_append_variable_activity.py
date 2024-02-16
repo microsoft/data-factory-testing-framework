@@ -2,7 +2,7 @@ from typing import List
 
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
+from data_factory_testing_framework.exceptions import (
     VariableBeingEvaluatedDoesNotExistError,
 )
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, List
 
-from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
+from data_factory_testing_framework.exceptions import ActivityNotFoundError
 
 if TYPE_CHECKING:
     from data_factory_testing_framework.models.activities._activity import Activity

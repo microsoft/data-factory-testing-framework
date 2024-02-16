@@ -1,4 +1,4 @@
-from data_factory_testing_framework.exceptions.user_error import UserError
+from data_factory_testing_framework.exceptions._user_error import UserError
 
 
 class ActivityOutputFieldNotFoundError(UserError):

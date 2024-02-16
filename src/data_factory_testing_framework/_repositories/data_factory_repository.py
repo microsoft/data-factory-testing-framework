@@ -1,6 +1,6 @@
 from typing import List
 
-from data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
+from data_factory_testing_framework.exceptions import PipelineNotFoundError
 from data_factory_testing_framework.models._pipeline import Pipeline
 
 

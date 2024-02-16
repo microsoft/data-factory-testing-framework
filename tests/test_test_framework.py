@@ -1,6 +1,6 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
+from data_factory_testing_framework.exceptions import (
     NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
