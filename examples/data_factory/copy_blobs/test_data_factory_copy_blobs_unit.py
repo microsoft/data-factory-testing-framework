@@ -1,4 +1,5 @@
 import pytest
+from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.models.activities.activity import Activity
 from data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
 from data_factory_testing_framework.models.pipeline import Pipeline
@@ -8,7 +9,6 @@ from data_factory_testing_framework.state import (
     RunParameter,
     RunParameterType,
 )
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture
