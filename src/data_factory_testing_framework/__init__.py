@@ -1,6 +1,8 @@
 from data_factory_testing_framework._functions.functions_repository import FunctionsRepository
+from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 __all__ = [
-    "test_framework",
+    "TestFramework",
+    "TestFrameworkType",
     "FunctionsRepository",
 ]
