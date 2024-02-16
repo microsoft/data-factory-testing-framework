@@ -1,5 +1,5 @@
 import pytest
-from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.exceptions.pipeline_not_found_error import PipelineNotFoundError
 from data_factory_testing_framework.state import RunParameter, RunParameterType
 

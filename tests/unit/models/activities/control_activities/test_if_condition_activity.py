@@ -1,8 +1,7 @@
 import pytest
-from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models.activities.if_condition_activity import IfConditionActivity
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models.activities import IfConditionActivity, SetVariableActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 
 

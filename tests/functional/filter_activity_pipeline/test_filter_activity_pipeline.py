@@ -1,7 +1,6 @@
 import pytest
-from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models.activities.activity import Activity
-from data_factory_testing_framework.models.activities.filter_activity import FilterActivity
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models.activities import Activity, FilterActivity
 from data_factory_testing_framework.state import RunParameter, RunParameterType
 
 

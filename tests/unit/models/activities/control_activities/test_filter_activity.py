@@ -1,8 +1,8 @@
 import pytest
-from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models.activities.filter_activity import FilterActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models.activities import FilterActivity
 from data_factory_testing_framework.state import RunParameter, RunParameterType
 
 

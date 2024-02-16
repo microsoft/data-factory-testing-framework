@@ -1,6 +1,6 @@
 from typing import Any
 
-from data_factory_testing_framework.models.activities.control_activity import ControlActivity
+from data_factory_testing_framework.models.activities import ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
 from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 

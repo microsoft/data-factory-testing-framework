@@ -1,5 +1,5 @@
-from data_factory_testing_framework.models.activities.execute_pipeline_activity import ExecutePipelineActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models.activities import ExecutePipelineActivity
 from data_factory_testing_framework.state import PipelineRunState, RunParameter, RunParameterType
 
 

@@ -1,5 +1,5 @@
 import pytest
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.state import RunParameterType
 from data_factory_testing_framework.state.run_parameter import RunParameter
 

@@ -1,6 +1,6 @@
 from typing import Any, Callable, Iterator, List
 
-from data_factory_testing_framework.models.activities.activity import Activity
+from data_factory_testing_framework.models.activities import Activity
 from data_factory_testing_framework.state import PipelineRunState
 
 

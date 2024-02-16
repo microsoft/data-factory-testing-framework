@@ -1,7 +1,9 @@
-from typing import Any, List
+from typing import TYPE_CHECKING, Any, List
 
 from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from data_factory_testing_framework.models.activities.activity import Activity
+
+if TYPE_CHECKING:
+    from data_factory_testing_framework.models.activities._activity import Activity
 from data_factory_testing_framework.state import PipelineRunVariable, RunParameter, RunParameterType
 
 
@@ -9,7 +11,7 @@ class Pipeline:
     def __init__(
         self,
         name: str,
-        activities: List[Activity],
+        activities: List["Activity"],
         **kwargs: Any,  # noqa: ANN401
     ) -> None:
         """This is the class that represents a pipeline.
@@ -25,7 +27,7 @@ class Pipeline:
         self.activities = activities
         self.annotations = kwargs["annotations"] if "annotations" in kwargs else []
 
-    def get_activity_by_name(self, name: str) -> Activity:
+    def get_activity_by_name(self, name: str) -> "Activity":
         """Get an activity by name. Throws an exception if the activity is not found.
 
         Args:

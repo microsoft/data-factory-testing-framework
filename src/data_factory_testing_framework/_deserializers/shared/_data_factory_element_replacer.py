@@ -1,6 +1,6 @@
 from typing import Any
 
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 
 
 def _find_and_replace_expressions_in_dict(obj: any, visited: list = None) -> None:

@@ -1,7 +1,7 @@
 from typing import Any
 
-from data_factory_testing_framework.models.activities.control_activity import ControlActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models.activities._control_activity import ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
 
 

@@ -1,7 +1,7 @@
 import json
 
 from data_factory_testing_framework._deserializers._deserializer_base import _parse_pipeline_from_json
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework.models._pipeline import Pipeline
 
 
 def parse_fabric_pipeline_from_pipeline_json_files(metadata_json: str, pipeline_json: str) -> Pipeline:

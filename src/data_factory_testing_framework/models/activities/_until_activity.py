@@ -1,8 +1,7 @@
 from typing import Any, Callable, Iterator, List
 
-from data_factory_testing_framework.models.activities.activity import Activity
-from data_factory_testing_framework.models.activities.control_activity import ControlActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models.activities import Activity, ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
 from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 

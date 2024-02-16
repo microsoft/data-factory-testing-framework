@@ -1,9 +1,9 @@
 from typing import Any, List
 
-from data_factory_testing_framework.models.activities.activity_dependency import (
+from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models.activities._activity_dependency import (
     ActivityDependency,
 )
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
 from data_factory_testing_framework.state import PipelineRunState
 from data_factory_testing_framework.state.dependency_condition import DependencyCondition
 

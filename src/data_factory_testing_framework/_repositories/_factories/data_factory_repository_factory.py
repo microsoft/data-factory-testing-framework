@@ -3,8 +3,8 @@ import os
 from data_factory_testing_framework._deserializers._deserializer_data_factory import (
     parse_data_factory_pipeline_from_pipeline_json,
 )
-from data_factory_testing_framework.models.pipeline import Pipeline
-from data_factory_testing_framework.repositories.base_repository_factory import BaseRepositoryFactory
+from data_factory_testing_framework._repositories._factories.base_repository_factory import BaseRepositoryFactory
+from data_factory_testing_framework.models._pipeline import Pipeline
 
 
 class DataFactoryRepositoryFactory(BaseRepositoryFactory):

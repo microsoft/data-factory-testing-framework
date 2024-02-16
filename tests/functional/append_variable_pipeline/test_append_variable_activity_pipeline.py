@@ -1,9 +1,8 @@
 from typing import List
 
 import pytest
-from data_factory_testing_framework._test_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models.activities.append_variable_activity import AppendVariableActivity
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models.activities import AppendVariableActivity, SetVariableActivity
 from data_factory_testing_framework.state import RunParameter, RunParameterType
 
 
