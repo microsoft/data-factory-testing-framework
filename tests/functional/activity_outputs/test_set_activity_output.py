@@ -10,7 +10,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("set_version")
+    pipeline = test_framework.get_pipeline_by_name("set_version")
 
     # Act
     activities = test_framework.evaluate_pipeline(

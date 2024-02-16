@@ -20,7 +20,7 @@ def test_switch_activity(on_value: str, expected_outcome: str, request: pytest.F
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("switchtest")
+    pipeline = test_framework.get_pipeline_by_name("switchtest")
 
     # Act
     activities = test_framework.evaluate_pipeline(

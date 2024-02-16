@@ -22,7 +22,7 @@ def test_filter_activity(input_values: [], expected_filtered_values: [], request
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("filter-test")
+    pipeline = test_framework.get_pipeline_by_name("filter-test")
 
     # Act
     activities = test_framework.evaluate_pipeline(

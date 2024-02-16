@@ -3,13 +3,13 @@ from typing import Iterator, List
 
 from azure.core import CaseInsensitiveEnumMeta
 
-from data_factory_testing_framework import DataFactoryRepository
 from data_factory_testing_framework._repositories._factories.data_factory_repository_factory import (
     DataFactoryRepositoryFactory,
 )
 from data_factory_testing_framework._repositories._factories.fabric_repository_factory import (
     FabricRepositoryFactory,
 )
+from data_factory_testing_framework._repositories.data_factory_repository import DataFactoryRepository
 from data_factory_testing_framework.exceptions import (
     NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
@@ -56,18 +56,27 @@ class TestFramework:
         """
         if framework_type == TestFrameworkType.Fabric:
             if root_folder_path is not None:
-                self.repository = FabricRepositoryFactory().parse_from_folder(root_folder_path)
+                self._repository = FabricRepositoryFactory().parse_from_folder(root_folder_path)
             else:
-                self.repository = DataFactoryRepository([])
+                self._repository = DataFactoryRepository([])
         elif framework_type == TestFrameworkType.DataFactory:
             if root_folder_path is not None:
-                self.repository = DataFactoryRepositoryFactory().parse_from_folder(root_folder_path)
+                self._repository = DataFactoryRepositoryFactory().parse_from_folder(root_folder_path)
             else:
-                self.repository = DataFactoryRepository([])
+                self._repository = DataFactoryRepository([])
         elif framework_type == TestFrameworkType.Synapse:
             raise NotImplementedError("Synapse test framework is not implemented yet.")
 
-        self.should_evaluate_child_pipelines = should_evaluate_child_pipelines
+        self._should_evaluate_child_pipelines = should_evaluate_child_pipelines
+
+    @property
+    def should_evaluate_child_pipelines(self) -> bool:
+        """Indicates whether child pipelines should be evaluated.
+
+        Returns:
+            A boolean indicating whether child pipelines should be evaluated.
+        """
+        return self._should_evaluate_child_pipelines
 
     def evaluate_activity(self, activity: Activity, state: PipelineRunState) -> Iterator[Activity]:
         """Evaluates a single activity given a state. Any expression part of the activity is evaluated based on the state of the pipeline.
@@ -137,7 +146,7 @@ class TestFramework:
                     activities_iterator = []
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:
                         execute_pipeline_activity: ExecutePipelineActivity = activity
-                        pipeline = self.repository.get_pipeline_by_name(
+                        pipeline = self.get_pipeline_by_name(
                             execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
                         )
                         activities_iterator = execute_pipeline_activity.evaluate_pipeline(
@@ -164,6 +173,17 @@ class TestFramework:
 
             if not any_activity_evaluated:
                 raise NoRemainingPipelineActivitiesMeetDependencyConditionsError()
+
+    def get_pipeline_by_name(self, name: str) -> Pipeline:
+        """Gets a pipeline by name.
+
+        Args:
+            name: The name of the pipeline to get.
+
+        Returns:
+            The pipeline with the given name.
+        """
+        return self._repository.get_pipeline_by_name(name)
 
     @staticmethod
     def _is_iteration_activity(activity: Activity) -> bool:

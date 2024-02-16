@@ -11,7 +11,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("main")
+    pipeline = test_framework.get_pipeline_by_name("main")
 
     # Act
     activities = test_framework.evaluate_pipeline(
@@ -42,8 +42,8 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    test_framework.repository.pipelines.remove(test_framework.repository.get_pipeline_by_name("child"))
-    pipeline = test_framework.repository.get_pipeline_by_name("main")
+    test_framework._repository.pipelines.remove(test_framework._repository.get_pipeline_by_name("child"))
+    pipeline = test_framework._repository.get_pipeline_by_name("main")
 
     # Act & Assert
     with pytest.raises(PipelineNotFoundError) as exception_info:

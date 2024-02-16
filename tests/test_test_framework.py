@@ -50,7 +50,7 @@ def test_circular_dependency_between_activities_should_throw_error() -> None:
             ),
         ],
     )
-    test_framework.repository.pipelines.append(pipeline)
+    test_framework._repository.pipelines.append(pipeline)
 
     # Act & Assert
     with pytest.raises(NoRemainingPipelineActivitiesMeetDependencyConditionsError):
@@ -91,7 +91,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
             ),
         ],
     )
-    test_framework.repository.pipelines.append(pipeline)
+    test_framework._repository.pipelines.append(pipeline)
 
     # Act
     activities = test_framework.evaluate_pipeline(pipeline, [])

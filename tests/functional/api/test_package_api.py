@@ -33,8 +33,8 @@ def test_package_classes() -> None:
     public_classes = [module[0] for module in inspect.getmembers(package, predicate=inspect.isclass)]
 
     # Assert
-    assert len(public_classes) == 4
-    assert public_classes == ["DataFactoryRepository", "FunctionsRepository", "TestFramework", "TestFrameworkType"]
+    assert len(public_classes) == 3
+    assert public_classes == ["FunctionsRepository", "TestFramework", "TestFrameworkType"]
 
 
 def test_package_exceptions() -> None:

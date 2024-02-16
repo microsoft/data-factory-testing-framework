@@ -12,7 +12,7 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
     test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory, root_folder_path=request.fspath.dirname
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("copy_blobs")
+    pipeline = test_framework.get_pipeline_by_name("copy_blobs")
 
     # Act
     activities = test_framework.evaluate_pipeline(

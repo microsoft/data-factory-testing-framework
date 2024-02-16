@@ -20,7 +20,7 @@ def test_framework(request: pytest.FixtureRequest) -> TestFramework:
 
 @pytest.fixture
 def pipeline(test_framework: TestFramework) -> Pipeline:
-    return test_framework.repository.get_pipeline_by_name("batch_job")
+    return test_framework.get_pipeline_by_name("batch_job")
 
 
 def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
