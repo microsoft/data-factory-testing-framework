@@ -1,7 +1,6 @@
 import pytest
 from data_factory_testing_framework.models._pipeline import Pipeline
-from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state import RunParameter, RunParameterType
 
 
 def test_when_validate_parameters_is_accurate_should_pass() -> None:

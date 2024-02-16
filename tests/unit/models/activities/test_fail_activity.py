@@ -1,7 +1,6 @@
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import FailActivity
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
 
 
 def test_fail_activity_evaluates_to_failed_result() -> None:

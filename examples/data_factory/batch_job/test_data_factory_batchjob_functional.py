@@ -1,7 +1,7 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.state import RunParameterType
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state._run_parameter import RunParameter
 
 
 def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:

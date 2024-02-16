@@ -17,7 +17,7 @@ from data_factory_testing_framework._functions.evaluator.rules import (
     SystemVariableReferenceExpressionRuleEvaluator,
     VariableReferenceExpressionRuleEvaluator,
 )
-from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state._pipeline_run_state import PipelineRunState
 
 
 @v_args(tree=True)

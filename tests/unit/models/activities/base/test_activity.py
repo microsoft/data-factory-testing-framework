@@ -2,9 +2,7 @@ import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import Activity, ExecutePipelineActivity
-from data_factory_testing_framework.state import PipelineRunState, RunParameterType
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState, RunParameter, RunParameterType
 
 TestFramework(framework_type=TestFrameworkType.Fabric)
 

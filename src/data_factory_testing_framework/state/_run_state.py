@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state._run_parameter import RunParameter
 
 
 class RunState:

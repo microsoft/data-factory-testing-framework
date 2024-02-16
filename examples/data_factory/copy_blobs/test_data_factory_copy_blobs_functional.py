@@ -4,7 +4,7 @@ from data_factory_testing_framework.state import (
     RunParameter,
     RunParameterType,
 )
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
+from data_factory_testing_framework.state._dependency_condition import DependencyCondition
 
 
 def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:

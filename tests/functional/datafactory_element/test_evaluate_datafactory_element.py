@@ -4,8 +4,8 @@ from data_factory_testing_framework.exceptions import (
     ParameterNotFoundError,
 )
 from data_factory_testing_framework.exceptions._user_error import UserError
-from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
-from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.state import PipelineRunState
 
 
 def test_evaluate_datafactory_element_passes_user_error_through() -> None:

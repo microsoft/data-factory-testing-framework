@@ -5,8 +5,8 @@ from data_factory_testing_framework._functions.evaluator.exceptions import (
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
 from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
-from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.state.run_parameter_type import RunParameterType
+from data_factory_testing_framework.state._pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.state._run_parameter_type import RunParameterType
 
 from .expression_rule_evaluator import ExpressionRuleEvaluator
 

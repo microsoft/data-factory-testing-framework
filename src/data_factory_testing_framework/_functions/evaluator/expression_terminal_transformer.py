@@ -5,7 +5,7 @@ from lark import Discard, Token, Transformer
 
 from data_factory_testing_framework._functions.evaluator.exceptions import ExpressionEvaluationError
 from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
-from data_factory_testing_framework.state.run_parameter_type import RunParameterType
+from data_factory_testing_framework.state._run_parameter_type import RunParameterType
 
 
 class ExpressionTerminalTransformer(Transformer):

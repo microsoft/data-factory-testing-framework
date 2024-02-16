@@ -5,7 +5,7 @@ from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.models.activities._activity import Activity
 from data_factory_testing_framework.models.activities._control_activity import ControlActivity
 from data_factory_testing_framework.state import PipelineRunState, RunParameterType
-from data_factory_testing_framework.state.run_parameter import RunParameter
+from data_factory_testing_framework.state._run_parameter import RunParameter
 
 
 class ExecutePipelineActivity(ControlActivity):
