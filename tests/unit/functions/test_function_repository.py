@@ -11,4 +11,4 @@ def test_function_registration() -> None:
     FunctionsRepository.register("function_name", function_spy)
 
     # Assert
-    assert FunctionsRepository.functions["function_name"] == function_spy
+    assert FunctionsRepository._functions["function_name"] == function_spy

@@ -114,7 +114,7 @@ class ExpressionEvaluator:
         self.lark_parser = Lark(grammer, start="start", maybe_placeholders=False)
 
     def _supported_functions(self) -> str:
-        functions = list(FunctionsRepository.functions.keys())
+        functions = list(FunctionsRepository._functions.keys())
         functions = [f'"{f}"' for f in functions]
         return " | ".join(functions)
 

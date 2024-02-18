@@ -9,7 +9,7 @@ import data_factory_testing_framework._functions.functions_string_implementation
 
 
 class FunctionsRepository:
-    functions: Dict[str, Callable] = {
+    _functions: Dict[str, Callable] = {
         "add": math_functions.add,
         "addDays": date_functions.add_days,
         "addHours": date_functions.add_hours,
@@ -96,4 +96,4 @@ class FunctionsRepository:
 
     @staticmethod
     def register(function_name: str, function: Callable) -> None:
-        FunctionsRepository.functions[function_name] = function
+        FunctionsRepository._functions[function_name] = function

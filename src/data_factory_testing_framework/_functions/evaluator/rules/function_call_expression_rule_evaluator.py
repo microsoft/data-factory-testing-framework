@@ -42,7 +42,7 @@ class FunctionCallExpressionRuleEvaluator(ExpressionRuleEvaluator):
 
     def evaluate(self) -> EvaluationResult:
         evaluated_parameters = self._evaluated_parameters(self.parameters)
-        function: Callable = FunctionsRepository.functions.get(self.function_name)
+        function: Callable = FunctionsRepository._functions.get(self.function_name)
 
         pos_or_kw_params, var_pos_params = self._build_function_call_parameters(function, evaluated_parameters)
         result = function(*pos_or_kw_params, *var_pos_params)
