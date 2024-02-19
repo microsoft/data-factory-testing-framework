@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 # Distributions / Releases
 dist
+
+# Dotnet Evaluator
+src/data_factory_testing_framework/_pythonnet/DataFactoryTestingFrameworkEvaluator

@@ -11,8 +11,6 @@ keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azur
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 azure-core = "^1.29.5"
-xmltodict = "^0.13.0"
-lxml = "^4.9.3"
 lark = "^1.1.8"
 pythonnet = "^3.0.3"
 

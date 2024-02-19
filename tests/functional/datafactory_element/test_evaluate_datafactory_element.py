@@ -8,6 +8,19 @@ from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.state import PipelineRunState
 
 
+def test_evaluate_datafactory_element() -> None:
+    # Arrange
+    expression = "@mul(2, 3)"
+    state = PipelineRunState()
+    data_factory_element = DataFactoryElement(expression)
+
+    # Act
+    result = data_factory_element.evaluate(state)
+
+    # Assert
+    assert result == 6
+
+
 def test_evaluate_datafactory_element_passes_user_error_through() -> None:
     # Arrange
     expression = "@pipeline().parameters.pipelineName"
