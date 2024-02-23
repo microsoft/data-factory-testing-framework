@@ -6,6 +6,7 @@ from data_factory_testing_framework.exceptions import (
     VariableBeingEvaluatedDoesNotExistError,
     VariableNotFoundError,
 )
+from data_factory_testing_framework.state._activity_result import ActivityResult
 from data_factory_testing_framework.state._dependency_condition import DependencyCondition
 from data_factory_testing_framework.state._pipeline_run_variable import PipelineRunVariable
 from data_factory_testing_framework.state._run_parameter import RunParameter
@@ -18,7 +19,7 @@ class PipelineRunState(RunState):
         self,
         parameters: Optional[List[RunParameter]] = None,
         variables: Optional[List[PipelineRunVariable]] = None,
-        pipeline_activity_results: Optional[Dict[str, Any]] = None,
+        activity_results: Optional[List[ActivityResult]] = None,
         iteration_item: Any = None,  # noqa: ANN401
     ) -> None:
         """Represents the state of a pipeline run. Can be used to configure the state to validate certain pipeline conditions.
@@ -26,21 +27,21 @@ class PipelineRunState(RunState):
         Args:
             parameters: The global and regular parameters to be used for evaluating expressions.
             variables: The initial variables specification to use for the pipeline run.
-            pipeline_activity_results: The results of previous activities to use for validating dependencyConditions and evaluating expressions
+            activity_results: The results of previous activities to use for validating dependencyConditions and evaluating expressions
             (i.e. activity('activityName').output).
             iteration_item: The current item() of a ForEach activity.
         """
         if variables is None:
             variables = []
 
-        if pipeline_activity_results is None:
-            pipeline_activity_results = {}
+        if activity_results is None:
+            activity_results = []
 
         super().__init__(parameters)
 
         self.variables = variables
-        self.pipeline_activity_results: Dict[str, Any] = pipeline_activity_results
-        self.scoped_pipeline_activity_results: Dict[str, Any] = {}
+        self.activity_results: List[ActivityResult] = activity_results
+        self.scoped_activity_results: List[ActivityResult] = []
         self.iteration_item = iteration_item
         self.return_values: Dict[str, Any] = {}
 
@@ -52,14 +53,12 @@ class PipelineRunState(RunState):
             status: Status of the activity.
             output: Output of the activity. (e.g. { "count": 1 } for activity('activityName').output.count)
         """
-        self.pipeline_activity_results[activity_name] = {
-            "status": status,
-            "output": output,
-        }
-        self.scoped_pipeline_activity_results[activity_name] = {
-            "status": status,
-            "output": output,
-        }
+        self.activity_results = self._update_activity_result_in_collection(
+            self.activity_results, activity_name, status, output
+        )
+        self.scoped_activity_results = self._update_activity_result_in_collection(
+            self.scoped_activity_results, activity_name, status, output
+        )
 
     def create_iteration_scope(self, iteration_item: str = None) -> "PipelineRunState":
         """Used to create a new scope for a ControlActivity like ForEach, If and Until activities.
@@ -73,7 +72,7 @@ class PipelineRunState(RunState):
         return PipelineRunState(
             self.parameters,
             self.variables,
-            self.pipeline_activity_results,
+            self.activity_results,
             iteration_item,
         )
 
@@ -83,16 +82,18 @@ class PipelineRunState(RunState):
         Args:
             scoped_state: The scoped childState.
         """
-        for result in scoped_state.pipeline_activity_results:
-            self.pipeline_activity_results[result] = scoped_state.pipeline_activity_results[result]
+        for result in scoped_state.activity_results:
+            self.activity_results = self._update_activity_result_in_collection(
+                self.activity_results, result.activity_name, result.status, result.output
+            )
 
-    def try_get_activity_result_by_name(self, name: str) -> Optional[Dict[str, Any]]:
+    def try_get_activity_result_by_name(self, activity_name: str) -> Optional[Dict[str, Any]]:
         """Tries to get the activity result from the state. Might be None if the activity was not executed in the scope.
 
         Args:
-            name: Name of the activity.
+            activity_name: Name of the activity.
         """
-        return self.pipeline_activity_results[name] if name in self.pipeline_activity_results else None
+        return self._try_get_activity_result_from_collection_by_name(self.activity_results, activity_name)
 
     def get_activity_result_by_name(self, name: str) -> Dict[str, Any]:
         """Gets the activity result from the state. Throws an exception if the activity was not executed in the scope.
@@ -100,10 +101,11 @@ class PipelineRunState(RunState):
         Args:
             name: Name of the activity.
         """
-        if name not in self.pipeline_activity_results:
+        activity_result = self.try_get_activity_result_by_name(name)
+        if activity_result is None:
             raise ActivityNotFoundError(name)
 
-        return self.pipeline_activity_results[name]
+        return activity_result
 
     def set_variable(self, variable_name: str, value: Union[str, int, bool, float]) -> None:
         """Sets the value of a variable if it exists. Otherwise throws an exception.
@@ -159,3 +161,35 @@ class PipelineRunState(RunState):
             raise ParameterNotFoundError(parameter_type, name)
 
         return parameters[0].value
+
+    def is_activity_evaluated_in_scope(self, activity_name: str) -> bool:
+        """Checks if an activity was evaluated in the current scope.
+
+        Args:
+            activity_name: Name of the activity.
+        """
+        return any(result.activity_name == activity_name for result in self.scoped_activity_results)
+
+    @staticmethod
+    def _try_get_activity_result_from_collection_by_name(
+        activity_results: List[ActivityResult], name: str
+    ) -> Optional[ActivityResult]:
+        return next((result for result in activity_results if result.activity_name == name), None)
+
+    @staticmethod
+    def _update_activity_result_in_collection(
+        activity_results: List[ActivityResult],
+        activity_name: str,
+        status: DependencyCondition,
+        output: Any,  # noqa: ANN401
+    ) -> List[ActivityResult]:
+        activity_result = PipelineRunState._try_get_activity_result_from_collection_by_name(
+            activity_results, activity_name
+        )
+        if activity_result:
+            activity_result.status = status
+            activity_result.output = output
+        else:
+            activity_results.append(ActivityResult(activity_name, status, output))
+
+        return activity_results

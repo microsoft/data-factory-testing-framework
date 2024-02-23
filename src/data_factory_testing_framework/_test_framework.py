@@ -121,10 +121,10 @@ class TestFramework:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
         fail_activity_evaluated = False
-        while len(state.scoped_pipeline_activity_results) != len(activities):
+        while len(state.scoped_activity_results) != len(activities):
             any_activity_evaluated = False
             for activity in filter(
-                lambda a: a.name not in state.scoped_pipeline_activity_results
+                lambda a: state.is_activity_evaluated_in_scope(a.name) is False
                 and a.are_dependency_condition_met(state),
                 activities,
             ):

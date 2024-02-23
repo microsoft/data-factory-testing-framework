@@ -152,8 +152,9 @@ def test_package_state_classes() -> None:
     public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
 
     # Assert
-    assert len(public_classes) == 6
+    assert len(public_classes) == 7
     assert public_classes == [
+        "ActivityResult",
         "DependencyCondition",
         "PipelineRunState",
         "PipelineRunVariable",

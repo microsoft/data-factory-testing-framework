@@ -50,8 +50,10 @@ The samples seen below is the *only* code that you need to write! The framework 
         ],
         variables=[
             PipelineRunVariable("JobName", "Job-123"),
+        ],
+        activity_results=[
+            ActivityResult("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"}),
         ])
-    state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
 
     # Act
     activity.evaluate(state)

@@ -1,3 +1,4 @@
+from ._activity_result import ActivityResult
 from ._dependency_condition import DependencyCondition
 from ._pipeline_run_state import PipelineRunState
 from ._pipeline_run_variable import PipelineRunVariable
@@ -12,4 +13,5 @@ __all__ = [
     "RunParameter",
     "RunParameterType",
     "RunState",
+    "ActivityResult",
 ]
