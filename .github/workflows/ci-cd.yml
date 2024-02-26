@@ -50,7 +50,7 @@ jobs:
       #----------------------------------------------
       - name: Set build version and build package
         run: |
-          poetry version 0.0.1.alpha${{ github.run_number}}
+          poetry version 0.1.0.alpha${{ github.run_number}}
           poetry build
       # ----------------------------------------------
       # upload dist
