@@ -1,7 +1,7 @@
 from typing import List
 
 from data_factory_testing_framework.exceptions import PipelineNotFoundError
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 
 
 class DataFactoryRepository:

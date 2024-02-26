@@ -1,10 +1,10 @@
-from typing import Generic, TypeVar
+from typing import Optional
 
-T = TypeVar("T")
+from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 
 
-class PipelineRunVariable(Generic[T]):
-    def __init__(self, name: str, default_value: T = None) -> None:
+class PipelineRunVariable:
+    def __init__(self, name: str, default_value: Optional[DataFactoryObjectType] = None) -> None:
         """Represents a pipeline variable that is being tracked during a pipeline run.
 
         Args:

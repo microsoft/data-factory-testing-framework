@@ -2,8 +2,7 @@ from typing import Any
 
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import ControlActivity
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.state._dependency_condition import DependencyCondition
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
 
 
 class FilterActivity(ControlActivity):

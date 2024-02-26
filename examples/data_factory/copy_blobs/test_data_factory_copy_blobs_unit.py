@@ -1,6 +1,6 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.models.activities import Activity, ForEachActivity
 from data_factory_testing_framework.state import (
     PipelineRunState,
@@ -31,11 +31,11 @@ def test_list_blobs(pipeline: Pipeline) -> None:
             PipelineRunVariable(name="SourceContainerName", default_value="source"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
+            RunParameter(
                 RunParameterType.Pipeline, "SourceContainerName", "container-8b6b545b-c583-4a06-adf7-19ff41370aba"
             ),
-            RunParameter[str](RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
+            RunParameter(RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
         ],
     )
 
@@ -59,11 +59,11 @@ def test_for_each(pipeline: Pipeline) -> None:
             PipelineRunVariable(name="SourceContainerName", default_value="source"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
+            RunParameter(
                 RunParameterType.Pipeline, "SourceContainerName", "container-8b6b545b-c583-4a06-adf7-19ff41370aba"
             ),
-            RunParameter[str](RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
+            RunParameter(RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
         ],
     )
     state.add_activity_result(

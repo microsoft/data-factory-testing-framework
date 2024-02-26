@@ -1,15 +1,14 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.models.activities._activity_dependency import (
     ActivityDependency,
 )
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.state._dependency_condition import DependencyCondition
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
 
 
 class Activity:
-    def __init__(self, name: str, type: str, policy: dict = None, **kwargs: Any) -> None:  # noqa: ANN401, A002
+    def __init__(self, name: str, type: str, policy: Optional[dict] = None, **kwargs: Any) -> None:  # noqa: ANN401, A002
         """Activity with dynamic dicts.
 
         Args:
@@ -65,8 +64,8 @@ class Activity:
         self,
         obj: Any,  # noqa: ANN401
         state: PipelineRunState,
-        visited: List[Any] = None,  # noqa: ANN401
-        types_to_ignore: List[Any] = None,  # noqa: ANN401
+        visited: Optional[List[Any]] = None,  # noqa: ANN401
+        types_to_ignore: Optional[List[Any]] = None,  # noqa: ANN401
     ) -> None:
         if visited is None:
             visited = []
@@ -117,6 +116,6 @@ class Activity:
 
                 self._evaluate_expressions(item, state, visited, types_to_ignore)
 
-    def set_result(self, result: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
+    def set_result(self, result: DependencyCondition, output: Optional[Any] = None) -> None:  # noqa: ANN401
         self.status = result
         self.output = output

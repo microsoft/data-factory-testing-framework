@@ -1,4 +1,4 @@
-from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.models.activities import FailActivity
 from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
 

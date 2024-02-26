@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from data_factory_testing_framework.exceptions import (
     ActivityNotFoundError,
@@ -6,6 +6,7 @@ from data_factory_testing_framework.exceptions import (
     VariableBeingEvaluatedDoesNotExistError,
     VariableNotFoundError,
 )
+from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state._activity_result import ActivityResult
 from data_factory_testing_framework.state._dependency_condition import DependencyCondition
 from data_factory_testing_framework.state._pipeline_run_variable import PipelineRunVariable
@@ -20,7 +21,7 @@ class PipelineRunState(RunState):
         parameters: Optional[List[RunParameter]] = None,
         variables: Optional[List[PipelineRunVariable]] = None,
         activity_results: Optional[List[ActivityResult]] = None,
-        iteration_item: Any = None,  # noqa: ANN401
+        iteration_item: Optional[Any] = None,  # noqa: ANN401
     ) -> None:
         """Represents the state of a pipeline run. Can be used to configure the state to validate certain pipeline conditions.
 
@@ -45,7 +46,12 @@ class PipelineRunState(RunState):
         self.iteration_item = iteration_item
         self.return_values: Dict[str, Any] = {}
 
-    def add_activity_result(self, activity_name: str, status: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
+    def add_activity_result(
+        self,
+        activity_name: str,
+        status: DependencyCondition,
+        output: Optional[Any] = None,  # noqa: ANN401
+    ) -> None:  # noqa: ANN401
         """Registers the result of an activity to the pipeline run state.
 
         Args:
@@ -60,7 +66,7 @@ class PipelineRunState(RunState):
             self.scoped_activity_results, activity_name, status, output
         )
 
-    def create_iteration_scope(self, iteration_item: str = None) -> "PipelineRunState":
+    def create_iteration_scope(self, iteration_item: Optional[str] = None) -> "PipelineRunState":
         """Used to create a new scope for a ControlActivity like ForEach, If and Until activities.
 
         Args:
@@ -107,7 +113,7 @@ class PipelineRunState(RunState):
 
         return activity_result
 
-    def set_variable(self, variable_name: str, value: Union[str, int, bool, float]) -> None:
+    def set_variable(self, variable_name: str, value: DataFactoryObjectType) -> None:
         """Sets the value of a variable if it exists. Otherwise throws an exception.
 
         Args:
@@ -121,7 +127,7 @@ class PipelineRunState(RunState):
 
         raise VariableBeingEvaluatedDoesNotExistError(variable_name)
 
-    def append_variable(self, variable_name: str, value: Union[str, int, bool, float]) -> None:
+    def append_variable(self, variable_name: str, value: DataFactoryObjectType) -> None:
         """Appends a value to a variable if it exists and is an array. Otherwise, throws an exception.
 
         Args:

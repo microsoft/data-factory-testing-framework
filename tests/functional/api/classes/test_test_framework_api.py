@@ -1,6 +1,7 @@
 import inspect
 import types
 import typing
+from typing import Optional
 
 from data_factory_testing_framework import TestFrameworkType
 from data_factory_testing_framework.models import Pipeline
@@ -74,13 +75,16 @@ def test_test_framework_method_signatures() -> None:
                     name="framework_type", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=TestFrameworkType
                 ),
                 inspect.Parameter(
-                    name="root_folder_path", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, default=None, annotation=str
+                    name="root_folder_path",
+                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                    default=None,
+                    annotation=Optional[str],
                 ),
                 inspect.Parameter(
                     name="should_evaluate_child_pipelines",
                     kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
                     default=False,
-                    annotation=bool,
+                    annotation=Optional[bool],
                 ),
             ],
             return_annotation=None,

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from data_factory_testing_framework._repositories.data_factory_repository import DataFactoryRepository
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 
 
 class BaseRepositoryFactory(ABC):

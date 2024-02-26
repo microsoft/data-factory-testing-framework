@@ -5,7 +5,7 @@ from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.exceptions import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.models.activities import AppendVariableActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 

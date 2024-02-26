@@ -3,8 +3,7 @@ from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.exceptions import (
     NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
-from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import DataFactoryElement, Pipeline
 from data_factory_testing_framework.models.activities import FailActivity, SetVariableActivity
 
 

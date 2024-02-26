@@ -4,7 +4,7 @@ from data_factory_testing_framework._deserializers.shared._activity_deserializer
 from data_factory_testing_framework._deserializers.shared._data_factory_element_replacer import (
     _find_and_replace_expressions_in_dict,
 )
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 
 
 def _parse_pipeline_from_json(name: str, json_data: dict) -> Pipeline:

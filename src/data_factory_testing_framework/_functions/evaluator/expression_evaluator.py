@@ -1,5 +1,3 @@
-from typing import Union
-
 from lark import Lark, Token, Tree, UnexpectedCharacters
 
 from data_factory_testing_framework._functions.evaluator.exceptions import (
@@ -15,7 +13,8 @@ from data_factory_testing_framework._functions.evaluator.expression_terminal_tra
 from data_factory_testing_framework._functions.evaluator.rules import ExpressionRuleEvaluator
 from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
 from data_factory_testing_framework._functions.functions_repository import FunctionsRepository
-from data_factory_testing_framework.state._pipeline_run_state import PipelineRunState
+from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
+from data_factory_testing_framework.state import PipelineRunState
 
 
 class ExpressionEvaluator:
@@ -122,7 +121,7 @@ class ExpressionEvaluator:
         tree = self.lark_parser.parse(expression)
         return tree
 
-    def evaluate(self, expression: str, state: PipelineRunState) -> Union[str, int, float, bool]:
+    def evaluate(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
         try:
             parse_tree = self._parse(expression)
 

@@ -1,10 +1,10 @@
-from typing import Any
+from typing import Any, Optional
 
 from data_factory_testing_framework.state._dependency_condition import DependencyCondition
 
 
 class ActivityResult:
-    def __init__(self, activity_name: str, status: DependencyCondition, output: Any = None) -> None:  # noqa: ANN401
+    def __init__(self, activity_name: str, status: DependencyCondition, output: Optional[Any] = None) -> None:  # noqa: ANN401
         """Represents the result of an activity.
 
         Args:

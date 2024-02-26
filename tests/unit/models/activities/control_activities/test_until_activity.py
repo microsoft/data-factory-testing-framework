@@ -1,6 +1,6 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.models.activities import SetVariableActivity, UntilActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 

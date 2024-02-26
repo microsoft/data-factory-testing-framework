@@ -1,7 +1,7 @@
 # flake8: noqa: E501
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
@@ -32,7 +32,7 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
+            RunParameter(RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
         ],
     )
 
@@ -54,9 +54,9 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
             PipelineRunVariable(name="UserAssignedIdentityReference"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "BatchAccountSubscription", "batch-account-subscription"),
-            RunParameter[str](RunParameterType.Global, "BatchAccountResourceGroup", "batch-account-resource-group"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "BatchAccountSubscription", "batch-account-subscription"),
+            RunParameter(RunParameterType.Global, "BatchAccountResourceGroup", "batch-account-resource-group"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "workload-user-assigned-identity-name",
@@ -82,8 +82,8 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
             PipelineRunVariable(name="ManagerApplicationPackagePath"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
         ],
     )
 
@@ -105,8 +105,8 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
             PipelineRunVariable(name="WorkloadApplicationPackagePath"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
         ],
     )
 
@@ -132,18 +132,18 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
             ),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
-            RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
+            RunParameter(RunParameterType.Global, "BatchStorageAccountName", "batch-account-name"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "workload-user-assigned-identity-name",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityClientId",
                 "workload-user-assigned-identity-client-id",
@@ -209,7 +209,7 @@ def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipelin
         variables=[
             PipelineRunVariable(name="JobContainerName"),
         ],
-        parameters=[RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba")],
+        parameters=[RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba")],
     )
 
     # Act
@@ -226,38 +226,38 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
     activity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Global,
                 "BatchURI",
                 "https://batch-account-name.westeurope.batch.azure.com",
             ),
-            RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
-            RunParameter[str](RunParameterType.Global, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"),
-            RunParameter[str](RunParameterType.Global, "ADFResourceGroup", "adf-rg"),
-            RunParameter[str](RunParameterType.Global, "ADFName", "adf-name"),
-            RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchPoolId", "test-application-batch-pool-id"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application-name"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
+            RunParameter(RunParameterType.Global, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"),
+            RunParameter(RunParameterType.Global, "ADFResourceGroup", "adf-rg"),
+            RunParameter(RunParameterType.Global, "ADFName", "adf-name"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            RunParameter(RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
+            RunParameter(RunParameterType.Pipeline, "BatchPoolId", "test-application-batch-pool-id"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application-name"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "ManagerTaskParameters",
                 "--parameter1 dummy --parameter2 another-dummy",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "test-application-batch-pool-id",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityClientId",
                 "test-application-identity-client-id",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "JobAdditionalEnvironmentSettings",
                 [{"name": "STORAGE_ACCOUNT_NAME", "value": "teststorage"}],
@@ -350,7 +350,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     activity = pipeline.get_activity_by_name("Monitor Batch Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
     )
 
@@ -372,14 +372,14 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) ->
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
-            RunParameter[str](RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
+            RunParameter(RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "OutputContainerName",
                 "test-application-output-container-name",
             ),
-            RunParameter[str](RunParameterType.Pipeline, "OutputFolderName", "output"),
+            RunParameter(RunParameterType.Pipeline, "OutputFolderName", "output"),
         ],
     )
 
@@ -409,7 +409,7 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
+            RunParameter(RunParameterType.Global, "BatchStorageAccountName", "batchstorage"),
         ],
     )
 

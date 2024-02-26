@@ -1,19 +1,18 @@
 import json
-from typing import Any, Generic, TypeVar, Union
+from typing import Any
 
 from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
 from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
 )
 from data_factory_testing_framework.exceptions._user_error import UserError
+from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import RunState
 
-T = TypeVar("T")
 
-
-class DataFactoryElement(Generic[T]):
+class DataFactoryElement:
     expression: str
-    result: T
+    result: DataFactoryObjectType
 
     def __init__(self, expression: str) -> None:
         """DataFactoryElement.
@@ -22,9 +21,9 @@ class DataFactoryElement(Generic[T]):
             expression: Expression to evaluate. (e.g. @concat(@pipeline().parameters.pipelineName, '-pipeline'))
         """
         self.expression = expression
-        self.result: Union[str, int, bool, float] = None
+        self.result: DataFactoryObjectType = None
 
-    def evaluate(self, state: RunState) -> Union[str, int, bool, float]:
+    def evaluate(self, state: RunState) -> DataFactoryObjectType:
         """Evaluate the expression."""
         try:
             evaluator = ExpressionEvaluator()

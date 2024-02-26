@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Iterator, List
+from typing import Iterator, List, Optional
 
 from azure.core import CaseInsensitiveEnumMeta
 
@@ -43,8 +43,8 @@ class TestFramework:
     def __init__(
         self,
         framework_type: TestFrameworkType,
-        root_folder_path: str = None,
-        should_evaluate_child_pipelines: bool = False,
+        root_folder_path: Optional[str] = None,
+        should_evaluate_child_pipelines: Optional[bool] = False,
     ) -> None:
         """Initializes the test framework allowing you to evaluate pipelines and activities.
 

@@ -5,7 +5,7 @@ from data_factory_testing_framework._deserializers._deserializer_fabric import (
     parse_fabric_pipeline_from_pipeline_json_files,
 )
 from data_factory_testing_framework._repositories._factories.base_repository_factory import BaseRepositoryFactory
-from data_factory_testing_framework.models._pipeline import Pipeline
+from data_factory_testing_framework.models import Pipeline
 
 
 class FabricRepositoryFactory(BaseRepositoryFactory):
