@@ -1,10 +1,10 @@
 import pytest
+from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.state import (
+    DependencyCondition,
     RunParameter,
     RunParameterType,
 )
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
@@ -12,7 +12,7 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
     test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory, root_folder_path=request.fspath.dirname
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("copy_blobs")
+    pipeline = test_framework.get_pipeline_by_name("copy_blobs")
 
     # Act
     activities = test_framework.evaluate_pipeline(
@@ -31,7 +31,7 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
     list_folder_activity = next(activities)
     assert list_folder_activity.name == "List Folders"
     assert (
-        list_folder_activity.type_properties["url"].value
+        list_folder_activity.type_properties["url"].result
         == "https://sourcestorageaccount.blob.core.windows.net/sourcecontainer?restype=container&comp=list&prefix=sourcefolder&delimiter=$SourceBlobDelimiter"
     )
     assert list_folder_activity.type_properties["method"] == "GET"
@@ -60,7 +60,7 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
     assert copy_activity.name == "Copy files to Destination"
     assert copy_activity.type == "Copy"
     assert (
-        copy_activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].value
+        copy_activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].result
         == "testfolder_1/$SourceBlobDelimiter"
     )
 
@@ -68,7 +68,7 @@ def test_copy_blobs_pipeline(request: pytest.FixtureRequest) -> None:
     assert copy_activity.name == "Copy files to Destination"
     assert copy_activity.type == "Copy"
     assert (
-        copy_activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].value
+        copy_activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].result
         == "testfolder_2/$SourceBlobDelimiter"
     )
 

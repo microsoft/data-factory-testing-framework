@@ -1,7 +1,6 @@
-from data_factory_testing_framework.models.activities.fail_activity import FailActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
+from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models.activities import FailActivity
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
 
 
 def test_fail_activity_evaluates_to_failed_result() -> None:
@@ -24,5 +23,5 @@ def test_fail_activity_evaluates_to_failed_result() -> None:
     assert activity is not None
     assert activity.name == "FailActivity"
     assert activity.status == DependencyCondition.FAILED
-    assert activity.type_properties["message"].value == "Error code: 500"
+    assert activity.type_properties["message"].result == "Error code: 500"
     assert activity.type_properties["errorCode"] == "500"

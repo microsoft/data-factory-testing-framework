@@ -1,13 +1,13 @@
 # flake8: noqa: E501
 import pytest
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def test_framework(request: pytest.FixtureRequest) -> TestFramework:
 
 @pytest.fixture
 def pipeline(test_framework: TestFramework) -> Pipeline:
-    return test_framework.repository.get_pipeline_by_name("batch_job")
+    return test_framework.get_pipeline_by_name("batch_job")
 
 
 def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -33,7 +33,7 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "BatchStorageAccountName", "batch-account-name"),
+            RunParameter(RunParameterType.Pipeline, "BatchStorageAccountName", "batch-account-name"),
         ],
     )
 
@@ -43,7 +43,7 @@ def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline
     # Assert
     updated_variable = state.get_variable_by_name("JobContainerURL")
     expected_url = "https://batch-account-name.blob.core.windows.net/job-8b6b545b-c583-4a06-adf7-19ff41370aba"
-    assert expected_url == activity.type_properties["value"].value
+    assert expected_url == activity.type_properties["value"].result
     assert expected_url == updated_variable.value
 
 
@@ -55,9 +55,9 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
             PipelineRunVariable(name="UserAssignedIdentityReference"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "BatchAccountSubscription", "batch-account-subscription"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchAccountResourceGroup", "batch-account-resource-group"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "BatchAccountSubscription", "batch-account-subscription"),
+            RunParameter(RunParameterType.Pipeline, "BatchAccountResourceGroup", "batch-account-resource-group"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "workload-user-assigned-identity-name",
@@ -71,7 +71,7 @@ def test_set_user_assigned_identity_reference(test_framework: TestFramework, pip
     # Assert
     updated_variable = state.get_variable_by_name("UserAssignedIdentityReference")
     expected_reference = "/subscriptions/batch-account-subscription/resourcegroups/batch-account-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/workload-user-assigned-identity-name"
-    assert expected_reference == activity.type_properties["value"].value
+    assert expected_reference == activity.type_properties["value"].result
     assert expected_reference == updated_variable.value
 
 
@@ -83,8 +83,8 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
             PipelineRunVariable(name="ManagerApplicationPackagePath"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
         ],
     )
 
@@ -94,7 +94,7 @@ def test_set_manager_application_package_path(test_framework: TestFramework, pip
     # Assert
     updated_variable = state.get_variable_by_name("ManagerApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_managerworkload_0_13_2/managerworkload.tar.gz"
-    assert expected_path == activity.type_properties["value"].value
+    assert expected_path == activity.type_properties["value"].result
     assert expected_path == updated_variable.value
 
 
@@ -106,8 +106,8 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
             PipelineRunVariable(name="WorkloadApplicationPackagePath"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
         ],
     )
 
@@ -117,7 +117,7 @@ def test_set_workload_application_package_path(test_framework: TestFramework, pi
     # Assert
     updated_variable = state.get_variable_by_name("WorkloadApplicationPackagePath")
     expected_path = "$AZ_BATCH_APP_PACKAGE_workload_0_13_2/workload.tar.gz"
-    assert expected_path == activity.type_properties["value"].value
+    assert expected_path == activity.type_properties["value"].result
     assert expected_path == updated_variable.value
 
 
@@ -133,18 +133,18 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
             ),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchStorageAccountName", "batch-account-name"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "workload"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "managerworkload"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "0.13.2"),
+            RunParameter(RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
+            RunParameter(RunParameterType.Pipeline, "BatchStorageAccountName", "batch-account-name"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "workload-user-assigned-identity-name",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityClientId",
                 "workload-user-assigned-identity-client-id",
@@ -156,7 +156,7 @@ def test_set_common_environment_settings(test_framework: TestFramework, pipeline
     activity.evaluate(state)
 
     # Assert
-    env_settings = activity.type_properties["value"].value
+    env_settings = activity.type_properties["value"].result
     assert env_settings[0]["name"] == "WORKLOAD_APP_PACKAGE"
     assert env_settings[0]["value"] == "workload"
     assert env_settings[1]["name"] == "WORKLOAD_APP_PACKAGE_VERSION"
@@ -193,10 +193,10 @@ def test_create_job_storage_container(test_framework: TestFramework, pipeline: P
     # Assert
     assert "Create Job Storage Container" == activity.name
     assert (
-        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].value
+        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].result
     )
     assert "PUT" == activity.type_properties["method"]
-    assert "{}" == activity.type_properties["body"].value
+    assert "{}" == activity.type_properties["body"].result
 
 
 def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -206,7 +206,7 @@ def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipelin
         variables=[
             PipelineRunVariable(name="JobContainerName"),
         ],
-        parameters=[RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba")],
+        parameters=[RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba")],
     )
 
     # Act
@@ -214,7 +214,7 @@ def test_set_job_container_name(test_framework: TestFramework, pipeline: Pipelin
 
     # Assert
     job_container_name_variable = state.get_variable_by_name("JobContainerName")
-    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["value"].value
+    assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["value"].result
     assert "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == job_container_name_variable.value
 
 
@@ -223,33 +223,33 @@ def test_start_job_pipeline(test_framework: TestFramework, pipeline: Pipeline) -
     activity = pipeline.get_activity_by_name("Start Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "BatchURI",
                 "https://batch-account-name.westeurope.batch.azure.com",
             ),
-            RunParameter[str](RunParameterType.Pipeline, "BatchStorageAccountName", "batchstorage"),
-            RunParameter[str](RunParameterType.Pipeline, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"),
-            RunParameter[str](RunParameterType.Pipeline, "ADFResourceGroup", "adf-rg"),
-            RunParameter[str](RunParameterType.Pipeline, "ADFName", "adf-name"),
-            RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
-            RunParameter[str](RunParameterType.Pipeline, "BatchPoolId", "test-application-batch-pool-id"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application-name"),
-            RunParameter[str](RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
-            RunParameter[str](RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "BatchStorageAccountName", "batchstorage"),
+            RunParameter(RunParameterType.Pipeline, "ADFSubscription", "d9153e28-dd4e-446c-91e4-0b1331b523f1"),
+            RunParameter(RunParameterType.Pipeline, "ADFResourceGroup", "adf-rg"),
+            RunParameter(RunParameterType.Pipeline, "ADFName", "adf-name"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            RunParameter(RunParameterType.Pipeline, "BatchJobTimeout", "PT4H"),
+            RunParameter(RunParameterType.Pipeline, "BatchPoolId", "test-application-batch-pool-id"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageName", "test-application-name"),
+            RunParameter(RunParameterType.Pipeline, "WorkloadApplicationPackageVersion", "1.5.0"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageName", "batchmanager"),
+            RunParameter(RunParameterType.Pipeline, "ManagerApplicationPackageVersion", "2.0.0"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "ManagerTaskParameters",
                 "--parameter1 dummy --parameter2 another-dummy",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityName",
                 "test-application-batch-pool-id",
             ),
-            RunParameter[str](
+            RunParameter(
                 RunParameterType.Pipeline,
                 "WorkloadUserAssignedIdentityClientId",
                 "test-application-identity-client-id",
@@ -341,7 +341,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     activity = pipeline.get_activity_by_name("Monitor Batch Job")
     state = PipelineRunState(
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
+            RunParameter(RunParameterType.Pipeline, "JobId", "8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
     )
 
@@ -352,7 +352,7 @@ def test_monitor_job(test_framework: TestFramework, pipeline: Pipeline) -> None:
     assert "Monitor Batch Job" == activity.name
     assert "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a" == activity.type_properties["pipeline"]["referenceName"]
     assert 1 == len(activity.type_properties["parameters"])
-    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].value
+    assert "8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobId"].result
 
 
 def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -363,14 +363,14 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) ->
             PipelineRunVariable(name="JobContainerName", default_value="job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
-            RunParameter[str](RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Pipeline, "TaskOutputFolderPrefix", "TASKOUTPUT_"),
+            RunParameter(RunParameterType.Pipeline, "OutputStorageAccountName", "teststorage"),
+            RunParameter(
                 RunParameterType.Pipeline,
                 "OutputContainerName",
                 "test-application-output-container-name",
             ),
-            RunParameter[str](RunParameterType.Pipeline, "OutputFolderName", "output"),
+            RunParameter(RunParameterType.Pipeline, "OutputFolderName", "output"),
         ],
     )
 
@@ -382,14 +382,14 @@ def test_copy_output_files(test_framework: TestFramework, pipeline: Pipeline) ->
     assert "4e66b9d6-d1b9-4d2b-9b89-4101def23c9a" == activity.type_properties["pipeline"]["referenceName"]
     assert 5 == len(activity.type_properties["parameters"])
     assert (
-        "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobContainerName"].value
+        "job-8b6b545b-c583-4a06-adf7-19ff41370aba" == activity.type_properties["parameters"]["JobContainerName"].result
     )
-    assert "TASKOUTPUT_" == activity.type_properties["parameters"]["TaskOutputFolderPrefix"].value
-    assert "teststorage" == activity.type_properties["parameters"]["OutputStorageAccountName"].value
+    assert "TASKOUTPUT_" == activity.type_properties["parameters"]["TaskOutputFolderPrefix"].result
+    assert "teststorage" == activity.type_properties["parameters"]["OutputStorageAccountName"].result
     assert (
-        "test-application-output-container-name" == activity.type_properties["parameters"]["OutputContainerName"].value
+        "test-application-output-container-name" == activity.type_properties["parameters"]["OutputContainerName"].result
     )
-    assert "output" == activity.type_properties["parameters"]["OutputFolderName"].value
+    assert "output" == activity.type_properties["parameters"]["OutputFolderName"].result
 
 
 def test_delete_job_storage_container(test_framework: TestFramework, pipeline: Pipeline) -> None:
@@ -400,7 +400,7 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
             PipelineRunVariable(name="JobContainerName", default_value="/job-8b6b545b-c583-4a06-adf7-19ff41370aba"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Pipeline, "BatchStorageAccountName", "batchstorage"),
+            RunParameter(RunParameterType.Pipeline, "BatchStorageAccountName", "batchstorage"),
         ],
     )
 
@@ -410,6 +410,6 @@ def test_delete_job_storage_container(test_framework: TestFramework, pipeline: P
     # Assert
     assert "Delete Job Storage Container" == activity.name
     assert (
-        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].value
+        "/job-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container" == activity.type_properties["relativeUrl"].result
     )
     assert "DELETE" == activity.type_properties["method"]

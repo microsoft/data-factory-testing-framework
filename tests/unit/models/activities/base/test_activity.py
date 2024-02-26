@@ -1,11 +1,8 @@
 import pytest
-from data_factory_testing_framework.models.activities.activity import Activity
-from data_factory_testing_framework.models.activities.execute_pipeline_activity import ExecutePipelineActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from data_factory_testing_framework.state import PipelineRunState, RunParameterType
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
-from data_factory_testing_framework.state.run_parameter import RunParameter
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models.activities import Activity, ExecutePipelineActivity
+from data_factory_testing_framework.state import DependencyCondition, PipelineRunState, RunParameter, RunParameterType
 
 TestFramework(framework_type=TestFrameworkType.Fabric)
 
@@ -107,4 +104,4 @@ def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
     pipeline_activity.evaluate(state)
 
     # Assert
-    assert pipeline_activity.type_properties["parameters"]["url"].value == "example.com"
+    assert pipeline_activity.type_properties["parameters"]["url"].result == "example.com"

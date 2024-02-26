@@ -1,19 +1,22 @@
 from typing import Union
 
 import pytest
-from data_factory_testing_framework.exceptions.activity_not_found_error import ActivityNotFoundError
-from data_factory_testing_framework.exceptions.parameter_not_found_error import ParameterNotFoundError
-from data_factory_testing_framework.exceptions.state_iteration_item_not_set_error import (
+from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
+from data_factory_testing_framework._pythonnet.csharp_datetime import CSharpDateTime
+from data_factory_testing_framework.exceptions import (
+    ActivityNotFoundError,
+    ParameterNotFoundError,
     StateIterationItemNotSetError,
+    VariableNotFoundError,
 )
-from data_factory_testing_framework.exceptions.variable_not_found_error import VariableNotFoundError
-from data_factory_testing_framework.functions import ExpressionEvaluator
-from data_factory_testing_framework.pythonnet.csharp_datetime import CSharpDateTime
-from data_factory_testing_framework.state.dependency_condition import DependencyCondition
-from data_factory_testing_framework.state.pipeline_run_state import PipelineRunState
-from data_factory_testing_framework.state.pipeline_run_variable import PipelineRunVariable
-from data_factory_testing_framework.state.run_parameter import RunParameter
-from data_factory_testing_framework.state.run_parameter_type import RunParameterType
+from data_factory_testing_framework.state import (
+    ActivityResult,
+    DependencyCondition,
+    PipelineRunState,
+    PipelineRunVariable,
+    RunParameter,
+    RunParameterType,
+)
 from pytest import param as p
 
 
@@ -66,14 +69,15 @@ from pytest import param as p
         p(
             "@activity('activityName').output.outputName",
             PipelineRunState(
-                pipeline_activity_results={
-                    "activityName": {
-                        "output": {
+                activity_results=[
+                    ActivityResult(
+                        activity_name="activityName",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
                             "outputName": "value",
                         },
-                        "status": DependencyCondition.SUCCEEDED,
-                    }
-                }
+                    ),
+                ]
             ),
             "value",
             id="activity_reference",
@@ -109,14 +113,15 @@ from pytest import param as p
         p(
             "@activity('activityName').output.outputName",
             PipelineRunState(
-                pipeline_activity_results={
-                    "activityName": {
-                        "output": {
+                activity_results=[
+                    ActivityResult(
+                        activity_name="activityName",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
                             "outputName": 1,
                         },
-                        "status": DependencyCondition.SUCCEEDED,
-                    }
-                }
+                    ),
+                ]
             ),
             1,
             id="activity_reference",
@@ -124,16 +129,17 @@ from pytest import param as p
         p(
             "@activity('activityName').output.pipelineReturnValue.test",
             PipelineRunState(
-                pipeline_activity_results={
-                    "activityName": {
-                        "output": {
+                activity_results=[
+                    ActivityResult(
+                        activity_name="activityName",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
                             "pipelineReturnValue": {
                                 "test": "value",
                             },
                         },
-                        "status": DependencyCondition.SUCCEEDED,
-                    }
-                }
+                    ),
+                ]
             ),
             "value",
             id="activity_reference_with_nested_property",
@@ -155,14 +161,15 @@ from pytest import param as p
         p(
             "@concat(activity('Sample').output.float, 'test')",
             PipelineRunState(
-                pipeline_activity_results={
-                    "Sample": {
-                        "output": {
+                activity_results=[
+                    ActivityResult(
+                        activity_name="Sample",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
                             "float": 0.016666666666666666,
                         },
-                        "status": DependencyCondition.SUCCEEDED,
-                    }
-                }
+                    ),
+                ]
             ),
             # TODO: fix this
             "0.016666666666666666test",
@@ -181,7 +188,15 @@ from pytest import param as p
             PipelineRunState(
                 variables=[PipelineRunVariable("abc", "defaultvalue_")],
                 parameters=[RunParameter(RunParameterType.Pipeline, "abc", "testvalue_02")],
-                pipeline_activity_results={"abc": {"output": {"abc": "_testvalue_01"}}},
+                activity_results=[
+                    ActivityResult(
+                        activity_name="abc",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
+                            "abc": "_testvalue_01",
+                        },
+                    ),
+                ],
             ),
             "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
         ),
@@ -204,9 +219,11 @@ from pytest import param as p
         p(
             "@activity('Sample').output.billingReference.billableDuration[0].duration",
             PipelineRunState(
-                pipeline_activity_results={
-                    "Sample": {
-                        "output": {
+                activity_results=[
+                    ActivityResult(
+                        activity_name="Sample",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
                             "billingReference": {
                                 "activityType": "ExternalActivity",
                                 "billableDuration": [
@@ -214,9 +231,8 @@ from pytest import param as p
                                 ],
                             }
                         },
-                        "status": DependencyCondition.SUCCEEDED,
-                    }
-                }
+                    ),
+                ]
             ),
             0.016666666666666666,
             id="activity_reference_with_nested_property_and_array_index",

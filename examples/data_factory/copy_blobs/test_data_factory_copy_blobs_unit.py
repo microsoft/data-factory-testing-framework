@@ -1,14 +1,13 @@
 import pytest
-from data_factory_testing_framework.models.activities.activity import Activity
-from data_factory_testing_framework.models.activities.for_each_activity import ForEachActivity
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models import Pipeline
+from data_factory_testing_framework.models.activities import Activity, ForEachActivity
 from data_factory_testing_framework.state import (
     PipelineRunState,
     PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.fixture
@@ -21,7 +20,7 @@ def test_framework(request: pytest.FixtureRequest) -> TestFramework:
 
 @pytest.fixture
 def pipeline(test_framework: TestFramework) -> Pipeline:
-    return test_framework.repository.get_pipeline_by_name("copy_blobs")
+    return test_framework.get_pipeline_by_name("copy_blobs")
 
 
 def test_list_blobs(pipeline: Pipeline) -> None:
@@ -32,11 +31,11 @@ def test_list_blobs(pipeline: Pipeline) -> None:
             PipelineRunVariable(name="SourceContainerName", default_value="source"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
+            RunParameter(
                 RunParameterType.Pipeline, "SourceContainerName", "container-8b6b545b-c583-4a06-adf7-19ff41370aba"
             ),
-            RunParameter[str](RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
+            RunParameter(RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
         ],
     )
 
@@ -46,7 +45,7 @@ def test_list_blobs(pipeline: Pipeline) -> None:
     # Assert
     assert activity.name == "List Folders"
     assert (
-        activity.type_properties["url"].value
+        activity.type_properties["url"].result
         == "https://sourcestorage.blob.core.windows.net/container-8b6b545b-c583-4a06-adf7-19ff41370aba?restype=container&comp=list&prefix=testfolder&delimiter=$SourceBlobDelimiter"
     )
     assert activity.type_properties["method"] == "GET"
@@ -60,11 +59,11 @@ def test_for_each(pipeline: Pipeline) -> None:
             PipelineRunVariable(name="SourceContainerName", default_value="source"),
         ],
         parameters=[
-            RunParameter[str](RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
-            RunParameter[str](
+            RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
+            RunParameter(
                 RunParameterType.Pipeline, "SourceContainerName", "container-8b6b545b-c583-4a06-adf7-19ff41370aba"
             ),
-            RunParameter[str](RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
+            RunParameter(RunParameterType.Pipeline, "SourceFolderPrefix", "testfolder"),
         ],
     )
     state.add_activity_result(
@@ -93,7 +92,7 @@ def test_for_each(pipeline: Pipeline) -> None:
 
     # Assert
     assert activity.name == "For Each SourceFolder"
-    assert activity.type_properties["items"].value == [
+    assert activity.type_properties["items"].result == [
         "testfolder_1/$SourceBlobDelimiter",
         "testfolder_2/$SourceBlobDelimiter",
     ]
@@ -135,4 +134,4 @@ def test_copy_blobs_activity(pipeline: Pipeline, wildcardfolderpath: str) -> Non
 
     # Assert
     assert activity.name == "Copy files to Destination"
-    assert activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].value == wildcardfolderpath
+    assert activity.type_properties["source"]["storeSettings"]["wildcardFolderPath"].result == wildcardfolderpath

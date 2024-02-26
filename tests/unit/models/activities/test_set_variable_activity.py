@@ -1,11 +1,11 @@
 import pytest
-from data_factory_testing_framework.exceptions.variable_being_evaluated_does_not_exist_error import (
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.exceptions import (
     VariableBeingEvaluatedDoesNotExistError,
 )
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
+from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models.activities import SetVariableActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_when_string_variable_evaluated_then_state_variable_should_be_set() -> None:

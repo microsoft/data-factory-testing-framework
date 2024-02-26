@@ -1,10 +1,8 @@
 import pytest
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
-from data_factory_testing_framework.models.activities.switch_activity import SwitchActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models.pipeline import Pipeline
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models import DataFactoryElement, Pipeline
+from data_factory_testing_framework.models.activities import SetVariableActivity, SwitchActivity
 from data_factory_testing_framework.state import PipelineRunState
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 def test_when_evaluated_should_evaluate_expression() -> None:
@@ -20,7 +18,7 @@ def test_when_evaluated_should_evaluate_expression() -> None:
     activity.evaluate(PipelineRunState())
 
     # Assert
-    assert activity.on.value == "case_1"
+    assert activity.on.result == "case_1"
 
 
 @pytest.mark.parametrize(

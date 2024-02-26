@@ -1,10 +1,9 @@
 from typing import List
 
 import pytest
-from data_factory_testing_framework.models.activities.append_variable_activity import AppendVariableActivity
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models.activities import AppendVariableActivity, SetVariableActivity
 from data_factory_testing_framework.state import RunParameter, RunParameterType
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
 
 
 @pytest.mark.parametrize(
@@ -24,7 +23,7 @@ def test_append_variable_activity(
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    pipeline = test_framework.repository.get_pipeline_by_name("append-variable-test")
+    pipeline = test_framework.get_pipeline_by_name("append-variable-test")
 
     # Act
     activities = test_framework.evaluate_pipeline(
@@ -38,8 +37,8 @@ def test_append_variable_activity(
     # Assert
     activity: SetVariableActivity = next(activities)
     assert activity.type == "SetVariable"
-    assert activity.value.value == initial_value
+    assert activity.value.result == initial_value
 
     activity: AppendVariableActivity = next(activities)
     assert activity.type == "AppendVariable"
-    assert activity.value.value == appended_value
+    assert activity.value.result == appended_value

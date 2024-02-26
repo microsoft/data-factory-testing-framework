@@ -1,12 +1,10 @@
 import pytest
-from data_factory_testing_framework.exceptions.pipeline_activities_circular_dependency_error import (
-    PipelineActivitiesCircularDependencyError,
+from data_factory_testing_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.exceptions import (
+    NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
-from data_factory_testing_framework.models.activities.fail_activity import FailActivity
-from data_factory_testing_framework.models.activities.set_variable_activity import SetVariableActivity
-from data_factory_testing_framework.models.data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models.pipeline import Pipeline
-from data_factory_testing_framework.test_framework import TestFramework, TestFrameworkType
+from data_factory_testing_framework.models import DataFactoryElement, Pipeline
+from data_factory_testing_framework.models.activities import FailActivity, SetVariableActivity
 
 
 def test_circular_dependency_between_activities_should_throw_error() -> None:
@@ -51,10 +49,10 @@ def test_circular_dependency_between_activities_should_throw_error() -> None:
             ),
         ],
     )
-    test_framework.repository.pipelines.append(pipeline)
+    test_framework._repository.pipelines.append(pipeline)
 
     # Act & Assert
-    with pytest.raises(PipelineActivitiesCircularDependencyError):
+    with pytest.raises(NoRemainingPipelineActivitiesMeetDependencyConditionsError):
         next(test_framework.evaluate_pipeline(pipeline, []))
 
 
@@ -92,7 +90,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
             ),
         ],
     )
-    test_framework.repository.pipelines.append(pipeline)
+    test_framework._repository.pipelines.append(pipeline)
 
     # Act
     activities = test_framework.evaluate_pipeline(pipeline, [])
@@ -103,7 +101,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
     assert activity.name == "failActivity"
     assert activity.type == "Fail"
     assert activity.status == "Failed"
-    assert activity.type_properties["message"].value == "Error code: 500"
+    assert activity.type_properties["message"].result == "Error code: 500"
     assert activity.type_properties["errorCode"] == "500"
 
     # Assert that there are no more activities

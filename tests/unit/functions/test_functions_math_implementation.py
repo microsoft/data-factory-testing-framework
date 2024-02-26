@@ -1,7 +1,7 @@
 import random
 from typing import Union
 
-import data_factory_testing_framework.functions.functions_math_implementation as math_functions
+import data_factory_testing_framework._functions.functions_math_implementation as math_functions
 import pytest
 
 

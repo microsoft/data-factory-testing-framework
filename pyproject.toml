@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "data-factory-testing-framework"
-version = "0.0.1"
+version = "0.1.0"
 description = "A stand-alone test framework that allows to write unit tests for Data Factory pipelines on Microsoft Fabric and Azure Data Factory."
 authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>", "Yennifer Santos <ysantos@microsoft.com>", "Jaya Kumar <kumarjaya@microsoft.com>", "Leonard Herold <lherold@microsoft.com>"]
 readme = "README.md"

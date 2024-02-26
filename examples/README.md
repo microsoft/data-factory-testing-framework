@@ -50,15 +50,17 @@ The samples seen below is the *only* code that you need to write! The framework 
         ],
         variables=[
             PipelineRunVariable("JobName", "Job-123"),
+        ],
+        activity_results=[
+            ActivityResult("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"}),
         ])
-    state.add_activity_result("Get version", DependencyCondition.SUCCEEDED, {"Version": "version1"})
 
     # Act
     activity.evaluate(state)
 
     # Assert
-    assert "https://example.com/jobs" == activity.type_properties["url"].value
-    assert "POST" == activity.type_properties["method"].value
+    assert "https://example.com/jobs" == activity.type_properties["url"].result
+    assert "POST" == activity.type_properties["method"].result
     body = activity.type_properties["body"].get_json_value()
     assert "123" == body["JobId"]
     assert "Job-123" == body["JobName"]
@@ -82,19 +84,19 @@ The samples seen below is the *only* code that you need to write! The framework 
     assert set_variable_activity is not None
     assert "Set JobName" == set_variable_activity.name
     assert "JobName" == activity.type_properties["variableName"]
-    assert "Job-123" == activity.type_properties["value"].value
+    assert "Job-123" == activity.type_properties["value"].result
 
     get_version_activity = next(activities)
     assert get_version_activity is not None
     assert "Get version" == get_version_activity.name
-    assert "https://example.com/version" == get_version_activity.type_properties["url"].value
+    assert "https://example.com/version" == get_version_activity.type_properties["url"].result
     assert "GET" == get_version_activity.type_properties["method"]
     get_version_activity.set_result(DependencyCondition.Succeeded,{"Version": "version1"})
 
     create_batch_activity = next(activities)
     assert create_batch_activity is not None
     assert "Trigger Azure Batch Job" == create_batch_activity.name
-    assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].value
+    assert "https://example.com/jobs" == create_batch_activity.type_properties["url"].result
     assert "POST" == create_batch_activity.type_properties["method"]
     body = create_batch_activity.type_properties["body"].get_json_value()
     assert "123" == body["JobId"]
