@@ -5,22 +5,16 @@ from DataFactoryTestingFrameworkEvaluator import (
     ExpressionEvaluator,  # this is the .NET class that we want to use in Python
 )
 
+from data_factory_testing_framework._functions.evaluator.expression_evaluator import ExpressionEvaluator
 from data_factory_testing_framework.state import PipelineRunState
 
 
 class DotnetExpressionEvaluator:
-    def evaluate(self, expression: str, state: PipelineRunState) -> Union[str, int, float, bool]:
+    def evaluate(self, expression: str, state: PipelineRunState) -> Union[str, int, float, bool, dict, list]:
+        expression_state_populator = ExpressionEvaluator()
+        expression = expression_state_populator.evaluate(expression, state)
+
         evaluator = ExpressionEvaluator()
-
-        # Set item Value From Json
-        evaluator.SetItemValueFromJson(json.dumps(state.iteration_item))
-
-        # Set variables from json
-        parameters = {}
-        for var in state.variables:
-            parameters[var.name] = var.value
-        evaluator.SetVariablesFromJson(json.dumps(parameters))
-
         result = evaluator.EvaluateExpression(expression)
         # Returns newton soft JValue
         return json.loads(result)["result"]
