@@ -1,3 +1,4 @@
+import codecs
 import os
 from typing import List
 
@@ -15,7 +16,10 @@ class FabricRepositoryFactory(BaseRepositoryFactory):
         for pipeline_folder in pipeline_folders:
             pipeline_file = os.path.join(pipeline_folder, "pipeline-content.json")
             pipeline_metadata_file = os.path.join(pipeline_folder, "item.metadata.json")
-            with open(pipeline_file, "r") as pipeline_file, open(pipeline_metadata_file, "r") as pipeline_metadata_file:
+            pipeline_content_encoding = FabricRepositoryFactory._detect_encoding(pipeline_file)
+            with open(pipeline_file, "r", encoding=pipeline_content_encoding) as pipeline_file, open(
+                pipeline_metadata_file, "r"
+            ) as pipeline_metadata_file:
                 pipelines.append(
                     parse_fabric_pipeline_from_pipeline_json_files(pipeline_metadata_file.read(), pipeline_file.read())
                 )
@@ -37,3 +41,20 @@ class FabricRepositoryFactory(BaseRepositoryFactory):
                 raise FileNotFoundError(f"Pipeline folder {pipeline_folder} does not contain metadata file")
 
         return pipeline_folders
+
+    @staticmethod
+    def _detect_encoding(file_path: str) -> str:
+        """Detects the encoding of the file and returns it as a string.
+
+        Args:
+            file_path (str): The path to the file.
+
+        Returns:
+            str: The encoding of the file. Possible values are "utf-8" and "utf-16" (little or big endian).
+        """
+        with open(file_path, "rb") as file:
+            bom = file.read(2)
+            if bom == codecs.BOM_UTF16_LE or bom == codecs.BOM_UTF16_BE:
+                return "utf-16"
+            else:
+                return "utf-8"
