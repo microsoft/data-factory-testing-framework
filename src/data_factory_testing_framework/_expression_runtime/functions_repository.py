@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import List
 
 
 class FunctionsRepository:
@@ -89,7 +89,3 @@ class FunctionsRepository:
         "or",
         "and",
     }
-
-    @staticmethod
-    def register(function_name: str, function: Callable) -> None:
-        FunctionsRepository._functions[function_name] = function

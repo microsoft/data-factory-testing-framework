@@ -9,80 +9,48 @@ using System.Reflection;
 
 public class ExpressionEvaluator
 {
-    private InsensitiveDictionary<JToken> parameterValues;
-    private InsensitiveDictionary<JToken> variables;
-    private JToken? itemValue;
-
-
-    public ExpressionEvaluator()
+    private TemplateExpressionEvaluationHelper GetTemplateFunctionEvaluationHelper(string parametersJson, string variablesJson, string itemValueJson)
     {
-        this.parameterValues = new InsensitiveDictionary<JToken>();
-        this.variables = new InsensitiveDictionary<JToken>();
-        this.itemValue = null;
-    }
+        var variables = ParseJsonToInsensitiveDictionary(variablesJson);
+        var parameterValues = ParseJsonToInsensitiveDictionary(parametersJson);
+        var itemValue = JToken.Parse(itemValueJson);
 
-
-    private TemplateExpressionEvaluationHelper GetTemplateFunctionEvaluationHelper()
-    {
         var helper = TemplateExpressionsHelper.GetTemplateFunctionEvaluationHelper(
-            parameterValues: this.parameterValues,
-            onGetApplicationConfiguration: delegate (string key)
-            {
-                return null;
-            },
-            triggerName: "triggerName",
-            triggerValue: "triggerValue",
-            enablePreserveAnnotations: true,
-            actionValues: new InsensitiveDictionary<JToken>(),
-            resultValues: new InsensitiveDictionary<JToken>(),
-            actionIsForeachValues: new InsensitiveDictionary<bool>(),
-            actionHasNonReferenceableAggregatedPartialContentValues: new InsensitiveDictionary<bool>(),
-            workflowValue: new JObject(),
-            variables: this.variables,
-            itemValue: this.itemValue,
-            itemValues: new InsensitiveDictionary<JToken>(),
-            iterationIndexes: new InsensitiveDictionary<JToken>(),
-            secretValues: new InsensitiveDictionary<JToken>(),
-            dependencyTrackingContext: null
-            );
+        parameterValues: parameterValues,
+        onGetApplicationConfiguration: delegate (string key)
+        {
+            return null;
+        },
+        triggerName: "triggerName",
+        triggerValue: "triggerValue",
+        enablePreserveAnnotations: true,
+        actionValues: new InsensitiveDictionary<JToken>(),
+        resultValues: new InsensitiveDictionary<JToken>(),
+        actionIsForeachValues: new InsensitiveDictionary<bool>(),
+        actionHasNonReferenceableAggregatedPartialContentValues: new InsensitiveDictionary<bool>(),
+        workflowValue: new JObject(),
+        variables: variables,
+        itemValue: itemValue,
+        itemValues: new InsensitiveDictionary<JToken>(),
+        iterationIndexes: new InsensitiveDictionary<JToken>(),
+        secretValues: new InsensitiveDictionary<JToken>(),
+        dependencyTrackingContext: null
+        );
 
         return helper;
     }
 
-    /// <summary>
-    /// Set the parameters from a json string
-    /// </summary>
-    /// <param name="json"></param>
-    public void SetParametersFromJson(string json)
+    private InsensitiveDictionary<JToken> ParseJsonToInsensitiveDictionary(string json)
     {
         var jObject = JObject.Parse(json);
+        var insensitiveDictionary = new InsensitiveDictionary<JToken>();
+
         foreach (var property in jObject.Properties())
         {
-            this.parameterValues[property.Name] = property.Value;
+            insensitiveDictionary[property.Name] = property.Value;
         }
-    }
 
-    /// <summary>
-    /// Set the variables from a json string
-    /// </summary>
-    /// <param name="json"></param>
-    /// <returns></returns>
-    public void SetVariablesFromJson(string json)
-    {
-        var jObject = JObject.Parse(json);
-        foreach (var property in jObject.Properties())
-        {
-            this.variables[property.Name] = property.Value;
-        }
-    }
-
-    /// <summary>
-    /// Set the item value from a json string
-    /// </summary>
-    /// <param name="json"></param>
-    public void SetItemValueFromJson(string json)
-    {
-        this.itemValue = JToken.Parse(json);
+        return insensitiveDictionary;
     }
 
     private void PatchRequestCorrelationContext()
@@ -95,9 +63,9 @@ public class ExpressionEvaluator
         methodInfoLogicalSetData.Invoke(null, new object[] { RequestCorrelationContext.PropertyRequestCorrelationContext, data });
     }
 
-    public string EvaluateExpression(string expression)
+    public string EvaluateExpression(string expression, string parametersJson, string variablesJson, string itemValueJson)
     {
-        var helper = GetTemplateFunctionEvaluationHelper();
+        var helper = GetTemplateFunctionEvaluationHelper(parametersJson, variablesJson, itemValueJson);
         var context = new TemplateExpressionEvaluationContext(helper);
         this.PatchRequestCorrelationContext();
 

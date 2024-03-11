@@ -1,17 +1,15 @@
-from data_factory_testing_framework._functions.evaluator.exceptions import (
+from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
 )
-from data_factory_testing_framework._functions.evaluator.expression_rule_transformer import (
-    ExpressionRuleTransformer,
-)
-from data_factory_testing_framework._functions.functions_repository import FunctionsRepository
+from data_factory_testing_framework._expression_runtime.functions_repository import FunctionsRepository
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import PipelineRunState
 from lark import Lark, Token, Tree, UnexpectedCharacters
 from lark.reconstruct import Reconstructor
+from lark.tree_templates import TemplateConf, TemplateTranslator
 
 
-class ExpressionEvaluator:
+class ExpressionTransformer:
     def __init__(self) -> None:
         """Evaluator for the expression language."""
         literal_grammar = """
@@ -40,7 +38,7 @@ class ExpressionEvaluator:
 
         expression_grammar = f"""
             // TODO: add support for array index
-            ?expression_start: expression_evaluation
+            expression_start: "@" expression_evaluation
             # TODO: probably object accessor does not apply to all below in expression_evaluation
             expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
             ?expression_call: expression_function_call
@@ -67,7 +65,7 @@ class ExpressionEvaluator:
 
             // function call rules
             expression_function_call: EXPRESSION_FUNCTION_NAME "(" [expression_parameter ("," expression_parameter )*] ")"
-            ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
+            ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_evaluation) EXPRESSION_WS*
 
             // expression terminals
             // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
@@ -88,7 +86,7 @@ class ExpressionEvaluator:
         """  # noqa: E501
 
         base_grammar = """
-            ?start: ("@" expression_start) | (["@@"] literal_start) | (literal_interpolation)
+            start: (expression_start) | (["@@"]+ literal_start) | (literal_interpolation)
 
             // shared custom basic data type rules:
             ARRAY_INDEX: "[" /[0-9]+/ "]"
@@ -114,7 +112,7 @@ class ExpressionEvaluator:
         tree = self.lark_parser.parse(expression)
         return tree
 
-    def evaluate(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
+    def transform_to_logic_apps_expression(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
         try:
             parse_tree = self._parse(expression)
 
@@ -131,14 +129,38 @@ class ExpressionEvaluator:
         # we start with a raw parse tree for the lark grammer
         # and then semantically analysis it (in our case transforming values step by step)
         ast = parse_tree
-        # ast = ExpressionTerminalTransformer().transform(ast)
-        ast = ExpressionRuleTransformer(state).transform(ast)
+
+        def parse_df_template(s):
+            return self.lark_parser.parse(s, start="start")
+
+        df_template = TemplateConf(parse=parse_df_template)
+
+        def parse_logic_apps_template(s):
+            logic_apps_parameter_parser = Lark(
+                """
+            start: "@" "pipeline" "('" /[a-zA-Z0-9_]+/ "')"
+            """,
+                start="start",
+                maybe_placeholders=False,
+            )
+
+            parsed = logic_apps_parameter_parser.parse(s, start="start")
+            return parsed
+
+        logic_apps_template = TemplateConf(parse=parse_logic_apps_template)
+
+        translations = {
+            "@pipeline().parameters.parameter": "@pipeline('parametersparameter')",
+        }
+
+        translation_templates = {df_template(k): logic_apps_template(v) for k, v in translations.items()}
+
+        tree = TemplateTranslator(translation_templates).translate(ast)
+
+        # try:
+        #     ast = ExpressionRuleTransformer(state).transform(ast)
+        # except VisitError as ve:
+        #     raise ve.orig_exc
 
         expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(ast)
         return expression_reconstructed
-        # if not isinstance(ast, ExpressionRuleEvaluator):
-        #     raise ExpressionEvaluationError()
-        # result = ast.evaluate()
-        # if not isinstance(result, EvaluationResult):
-        #     raise ExpressionEvaluationError()
-        # return result.value

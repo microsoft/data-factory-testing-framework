@@ -1,7 +1,11 @@
 from typing import Union
 
 import pytest
-from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
+from data_factory_testing_framework._expression_runtime.data_factory_expression import (
+    ExpressionTransformer as DataFactoryExpressionTransformer,
+)
+from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
+from data_factory_testing_framework._pythonnet.logic_apps_expression_evaluator import LogicAppsExpressionEvaluator
 
 # from data_factory_testing_framework._pythonnet.csharp_datetime import CSharpDateTime
 from data_factory_testing_framework.exceptions import (
@@ -22,11 +26,11 @@ from pytest import param as p
 
 
 @pytest.mark.parametrize(
-    ["expression", "state", "expected"],
+    ["expression", "state", "expected_logic_apps_expression", "expected_evaluation"],
     [
-        p("value", PipelineRunState(), "value", id="string_literal"),
-        p(" value ", PipelineRunState(), " value ", id="string_with_ws_literal"),
-        p("11", PipelineRunState(), 11, id="integer_literal"),
+        p("value", PipelineRunState(), "value", "value", id="string_literal"),
+        p(" value ", PipelineRunState(), " value ", " value ", id="string_with_ws_literal"),
+        p("11", PipelineRunState(), "11", "11", id="integer_literal"),
         p(
             "@pipeline().parameters.parameter",
             PipelineRunState(
@@ -34,6 +38,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", "value"),
                 ]
             ),
+            "value",
             "value",
             id="pipeline_parameters_reference",
         ),
@@ -44,8 +49,20 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", 1),
                 ]
             ),
-            1,
+            "1",
+            "1",
             id="pipeline_parameters_reference",
+        ),
+        p(
+            "@pipeline().parameters.parameter",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Pipeline, "parameter", {"field1": "value1"}),
+                ]
+            ),
+            '@json(\'{"field1": "value1"}\')',
+            {"field1": "value1"},
+            id="pipeline_parameters_reference_complex",
         ),
         p(
             "@pipeline().globalParameters.parameter",
@@ -54,6 +71,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Global, "parameter", "value"),
                 ]
             ),
+            "value",
             "value",
             id="pipeline_global_parameters_reference",
         ),
@@ -64,6 +82,7 @@ from pytest import param as p
                     PipelineRunVariable(name="variable", default_value="value"),
                 ]
             ),
+            "value",
             "value",
             id="variables_reference",
         ),
@@ -80,12 +99,14 @@ from pytest import param as p
                     ),
                 ]
             ),
+            '@json(\'{"output": {"outputName": "value"}, "status": "Succeeded"}\').output.outputName',
             "value",
             id="activity_reference",
         ),
         p(
             "@dataset().parameterName",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Dataset, "parameterName", "datasetNameValue")]),
+            "datasetNameValue",
             "datasetNameValue",
             id="dataset_reference",
         ),
@@ -95,19 +116,22 @@ from pytest import param as p
                 parameters=[RunParameter(RunParameterType.LinkedService, "parameterName", "parameterValue")]
             ),
             "parameterValue",
+            "parameterValue",
             id="linked_service_reference",
         ),
-        p("@item()", PipelineRunState(iteration_item="value"), "value", id="item_reference"),
-        p("@concat('a', 'b' )", PipelineRunState(), "ab", id="function_call"),
+        p("@item()", PipelineRunState(iteration_item="value"), "value", "value", id="item_reference"),
+        p("@concat('a', 'b' )", PipelineRunState(), "@concat('a', 'b' )", "ab", id="function_call"),
         p(
-            "concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
+            "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
             PipelineRunState(),
-            "concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
+            "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
+            "https://example.com/jobs/123'&abc,",
             id="literal_function_call_with_nested_function_and_single_quote",
         ),
         p(
             "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
             PipelineRunState(),
+            "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
             "https://example.com/jobs/123'&abc,",
             id="function_call_with_nested_function_and_single_quote",
         ),
@@ -124,6 +148,7 @@ from pytest import param as p
                     ),
                 ]
             ),
+            '@json(\'{"output": {"outputName": 1}, "status": "Succeeded"}\').output.outputName',
             1,
             id="activity_reference",
         ),
@@ -142,20 +167,35 @@ from pytest import param as p
                     ),
                 ]
             ),
+            '@json(\'{"output": {"pipelineReturnValue": {"test": "value"}}, "status": "Succeeded"}\').output.pipelineReturnValue.test',
             "value",
             id="activity_reference_with_nested_property",
         ),
-        p("@createArray('a', 'b')", PipelineRunState(), ["a", "b"], id="function_call_array_result"),
-        p("@createArray('a', 'b')[1]", PipelineRunState(), "b", id="function_call_with_array_index"),
+        p(
+            "@createArray('a', 'b')",
+            PipelineRunState(),
+            "@createArray('a', 'b')",
+            ["a", "b"],
+            id="function_call_array_result",
+        ),
+        p(
+            "@createArray('a', 'b')[1]",
+            PipelineRunState(),
+            "@createArray('a', 'b')[1]",
+            "b",
+            id="function_call_with_array_index",
+        ),
         p(
             "@createArray('a', createArray('b', 'c'))[1][0]",
             PipelineRunState(),
+            "@createArray('a', createArray('b', 'c'))[1][0]",
             "b",
             id="function_call_with_nested_array_index",
         ),
         p(
             "@concat(  'x1'  , \n 'x2','x3'  )",
             PipelineRunState(),
+            "@concat(  'x1'  , \n 'x2','x3'  )",
             "x1x2x3",
             id="function_call_with_ws_and_newline",
         ),
@@ -173,6 +213,7 @@ from pytest import param as p
                 ]
             ),
             # TODO: fix this
+            '@concat(json(\'"output": {"float": 0.016666666666666666}, "status": "Succeeded"\').output.float, \'test\')',
             "0.016666666666666666test",
             id="function_call_with_nested_property",
             marks=pytest.mark.xfail(
@@ -180,9 +221,23 @@ from pytest import param as p
             ),
         ),
         p(
-            "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
-            PipelineRunState(),
-            "concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
+            "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
+            PipelineRunState(
+                variables=[PipelineRunVariable("abc", "defaultvalue_")],
+                parameters=[RunParameter(RunParameterType.Pipeline, "abc", "testvalue_02")],
+                activity_results=[
+                    ActivityResult(
+                        activity_name="abc",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
+                            "abc": "_testvalue_01",
+                        },
+                    )
+                ],
+            ),
+            "@concat('https://example.com/jobs/', '123''', 'defaultvalue_', 'testvalue_02', json('{\"output\": {\"abc\": \"_testvalue_01\"}, \"status\": \"Succeeded\"}').output.abc)",
+            "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
+            id="function_call_with_nested_references",
         ),
         p(
             "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
@@ -199,13 +254,23 @@ from pytest import param as p
                     ),
                 ],
             ),
+            "@concat('https://example.com/jobs/', '123''', 'defaultvalue_', 'testvalue_02', json('{\"output\": {\"abc\": \"_testvalue_01\"}, \"status\": \"Succeeded\"}').output.abc)",
             "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
+            id="function_call_with_nested_references_evaluated",
         ),
-        p("@createArray('a', createArray('a', 'b'))[1][1]", PipelineRunState(), "b"),
+        p(
+            "@createArray('a', createArray('a', 'b'))[1][1]",
+            PipelineRunState(),
+            "@createArray('a', createArray('a', 'b'))[1][1]",
+            "b",
+            id="function_call_with_nested_array_index",
+        ),
         p(
             "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "id")]),
             "/repos/id/",
+            "/repos/id/",
+            id="string_interpolation",
         ),
         p(
             "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
@@ -216,6 +281,8 @@ from pytest import param as p
                 ]
             ),
             "/repos/id/apath",
+            "/repos/id/apath",
+            id="string_interpolation_with_multiple_interpolations",
         ),
         p(
             "@activity('Sample').output.billingReference.billableDuration[0].duration",
@@ -235,18 +302,21 @@ from pytest import param as p
                     ),
                 ]
             ),
+            '@json(\'{"output": {"billingReference": {"activityType": "ExternalActivity", "billableDuration": [{"meterType": "AzureIR", "duration": 0.016666666666666666, "unit": "Hours"}]}}, "status": "Succeeded"}\').output.billingReference.billableDuration[0].duration',
             0.016666666666666666,
             id="activity_reference_with_nested_property_and_array_index",
         ),
         p(
             "@utcNow()",
             PipelineRunState(),
+            "@utcNow()",
             "2021-11-24T12:11:49.7531321Z",
             id="function_call_with_zero_parameters",
         ),
         p(
             "@coalesce(null)",
             PipelineRunState(),
+            "@coalesce(null)",
             None,
             id="function_call_with_null_parameter",
         ),
@@ -254,11 +324,13 @@ from pytest import param as p
             "@{pipeline().globalParameters.OpsPrincipalClientId}",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
             "dummyId",
+            "dummyId",
             id="string_interpolation_with_no_surrounding_literals",
         ),
         p(
             "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
+            "/Repos/dummyId/",
             "/Repos/dummyId/",
             id="string_interpolation_with_literals",
         ),
@@ -271,28 +343,40 @@ from pytest import param as p
                 ]
             ),
             "/Repos/dummyId/dummyPath",
+            "/Repos/dummyId/dummyPath",
             id="string_interpolation_with_multiple_expressions",
         ),
     ],
 )
 def test_evaluate(
-    expression: str, state: PipelineRunState, expected: Union[str, int, bool, float], monkeypatch: pytest.MonkeyPatch
+    expression: str,
+    state: PipelineRunState,
+    expected_logic_apps_expression: str,
+    expected_evaluation: Union[str, int, bool, float],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     # Arrange
     # monkeypatch.setattr(CSharpDateTime, "utcnow", lambda: CSharpDateTime.parse("2021-11-24T12:11:49.7531321Z"))
-    evaluator = ExpressionEvaluator()
+    data_factory_expression_transformer = DataFactoryExpressionTransformer()
 
-    # Act
-    actual = evaluator.evaluate(expression, state)
+    # Act populating the expression
+    logic_apps_expression = data_factory_expression_transformer.transform_to_logic_apps_expression(expression, state)
 
-    # Assert
-    assert actual == expected
+    # Assert population
+    assert logic_apps_expression == expected_logic_apps_expression
+
+    # Act evaluating the expression
+    logic_apps_expression_evaluator = LogicAppsExpressionEvaluator()
+    actual = logic_apps_expression_evaluator.evaluate(expression, state)
+
+    # Assert evaluation
+    assert actual == expected_evaluation
 
 
 def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter[0].field1.field2"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         parameters=[
             RunParameter(
@@ -308,7 +392,7 @@ def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = evaluator.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert evaluated_value == "value1"
@@ -317,12 +401,12 @@ def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
 def test_evaluate_raises_exception_when_pipeline_parameter_not_found() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameter' of type 'RunParameterType.Pipeline' not found"
@@ -331,12 +415,12 @@ def test_evaluate_raises_exception_when_pipeline_parameter_not_found() -> None:
 def test_evaluate_raises_exception_when_pipeline_global_parameter_not_found() -> None:
     # Arrange
     expression = "@pipeline().globalParameters.parameter"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameter' of type 'RunParameterType.Global' not found"
@@ -345,7 +429,7 @@ def test_evaluate_raises_exception_when_pipeline_global_parameter_not_found() ->
 def test_evaluate_variable_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@variables('variable')[0].field1.field2[0]"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(
@@ -360,7 +444,7 @@ def test_evaluate_variable_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = evaluator.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert evaluated_value == "value1"
@@ -369,12 +453,12 @@ def test_evaluate_variable_with_complex_object_and_array_index() -> None:
 def test_evaluate_raises_exception_when_variable_not_found() -> None:
     # Arrange
     expression = "@variables('variable')"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(VariableNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Variable 'variable' not found"
@@ -383,7 +467,7 @@ def test_evaluate_raises_exception_when_variable_not_found() -> None:
 def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@dataset().parameterName[0].field1.field2"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         parameters=[
             RunParameter(
@@ -399,7 +483,7 @@ def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = evaluator.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert evaluated_value == "value1"
@@ -408,12 +492,12 @@ def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
 def test_evaluate_raises_exception_when_dataset_not_found() -> None:
     # Arrange
     expression = "@dataset().parameterName"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.Dataset' not found"
@@ -422,7 +506,7 @@ def test_evaluate_raises_exception_when_dataset_not_found() -> None:
 def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@linkedService().parameterName[0].field1.field2"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         parameters=[
             RunParameter(
@@ -438,7 +522,7 @@ def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = evaluator.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert evaluated_value == "value1"
@@ -447,12 +531,12 @@ def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
 def test_evaluate_raises_exception_when_linked_service_not_found() -> None:
     # Arrange
     expression = "@linkedService().parameterName"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.LinkedService' not found"
@@ -461,12 +545,12 @@ def test_evaluate_raises_exception_when_linked_service_not_found() -> None:
 def test_evaluate_raises_exception_when_activity_not_found() -> None:
     # Arrange
     expression = "@activity('activityName').output.outputName"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ActivityNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Activity with name 'activityName' not found"
@@ -475,12 +559,12 @@ def test_evaluate_raises_exception_when_activity_not_found() -> None:
 def test_evaluate_raises_exception_when_state_iteration_item_not_set() -> None:
     # Arrange
     expression = "@item()"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(StateIterationItemNotSetError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Iteration item not set."
@@ -489,7 +573,7 @@ def test_evaluate_raises_exception_when_state_iteration_item_not_set() -> None:
 def test_evaluate_complex_item() -> None:
     # Arrange
     expression = "@item().field1.field2"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         iteration_item={
             "field1": {"field2": "value1"},
@@ -497,7 +581,7 @@ def test_evaluate_complex_item() -> None:
     )
 
     # Act
-    evaluated_value = evaluator.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert evaluated_value == "value1"
@@ -506,7 +590,7 @@ def test_evaluate_complex_item() -> None:
 def test_evaluate_system_variable() -> None:
     # Arrange
     expression = "@pipeline().RunId"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState(
         parameters=[
             RunParameter(RunParameterType.System, "RunId", "123"),
@@ -514,7 +598,7 @@ def test_evaluate_system_variable() -> None:
     )
 
     # Act
-    actual = evaluator.evaluate(expression, state)
+    actual = expression_runtime.evaluate(expression, state)
 
     # Assert
     assert actual == "123"
@@ -523,12 +607,12 @@ def test_evaluate_system_variable() -> None:
 def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> None:
     # Arrange
     expression = "@pipeline().RunId"
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        evaluator.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state)
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'RunId' of type 'RunParameterType.System' not found"
@@ -614,9 +698,9 @@ def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> N
 def test_json_nested_object_with_list_and_attributes(json_expression: str, accessor: str, expected: str) -> None:
     expression = f"@json('{json_expression}'){accessor}"
 
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
-    actual = evaluator.evaluate(expression, state)
+    actual = expression_runtime.evaluate(expression, state)
 
     assert actual == expected
 
@@ -715,15 +799,15 @@ def test_boolean_operators_short_circuit(
     # Arrange
     expression = f"@{logical_operator}(equals(pipeline().parameters.a,'{parameter_left}'),equals(pipeline().parameters.b,'{parameter_right}'))"
 
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
 
     # Act / Assert
     if isinstance(expected, bool):
-        actual = evaluator.evaluate(expression, state)
+        actual = expression_runtime.evaluate(expression, state)
         assert actual == expected
     else:
         with pytest.raises(expected):
-            evaluator.evaluate(expression, state)
+            expression_runtime.evaluate(expression, state)
 
 
 @pytest.mark.parametrize(
@@ -759,14 +843,14 @@ def test_conditional_expression_with_branching(
     expression: str, state: PipelineRunState, expected: Union[str, int, bool, float, Exception]
 ) -> None:
     # Arrange
-    evaluator = ExpressionEvaluator()
+    expression_runtime = ExpressionRuntime()
 
     # Act / Assert
     if isinstance(expected, (str, int, bool, float)):
-        actual = evaluator.evaluate(expression, state)
+        actual = expression_runtime.evaluate(expression, state)
 
         # Assert
         assert actual == expected
     else:
         with pytest.raises(expected):
-            evaluator.evaluate(expression, state)
+            expression_runtime.evaluate(expression, state)
