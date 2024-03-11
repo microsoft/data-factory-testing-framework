@@ -1,7 +1,7 @@
 import json
 from typing import Any
 
-from data_factory_testing_framework._pythonnet.dotnet_expression_evaluator import DotnetExpressionEvaluator
+from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
 from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
 )
@@ -26,9 +26,9 @@ class DataFactoryElement:
     def evaluate(self, state: RunState) -> DataFactoryObjectType:
         """Evaluate the expression."""
         try:
-            evaluator = DotnetExpressionEvaluator()
+            expression_runtime = ExpressionRuntime()
 
-            self.result = evaluator.evaluate(self.expression, state)
+            self.result = expression_runtime.evaluate(self.expression, state)
             # TODO: catch value mismatch.
             return self.result
         except UserError as e:

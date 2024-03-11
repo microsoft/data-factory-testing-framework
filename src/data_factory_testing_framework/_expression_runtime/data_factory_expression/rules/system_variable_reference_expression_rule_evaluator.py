@@ -1,11 +1,13 @@
-from data_factory_testing_framework._functions.evaluator.exceptions import (
+from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionEvaluationInvalidChildTypeError,
     ExpressionEvaluationInvalidNumberOfChildrenError,
 )
-from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
+from data_factory_testing_framework._expression_runtime.data_factory_expression.rules.expression_rule_evaluator import (
+    EvaluationResult,
+)
 from data_factory_testing_framework.state._pipeline_run_state import PipelineRunState
 from data_factory_testing_framework.state._run_parameter_type import RunParameterType
-from lark import Tree
+from lark import Token, Tree
 
 from .expression_rule_evaluator import ExpressionRuleEvaluator
 
@@ -19,9 +21,9 @@ class SystemVariableReferenceExpressionRuleEvaluator(ExpressionRuleEvaluator):
         if len(self.children) != 1:
             raise ExpressionEvaluationInvalidNumberOfChildrenError(required=1, actual=len(self.children))
 
-        if not isinstance(self.children[0], EvaluationResult):
+        if not isinstance(self.children[0], Token):
             raise ExpressionEvaluationInvalidChildTypeError(
-                child_index=0, expected_types=EvaluationResult, actual_type=type(self.children[0])
+                child_index=0, expected_types=Token, actual_type=type(self.children[0])
             )
 
         self.system_variable_name = self.children[0].value
