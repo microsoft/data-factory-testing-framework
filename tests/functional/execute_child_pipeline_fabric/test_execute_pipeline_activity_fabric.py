@@ -59,5 +59,5 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
 
     assert (
         exception_info.value.args[0]
-        == "Pipeline with name Pipeline with id: '12345678-3d08-43b7-aa02-eb0fb7154b11' not found not found"
+        == "Pipeline with name Pipeline with pipeline_id: '12345678-3d08-43b7-aa02-eb0fb7154b11' not found not found"
     )

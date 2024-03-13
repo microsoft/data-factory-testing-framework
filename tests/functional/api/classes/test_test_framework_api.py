@@ -128,7 +128,7 @@ def test_test_framework_method_signatures() -> None:
         "get_pipeline_by_id": inspect.Signature(
             parameters=[
                 inspect.Parameter(name="self", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD),
-                inspect.Parameter(name="id_", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str),
+                inspect.Parameter(name="pipeline_id", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=str),
             ],
             return_annotation=Pipeline,
         ),
