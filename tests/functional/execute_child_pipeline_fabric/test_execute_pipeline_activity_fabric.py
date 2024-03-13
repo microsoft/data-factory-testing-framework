@@ -7,7 +7,7 @@ from data_factory_testing_framework.state import RunParameter, RunParameterType
 def test_execute_pipeline_activity_child_activities_executed(request: pytest.FixtureRequest) -> None:
     # Arrange
     test_framework = TestFramework(
-        framework_type=TestFrameworkType.DataFactory,
+        framework_type=TestFrameworkType.Fabric,
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
@@ -26,7 +26,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
     # Assert
     assert child_web_activity is not None
     assert child_web_activity.name == "API Call"
-    assert child_web_activity.type_properties["url"].result == "https://example.com"
+    assert child_web_activity.type_properties["relativeUrl"].result == "https://example.com"
     assert child_web_activity.type_properties["body"].result == '{ "key": "value" }'
 
     with pytest.raises(StopIteration):
@@ -38,12 +38,12 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
 ) -> None:
     # Arrange
     test_framework = TestFramework(
-        framework_type=TestFrameworkType.DataFactory,
+        framework_type=TestFrameworkType.Fabric,
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )
-    test_framework._repository.pipelines.remove(test_framework._repository.get_pipeline_by_name("child"))
-    pipeline = test_framework._repository.get_pipeline_by_name("main")
+    test_framework._repository.pipelines.remove(test_framework.get_pipeline_by_name("child"))
+    pipeline = test_framework.get_pipeline_by_name("main")
 
     # Act & Assert
     with pytest.raises(PipelineNotFoundError) as exception_info:
@@ -57,4 +57,7 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
             ),
         )
 
-    assert exception_info.value.args[0] == "Pipeline with name Pipeline with name child not found not found"
+    assert (
+        exception_info.value.args[0]
+        == "Pipeline with name Pipeline with pipeline_id: '12345678-3d08-43b7-aa02-eb0fb7154b11' not found not found"
+    )

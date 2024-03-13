@@ -6,6 +6,7 @@ from data_factory_testing_framework.state import RunParameter, RunParameterType
 def test_when_validate_parameters_is_accurate_should_pass() -> None:
     # Arrange
     pipeline = Pipeline(
+        pipeline_id="some-id",
         name="pipeline",
         activities=[],
         parameters={
@@ -43,6 +44,7 @@ def test_when_validate_parameters_is_accurate_should_pass() -> None:
 def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() -> None:
     # Arrange
     pipeline = Pipeline(
+        pipeline_id="some-id",
         name="pipeline",
         activities=[],
         parameters={
@@ -74,6 +76,7 @@ def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() 
 def test_when_duplicate_parameters_supplied_should_throw_error() -> None:
     # Arrange
     pipeline = Pipeline(
+        pipeline_id="some-id",
         name="pipeline",
         activities=[],
         parameters={

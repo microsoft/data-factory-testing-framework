@@ -70,7 +70,7 @@ Let's write a test for validating the correct flow of activities, the correct se
 Get a reference to the pipeline to be tested using the `get_pipeline_by_name` method on the `Repository` instance.
 
 ```python
-pipeline = test_framework.repository.get_pipeline_by_name("batch_job")
+pipeline = test_framework.get_pipeline_by_name("batch_job")
 ```
 
 ## Act
@@ -92,12 +92,12 @@ Request the next activity from the returned generator and verify that the output
 set_variable_activity = next(activities)
 assert set_variable_activity is not None
 assert "Set JobName" == set_variable_activity.name
-assert "Job-123" == activity.type_properties["value"].value
+assert "Job-123" == activity.type_properties["value"].result
 
 get_version_activity = next(activities)
 assert get_version_activity is not None
 assert "Get version of job" == get_version_activity.name
-assert "https://example.com/Job-123/version" == get_version_activity.type_properties["url"].value
+assert "https://example.com/Job-123/version" == get_version_activity.type_properties["url"].result
 assert "GET" == get_version_activity.type_properties["method"]
 ```
 

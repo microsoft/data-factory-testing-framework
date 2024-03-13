@@ -11,6 +11,7 @@ def test_circular_dependency_between_activities_should_throw_error() -> None:
     # Arrange
     test_framework = TestFramework(TestFrameworkType.Fabric)
     pipeline = Pipeline(
+        pipeline_id="some-id",
         name="main",
         parameters={},
         variables={},
@@ -60,6 +61,7 @@ def test_fail_activity_halts_further_evaluation() -> None:
     # Arrange
     test_framework = TestFramework(TestFrameworkType.Fabric)
     pipeline = Pipeline(
+        pipeline_id="some-id",
         name="main",
         parameters={},
         variables={},

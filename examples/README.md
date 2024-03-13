@@ -71,7 +71,7 @@ The samples seen below is the *only* code that you need to write! The framework 
 
     ```python
     # Arrange
-    pipeline: PipelineResource = test_framework.repository.get_pipeline_by_name("batch_job")
+    pipeline: PipelineResource = test_framework.get_pipeline_by_name("batch_job")
 
     # Runs the pipeline with the provided parameters
     activities = test_framework.evaluate_pipeline(pipeline, [
