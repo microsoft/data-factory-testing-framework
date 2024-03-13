@@ -17,7 +17,7 @@ The framework evaluates pipeline and activity definitions which can be asserted.
 Given a `WebActivity` with a `typeProperties.url` property containing the following expression:
 
 ```datafactoryexpression
-@concat(pipeline().globalParameters.baseUrl, variables('JobName'))
+@concat(pipeline().globalParameters.BaseUrl, variables('Path'))
 ```
 
 A simple test to validate that the concatenation is working as expected could look like this:
