@@ -49,7 +49,7 @@ class FabricRepositoryFactory(BaseRepositoryFactory):
             if "pipeline-content.json" in files:
                 pipeline_folders.append(root)
 
-        # Check if each folder contains the config and metadata file
+        # Check if each folder contains the required files
         for pipeline_folder in pipeline_folders:
             list_dir = os.listdir(pipeline_folder)
             if not all(file in list_dir for file in REQUIRED_FILES):
