@@ -15,6 +15,13 @@ public class ExpressionEvaluator
         var parameterValues = ParseJsonToInsensitiveDictionary(parametersJson);
         var itemValue = JToken.Parse(itemValueJson);
 
+        var triggerValue = new JObject();
+        var outputs = new JObject();
+        triggerValue.Add("outputs", outputs);
+        var param = JToken.Parse(parametersJson);
+        var body = new JObject();
+        outputs.Add("body", param);
+
         var helper = TemplateExpressionsHelper.GetTemplateFunctionEvaluationHelper(
         parameterValues: parameterValues,
         onGetApplicationConfiguration: delegate (string key)
@@ -22,7 +29,7 @@ public class ExpressionEvaluator
             return null;
         },
         triggerName: "triggerName",
-        triggerValue: "triggerValue",
+        triggerValue: triggerValue,
         enablePreserveAnnotations: true,
         actionValues: new InsensitiveDictionary<JToken>(),
         resultValues: new InsensitiveDictionary<JToken>(),

@@ -1,6 +1,5 @@
-
-from data_factory_testing_framework.state import PipelineRunState
 from data_factory_testing_framework._pythonnet.logic_apps_expression_evaluator import LogicAppsExpressionEvaluator
+from data_factory_testing_framework.state import PipelineRunState
 
 if __name__ == "__main__":
     state = PipelineRunState(

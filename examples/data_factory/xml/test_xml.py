@@ -1,6 +1,8 @@
+import base64
+
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-import base64
+
 
 def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     # Arrange
@@ -34,5 +36,8 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert len(xml_array) == 1
 
     # decode $content from base64
-    assert base64.b64decode(xml_array[0]['$content']).decode('utf-8') == "<location xmlns=\"https://contoso.com\">Paris</location>"
-    assert xml_array[0]['$content-type'] == "application/xml;charset=utf-8"
+    assert (
+        base64.b64decode(xml_array[0]["$content"]).decode("utf-8")
+        == '<location xmlns="https://contoso.com">Paris</location>'
+    )
+    assert xml_array[0]["$content-type"] == "application/xml;charset=utf-8"

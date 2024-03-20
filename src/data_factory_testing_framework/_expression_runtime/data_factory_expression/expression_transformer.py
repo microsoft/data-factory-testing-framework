@@ -1,14 +1,14 @@
-from typing import Union
-from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_logic_app_transformer import DataFactoryToLogicaAppTransformer
+from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_logic_app_transformer import (
+    DataFactoryToLogicaAppTransformer,
+)
 from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
 )
 from data_factory_testing_framework._expression_runtime.functions_repository import FunctionsRepository
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import PipelineRunState
-from lark import Discard, Lark, Token, Transformer, Tree, UnexpectedCharacters, v_args
+from lark import Lark, Token, Tree, UnexpectedCharacters
 from lark.reconstruct import Reconstructor
-from lark.tree_templates import TemplateConf, TemplateTranslator
 
 
 class ExpressionTransformer:
@@ -49,13 +49,16 @@ class ExpressionTransformer:
                               | expression_datafactory_reference
                               | expression_datafactory_activity_reference
                               | expression_parameter_reference
+                              | expression_pipeline_reference
 
             // reference rules:
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
             expression_datafactory_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
             expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
-            expression_parameter_reference: parameter "(" EXPRESSION_PARAMETER_NAME ")"
+            expression_parameter_reference: "parameter" "(" EXPRESSION_PARAMETER_NAME ")"
+            expression_pipeline_reference: "pipeline" "()"
+
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
             expression_branch: "if" "(" expression_parameter "," expression_parameter "," expression_parameter ")"
@@ -66,7 +69,7 @@ class ExpressionTransformer:
             ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_evaluation) EXPRESSION_WS*
 
             // expression terminals
-            EXPRESSION_DATAFACTORY_REFERENCE: "pipeline" | "dataset" | "linkedService"
+            EXPRESSION_DATAFACTORY_REFERENCE: "dataset" | "linkedService"
             // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX

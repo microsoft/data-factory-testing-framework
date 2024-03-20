@@ -293,14 +293,14 @@ from pytest import param as p
         p(
             "@{pipeline().globalParameters.OpsPrincipalClientId}",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
-            "@{variables('pipeline').globalParameters.OpsPrincipalClientId}",
+            "@{pipeline().globalParameters.OpsPrincipalClientId}",
             "dummyId",
             id="string_interpolation_with_no_surrounding_literals",
         ),
         p(
             "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
-            "/Repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/",
+            "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             "/Repos/dummyId/",
             id="string_interpolation_with_literals",
         ),
@@ -312,7 +312,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "SubPath", "dummyPath"),
                 ]
             ),
-            "/Repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/@{variables('pipeline').parameters.SubPath}",
+            "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
             "/Repos/dummyId/dummyPath",
             id="string_interpolation_with_multiple_expressions",
         ),
@@ -322,10 +322,10 @@ from pytest import param as p
                 variables=[PipelineRunVariable("variable_test", "variable_test_value")],
                 parameters=[RunParameter(RunParameterType.Pipeline, "parameter_test", "parameter_test_value")],
             ),
-            "@concat(variables('v_variable_test'), parameters('parameters_parameter_test'))",
+            "@concat(variables('v_variable_test'), pipeline().parameters.parameter_test)",
             "variable_test_valueparameter_test_value",
             id="variable_and_parameter_reference",
-        )
+        ),
     ],
 )
 def test_evaluate(
