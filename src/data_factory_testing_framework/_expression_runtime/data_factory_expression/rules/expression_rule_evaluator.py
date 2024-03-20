@@ -62,7 +62,7 @@ class ExpressionRuleEvaluator(ABC):
         return self._tree.children
 
     @staticmethod
-    def _reconstruct_expression_tree_from_value(value: Any) -> Union[Token, Tree]:
+    def _reconstruct_expression_tree_from_value(value: Any) -> Union[Token, Tree]:  # type: ignore # noqa: ANN401
         """Reconstructs the expression tree from the value."""
         if isinstance(value, str):
             return Token("EXPRESSION_STRING", f"'{value}'")

@@ -38,7 +38,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", "value"),
                 ]
             ),
-            "@variables('pipeline').parameters.parameter",
+            "@pipeline().parameters.parameter",
             "value",
             id="pipeline_parameters_reference",
         ),
@@ -49,7 +49,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", 1),
                 ]
             ),
-            "@variables('pipeline').parameters.parameter",
+            "@pipeline().parameters.parameter",
             1,
             id="pipeline_parameters_reference",
         ),
@@ -60,7 +60,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", {"field1": "value1"}),
                 ]
             ),
-            "@variables('pipeline').parameters.parameter",
+            "@pipeline().parameters.parameter",
             {"field1": "value1"},
             id="pipeline_parameters_reference_complex",
         ),
@@ -71,7 +71,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Global, "parameter", "value"),
                 ]
             ),
-            "@variables('pipeline').globalParameters.parameter",
+            "@pipeline().globalParameters.parameter",
             "value",
             id="pipeline_global_parameters_reference",
         ),
@@ -82,7 +82,7 @@ from pytest import param as p
                     PipelineRunVariable(name="variable", default_value="value"),
                 ]
             ),
-            "@variables('v_variable')",
+            "@variables('variable')",
             "value",
             id="variables_reference",
         ),
@@ -99,14 +99,14 @@ from pytest import param as p
                     ),
                 ]
             ),
-            "@variables('activity_activityName').output.outputName",
+            "@activity('activityName').output.outputName",
             "value",
             id="activity_reference",
         ),
         p(
             "@dataset().parameterName",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Dataset, "parameterName", "datasetNameValue")]),
-            "@variables('dataset').parameterName",
+            "@pipeline().dataset.parameterName",
             "datasetNameValue",
             id="dataset_reference",
         ),
@@ -115,7 +115,7 @@ from pytest import param as p
             PipelineRunState(
                 parameters=[RunParameter(RunParameterType.LinkedService, "parameterName", "parameterValue")]
             ),
-            "@variables('linkedService').parameterName",
+            "@pipeline().linkedService.parameterName",
             "parameterValue",
             id="linked_service_reference",
         ),
@@ -148,7 +148,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            "@variables('activity_activityName').output.outputName",
+            "@activity('activityName').output.outputName",
             1,
             id="activity_reference",
         ),
@@ -167,7 +167,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            "@variables('activity_activityName').output.pipelineReturnValue.test",
+            "@activity('activityName').output.pipelineReturnValue.test",
             "value",
             id="activity_reference_with_nested_property",
         ),
@@ -212,7 +212,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            "@concat(variables('activity_Sample').output.float, 'test')",
+            "@concat(activity('Sample').output.float, 'test')",
             "0.016666666666666666test",
             id="function_call_with_nested_property",
         ),
@@ -231,7 +231,7 @@ from pytest import param as p
                     )
                 ],
             ),
-            "@concat('https://example.com/jobs/', '123''', variables('v_abc'), variables('pipeline').parameters.abc, variables('activity_abc').output.abc)",
+            "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
             "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
             id="function_call_with_nested_references",
         ),
@@ -245,7 +245,7 @@ from pytest import param as p
         p(
             "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "id")]),
-            "/repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/",
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             "/repos/id/",
             id="string_interpolation",
         ),
@@ -257,7 +257,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "SubPath", "apath"),
                 ]
             ),
-            "/repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/@{variables('pipeline').parameters.SubPath}",
+            "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/@{pipeline().parameters.SubPath}",
             "/repos/id/apath",
             id="string_interpolation_with_multiple_interpolations",
         ),
@@ -279,7 +279,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            "@variables('activity_Sample').output.billingReference.billableDuration[0].duration",
+            "@activity('Sample').output.billingReference.billableDuration[0].duration",
             0.016666666666666666,
             id="activity_reference_with_nested_property_and_array_index",
         ),
@@ -322,7 +322,7 @@ from pytest import param as p
                 variables=[PipelineRunVariable("variable_test", "variable_test_value")],
                 parameters=[RunParameter(RunParameterType.Pipeline, "parameter_test", "parameter_test_value")],
             ),
-            "@concat(variables('v_variable_test'), pipeline().parameters.parameter_test)",
+            "@concat(variables('variable_test'), pipeline().parameters.parameter_test)",
             "variable_test_valueparameter_test_value",
             id="variable_and_parameter_reference",
         ),

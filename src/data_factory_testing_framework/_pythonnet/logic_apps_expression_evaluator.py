@@ -5,7 +5,7 @@ from DataFactoryTestingFrameworkEvaluator import (
     ExpressionEvaluator,  # this is the .NET class that we want to use in Python
 )
 
-from data_factory_testing_framework.state import PipelineRunState
+from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
 class LogicAppsExpressionEvaluator:
@@ -19,33 +19,56 @@ class LogicAppsExpressionEvaluator:
         # expression = expression.replace("@pipeline().parameters.parameter", "@parameters('parametersparameter')")
 
         parameters = {
-            "parameters": {parameter.name: parameter.value for parameter in state.parameters},
-            "globalParameters": {
-                global_parameter.name: global_parameter.value for global_parameter in state.parameters
-            },
+            "globalParameters": {},
+            "parameters": {},
+            "dataset": {},
+            "linkedService": {},
         }
 
+        # add system parameters
+        for parameter in state.parameters:
+            if parameter.type == RunParameterType.System:
+                parameters[parameter.name] = parameter.value
+            elif parameter.type == RunParameterType.Global:
+                parameters["globalParameters"][parameter.name] = parameter.value
+            elif parameter.type == RunParameterType.Pipeline:
+                parameters["parameters"][parameter.name] = parameter.value
+            elif parameter.type == RunParameterType.Dataset:
+                parameters["dataset"][parameter.name] = parameter.value
+            elif parameter.type == RunParameterType.LinkedService:
+                parameters["linkedService"][parameter.name] = parameter.value
+
+        # TODO: we can use parameters probably to replace dataset and linkedService
         variables = {
-            "pipeline": {
-                # TODO: split parameters and globalParameters from state.parameters
-                
-            },
             "dataset": {parameter.name: parameter.value for parameter in state.parameters},
             "linkedService": {parameter.name: parameter.value for parameter in state.parameters},
         }
 
-
-
+        activity_results = {}
         for activity in state.activity_results:
-            variables[f"activity_{activity.activity_name}"] = {"output": activity.output}
+            # activity.output
+            # activity.status ??
+            activity_result_dir = {
+                "outputs": {
+                    "body": {
+                        "output": activity.output,
+                        "status": activity.status,
+                    }
+                }
+            }
+
+            activity_results[activity.activity_name] = activity_result_dir
 
         for variable in state.variables:
-            variables[f"v_{variable.name}"] = variable.value
+            variables[f"{variable.name}"] = variable.value
+
+        state_iter_item_json = json.dumps(state.iteration_item) if state.iteration_item else None
 
         result = evaluator.EvaluateExpression(
             expression,
             json.dumps(parameters),
             json.dumps(variables),
-            json.dumps(state.iteration_item),
+            state_iter_item_json,
+            json.dumps(activity_results),
         )
         return json.loads(result)["result"]

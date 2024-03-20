@@ -46,18 +46,18 @@ class ExpressionTransformer:
             ?expression_call: expression_function_call
                               | expression_variable_reference
                               | expression_item_reference
-                              | expression_datafactory_reference
+                              | expression_datafactory_parameters_reference
                               | expression_datafactory_activity_reference
                               | expression_parameter_reference
                               | expression_pipeline_reference
 
             // reference rules:
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_datafactory_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
+            expression_datafactory_parameters_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
             expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
             expression_parameter_reference: "parameter" "(" EXPRESSION_PARAMETER_NAME ")"
-            expression_pipeline_reference: "pipeline" "()"
+            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY
 
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
@@ -80,7 +80,7 @@ class ExpressionTransformer:
             EXPRESSION_LOGICAL_BOOL: "or" | "and"
             EXPRESSION_NULL: NULL
             EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
-            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
+            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters" | "dataset" | "linkedService" | /[a-zA-Z]+/
             EXPRESSION_STRING: SINGLE_QUOTED_STRING
             EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"

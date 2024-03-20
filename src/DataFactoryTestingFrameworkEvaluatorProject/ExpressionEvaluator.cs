@@ -9,11 +9,17 @@ using System.Reflection;
 
 public class ExpressionEvaluator
 {
-    private TemplateExpressionEvaluationHelper GetTemplateFunctionEvaluationHelper(string parametersJson, string variablesJson, string itemValueJson)
+    private TemplateExpressionEvaluationHelper GetTemplateFunctionEvaluationHelper(
+        string parametersJson,
+        string variablesJson,
+        string itemValueJson,
+        string activityValuesJson
+        )
     {
         var variables = ParseJsonToInsensitiveDictionary(variablesJson);
         var parameterValues = ParseJsonToInsensitiveDictionary(parametersJson);
-        var itemValue = JToken.Parse(itemValueJson);
+        var actionValues = ParseJsonToInsensitiveDictionary(activityValuesJson);
+        var itemValue = itemValueJson != null ? JToken.Parse(itemValueJson) : null;
 
         var triggerValue = new JObject();
         var outputs = new JObject();
@@ -21,6 +27,13 @@ public class ExpressionEvaluator
         var param = JToken.Parse(parametersJson);
         var body = new JObject();
         outputs.Add("body", param);
+
+        var actionHasNonReferenceableAggregatedPartialContentValues = new InsensitiveDictionary<bool>();
+        // loop over all keys in actionValues and set the value to false
+        foreach (var key in actionValues.Keys)
+        {
+            actionHasNonReferenceableAggregatedPartialContentValues.Add(key, false);
+        }
 
         var helper = TemplateExpressionsHelper.GetTemplateFunctionEvaluationHelper(
         parameterValues: parameterValues,
@@ -31,10 +44,10 @@ public class ExpressionEvaluator
         triggerName: "triggerName",
         triggerValue: triggerValue,
         enablePreserveAnnotations: true,
-        actionValues: new InsensitiveDictionary<JToken>(),
+        actionValues: actionValues,
         resultValues: new InsensitiveDictionary<JToken>(),
         actionIsForeachValues: new InsensitiveDictionary<bool>(),
-        actionHasNonReferenceableAggregatedPartialContentValues: new InsensitiveDictionary<bool>(),
+        actionHasNonReferenceableAggregatedPartialContentValues: actionHasNonReferenceableAggregatedPartialContentValues,
         workflowValue: new JObject(),
         variables: variables,
         itemValue: itemValue,
@@ -70,10 +83,11 @@ public class ExpressionEvaluator
         methodInfoLogicalSetData.Invoke(null, new object[] { RequestCorrelationContext.PropertyRequestCorrelationContext, data });
     }
 
-    public string EvaluateExpression(string expression, string parametersJson, string variablesJson, string itemValueJson)
+    public string EvaluateExpression(string expression, string parametersJson, string variablesJson, string itemValueJson, string activityValuesJson)
     {
-        var helper = GetTemplateFunctionEvaluationHelper(parametersJson, variablesJson, itemValueJson);
+        var helper = GetTemplateFunctionEvaluationHelper(parametersJson, variablesJson, itemValueJson, activityValuesJson);
         var context = new TemplateExpressionEvaluationContext(helper);
+
         this.PatchRequestCorrelationContext();
 
         // Return the evaluated expression as a json object:
@@ -84,15 +98,4 @@ public class ExpressionEvaluator
         return resultObject.ToString();
     }
 
-    // main method for testing
-    public void Main()
-    {
-        var expression = "@pipeline().test";
-        var parametersJson = "{}";
-        var variablesJson = "{}";
-        var itemValueJson = "{}";
-
-        var result = this.EvaluateExpression(expression, parametersJson, variablesJson, itemValueJson);
-        Console.WriteLine(result);
-    }
 }
