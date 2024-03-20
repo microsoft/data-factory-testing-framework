@@ -14,4 +14,4 @@ class ExpressionRuntime:
         logic_apps_expression = self.data_factory_expression_transformer.transform_to_logic_apps_expression(
             expression, state
         )
-        return self.logic_apps_expression_evaluator.evaluate(logic_apps_expression)
+        return self.logic_apps_expression_evaluator.evaluate(logic_apps_expression, state)

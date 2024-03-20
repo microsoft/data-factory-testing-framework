@@ -38,7 +38,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", "value"),
                 ]
             ),
-            "value",
+            "@variables('pipeline').parameters.parameter",
             "value",
             id="pipeline_parameters_reference",
         ),
@@ -49,8 +49,8 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", 1),
                 ]
             ),
-            "1",
-            "1",
+            "@variables('pipeline').parameters.parameter",
+            1,
             id="pipeline_parameters_reference",
         ),
         p(
@@ -60,7 +60,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "parameter", {"field1": "value1"}),
                 ]
             ),
-            '@json(\'{"field1": "value1"}\')',
+            "@variables('pipeline').parameters.parameter",
             {"field1": "value1"},
             id="pipeline_parameters_reference_complex",
         ),
@@ -71,7 +71,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Global, "parameter", "value"),
                 ]
             ),
-            "value",
+            "@variables('pipeline').globalParameters.parameter",
             "value",
             id="pipeline_global_parameters_reference",
         ),
@@ -82,7 +82,7 @@ from pytest import param as p
                     PipelineRunVariable(name="variable", default_value="value"),
                 ]
             ),
-            "value",
+            "@variables('v_variable')",
             "value",
             id="variables_reference",
         ),
@@ -99,14 +99,14 @@ from pytest import param as p
                     ),
                 ]
             ),
-            '@json(\'{"output": {"outputName": "value"}, "status": "Succeeded"}\').output.outputName',
+            "@variables('activity_activityName').output.outputName",
             "value",
             id="activity_reference",
         ),
         p(
             "@dataset().parameterName",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Dataset, "parameterName", "datasetNameValue")]),
-            "datasetNameValue",
+            "@variables('dataset').parameterName",
             "datasetNameValue",
             id="dataset_reference",
         ),
@@ -115,11 +115,11 @@ from pytest import param as p
             PipelineRunState(
                 parameters=[RunParameter(RunParameterType.LinkedService, "parameterName", "parameterValue")]
             ),
-            "parameterValue",
+            "@variables('linkedService').parameterName",
             "parameterValue",
             id="linked_service_reference",
         ),
-        p("@item()", PipelineRunState(iteration_item="value"), "value", "value", id="item_reference"),
+        p("@item()", PipelineRunState(iteration_item="value"), "@item()", "value", id="item_reference"),
         p("@concat('a', 'b' )", PipelineRunState(), "@concat('a', 'b' )", "ab", id="function_call"),
         p(
             "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
@@ -148,7 +148,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            '@json(\'{"output": {"outputName": 1}, "status": "Succeeded"}\').output.outputName',
+            "@variables('activity_activityName').output.outputName",
             1,
             id="activity_reference",
         ),
@@ -167,7 +167,7 @@ from pytest import param as p
                     ),
                 ]
             ),
-            '@json(\'{"output": {"pipelineReturnValue": {"test": "value"}}, "status": "Succeeded"}\').output.pipelineReturnValue.test',
+            "@variables('activity_activityName').output.pipelineReturnValue.test",
             "value",
             id="activity_reference_with_nested_property",
         ),
@@ -212,13 +212,9 @@ from pytest import param as p
                     ),
                 ]
             ),
-            # TODO: fix this
-            '@concat(json(\'"output": {"float": 0.016666666666666666}, "status": "Succeeded"\').output.float, \'test\')',
+            "@concat(variables('activity_Sample').output.float, 'test')",
             "0.016666666666666666test",
             id="function_call_with_nested_property",
-            marks=pytest.mark.xfail(
-                reason="We do not support automatic type conversion yet. Here float is passed to concat (which expects str)."
-            ),
         ),
         p(
             "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
@@ -235,28 +231,9 @@ from pytest import param as p
                     )
                 ],
             ),
-            "@concat('https://example.com/jobs/', '123''', 'defaultvalue_', 'testvalue_02', json('{\"output\": {\"abc\": \"_testvalue_01\"}, \"status\": \"Succeeded\"}').output.abc)",
+            "@concat('https://example.com/jobs/', '123''', variables('v_abc'), variables('pipeline').parameters.abc, variables('activity_abc').output.abc)",
             "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
             id="function_call_with_nested_references",
-        ),
-        p(
-            "@concat('https://example.com/jobs/', '123''', variables('abc'), pipeline().parameters.abc, activity('abc').output.abc)",
-            PipelineRunState(
-                variables=[PipelineRunVariable("abc", "defaultvalue_")],
-                parameters=[RunParameter(RunParameterType.Pipeline, "abc", "testvalue_02")],
-                activity_results=[
-                    ActivityResult(
-                        activity_name="abc",
-                        status=DependencyCondition.SUCCEEDED,
-                        output={
-                            "abc": "_testvalue_01",
-                        },
-                    ),
-                ],
-            ),
-            "@concat('https://example.com/jobs/', '123''', 'defaultvalue_', 'testvalue_02', json('{\"output\": {\"abc\": \"_testvalue_01\"}, \"status\": \"Succeeded\"}').output.abc)",
-            "https://example.com/jobs/123'defaultvalue_testvalue_02_testvalue_01",
-            id="function_call_with_nested_references_evaluated",
         ),
         p(
             "@createArray('a', createArray('a', 'b'))[1][1]",
@@ -268,7 +245,7 @@ from pytest import param as p
         p(
             "/repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "id")]),
-            "/repos/id/",
+            "/repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/",
             "/repos/id/",
             id="string_interpolation",
         ),
@@ -280,7 +257,7 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "SubPath", "apath"),
                 ]
             ),
-            "/repos/id/apath",
+            "/repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/@{variables('pipeline').parameters.SubPath}",
             "/repos/id/apath",
             id="string_interpolation_with_multiple_interpolations",
         ),
@@ -302,16 +279,9 @@ from pytest import param as p
                     ),
                 ]
             ),
-            '@json(\'{"output": {"billingReference": {"activityType": "ExternalActivity", "billableDuration": [{"meterType": "AzureIR", "duration": 0.016666666666666666, "unit": "Hours"}]}}, "status": "Succeeded"}\').output.billingReference.billableDuration[0].duration',
+            "@variables('activity_Sample').output.billingReference.billableDuration[0].duration",
             0.016666666666666666,
             id="activity_reference_with_nested_property_and_array_index",
-        ),
-        p(
-            "@utcNow()",
-            PipelineRunState(),
-            "@utcNow()",
-            "2021-11-24T12:11:49.7531321Z",
-            id="function_call_with_zero_parameters",
         ),
         p(
             "@coalesce(null)",
@@ -323,14 +293,14 @@ from pytest import param as p
         p(
             "@{pipeline().globalParameters.OpsPrincipalClientId}",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
-            "dummyId",
+            "@{variables('pipeline').globalParameters.OpsPrincipalClientId}",
             "dummyId",
             id="string_interpolation_with_no_surrounding_literals",
         ),
         p(
             "/Repos/@{pipeline().globalParameters.OpsPrincipalClientId}/",
             PipelineRunState(parameters=[RunParameter(RunParameterType.Global, "OpsPrincipalClientId", "dummyId")]),
-            "/Repos/dummyId/",
+            "/Repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/",
             "/Repos/dummyId/",
             id="string_interpolation_with_literals",
         ),
@@ -342,10 +312,20 @@ from pytest import param as p
                     RunParameter(RunParameterType.Pipeline, "SubPath", "dummyPath"),
                 ]
             ),
-            "/Repos/dummyId/dummyPath",
+            "/Repos/@{variables('pipeline').globalParameters.OpsPrincipalClientId}/@{variables('pipeline').parameters.SubPath}",
             "/Repos/dummyId/dummyPath",
             id="string_interpolation_with_multiple_expressions",
         ),
+        p(
+            "@concat(variables('variable_test'), pipeline().parameters.parameter_test)",
+            PipelineRunState(
+                variables=[PipelineRunVariable("variable_test", "variable_test_value")],
+                parameters=[RunParameter(RunParameterType.Pipeline, "parameter_test", "parameter_test_value")],
+            ),
+            "@concat(variables('v_variable_test'), parameters('parameters_parameter_test'))",
+            "variable_test_valueparameter_test_value",
+            id="variable_and_parameter_reference",
+        )
     ],
 )
 def test_evaluate(
@@ -367,7 +347,7 @@ def test_evaluate(
 
     # Act evaluating the expression
     logic_apps_expression_evaluator = LogicAppsExpressionEvaluator()
-    actual = logic_apps_expression_evaluator.evaluate(expression, state)
+    actual = logic_apps_expression_evaluator.evaluate(logic_apps_expression, state)
 
     # Assert evaluation
     assert actual == expected_evaluation

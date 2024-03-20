@@ -1,10 +1,12 @@
+from typing import Union
+from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_logic_app_transformer import DataFactoryToLogicaAppTransformer
 from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
 )
 from data_factory_testing_framework._expression_runtime.functions_repository import FunctionsRepository
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import PipelineRunState
-from lark import Lark, Token, Tree, UnexpectedCharacters
+from lark import Discard, Lark, Token, Transformer, Tree, UnexpectedCharacters, v_args
 from lark.reconstruct import Reconstructor
 from lark.tree_templates import TemplateConf, TemplateTranslator
 
@@ -42,22 +44,18 @@ class ExpressionTransformer:
             # TODO: probably object accessor does not apply to all below in expression_evaluation
             expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
             ?expression_call: expression_function_call
-                                    | expression_pipeline_reference
-                                    | expression_variable_reference
-                                    | expression_activity_reference
-                                    | expression_dataset_reference
-                                    | expression_linked_service_reference
-                                    | expression_item_reference
-                                    | expression_system_variable_reference
+                              | expression_variable_reference
+                              | expression_item_reference
+                              | expression_datafactory_reference
+                              | expression_datafactory_activity_reference
+                              | expression_parameter_reference
 
             // reference rules:
-            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
-            expression_dataset_reference: "dataset" "()" "." EXPRESSION_PARAMETER_NAME
-            expression_linked_service_reference: "linkedService" "()" "." EXPRESSION_PARAMETER_NAME
+            expression_datafactory_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
+            expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
-            expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
+            expression_parameter_reference: parameter "(" EXPRESSION_PARAMETER_NAME ")"
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
             expression_branch: "if" "(" expression_parameter "," expression_parameter "," expression_parameter ")"
@@ -68,6 +66,7 @@ class ExpressionTransformer:
             ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_evaluation) EXPRESSION_WS*
 
             // expression terminals
+            EXPRESSION_DATAFACTORY_REFERENCE: "pipeline" | "dataset" | "linkedService"
             // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX
@@ -130,37 +129,10 @@ class ExpressionTransformer:
         # and then semantically analysis it (in our case transforming values step by step)
         ast = parse_tree
 
-        def parse_df_template(s):
-            return self.lark_parser.parse(s, start="start")
+        # Use a transformer to transform df expression to logic apps expression
+        rule_transformer = DataFactoryToLogicaAppTransformer()
 
-        df_template = TemplateConf(parse=parse_df_template)
+        transformed_ast = rule_transformer.transform(ast)
 
-        def parse_logic_apps_template(s):
-            logic_apps_parameter_parser = Lark(
-                """
-            start: "@" "pipeline" "('" /[a-zA-Z0-9_]+/ "')"
-            """,
-                start="start",
-                maybe_placeholders=False,
-            )
-
-            parsed = logic_apps_parameter_parser.parse(s, start="start")
-            return parsed
-
-        logic_apps_template = TemplateConf(parse=parse_logic_apps_template)
-
-        translations = {
-            "@pipeline().parameters.parameter": "@pipeline('parametersparameter')",
-        }
-
-        translation_templates = {df_template(k): logic_apps_template(v) for k, v in translations.items()}
-
-        tree = TemplateTranslator(translation_templates).translate(ast)
-
-        # try:
-        #     ast = ExpressionRuleTransformer(state).transform(ast)
-        # except VisitError as ve:
-        #     raise ve.orig_exc
-
-        expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(ast)
+        expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(transformed_ast)
         return expression_reconstructed

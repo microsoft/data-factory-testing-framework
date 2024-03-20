@@ -76,4 +76,16 @@ public class ExpressionEvaluator
         resultObject.Add("result", result);
         return resultObject.ToString();
     }
+
+    // main method for testing
+    public void Main()
+    {
+        var expression = "@pipeline().test";
+        var parametersJson = "{}";
+        var variablesJson = "{}";
+        var itemValueJson = "{}";
+
+        var result = this.EvaluateExpression(expression, parametersJson, variablesJson, itemValueJson);
+        Console.WriteLine(result);
+    }
 }

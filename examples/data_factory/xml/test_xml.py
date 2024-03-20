@@ -1,6 +1,6 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-
+import base64
 
 def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     # Arrange
@@ -23,22 +23,16 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     assert activity.name == "Set xpath"
 
     activity = next(activities)
-    assert activity.name == "Example as string"
+    assert activity.name == "Example 1 as string"
 
     activity = next(activities)
 
-    xml_array = activity.result
+    xml_array = activity.value.result
 
     assert isinstance(xml_array, list)
 
-    # assert len(xml_array) == 1
+    assert len(xml_array) == 1
 
-    # assert xml_array[0] == "<location xmlns="https://contoso.com">Paris</location>"
-    # # implies the object is a str, but in facts is xml instance
-    # assert xml_array[0] == XmlObject("<location xmlns="https://contoso.com">Paris</location>")
-    # xml = XmlObject()
-    # xml.vaue = "<location xmlns="https://contoso.com">Paris</location>"
-
-    # assert xml_array[0].value ==
-
-    # assert xml_array[0] == '{"$content-type": "application/xml;charset=utf-8","$content": "PGxvY2F0aW9uIHhtbG5zPSJodHRwczovL2NvbnRvc28uY29tIj5QYXJpczwvbG9jYXRpb24+"}'
+    # decode $content from base64
+    assert base64.b64decode(xml_array[0]['$content']).decode('utf-8') == "<location xmlns=\"https://contoso.com\">Paris</location>"
+    assert xml_array[0]['$content-type'] == "application/xml;charset=utf-8"
