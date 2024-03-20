@@ -6,8 +6,6 @@ from data_factory_testing_framework._expression_runtime.data_factory_expression 
 )
 from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
 from data_factory_testing_framework._pythonnet.logic_apps_expression_evaluator import LogicAppsExpressionEvaluator
-
-# from data_factory_testing_framework._pythonnet.csharp_datetime import CSharpDateTime
 from data_factory_testing_framework.exceptions import (
     ActivityNotFoundError,
     ParameterNotFoundError,
@@ -336,7 +334,6 @@ def test_evaluate(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     # Arrange
-    # monkeypatch.setattr(CSharpDateTime, "utcnow", lambda: CSharpDateTime.parse("2021-11-24T12:11:49.7531321Z"))
     data_factory_expression_transformer = DataFactoryExpressionTransformer()
 
     # Act populating the expression

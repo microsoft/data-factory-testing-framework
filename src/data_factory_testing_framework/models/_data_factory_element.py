@@ -27,9 +27,7 @@ class DataFactoryElement:
         """Evaluate the expression."""
         try:
             expression_runtime = ExpressionRuntime()
-
             self.result = expression_runtime.evaluate(self.expression, state)
-            # TODO: catch value mismatch.
             return self.result
         except UserError as e:
             raise e from e

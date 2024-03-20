@@ -12,12 +12,6 @@ class LogicAppsExpressionEvaluator:
     @staticmethod
     def evaluate(expression: str, state: PipelineRunState) -> Union[str, int, float, bool, dict, list]:
         evaluator = ExpressionEvaluator()
-
-        parameters = {}
-        # variables = {variable.name: variable.value for variable in state.variables}
-
-        # expression = expression.replace("@pipeline().parameters.parameter", "@parameters('parametersparameter')")
-
         parameters = {
             "globalParameters": {},
             "parameters": {},
@@ -25,7 +19,6 @@ class LogicAppsExpressionEvaluator:
             "linkedService": {},
         }
 
-        # add system parameters
         for parameter in state.parameters:
             if parameter.type == RunParameterType.System:
                 parameters[parameter.name] = parameter.value
@@ -38,16 +31,8 @@ class LogicAppsExpressionEvaluator:
             elif parameter.type == RunParameterType.LinkedService:
                 parameters["linkedService"][parameter.name] = parameter.value
 
-        # TODO: we can use parameters probably to replace dataset and linkedService
-        variables = {
-            "dataset": {parameter.name: parameter.value for parameter in state.parameters},
-            "linkedService": {parameter.name: parameter.value for parameter in state.parameters},
-        }
-
         activity_results = {}
         for activity in state.activity_results:
-            # activity.output
-            # activity.status ??
             activity_result_dir = {
                 "outputs": {
                     "body": {
@@ -56,11 +41,9 @@ class LogicAppsExpressionEvaluator:
                     }
                 }
             }
-
             activity_results[activity.activity_name] = activity_result_dir
 
-        for variable in state.variables:
-            variables[f"{variable.name}"] = variable.value
+        variables = {variable.name: variable.value for variable in state.variables}
 
         state_iter_item_json = json.dumps(state.iteration_item) if state.iteration_item else None
 
