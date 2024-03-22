@@ -5,7 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <BaseOutputPath>../data_factory_testing_framework/_pythonnet</BaseOutputPath>
+    <BaseOutputPath>../data_factory_testing_framework</BaseOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	  <Configurations>DataFactoryTestingFrameworkEvaluator</Configurations>
   </PropertyGroup>
   <ItemGroup>

@@ -1,18 +1,12 @@
 [tool.poetry]
-name = "data-factory-testing-framework"
-version = "0.1.0"
-description = "A stand-alone test framework that allows to write unit tests for Data Factory pipelines on Microsoft Fabric and Azure Data Factory."
-authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>", "Yennifer Santos <ysantos@microsoft.com>", "Jaya Kumar <kumarjaya@microsoft.com>", "Leonard Herold <lherold@microsoft.com>"]
-readme = "README.md"
-license = "MIT"
-include = [ "README.md", "LICENSE" ]
-keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 azure-core = "^1.29.5"
 lark = "^1.1.8"
 pythonnet = "^3.0.3"
+
 
 [tool.poetry.group.dev.dependencies]
 mutatest = "^3.1.0"
@@ -21,12 +15,8 @@ ruff = "^0.1.5"
 pre-commit = "^3.5.0"
 astor = "^0.8.1"
 docstring-parser = "^0.15"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
+build = "^1.1.1"
+wheel = "^0.43.0"
 
 [tool.ruff]
 select = [
@@ -75,3 +65,32 @@ convention = "google"
 [tool.pytest.ini_options]
 minversion = "7.0"
 pythonpath = ["."]
+
+[project]
+name = "data-factory-testing-framework"
+version = "0.1.0"
+authors = [
+  { name="Arjen Kroezen", email="arjenkroezen@microsoft.com" },
+    { name="Yennifer Santos", email="ysantos@microsoft.com" },
+    { name="Jaya Kumar", email="kumarjaya@microsoft.com" },
+    { name="Leonard Herold", email="lherold@microsoft.com" }
+]
+requires-python = ">=3.9,<3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+description = "A stand-alone test framework that allows to write unit tests for Data Factory pipelines on Microsoft Fabric and Azure Data Factory."
+readme = "README.md"
+keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
+
+dependencies = [
+    "azure-core>=1.29.5,<2.0.0",
+    "lark>=1.1.8,<2.0.0",
+    "pythonnet>=3.0.3,<4.0.0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
