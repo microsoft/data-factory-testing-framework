@@ -4,78 +4,26 @@ name: CI-CD
 on: [push]  # yamllint disable-line rule:truthy
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      # ----------------------------------------------
-      #       check-out repo and set-up python
-      # ----------------------------------------------
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Set up python
-        id: setup-python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      # ----------------------------------------------
-      #  -----  install & configure poetry  -----
-      # ----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-
-      # ----------------------------------------------
-      # install dependencies if cache does not exist
-      # ----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      # ----------------------------------------------
-      # install your root project, if required
-      # ----------------------------------------------
-      - name: Install project
-        run: poetry install --no-interaction
-      #----------------------------------------------
-      #              run linting and tests
-      #----------------------------------------------
-      - name: Run linting and tests
-        run: poetry run pre-commit run --all-files --show-diff-on-failure
-      #----------------------------------------------
-      #              build package
-      #----------------------------------------------
-      - name: Set build version and build package
-        run: |
-          poetry version 0.1.0.alpha${{ github.run_number}}
-          poetry build
-      # ----------------------------------------------
-      # upload dist
-      # ----------------------------------------------
-      - name: Upload dist
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist
-  publish:
-    needs: build
+  ci:
+    uses: ./.github/workflows/ci.yml
+  e2e:
+    needs: ci
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'windows-latest']
+        python-version: ['3.9', '3.10', '3.11']
+        dotnet-version: [3.1.x, '8.0.x']
+        # test either wheel or source distribution
+        dist: [whl, sdist]
+    uses: ./.github/workflows/e2e.yml
+    with:
+      os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+      dotnet-version: ${{ matrix.dotnet-version }}
+      dist: ${{ matrix.dist }}
+  cd:
+    needs: [ci, e2e]
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    environment:
-      name: pypi
-      url: https://pypi.org/p/data-factory-testing-framework
-    steps:
-      - name: Download dist
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: ./dist
+    uses: ./.github/workflows/cd.yml
+    with:
+      version: ${{ needs.ci.outputs.version }}

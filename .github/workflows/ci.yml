@@ -1,0 +1,81 @@
+---
+name: CI
+
+on:
+  workflow_call: # yamllint disable-line rule:truthy
+    outputs:
+      version:
+        description: 'The version of the package'
+        value: ${{ jobs.version.outputs.version }}
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.GITVERSION_SEMVER }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # to calculate the version we need the tags and the commit history
+          fetch-tags: true
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+          configFilePath: './.conventional-commits/GitVersion.yml'
+      - name: Set version output
+        id: set-version
+        run: echo "GITVERSION_SEMVER=$GitVersion_MajorMinorPatch$SUFFIX" >> $GITHUB_OUTPUT
+        env:
+          SUFFIX: ${{ github.ref != 'refs/heads/main' && format('.dev{0}+{1}', github.run_number, env.GitVersion_ShortSha) || '' }}
+  build:
+    runs-on: ubuntu-latest
+    needs: version
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Install project
+        run: poetry install --no-interaction
+      - name: Run linting and tests
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
+      - name: Set build version and build package
+        run: | 
+          poetry version $BUILD_VERSION
+          poetry build
+        env:
+          BUILD_VERSION: ${{ needs.version.outputs.version }}
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: whl
+          path: dist/*.whl
+      - name: Upload sdist
+        uses: actions/upload-artifact@v3
+        with:
+          name: sdist
+          path: dist/*.tar.gz
