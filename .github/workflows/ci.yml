@@ -64,7 +64,7 @@ jobs:
       - name: Run linting and tests
         run: poetry run pre-commit run --all-files --show-diff-on-failure
       - name: Set build version and build package
-        run: | 
+        run: |
           poetry version $BUILD_VERSION
           poetry build
         env:
