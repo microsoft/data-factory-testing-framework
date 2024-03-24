@@ -24,6 +24,8 @@ jobs:
   cd:
     needs: [ci, e2e]
     if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write
     uses: ./.github/workflows/cd.yml
     with:
       version: ${{ needs.ci.outputs.version }}
