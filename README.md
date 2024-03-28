@@ -4,6 +4,9 @@ A stand-alone test framework that allows to write unit tests for Data Factory pi
 
 ## Features :rocket:
 
+Docs change
+(not to upstream!)
+
 The framework evaluates pipeline and activity definitions which can be asserted. It does so by providing the following features:
 
 1. Evaluate expressions by using the framework's internal expression parser. It supports all the functions and arguments that are available in the Data Factory expression language.
