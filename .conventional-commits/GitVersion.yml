@@ -1,4 +1,6 @@
 ---
+# setting next-version temporary until 1.0.0 is released
+next-version: 0.0.0
 assembly-versioning-scheme: MajorMinorPatch
 mode: Mainline
 ignore:

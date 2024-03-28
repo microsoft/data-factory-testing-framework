@@ -11,6 +11,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       id-token: write
+      contents: write
     uses: ./.github/workflows/cd.yml
     with:
       version: ${{ needs.ci.outputs.version }}
