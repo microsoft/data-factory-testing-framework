@@ -1,0 +1,13 @@
+---
+assembly-versioning-scheme: MajorMinorPatch
+mode: Mainline
+ignore:
+  sha: []
+merge-message-formats: {}
+
+# Conventional Commit Reference
+# https://www.conventionalcommits.org/en/v1.0.0/
+# https://gitversion.net/docs/reference/version-increments#manually-incrementing-the-version
+major-version-bump-message: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\\([\\w\\s-]*\\))?(!:|:.*\\n\\n((.+\\n)+\\n)?BREAKING CHANGE:\\s.+)"
+minor-version-bump-message: "^(feat)(\\([\\w\\s-]*\\))?:"
+patch-version-bump-message: "^(build|chore|ci|docs|fix|perf|refactor|revert|style|test)(\\([\\w\\s-]*\\))?:"

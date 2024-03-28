@@ -1,0 +1,38 @@
+---
+name: CD
+
+on:
+  workflow_call: # yamllint disable-line rule:truthy
+    inputs:
+      version:
+        description: 'The version of the package'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/data-factory-testing-framework
+    steps:
+      - name: Download sdist
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: Download whl
+        uses: actions/download-artifact@v3
+        with:
+          name: whl
+          path: dist
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ./dist
+      - name: Create release
+        run: gh release create ${{ inputs.version }} --prerelease --target ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
