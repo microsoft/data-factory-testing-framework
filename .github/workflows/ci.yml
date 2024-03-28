@@ -20,7 +20,7 @@ jobs:
           fetch-tags: true
           fetch-depth: 0
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
+        uses: gittools/actions/gitversion/setup@v1.1.1
         with:
           versionSpec: '5.x'
       - name: Determine Version

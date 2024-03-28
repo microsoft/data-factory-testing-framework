@@ -1,5 +1,5 @@
 ---
-name: CD
+name: E2E
 
 on:
   workflow_call: # yamllint disable-line rule:truthy
