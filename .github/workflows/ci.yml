@@ -79,3 +79,18 @@ jobs:
         with:
           name: sdist
           path: dist/*.tar.gz
+  e2e:
+    needs: build
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'windows-latest']
+        python-version: ['3.9', '3.10', '3.11']
+        dotnet-version: ['3.1.x', '8.0.x']
+        # test either wheel or source distribution
+        dist: [whl, sdist]
+    uses: ./.github/workflows/e2e.yml
+    with:
+      os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}
+      dotnet-version: ${{ matrix.dotnet-version }}
+      dist: ${{ matrix.dist }}

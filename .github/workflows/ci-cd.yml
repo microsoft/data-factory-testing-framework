@@ -6,23 +6,8 @@ on: [push]  # yamllint disable-line rule:truthy
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
-  e2e:
-    needs: ci
-    strategy:
-      matrix:
-        os: ['ubuntu-latest', 'windows-latest']
-        python-version: ['3.9', '3.10', '3.11']
-        dotnet-version: [3.1.x, '8.0.x']
-        # test either wheel or source distribution
-        dist: [whl, sdist]
-    uses: ./.github/workflows/e2e.yml
-    with:
-      os: ${{ matrix.os }}
-      python-version: ${{ matrix.python-version }}
-      dotnet-version: ${{ matrix.dotnet-version }}
-      dist: ${{ matrix.dist }}
   cd:
-    needs: [ci, e2e]
+    needs: [ci]
     if: github.ref == 'refs/heads/main'
     permissions:
       id-token: write
