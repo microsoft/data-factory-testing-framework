@@ -20,6 +20,8 @@ Given a `WebActivity` with a `typeProperties.url` property containing the follow
 @concat(pipeline().globalParameters.BaseUrl, variables('Path'))
 ```
 
+new feat
+
 A simple test to validate that the concatenation is working as expected could look like this:
 
 ```python
