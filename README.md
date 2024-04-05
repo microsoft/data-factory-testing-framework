@@ -2,6 +2,8 @@
 
 A stand-alone test framework that allows to write unit tests for Data Factory pipelines on [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/) and [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory).
 
+> The framework is currently in _Public Preview_ and is not officially supported by Microsoft.
+
 ## Features :rocket:
 
 The framework evaluates pipeline and activity definitions which can be asserted. It does so by providing the following features:
@@ -82,6 +84,15 @@ Azure Data Factory:
 1. [Copy blobs example](examples/data_factory/copy_blobs/README.md)
 2. [Batch job example](examples/data_factory/batch_job/README.md)
 
+## Limitations :warning:
+
+The framework has the following limitations at the moment:
+
+1. The framework reimplements the Data Factory expression language in Python. This means that it might not be 100% accurate with the actual Data Factory language, especially when it comes to xml functions.
+2. The framework does not support automatic type conversion of arguments passed to functions in expressions.
+
+> These limitations are top priority to be resolved in the future.
+
 ## Contributing :handshake:
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
@@ -95,15 +106,6 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Disclaimer :warning:
-
-This unit test framework is not officially supported.
-It is currently in an experimental state and has not been tested with every single data factory resource.
-It should support all activities out-of-the-box but has not been thoroughly tested,
-please report any issues in the issues section and include an example of the pipeline that is not working as expected.
-
-If there's a lot of interest in this framework, then we will continue to improve it and move it to a production-ready state.
 
 ## Trademarks :tm:
 
