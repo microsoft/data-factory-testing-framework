@@ -92,7 +92,7 @@ Request the next activity from the returned generator and verify that the output
 set_variable_activity = next(activities)
 assert set_variable_activity is not None
 assert "Set JobName" == set_variable_activity.name
-assert "Job-123" == activity.type_properties["value"].result
+assert "Job-123" == set_variable_activity.type_properties["value"].result
 
 get_version_activity = next(activities)
 assert get_version_activity is not None
