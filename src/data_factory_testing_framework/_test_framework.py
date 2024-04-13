@@ -54,20 +54,31 @@ class TestFramework:
             The repository attribute will be populated with the data factory entities if provided.
             should_evaluate_child_pipelines: optional boolean indicating whether child pipelines should be evaluated. Defaults to False.
         """
-        if framework_type == TestFrameworkType.Fabric:
+        self._framework_type = framework_type
+
+        if self._framework_type == TestFrameworkType.Fabric:
             if root_folder_path is not None:
                 self._repository = FabricRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self._repository = DataFactoryRepository([])
-        elif framework_type == TestFrameworkType.DataFactory:
+        elif self._framework_type == TestFrameworkType.DataFactory:
             if root_folder_path is not None:
                 self._repository = DataFactoryRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self._repository = DataFactoryRepository([])
-        elif framework_type == TestFrameworkType.Synapse:
+        elif self._framework_type == TestFrameworkType.Synapse:
             raise NotImplementedError("Synapse test framework is not implemented yet.")
 
         self._should_evaluate_child_pipelines = should_evaluate_child_pipelines
+
+    @property
+    def framework_type(self) -> str:
+        """Indicates which test framework is used.
+
+        Returns:
+            A string from TestFrameworkType.
+        """
+        return self._framework_type
 
     @property
     def should_evaluate_child_pipelines(self) -> bool:
@@ -146,10 +157,17 @@ class TestFramework:
                     activities_iterator = []
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:
                         execute_pipeline_activity: ExecutePipelineActivity = activity
-                        pipeline = self.get_pipeline_by_id(
-                            # Note: in the future they will probably rename this to referenceId for Fabric
-                            execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
-                        )
+                        pipeline: Pipeline = None
+                        if self._framework_type == TestFrameworkType.Fabric:
+                            pipeline = self.get_pipeline_by_id(
+                                # Note: in the future they will probably rename this to referenceId for Fabric
+                                execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
+                            )
+                        else:
+                            pipeline = self.get_pipeline_by_name(
+                                # Note: in the future they will probably rename this to referenceId for Fabric
+                                execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
+                            )
                         activities_iterator = execute_pipeline_activity.evaluate_pipeline(
                             pipeline,
                             activity.get_child_run_parameters(state),
