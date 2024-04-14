@@ -158,7 +158,7 @@ class TestFramework:
                     if isinstance(activity, ExecutePipelineActivity) and self.should_evaluate_child_pipelines:
                         execute_pipeline_activity: ExecutePipelineActivity = activity
                         pipeline: Pipeline = None
-                        if self._framework_type == TestFrameworkType.Fabric:
+                        if self.framework_type == TestFrameworkType.Fabric:
                             pipeline = self.get_pipeline_by_id(
                                 # Note: in the future they will probably rename this to referenceId for Fabric
                                 execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
