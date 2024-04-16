@@ -34,7 +34,7 @@ def test_execute_pipeline_activity_child_activities_executed(request: pytest.Fix
 
 
 def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_known_exception_thrown(
-    request: pytest.FixtureRequest
+    request: pytest.FixtureRequest,
 ) -> None:
     # Arrange
     test_framework = TestFramework(
@@ -57,4 +57,4 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
             ),
         )
 
-    assert exception_info.value.args[0] == "Pipeline with name Pipeline with pipeline_id: 'child' not found not found"
+    assert exception_info.value.args[0] == "Pipeline with pipeline_id: 'child' not found"
