@@ -1,0 +1,70 @@
+{
+    "name": "switch-empty-default",
+    "properties": {
+        "activities": [
+            {
+                "name": "Switch1",
+                "type": "Switch",
+                "dependsOn": [],
+                "typeProperties": {
+                    "on": {
+                        "value": "@pipeline().parameters.current_value",
+                        "type": "Expression"
+                    },
+                    "cases": [
+                        {
+                            "value": "case_1",
+                            "activities": [
+                                {
+                                    "name": "Set variable2",
+                                    "type": "SetVariable",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "typeProperties": {
+                                        "variableName": "case_hit",
+                                        "value": "case_1_hit"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "value": "case_2",
+                            "activities": [
+                                {
+                                    "name": "Set variable3",
+                                    "type": "SetVariable",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "typeProperties": {
+                                        "variableName": "case_hit",
+                                        "value": "case_2_hit"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "current_value": {
+                "type": "string",
+                "defaultValue": "1"
+            }
+        },
+        "variables": {
+            "case_hit": {
+                "type": "String"
+            }
+        },
+        "annotations": [],
+        "lastModifiedByObjectId": "80311eb5-b33b-4d7f-bfa3-879f8c8261c1",
+        "lastPublishTime": "2023-11-23T08:44:44Z"
+    }
+}
