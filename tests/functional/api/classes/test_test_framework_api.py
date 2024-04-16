@@ -58,7 +58,7 @@ def test_test_framework_method_properties() -> None:
 
     # Assert
     assert properties == ["framework_type", "should_evaluate_child_pipelines"]
-    assert TestFramework.framework_type.fget.__annotations__ == {"return": str}
+    assert TestFramework.framework_type.fget.__annotations__ == {"return": TestFrameworkType}
     assert TestFramework.should_evaluate_child_pipelines.fget.__annotations__ == {"return": bool}
 
 

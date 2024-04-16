@@ -72,11 +72,11 @@ class TestFramework:
         self._should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
     @property
-    def framework_type(self) -> str:
+    def framework_type(self) -> TestFrameworkType:
         """Indicates which test framework is used.
 
         Returns:
-            A string from TestFrameworkType.
+            A TestFrameworkType object.
         """
         return self._framework_type
 
@@ -165,7 +165,6 @@ class TestFramework:
                             )
                         else:
                             pipeline = self.get_pipeline_by_name(
-                                # Note: in the future they will probably rename this to referenceId for Fabric
                                 execute_pipeline_activity.type_properties["pipeline"]["referenceName"],
                             )
                         activities_iterator = execute_pipeline_activity.evaluate_pipeline(

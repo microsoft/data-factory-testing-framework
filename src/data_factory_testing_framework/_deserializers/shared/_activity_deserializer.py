@@ -43,7 +43,11 @@ def _get_activity_from_activity_data(activity_data: dict) -> Activity:
         child_activities = _get_activity_from_activities_data(type_properties["activities"])
         return ForEachActivity(activities=child_activities, **activity_data)
     elif activity_data["type"] == "Switch":
-        default_activities = _get_activity_from_activities_data(type_properties["defaultActivities"])
+        default_activities = (
+            _get_activity_from_activities_data(type_properties["defaultActivities"])
+            if "defaultActivities" in type_properties
+            else []
+        )
         cases_activities = {}
         for case in type_properties["cases"]:
             case_value = case["value"]
