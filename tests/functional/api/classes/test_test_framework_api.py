@@ -23,6 +23,7 @@ def test_test_framework_api() -> None:
         "evaluate_activities",
         "evaluate_activity",
         "evaluate_pipeline",
+        "framework_type",
         "get_pipeline_by_id",
         "get_pipeline_by_name",
         "should_evaluate_child_pipelines",
@@ -43,6 +44,7 @@ def test_test_framework_method_types() -> None:
         "evaluate_pipeline": types.FunctionType,
         "get_pipeline_by_id": types.FunctionType,
         "get_pipeline_by_name": types.FunctionType,
+        "framework_type": property,
         "should_evaluate_child_pipelines": property,
     }
 
@@ -55,7 +57,8 @@ def test_test_framework_method_properties() -> None:
     properties = [method[0] for method in inspect.getmembers(TestFramework, predicate=utils.is_property)]
 
     # Assert
-    assert properties == ["should_evaluate_child_pipelines"]
+    assert properties == ["framework_type", "should_evaluate_child_pipelines"]
+    assert TestFramework.framework_type.fget.__annotations__ == {"return": TestFrameworkType}
     assert TestFramework.should_evaluate_child_pipelines.fget.__annotations__ == {"return": bool}
 
 

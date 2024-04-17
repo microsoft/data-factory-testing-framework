@@ -57,4 +57,4 @@ def test_execute_pipeline_activity_evaluate_child_pipelines_child_pipeline_not_k
             ),
         )
 
-    assert exception_info.value.args[0] == "Pipeline with pipeline_id: 'child' not found"
+    assert exception_info.value.args[0] == "Pipeline with name: 'child' not found"

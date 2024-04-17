@@ -38,4 +38,4 @@ class DataFactoryRepository:
             if pipeline.name == name:
                 return pipeline
 
-        raise PipelineNotFoundError(f"Pipeline with name {name} not found")
+        raise PipelineNotFoundError(f"Pipeline with name: '{name}' not found")
