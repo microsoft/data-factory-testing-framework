@@ -1,16 +1,19 @@
 ---
 name: Conventional Commits
-on:  # yamllint disable-line rule:truthy
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
-  workflow_dispatch:  # yamllint disable-line rule:empty-values
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+permissions:
+  pull-requests: read
 jobs:
   lint-pull-request:
     name: Lint Pull Request
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: PR Linting
-        run: |
-          .conventional-commits/scripts/lint-pull-request.sh '${{ github.event.pull_request.title }}' '${{ github.workspace }}/.conventional-commits/commitlint.pr.config.js'
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
