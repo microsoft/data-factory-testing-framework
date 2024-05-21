@@ -1,5 +1,8 @@
 from typing import Any, Callable, Iterator, List
 
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import Activity, ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
@@ -25,7 +28,9 @@ class ForEachActivity(ControlActivity):
         self.items: DataFactoryElement = self.type_properties["items"]
 
     def evaluate(self, state: PipelineRunState) -> "ForEachActivity":
-        self.items.evaluate(state)
+        items = self.items.evaluate(state)
+        if not isinstance(items, list):
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "list")
 
         super(ControlActivity, self).evaluate(state)
 

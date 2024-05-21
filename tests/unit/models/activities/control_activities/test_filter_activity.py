@@ -1,8 +1,11 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models import DataFactoryElement, Pipeline
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
+from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType, Pipeline
 from data_factory_testing_framework.models.activities import FilterActivity
-from data_factory_testing_framework.state import RunParameter, RunParameterType
+from data_factory_testing_framework.state import PipelineRunState, RunParameter, RunParameterType
 
 
 @pytest.mark.parametrize(
@@ -53,3 +56,27 @@ def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_
     assert activity.type == "Filter"
     assert activity.type_properties["items"].result == input_values
     assert activity.output["value"] == expected_filtered_values
+
+
+@pytest.mark.parametrize(("evaluated_value"), [1, 1.1, "string-value", {}, True, None])
+def test_filter_activity_evaluated_raises_error_when_evaluated_value_is_not_a_list(
+    evaluated_value: DataFactoryObjectType
+) -> None:
+    # Arrange
+    state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "input_values", evaluated_value)])
+    filter_activity = FilterActivity(
+        name="FilterActivity",
+        typeProperties={
+            "items": DataFactoryElement("@pipeline().parameters.input_values"),
+            "condition": DataFactoryElement("@lessOrEquals(item(), 3)"),
+        },
+    )
+
+    # Act
+    with pytest.raises(ControlActivityExpressionEvaluatedNotToExpectedTypeError) as ex_info:
+        filter_activity.evaluate(state)
+
+    assert (
+        ex_info.value.args[0]
+        == "Iteration expression of Activity: 'FilterActivity' does not evaluate to the expected type: 'list'."
+    )

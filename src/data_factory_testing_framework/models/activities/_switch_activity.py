@@ -1,5 +1,8 @@
 from typing import Any, Callable, Dict, Generator, Iterator, List
 
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import Activity, ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
@@ -28,7 +31,9 @@ class SwitchActivity(ControlActivity):
         self.on: DataFactoryElement = self.type_properties["on"]
 
     def evaluate(self, state: PipelineRunState) -> "SwitchActivity":
-        self.on.evaluate(state)
+        evaluated_on = self.on.evaluate(state)
+        if not isinstance(evaluated_on, str):
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "str")
 
         super(ControlActivity, self).evaluate(state)
 
@@ -51,7 +56,7 @@ class SwitchActivity(ControlActivity):
         activities: List[Activity],
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
     ) -> Generator[Activity, None, None]:
-        scoped_state = state.create_iteration_scope(None)
+        scoped_state = state.create_iteration_scope()
         for activity in evaluate_activities(activities, scoped_state):
             yield activity
         state.add_scoped_activity_results_from_scoped_state(scoped_state)
