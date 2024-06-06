@@ -13,7 +13,7 @@ The framework is available as a Python package on PyPI. You can install it using
 To initialize the framework, you need to create a `TestFramework` instance. This instance is the entry point to the framework and provides access to the pipeline and activity definitions. Specify the type of data factory (i.e. Fabric or DataFactory for Azure Data Factory) and pass the path to the folder containing the pipeline definitions to the `TestFramework` constructor.
 
 ```python
-from data_factory_testing_framework import TestFramework
+from data_factory_testing_framework import TestFramework, TestFrameworkType
 
 test_framework = TestFramework(
         framework_type=TestFrameworkType.DataFactory,
