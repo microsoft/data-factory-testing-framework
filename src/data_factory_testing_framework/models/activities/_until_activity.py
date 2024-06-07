@@ -1,5 +1,8 @@
 from typing import Any, Callable, Iterator, List
 
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities import Activity, ControlActivity
 from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
@@ -34,13 +37,17 @@ class UntilActivity(ControlActivity):
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
     ) -> Iterator[Activity]:
         while True:
-            scoped_state = state.create_iteration_scope(None)
+            scoped_state = state.create_iteration_scope()
             for activity in evaluate_activities(self.activities, scoped_state):
                 yield activity
 
             state.add_scoped_activity_results_from_scoped_state(scoped_state)
 
-            if self.expression.evaluate(state):
+            evaluated_expression = self.expression.evaluate(state)
+            if not isinstance(evaluated_expression, bool):
+                raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, bool)
+
+            if evaluated_expression:
                 state.add_activity_result(self.name, DependencyCondition.Succeeded)
                 self.set_result(DependencyCondition.Succeeded)
                 break

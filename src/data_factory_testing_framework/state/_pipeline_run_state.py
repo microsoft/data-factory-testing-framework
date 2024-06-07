@@ -70,7 +70,7 @@ class PipelineRunState(RunState):
         """Used to create a new scope for a ControlActivity like ForEach, If and Until activities.
 
         Args:
-            iteration_item: The current item() of a ForEach activity.
+            iteration_item: The current item() of a ForEach activity. If not supplied, takes parent iteration_item.
 
         Returns:
             A new PipelineRunState with the scoped variables and activity results.
@@ -79,7 +79,7 @@ class PipelineRunState(RunState):
             self.parameters,
             self.variables,
             self.activity_results,
-            iteration_item,
+            iteration_item if iteration_item is not None else self.iteration_item,
         )
 
     def add_scoped_activity_results_from_scoped_state(self, scoped_state: "PipelineRunState") -> None:

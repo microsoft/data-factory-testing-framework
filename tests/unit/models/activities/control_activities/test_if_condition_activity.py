@@ -1,8 +1,13 @@
+from unittest.mock import Mock
+
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
-from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
+from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType
 from data_factory_testing_framework.models.activities import IfConditionActivity, SetVariableActivity
-from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
+from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameter, RunParameterType
 
 
 def test_when_evaluated_should_evaluate_expression() -> None:
@@ -69,3 +74,46 @@ def test_when_evaluated_should_evaluate_correct_child_activities(
     # Assert
     assert len(child_activities) == 1
     assert child_activities[0].name == expected_activity_name
+
+
+def test_evaluate_pipeline_should_pass_iteration_item_to_child_activities() -> None:
+    # Arrange
+    state = PipelineRunState(variables=[PipelineRunVariable("variable", None)], iteration_item="some-item")
+    activity = IfConditionActivity(
+        name="IfCondition",
+        if_true_activities=[],
+        if_false_activities=[],
+        typeProperties={
+            "expression": DataFactoryElement("some-expression"),
+        },
+    )
+    evaluator = Mock(return_value=[])
+
+    # Act
+    list(activity.evaluate_control_activities(state, evaluator))
+
+    # Assert
+    assert evaluator.call_args[0][1].iteration_item == "some-item"
+
+
+@pytest.mark.parametrize(("evaluated_value"), [1, 1.1, "string-value", {}, [], None])
+def test_evaluated_raises_error_when_evaluated_value_is_not_a_bool(evaluated_value: DataFactoryObjectType) -> None:
+    # Arrange
+    state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "input_values", evaluated_value)])
+    activity = IfConditionActivity(
+        name="IfCondition",
+        if_true_activities=[],
+        if_false_activities=[],
+        typeProperties={
+            "expression": DataFactoryElement("@pipeline().parameters.input_values"),
+        },
+    )
+
+    # Act
+    with pytest.raises(ControlActivityExpressionEvaluatedNotToExpectedTypeError) as ex_info:
+        activity.evaluate(state)
+
+    assert (
+        ex_info.value.args[0]
+        == "Iteration expression of Activity: 'IfCondition' does not evaluate to the expected type: 'bool'."
+    )

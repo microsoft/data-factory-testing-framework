@@ -56,10 +56,11 @@ def test_package_exceptions_classes() -> None:
     public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
 
     # Assert
-    assert len(public_classes) == 11
+    assert len(public_classes) == 12
     assert public_classes == [
         "ActivityNotFoundError",
         "ActivityOutputFieldNotFoundError",
+        "ControlActivityExpressionEvaluatedNotToExpectedTypeError",
         "DataFactoryElementEvaluationError",
         "FunctionCallInvalidArgumentsCountError",
         "NoRemainingPipelineActivitiesMeetDependencyConditionsError",
