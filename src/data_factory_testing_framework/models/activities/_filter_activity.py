@@ -28,7 +28,7 @@ class FilterActivity(ControlActivity):
     def evaluate(self, state: PipelineRunState) -> "FilterActivity":
         items = self.items.evaluate(state)
         if not isinstance(items, list):
-            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "list")
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, list)
 
         value = []
         for item in items:

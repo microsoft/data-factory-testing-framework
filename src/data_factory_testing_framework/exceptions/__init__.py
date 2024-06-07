@@ -2,6 +2,9 @@ from data_factory_testing_framework.exceptions._activity_not_found_error import 
 from data_factory_testing_framework.exceptions._activity_output_field_not_found_error import (
     ActivityOutputFieldNotFoundError,
 )
+from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
+    ControlActivityExpressionEvaluatedNotToExpectedTypeError,
+)
 from data_factory_testing_framework.exceptions._data_factory_element_evaluation_error import (
     DataFactoryElementEvaluationError,
 )
@@ -32,4 +35,5 @@ __all__ = [
     "UnsupportedFunctionError",
     "VariableBeingEvaluatedDoesNotExistError",
     "VariableNotFoundError",
+    "ControlActivityExpressionEvaluatedNotToExpectedTypeError",
 ]

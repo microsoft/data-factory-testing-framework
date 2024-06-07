@@ -33,7 +33,7 @@ class IfConditionActivity(ControlActivity):
     def evaluate(self, state: PipelineRunState) -> "IfConditionActivity":
         evaluated_expression = self.expression.evaluate(state)
         if not isinstance(evaluated_expression, bool):
-            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "bool")
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, bool)
 
         super(ControlActivity, self).evaluate(state)
 

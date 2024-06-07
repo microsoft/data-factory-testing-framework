@@ -33,7 +33,7 @@ class SwitchActivity(ControlActivity):
     def evaluate(self, state: PipelineRunState) -> "SwitchActivity":
         evaluated_on = self.on.evaluate(state)
         if not isinstance(evaluated_on, str):
-            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "str")
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, str)
 
         super(ControlActivity, self).evaluate(state)
 

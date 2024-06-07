@@ -45,7 +45,7 @@ class UntilActivity(ControlActivity):
 
             evaluated_expression = self.expression.evaluate(state)
             if not isinstance(evaluated_expression, bool):
-                raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "bool")
+                raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, bool)
 
             if evaluated_expression:
                 state.add_activity_result(self.name, DependencyCondition.Succeeded)

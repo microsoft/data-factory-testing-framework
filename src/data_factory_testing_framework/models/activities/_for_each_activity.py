@@ -30,7 +30,7 @@ class ForEachActivity(ControlActivity):
     def evaluate(self, state: PipelineRunState) -> "ForEachActivity":
         items = self.items.evaluate(state)
         if not isinstance(items, list):
-            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, "list")
+            raise ControlActivityExpressionEvaluatedNotToExpectedTypeError(self.name, list)
 
         super(ControlActivity, self).evaluate(state)
 
