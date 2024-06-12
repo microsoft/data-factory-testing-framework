@@ -70,6 +70,7 @@ def test_activity_if_true(test_framework: TestFramework, pipeline: Pipeline) -> 
     # Assert
     assert child_activity.type_properties["expression"].result is True
 
+
 def test_activity_if_false(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
     foreach_activity = pipeline.get_activity_by_name("ForEachYearMonthPair")
