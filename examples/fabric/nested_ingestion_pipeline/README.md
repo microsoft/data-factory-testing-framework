@@ -68,7 +68,7 @@ For this particular pipeline, we will have three activities to evaluate, the fir
 - read_configuration_file_activity = next(activities)
 - copy_nyc_data_to_adls_pipeline_activity = next(activities)
 - copy_nyc_data_to_lakehouse_pipeline_activity = next(activities)
-  
+
 ## Testing the pl_main pipeline with should_evaluate_child_pipelines=False
 
 Setting this flag to `False`,  means that the test is just being done on the main pipeline and the child pipeline will not be loaded for evaluation. For more details check the code below:
