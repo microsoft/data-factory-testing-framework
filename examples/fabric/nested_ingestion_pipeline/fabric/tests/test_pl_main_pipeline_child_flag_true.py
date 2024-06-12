@@ -11,7 +11,7 @@ from data_factory_testing_framework.state import DependencyCondition, RunParamet
 def test_framework(request: pytest.FixtureRequest) -> TestFramework:
     return TestFramework(
         framework_type=TestFrameworkType.Fabric,
-        root_folder_path=os.path.join(Path(__file__).parent.parent),
+        root_folder_path=os.path.join(Path(request.fspath.dirname).parent),
         should_evaluate_child_pipelines=True,
     )
 
@@ -56,7 +56,7 @@ def test_pl_main_pipeline(test_framework: TestFramework) -> None:
         == "config"
     )
 
-    # In order to simulate how the activity would look like when the FoarEach activity iterates throught the first row
+    # In order to simulate how the activity would look like when the FoarEach activity iterates through the first row
     # the result of the activity needs to be set upfront.
     # Because of the following expression: "@activity('Read Configuration File').output.firstRow.lakeHouseProperties",
     # we need to add the "lakeHouseProperties" and "firstRow" key to the result because the Framework is unaware of these.
@@ -79,14 +79,14 @@ def test_pl_main_pipeline(test_framework: TestFramework) -> None:
         },
     )
 
-    # Next activity is the first activity of the child pipeline: "Copy NYCData to ADLS" as we have the evaluate child flag set to true.
+    # Next activity is the first activity of the child pipeline: "Copy NYCData from Web to ADLS" as we have the evaluate child flag set to true.
     # Because for the previous control activities: If and ForEach the framework does the evaluation in the background and
     # it doesn't need to be done manually in the test.
-    # With that, the next activity to be evaluated is the "Copy NYCData to ADLS".
+    # With that, the next activity to be evaluated is the "Copy NYCData from Web to ADLS".
 
     # Use the following code if your should_evaluate_child_pipelines is set to True
     copy_nyc_data_to_adls_pipeline_activity = next(activities)
-    assert copy_nyc_data_to_adls_pipeline_activity.name == "Copy NYCData to ADLS"
+    assert copy_nyc_data_to_adls_pipeline_activity.name == "Copy NYCData from Web to ADLS"
     assert copy_nyc_data_to_adls_pipeline_activity.type == "Copy"
     assert (
         copy_nyc_data_to_adls_pipeline_activity.type_properties["source"]["datasetSettings"]["typeProperties"][
@@ -107,9 +107,9 @@ def test_pl_main_pipeline(test_framework: TestFramework) -> None:
         == "nyc_taxi_data/2019/09"
     )
 
-    # Next activity is the second activity of the child pipeline: "Copy NYCData to Lakehouse"
+    # Next activity is the second activity of the child pipeline: "Copy NYCData from ADLS to Lakehouse"
     copy_nyc_data_to_lakehouse_pipeline_activity = next(activities)
-    assert copy_nyc_data_to_lakehouse_pipeline_activity.name == "Copy NYCData to Lakehouse"
+    assert copy_nyc_data_to_lakehouse_pipeline_activity.name == "Copy NYCData from ADLS to Lakehouse"
     assert copy_nyc_data_to_lakehouse_pipeline_activity.type == "Copy"
     assert (
         copy_nyc_data_to_lakehouse_pipeline_activity.type_properties["source"]["datasetSettings"]["typeProperties"][

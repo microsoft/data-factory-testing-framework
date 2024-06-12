@@ -14,7 +14,7 @@ from data_factory_testing_framework.state import (
 def test_framework(request: pytest.FixtureRequest) -> TestFramework:
     return TestFramework(
         framework_type=TestFrameworkType.Fabric,
-        root_folder_path=os.path.join(Path(request.fspath.dirname).parent, "pl_main.DataPipeline"),
+        root_folder_path=os.path.join(Path(request.fspath.dirname).parent),
     )
 
 
@@ -47,9 +47,9 @@ def test_activity_read_configuration_file(request: pytest.FixtureRequest, pipeli
     )
 
 
-def test_activity_if(test_framework: TestFramework, pipeline: Pipeline) -> None:
+def test_activity_if_true(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    foreach_activity = pipeline.get_activity_by_name("ForEach")
+    foreach_activity = pipeline.get_activity_by_name("ForEachYearMonthPair")
     child_activity: IfConditionActivity = next(
         filter(lambda a: a.name == "If New Or Updated", foreach_activity.activities)
     )
@@ -70,10 +70,33 @@ def test_activity_if(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Assert
     assert child_activity.type_properties["expression"].result is True
 
+def test_activity_if_false(test_framework: TestFramework, pipeline: Pipeline) -> None:
+    # Arrange
+    foreach_activity = pipeline.get_activity_by_name("ForEachYearMonthPair")
+    child_activity: IfConditionActivity = next(
+        filter(lambda a: a.name == "If New Or Updated", foreach_activity.activities)
+    )
+
+    # Act
+    state = PipelineRunState(
+        iteration_item={
+            "year": "2019",
+            "month": "09",
+            "created": "2023-05-24T11:04:42Z",
+            "lastUpdatedSourceSystem": "2023-05-24T11:04:42Z",
+            "lastUpdatedDatalake": "2023-05-25T11:04:42Z",
+        }
+    )
+
+    child_activity.evaluate(state)
+
+    # Assert
+    assert child_activity.type_properties["expression"].result is False
+
 
 def test_activity_invoke_pipeline(test_framework: TestFramework, pipeline: Pipeline) -> None:
     # Arrange
-    foreach_activity = pipeline.get_activity_by_name("ForEach")
+    foreach_activity = pipeline.get_activity_by_name("ForEachYearMonthPair")
     if_activity: IfConditionActivity = next(
         filter(lambda a: a.name == "If New Or Updated", foreach_activity.activities)
     )

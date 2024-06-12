@@ -66,7 +66,7 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Copy NYCData to ADLS",
+        "name": "Copy NYCData from Web to ADLS",
         "dependsOn": []
       },
       {
@@ -164,10 +164,10 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Copy NYCData to Lakehouse",
+        "name": "Copy NYCData from ADLS to Lakehouse",
         "dependsOn": [
           {
-            "activity": "Copy NYCData to ADLS",
+            "activity": "Copy NYCData from Web to ADLS",
             "dependencyConditions": [
               "Succeeded"
             ]

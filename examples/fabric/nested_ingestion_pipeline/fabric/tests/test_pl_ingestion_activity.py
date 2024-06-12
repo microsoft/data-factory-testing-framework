@@ -15,8 +15,7 @@ from data_factory_testing_framework.state import (
 def test_framework(request: pytest.FixtureRequest) -> TestFramework:
     return TestFramework(
         framework_type=TestFrameworkType.Fabric,
-        # root_folder_path = os.path.join(Path(__file__).parent,"pl_ingestion.DataPipeline")
-        root_folder_path=os.path.join(Path(request.fspath.dirname).parent, "pl_ingestion.DataPipeline"),
+        root_folder_path=os.path.join(Path(request.fspath.dirname).parent),
     )
 
 
@@ -25,9 +24,9 @@ def pipeline(test_framework: TestFramework) -> Pipeline:
     return test_framework.get_pipeline_by_name("pl_ingestion")
 
 
-def test_copy_nyc_data_to_adls2(pipeline: Pipeline) -> None:
+def test_copy_nyc_data_from_web_to_adls2(pipeline: Pipeline) -> None:
     # Arrange
-    activity = pipeline.get_activity_by_name("Copy NYCData to ADLS")
+    activity = pipeline.get_activity_by_name("Copy NYCData from Web to ADLS")
     state = PipelineRunState(
         parameters=[
             RunParameter(RunParameterType.Pipeline, name="dynamicmonth", value="01"),
@@ -53,9 +52,9 @@ def test_copy_nyc_data_to_adls2(pipeline: Pipeline) -> None:
     )
 
 
-def test_copy_nyc_data_to_lakehouse(pipeline: Pipeline) -> None:
+def test_copy_nyc_data_from_adls2_to_lakehouse(pipeline: Pipeline) -> None:
     # Arrange
-    activity = pipeline.get_activity_by_name("Copy NYCData to Lakehouse")
+    activity = pipeline.get_activity_by_name("Copy NYCData from ADLS to Lakehouse")
     state = PipelineRunState(
         parameters=[
             RunParameter(RunParameterType.Pipeline, name="dynamicmonth", value="01"),

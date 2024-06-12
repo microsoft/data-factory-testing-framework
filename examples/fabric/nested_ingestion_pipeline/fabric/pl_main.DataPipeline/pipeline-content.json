@@ -96,7 +96,7 @@
               }
             ]
           },
-          "name": "ForEach",
+          "name": "ForEachYearMonthPair",
           "dependsOn": [
             {
               "activity": "Read Configuration File",
