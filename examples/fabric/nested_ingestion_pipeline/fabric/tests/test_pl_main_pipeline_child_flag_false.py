@@ -56,7 +56,7 @@ def test_pl_main_pipeline(test_framework: TestFramework) -> None:
         == "config"
     )
 
-    # In order to simulate how the activity would look like when the FoarEach activity iterates through the first row
+    # In order to simulate how the activity would look like when the ForEach activity iterates through the first row
     # the result of the activity needs to be set upfront.
     # Because of the following expression: "@activity('Read Configuration File').output.firstRow.lakeHouseProperties",
     # we need to add the "lakeHouseProperties" and "firstRow" key to the result because the Framework is unaware of these.
