@@ -1,0 +1,187 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "BinarySource",
+            "storeSettings": {
+              "type": "HttpReadSettings",
+              "requestMethod": "GET"
+            },
+            "formatSettings": {
+              "type": "BinaryReadSettings"
+            },
+            "datasetSettings": {
+              "type": "Binary",
+              "typeProperties": {
+                "location": {
+                  "type": "HttpServerLocation",
+                  "relativeUrl": {
+                    "value": "@concat('yellow_tripdata_',pipeline().parameters.dynamicyear,'-', pipeline().parameters.dynamicmonth,'.parquet')",
+                    "type": "Expression"
+                  }
+                }
+              },
+              "externalReferences": {
+                "connection": "55f7c027-5f9c-4420-bda7-1cd12412c54a"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "BinarySink",
+            "storeSettings": {
+              "type": "AzureBlobFSWriteSettings"
+            },
+            "datasetSettings": {
+              "type": "Binary",
+              "typeProperties": {
+                "location": {
+                  "type": "AzureBlobFSLocation",
+                  "fileSystem": "nyctaxidata",
+                  "folderPath": {
+                    "value": "@concat('nyc_taxi_data', '/', pipeline().parameters.dynamicyear,'/',pipeline().parameters.dynamicmonth)",
+                    "type": "Expression"
+                  },
+                  "fileName": {
+                    "value": "@concat('yellow_tripdata_',pipeline().parameters.dynamicyear,'-', pipeline().parameters.dynamicmonth,'.parquet')",
+                    "type": "Expression"
+                  }
+                }
+              },
+              "externalReferences": {
+                "connection": "a97f9477-e2b0-4a61-bc57-081255466130"
+              },
+              "annotations": []
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy NYCData from Web to ADLS",
+        "dependsOn": []
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "ParquetSource",
+            "storeSettings": {
+              "type": "AzureBlobFSReadSettings",
+              "recursive": true,
+              "enablePartitionDiscovery": false
+            },
+            "formatSettings": {
+              "type": "ParquetReadSettings"
+            },
+            "datasetSettings": {
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "AzureBlobFSLocation",
+                  "fileSystem": "nyctaxidata",
+                  "folderPath": {
+                    "value": "@concat(pipeline().parameters.dynamicyear,'/',pipeline().parameters.dynamicmonth)",
+                    "type": "Expression"
+                  },
+                  "fileName": {
+                    "value": "@concat('yellow_tripdata_',pipeline().parameters.dynamicyear,'-', pipeline().parameters.dynamicmonth,'.parquet')",
+                    "type": "Expression"
+                  }
+                },
+                "compressionCodec": "snappy"
+              },
+              "schema": [],
+              "externalReferences": {
+                "connection": "a97f9477-e2b0-4a61-bc57-081255466130"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "ParquetSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings"
+            },
+            "formatSettings": {
+              "type": "ParquetWriteSettings",
+              "enableVertiParquet": true
+            },
+            "datasetSettings": {
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": {
+                    "value": "@concat('nyc_taxi_data', '/',pipeline().parameters.dynamicyear,'/',pipeline().parameters.dynamicmonth)",
+                    "type": "Expression"
+                  },
+                  "fileName": {
+                    "value": "@concat('yellow_tripdata_',pipeline().parameters.dynamicyear,'-', pipeline().parameters.dynamicmonth,'.parquet')",
+                    "type": "Expression"
+                  }
+                },
+                "compressionCodec": "snappy"
+              },
+              "schema": [],
+              "linkedService": {
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "8aa1ecb3-4662-420b-a02b-845193795d3c",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Files"
+                  },
+                  "annotations": []
+                },
+                "name": "ys_lh_testing_framework"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy NYCData from ADLS to Lakehouse",
+        "dependsOn": [
+          {
+            "activity": "Copy NYCData from Web to ADLS",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "dynamicmonth": {
+        "type": "string"
+      },
+      "dynamicyear": {
+        "type": "string"
+      }
+    }
+  }
+}
