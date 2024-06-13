@@ -14,7 +14,7 @@ The main pipeline is composed of 2 top activities:
 - a Lookup activity named "Read Configuration File"
 - a ForEach activity named "ForEachYearMonthPair"
 
-Within the ForEach activity, there is a nested If activity called "If New Or Updated" and if this activity evaluates to `True`, the  "Invoke Ingestion Pipeline" activity is triggered.
+Within the ForEach activity, there is a nested If activity called "If New Or Updated" and if this activity evaluates to `True`, the "Invoke Ingestion Pipeline" activity is triggered.
 
 The Ingestion pipeline is composed also by two activities:
 
