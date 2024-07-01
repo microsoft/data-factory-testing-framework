@@ -7,12 +7,12 @@ readme = "README.md"
 license = "MIT"
 include = [ "README.md", "LICENSE" ]
 keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
+homepage = "https://github.com/microsoft/data-factory-testing-framework"
+documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
+repository = "https://github.com/microsoft/data-factory-testing-framework.git"
 
-[project.urls]
-Homepage = "https://github.com/microsoft/data-factory-testing-framework"
-Documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
-Repository = "https://github.com/microsoft/data-factory-testing-framework.git"
-Issues = "https://github.com/microsoft/data-factory-testing-framework/issues"
+[tool.poetry.urls]
+"Issues" = "https://github.com/microsoft/data-factory-testing-framework/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
