@@ -2,11 +2,17 @@
 name = "data-factory-testing-framework"
 version = "0.1.0"
 description = "A stand-alone test framework that allows to write unit tests for Data Factory pipelines on Microsoft Fabric and Azure Data Factory."
-authors = ["Arjen Kroezen <arjenkroezen@microsoft.com>", "Yennifer Santos <ysantos@microsoft.com>", "Jaya Kumar <kumarjaya@microsoft.com>", "Leonard Herold <lherold@microsoft.com>"]
+authors = ["Data Factory Testing Framework Team <dftf@microsoft.com>"]
 readme = "README.md"
 license = "MIT"
 include = [ "README.md", "LICENSE" ]
 keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
+
+[project.urls]
+Homepage = "https://github.com/microsoft/data-factory-testing-framework"
+Documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
+Repository = "https://github.com/microsoft/data-factory-testing-framework.git"
+Issues = "https://github.com/microsoft/data-factory-testing-framework/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
