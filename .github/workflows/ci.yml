@@ -63,6 +63,8 @@ jobs:
         run: dotnet build
       - name: Install project
         run: poetry run pip install -e .
+      - name: Run linting and tests
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
       - name: Set build version and build package
         run: |
           # create a version file with the build version
@@ -70,8 +72,6 @@ jobs:
           poetry run python -m build
         env:
           BUILD_VERSION: ${{ needs.version.outputs.version }}
-      - name: Run linting and tests
-        run: poetry run pre-commit run --all-files --show-diff-on-failure
       - name: Upload dist
         uses: actions/upload-artifact@v3
         with:
