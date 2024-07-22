@@ -60,7 +60,7 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
       - name: Build dotnet dependencies
-        run: dotnet build src/data_factory_testing_framework/_pythonnet/Evaluator.csproj -o src/data_factory_testing_framework/_pythonnet/lib
+        run: dotnet build src/data_factory_testing_framework/_pythonnet/Evaluator.csproj -o src/data_factory_testing_framework/_pythonnet/bin
       - name: Install project
         run: poetry run pip install -e .
       - name: Run linting and tests

@@ -9,7 +9,7 @@ import clr  # noqa: E402
 
 def load_dotnet_assemblies() -> None:
     # Load the .NET assemblies
-    for dll in (Path(__file__).parent / "lib").glob("**/*.dll"):
+    for dll in (Path(__file__).parent / "bin").glob("**/*.dll"):
         dll = os.path.abspath(dll)
         try:
             clr.AddReference(dll)
