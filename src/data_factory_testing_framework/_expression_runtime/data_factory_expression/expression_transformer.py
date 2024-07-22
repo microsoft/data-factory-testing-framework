@@ -1,5 +1,5 @@
 from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_dotnet_evaluator_transformer import (
-    DataFactoryToLogicaAppTransformer,
+    DataFactoryToDotnetEvaluatorExpressionTransformer,
 )
 from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
@@ -131,8 +131,7 @@ class ExpressionTransformer:
             raise ExpressionParsingError(msg) from uc
 
         # Use transformer to translate DataFactory expression language
-        # to valid Logic App Expression Language
-        rule_transformer = DataFactoryToLogicaAppTransformer()
+        rule_transformer = DataFactoryToDotnetEvaluatorExpressionTransformer()
         transformed_ast = rule_transformer.transform(parse_tree)
         expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(transformed_ast)
         return expression_reconstructed
