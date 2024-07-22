@@ -60,15 +60,16 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
       - name: Install project
-        run: poetry install --no-interaction
-      - name: Run linting and tests
-        run: poetry run pre-commit run --all-files --show-diff-on-failure
+        run: poetry run pip install .
       - name: Set build version and build package
         run: |
-          poetry version $BUILD_VERSION
-          poetry build
+          # create a version file with the build version
+          echo $BUILD_VERSION > VERSION
+          poetry run python -m build
         env:
           BUILD_VERSION: ${{ needs.version.outputs.version }}
+      - name: Run linting and tests
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
       - name: Upload dist
         uses: actions/upload-artifact@v3
         with:

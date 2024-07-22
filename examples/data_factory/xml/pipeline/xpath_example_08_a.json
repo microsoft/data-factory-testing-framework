@@ -1,0 +1,127 @@
+{
+	"name": "xpath_example_08_a",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set XML String",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "xml",
+					"value": "<?xml version=\"1.0\"?>\n<file xmlns=\"https://contoso.com\"><location>Paris</location></file>"
+				}
+			},
+			{
+				"name": "Example 1 as string",
+				"description": "[\n\t\t{\n\t\t\t\"$content-type\": \"application/xml;charset=utf-8\",\n\t\t\t\"$content\": \"PG5hbWU+R2FsYTwvbmFtZT4=\"\n\t\t},\n\t\t{\n\t\t\t\"$content-type\": \"application/xml;charset=utf-8\",\n\t\t\t\"$content\": \"PG5hbWU+SG9uZXljcmlzcDwvbmFtZT4=\"\n\t\t}\n]",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set XML String",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set xpath",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "result_str",
+					"value": {
+						"value": "@concat(\n    xpath(xml(variables('xml')), variables('xpath'))[0],\n    string(length(xpath(xml(variables('xml')), variables('xpath'))))\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Example 1 as array",
+				"description": "[\n\t\t{\n\t\t\t\"$content-type\": \"application/xml;charset=utf-8\",\n\t\t\t\"$content\": \"PG5hbWU+R2FsYTwvbmFtZT4=\"\n\t\t},\n\t\t{\n\t\t\t\"$content-type\": \"application/xml;charset=utf-8\",\n\t\t\t\"$content\": \"PG5hbWU+SG9uZXljcmlzcDwvbmFtZT4=\"\n\t\t}\n]",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set XML String",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set xpath",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "result_arr",
+					"value": {
+						"value": "@xpath(xml(variables('xml')), variables('xpath'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set xpath",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "xpath",
+					"value": "/*[name()=\"file\"]/*[name()=\"location\"]"
+				}
+			}
+		],
+		"variables": {
+			"xml": {
+				"type": "String"
+			},
+			"result": {
+				"type": "Array"
+			},
+			"decoded": {
+				"type": "String"
+			},
+			"expected_01": {
+				"type": "String"
+			},
+			"expected_00": {
+				"type": "String"
+			},
+			"result_str": {
+				"type": "String"
+			},
+			"result_arr": {
+				"type": "Array"
+			},
+			"xpath": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "XML Tests"
+		},
+		"annotations": []
+	}
+}

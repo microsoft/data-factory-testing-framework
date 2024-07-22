@@ -1,7 +1,7 @@
 import json
 from typing import Any
 
-from data_factory_testing_framework._functions.evaluator import ExpressionEvaluator
+from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
 from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
 )
@@ -26,8 +26,9 @@ class DataFactoryElement:
     def evaluate(self, state: RunState) -> DataFactoryObjectType:
         """Evaluate the expression."""
         try:
-            evaluator = ExpressionEvaluator()
-            self.result = evaluator.evaluate(self.expression, state)
+            expression_runtime = ExpressionRuntime()
+            self.result = expression_runtime.evaluate(self.expression, state)
+            return self.result
         except UserError as e:
             raise e from e
         except Exception as e:
