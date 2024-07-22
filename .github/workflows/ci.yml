@@ -62,7 +62,7 @@ jobs:
       - name: Build dotnet dependencies
         run: dotnet build
       - name: Install project
-        run: poetry run pip install .
+        run: poetry run pip install -e .
       - name: Set build version and build package
         run: |
           # create a version file with the build version
