@@ -59,6 +59,8 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
+      - name: Build dotnet dependencies
+        run: dotnet build
       - name: Install project
         run: poetry run pip install .
       - name: Set build version and build package
