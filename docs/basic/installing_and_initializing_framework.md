@@ -2,7 +2,9 @@
 
 ## Install dotnet runtime
 
-Install the dotnet runtime (not SDK) from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). This is required to evaluate the Data Factory expression functions on dotnet just like in Data Factory.
+Install the dotnet runtime (not SDK) from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
+Version 8.0 is recommended (the minimum version required is 5.0).
+The dotnet runtime is required to evaluate the Data Factory expression functions on dotnet just like in Data Factory.
 
 ## Installing the framework
 

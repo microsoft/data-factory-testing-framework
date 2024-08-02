@@ -32,10 +32,7 @@ def test_batch_job_pipeline(request: pytest.FixtureRequest) -> None:
     xml_array = activity.value.result
 
     assert isinstance(xml_array, list)
-
     assert len(xml_array) == 1
-
-    # decode $content from base64
     assert (
         base64.b64decode(xml_array[0]["$content"]).decode("utf-8")
         == '<location xmlns="https://contoso.com">Paris</location>'

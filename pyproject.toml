@@ -2,11 +2,14 @@
 name = "data-factory-testing-framework"
 dynamic = ["version"]
 authors = [
-  { name="Data Factory Testing Framework", email="dftf@microsoft.com" },
+    {name = "Data Factory Testing Framework", email = "dftf@microsoft.com"},
 ]
 requires-python = ">=3.9,<3.13"
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
@@ -22,10 +25,10 @@ dependencies = [
 ]
 
 [project.urls]
-"Issues" = "https://github.com/microsoft/data-factory-testing-framework/issues"
-homepage = "https://github.com/microsoft/data-factory-testing-framework"
-documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
-repository = "https://github.com/microsoft/data-factory-testing-framework.git"
+Homepage = "https://github.com/microsoft/data-factory-testing-framework"
+Documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
+Issues = "https://github.com/microsoft/data-factory-testing-framework/issues"
+Source = "https://github.com/microsoft/data-factory-testing-framework.git"
 
 [tool.poetry]
 package-mode = false

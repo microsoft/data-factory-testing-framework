@@ -49,14 +49,12 @@ class ExpressionTransformer:
                               | expression_variable_reference
                               | expression_item_reference
                               | expression_datafactory_activity_reference
-                              | expression_parameter_reference
 
             // reference rules:
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
             expression_datafactory_parameters_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
             expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
-            expression_parameter_reference: "parameter" "(" EXPRESSION_PARAMETER_NAME ")"
             expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY
 
 
