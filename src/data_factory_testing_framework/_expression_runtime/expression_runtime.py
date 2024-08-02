@@ -1,9 +1,11 @@
 import re
 
 from data_factory_testing_framework._expression_runtime.data_factory_expression.expression_transformer import (
-    ExpressionTransformer as DataFactoryExpressionTransformer,
+    ExpressionTransformer as DataFactoryTestingFrameworkExpressionsTransformer,
 )
-from data_factory_testing_framework._pythonnet.dotnet_expression_evaluator import DotnetExpressionEvaluator
+from data_factory_testing_framework._pythonnet.data_factory_testing_framework_expressions_evaluator import (
+    DataFactoryTestingFrameworkExpressionsEvaluator,
+)
 from data_factory_testing_framework.exceptions import (
     ActivityNotFoundError,
     ParameterNotFoundError,
@@ -15,16 +17,16 @@ from data_factory_testing_framework.state import PipelineRunState, RunParameterT
 
 class ExpressionRuntime:
     def __init__(self) -> None:
-        """Initializes the expression runtime."""
-        self.data_factory_expression_transformer = DataFactoryExpressionTransformer()
-        self.dotnet_expression_evaluator = DotnetExpressionEvaluator()
+        """Initializes the expression runtime to transform and evaluate the expressions."""
+        self.dftf_expressions_transformer = DataFactoryTestingFrameworkExpressionsTransformer()
+        self.dftf_expressions_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
 
     def evaluate(self, expression: str, state: PipelineRunState) -> str:
-        dotnet_evaluator_expression = self.data_factory_expression_transformer.transform_to_dotnet_evaluator_expression(
+        dftf_transformed_expression = self.dftf_expressions_transformer.transform_to_dftf_evaluator_expression(
             expression, state
         )
         try:
-            result = self.dotnet_expression_evaluator.evaluate(dotnet_evaluator_expression, state)
+            result = self.dftf_expressions_evaluator.evaluate(dftf_transformed_expression, state)
         except Exception as e:
             # match the exception type (coming from .NET) to the one we expect
             missing_parameter_match = re.match(

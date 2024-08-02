@@ -5,7 +5,9 @@ from data_factory_testing_framework._expression_runtime.data_factory_expression 
     ExpressionTransformer as DataFactoryExpressionTransformer,
 )
 from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
-from data_factory_testing_framework._pythonnet.dotnet_expression_evaluator import DotnetExpressionEvaluator
+from data_factory_testing_framework._pythonnet.data_factory_testing_framework_expressions_evaluator import (
+    DataFactoryTestingFrameworkExpressionsEvaluator,
+)
 from data_factory_testing_framework.exceptions import (
     ActivityNotFoundError,
     ParameterNotFoundError,
@@ -337,7 +339,7 @@ def test_evaluate(
     data_factory_expression_transformer = DataFactoryExpressionTransformer()
 
     # Act populating the expression
-    dotnet_evaluator_expression = data_factory_expression_transformer.transform_to_dotnet_evaluator_expression(
+    dotnet_evaluator_expression = data_factory_expression_transformer.transform_to_dftf_evaluator_expression(
         expression, state
     )
 
@@ -345,7 +347,7 @@ def test_evaluate(
     assert dotnet_evaluator_expression == expected_dotnet_evaluator_expression
 
     # Act evaluating the expression
-    dotnet_evaluator = DotnetExpressionEvaluator()
+    dotnet_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
     actual = dotnet_evaluator.evaluate(dotnet_evaluator_expression, state)
 
     # Assert evaluation

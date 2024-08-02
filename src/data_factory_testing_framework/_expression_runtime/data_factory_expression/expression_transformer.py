@@ -1,5 +1,5 @@
-from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_dotnet_evaluator_transformer import (
-    DataFactoryToDotnetEvaluatorExpressionTransformer,
+from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_expression_transformer import (
+    DataFactoryExpressionTransformer,
 )
 from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
@@ -115,9 +115,7 @@ class ExpressionTransformer:
         tree = self.lark_parser.parse(expression)
         return tree
 
-    def transform_to_dotnet_evaluator_expression(
-        self, expression: str, state: PipelineRunState
-    ) -> DataFactoryObjectType:
+    def transform_to_dftf_evaluator_expression(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
         try:
             parse_tree = self._parse(expression)
 
@@ -132,8 +130,7 @@ class ExpressionTransformer:
             """
             raise ExpressionParsingError(msg) from uc
 
-        # Use transformer to translate DataFactory expression language
-        rule_transformer = DataFactoryToDotnetEvaluatorExpressionTransformer()
+        rule_transformer = DataFactoryExpressionTransformer()
         transformed_ast = rule_transformer.transform(parse_tree)
         expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(transformed_ast)
         return expression_reconstructed

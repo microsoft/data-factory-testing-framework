@@ -9,7 +9,7 @@ from Microsoft.Azure.DataFactoryTestingFramework.Expressions import (  # type: i
 from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
-class DotnetExpressionEvaluator:
+class DataFactoryTestingFrameworkExpressionsEvaluator:
     @staticmethod
     def evaluate(expression: str, state: PipelineRunState) -> Union[str, int, float, bool, dict, list]:
         evaluator = Evaluator()
