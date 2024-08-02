@@ -42,12 +42,14 @@ class ExpressionTransformer:
             expression_start: "@" expression_evaluation
             expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
             ?expression_call: expression_function_call
+                              // used to translate to expression_pipeline_reference
+                              | expression_datafactory_parameters_reference
+                              | expression_pipeline_reference
+                              // parse other language constructs
                               | expression_variable_reference
                               | expression_item_reference
-                              | expression_datafactory_parameters_reference
                               | expression_datafactory_activity_reference
                               | expression_parameter_reference
-                              | expression_pipeline_reference
 
             // reference rules:
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
