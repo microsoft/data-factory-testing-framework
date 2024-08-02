@@ -1,3 +1,7 @@
+"""Custom build script for building the C# project with setuptools.
+
+Based on the following discussion: https://github.com/pypa/setuptools/discussions/3762
+"""
 import shutil
 import subprocess
 from contextlib import suppress
@@ -5,9 +9,6 @@ from pathlib import Path
 
 from setuptools import Command, setup
 from setuptools.command.build import build
-
-# from setuptools.command.build
-# https://github.com/pypa/setuptools/discussions/3762
 
 
 class CustomCommand(Command):
