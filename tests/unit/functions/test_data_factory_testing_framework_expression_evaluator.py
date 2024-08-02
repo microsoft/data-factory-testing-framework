@@ -26,7 +26,7 @@ from pytest import param as p
 
 
 @pytest.mark.parametrize(
-    ["expression", "state", "expected_dotnet_evaluator_expression", "expected_evaluation"],
+    ["expression", "state", "expected_expressions_evaluator_expression", "expected_evaluation"],
     [
         p("value", PipelineRunState(), "value", "value", id="string_literal"),
         p(" value ", PipelineRunState(), " value ", " value ", id="string_with_ws_literal"),
@@ -331,7 +331,7 @@ from pytest import param as p
 def test_evaluate(
     expression: str,
     state: PipelineRunState,
-    expected_dotnet_evaluator_expression: str,
+    expected_expressions_evaluator_expression: str,
     expected_evaluation: Union[str, int, bool, float],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -339,16 +339,16 @@ def test_evaluate(
     data_factory_expression_transformer = DataFactoryExpressionTransformer()
 
     # Act populating the expression
-    dotnet_evaluator_expression = data_factory_expression_transformer.transform_to_dftf_evaluator_expression(
+    dftf_evaluator_expression = data_factory_expression_transformer.transform_to_dftf_evaluator_expression(
         expression, state
     )
 
     # Assert population
-    assert dotnet_evaluator_expression == expected_dotnet_evaluator_expression
+    assert dftf_evaluator_expression == expected_expressions_evaluator_expression
 
     # Act evaluating the expression
-    dotnet_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
-    actual = dotnet_evaluator.evaluate(dotnet_evaluator_expression, state)
+    dftf_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
+    actual = dftf_evaluator.evaluate(dftf_evaluator_expression, state)
 
     # Assert evaluation
     assert actual == expected_evaluation
