@@ -84,15 +84,6 @@ Azure Data Factory:
 1. [Copy blobs example](examples/data_factory/copy_blobs/README.md)
 2. [Batch job example](examples/data_factory/batch_job/README.md)
 
-## Limitations :warning:
-
-The framework has the following limitations at the moment:
-
-1. The framework reimplements the Data Factory expression language in Python. This means that it might not be 100% accurate with the actual Data Factory language, especially when it comes to xml functions.
-2. The framework does not support automatic type conversion of arguments passed to functions in expressions.
-
-> These limitations are top priority to be resolved in the future.
-
 ## Contributing :handshake:
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
