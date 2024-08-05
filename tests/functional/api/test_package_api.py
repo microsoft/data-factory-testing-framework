@@ -1,6 +1,6 @@
 import inspect
 
-from tests.functional.utils import is_public_module
+from tests.functional.utils import get_public_members, is_public_class, is_public_module
 
 
 def test_package_root() -> None:
@@ -18,7 +18,7 @@ def test_package_modules() -> None:
     import data_factory_testing_framework as package
 
     # Act
-    public_modules = [module[0] for module in inspect.getmembers(package, predicate=is_public_module)]
+    public_modules = get_public_members(package, predicate=is_public_module)
 
     # Assert
     assert len(public_modules) == 3
@@ -30,11 +30,11 @@ def test_package_classes() -> None:
     import data_factory_testing_framework as package
 
     # Act
-    public_classes = [module[0] for module in inspect.getmembers(package, predicate=inspect.isclass)]
+    public_classes = get_public_members(package, predicate=is_public_class)
 
     # Assert
-    assert len(public_classes) == 3
-    assert public_classes == ["FunctionsRepository", "TestFramework", "TestFrameworkType"]
+    assert len(public_classes) == 2
+    assert public_classes == ["TestFramework", "TestFrameworkType"]
 
 
 def test_package_exceptions() -> None:
@@ -42,7 +42,7 @@ def test_package_exceptions() -> None:
     import data_factory_testing_framework.exceptions as module
 
     # Act
-    public_modules = [module[0] for module in inspect.getmembers(module, predicate=is_public_module)]
+    public_modules = get_public_members(module, predicate=is_public_module)
 
     # Assert
     assert len(public_modules) == 0
@@ -53,7 +53,7 @@ def test_package_exceptions_classes() -> None:
     import data_factory_testing_framework.exceptions as module
 
     # Act
-    public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
+    public_classes = get_public_members(module, predicate=inspect.isclass)
 
     # Assert
     assert len(public_classes) == 12
@@ -78,7 +78,7 @@ def test_package_models() -> None:
     import data_factory_testing_framework.models as module
 
     # Act
-    public_modules = [module[0] for module in inspect.getmembers(module, predicate=is_public_module)]
+    public_modules = get_public_members(module, predicate=is_public_module)
 
     # Assert
     assert len(public_modules) == 1
@@ -90,7 +90,7 @@ def test_package_models_classes() -> None:
     import data_factory_testing_framework.models as module
 
     # Act
-    public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
+    public_classes = get_public_members(module, predicate=inspect.isclass)
 
     # Assert
     assert len(public_classes) == 2
@@ -102,7 +102,7 @@ def test_package_models_activities() -> None:
     import data_factory_testing_framework.models.activities as module
 
     # Act
-    public_modules = [module[0] for module in inspect.getmembers(module, predicate=is_public_module)]
+    public_modules = get_public_members(module, predicate=is_public_module)
 
     # Assert
     assert len(public_modules) == 0
@@ -113,7 +113,7 @@ def test_package_models_activities_classes() -> None:
     import data_factory_testing_framework.models.activities as module
 
     # Act
-    public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
+    public_classes = get_public_members(module, predicate=inspect.isclass)
 
     # Assert
     assert len(public_classes) == 12
@@ -138,7 +138,7 @@ def test_package_state() -> None:
     import data_factory_testing_framework.state as module
 
     # Act
-    public_modules = [module[0] for module in inspect.getmembers(module, predicate=is_public_module)]
+    public_modules = get_public_members(module, predicate=is_public_module)
 
     # Assert
     assert len(public_modules) == 0
@@ -150,7 +150,7 @@ def test_package_state_classes() -> None:
     import data_factory_testing_framework.state as module
 
     # Act
-    public_classes = [module[0] for module in inspect.getmembers(module, predicate=inspect.isclass)]
+    public_classes = get_public_members(module, predicate=inspect.isclass)
 
     # Assert
     assert len(public_classes) == 7

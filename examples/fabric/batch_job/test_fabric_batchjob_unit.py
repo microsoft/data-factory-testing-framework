@@ -24,7 +24,6 @@ def pipeline(test_framework: TestFramework) -> Pipeline:
 
 
 def test_set_job_container_url(test_framework: TestFramework, pipeline: Pipeline) -> None:
-    int(1.1)
     # Arrange
     activity = pipeline.get_activity_by_name("Set Job Container URL")
     state = PipelineRunState(

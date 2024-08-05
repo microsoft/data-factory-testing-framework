@@ -1,23 +1,17 @@
-from lark import Lark, Token, Tree, UnexpectedCharacters
-
-from data_factory_testing_framework._functions.evaluator.exceptions import (
-    ExpressionEvaluationError,
+from data_factory_testing_framework._expression_runtime.data_factory_expression.data_factory_to_expression_transformer import (
+    DataFactoryExpressionTransformer,
+)
+from data_factory_testing_framework._expression_runtime.data_factory_expression.exceptions import (
     ExpressionParsingError,
 )
-from data_factory_testing_framework._functions.evaluator.expression_rule_transformer import (
-    ExpressionRuleTransformer,
-)
-from data_factory_testing_framework._functions.evaluator.expression_terminal_transformer import (
-    ExpressionTerminalTransformer,
-)
-from data_factory_testing_framework._functions.evaluator.rules import ExpressionRuleEvaluator
-from data_factory_testing_framework._functions.evaluator.rules.expression_rule_evaluator import EvaluationResult
-from data_factory_testing_framework._functions.functions_repository import FunctionsRepository
+from data_factory_testing_framework._expression_runtime.functions_repository import FunctionsRepository
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import PipelineRunState
+from lark import Lark, Token, Tree, UnexpectedCharacters
+from lark.reconstruct import Reconstructor
 
 
-class ExpressionEvaluator:
+class ExpressionTransformer:
     def __init__(self) -> None:
         """Evaluator for the expression language."""
         literal_grammar = """
@@ -45,27 +39,26 @@ class ExpressionEvaluator:
         """
 
         expression_grammar = f"""
-            // TODO: add support for array index
-            ?expression_start: expression_evaluation
-            # TODO: probably object accessor does not apply to all below in expression_evaluation
+            expression_start: "@" expression_evaluation
             expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
             ?expression_call: expression_function_call
-                                    | expression_pipeline_reference
-                                    | expression_variable_reference
-                                    | expression_activity_reference
-                                    | expression_dataset_reference
-                                    | expression_linked_service_reference
-                                    | expression_item_reference
-                                    | expression_system_variable_reference
+                              // used to translate to expression_pipeline_reference
+                              | expression_datafactory_parameters_reference
+                              | expression_pipeline_reference
+                              // parse other language constructs
+                              | expression_variable_reference
+                              | expression_item_reference
+                              | expression_datafactory_activity_reference
 
             // reference rules:
-            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY "." EXPRESSION_PARAMETER_NAME
             expression_variable_reference: "variables" "(" EXPRESSION_VARIABLE_NAME ")"
-            expression_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
-            expression_dataset_reference: "dataset" "()" "." EXPRESSION_PARAMETER_NAME
-            expression_linked_service_reference: "linkedService" "()" "." EXPRESSION_PARAMETER_NAME
+            expression_datafactory_parameters_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
+            expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
-            expression_system_variable_reference: "pipeline" "()" "." EXPRESSION_SYSTEM_VARIABLE_NAME
+            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY
+
+
+
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
             expression_branch: "if" "(" expression_parameter "," expression_parameter "," expression_parameter ")"
@@ -73,10 +66,10 @@ class ExpressionEvaluator:
 
             // function call rules
             expression_function_call: EXPRESSION_FUNCTION_NAME "(" [expression_parameter ("," expression_parameter )*] ")"
-            ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_start) EXPRESSION_WS*
+            ?expression_parameter: EXPRESSION_WS* (EXPRESSION_NULL | EXPRESSION_INTEGER | EXPRESSION_FLOAT | EXPRESSION_BOOLEAN | EXPRESSION_STRING | expression_evaluation) EXPRESSION_WS*
 
             // expression terminals
-            // EXPRESSION_PIPELINE_PROPERTY requires higher priority, because it clashes with pipeline().system_variable.field in the rule: expression_pipeline_reference
+            EXPRESSION_DATAFACTORY_REFERENCE: "dataset" | "linkedService"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX
             EXPRESSION_BOOLEAN: BOOLEAN
@@ -86,7 +79,7 @@ class ExpressionEvaluator:
             EXPRESSION_LOGICAL_BOOL: "or" | "and"
             EXPRESSION_NULL: NULL
             EXPRESSION_PARAMETER_NAME: /[a-zA-Z0-9_]+/
-            EXPRESSION_PIPELINE_PROPERTY.2: "parameters" | "globalParameters"
+            EXPRESSION_PIPELINE_PROPERTY: /[a-zA-Z0-9_]+/
             EXPRESSION_STRING: SINGLE_QUOTED_STRING
             EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
@@ -94,7 +87,7 @@ class ExpressionEvaluator:
         """  # noqa: E501
 
         base_grammar = """
-            ?start: ("@" expression_start) | (["@@"] literal_start) | (literal_interpolation)
+            start: (expression_start) | (["@@"]+ literal_start) | (literal_interpolation)
 
             // shared custom basic data type rules:
             ARRAY_INDEX: "[" /[0-9]+/ "]"
@@ -113,15 +106,14 @@ class ExpressionEvaluator:
         self.lark_parser = Lark(grammer, start="start", maybe_placeholders=False)
 
     def _supported_functions(self) -> str:
-        functions = list(FunctionsRepository._functions.keys())
-        functions = [f'"{f}"' for f in functions]
+        functions = [f'"{f}"' for f in FunctionsRepository._functions]
         return " | ".join(functions)
 
     def _parse(self, expression: str) -> Tree[Token]:
         tree = self.lark_parser.parse(expression)
         return tree
 
-    def evaluate(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
+    def transform_to_dftf_evaluator_expression(self, expression: str, state: PipelineRunState) -> DataFactoryObjectType:
         try:
             parse_tree = self._parse(expression)
 
@@ -135,14 +127,8 @@ class ExpressionEvaluator:
             char: {uc.char}
             """
             raise ExpressionParsingError(msg) from uc
-        # we start with a raw parse tree for the lark grammer
-        # and then semantically analysis it (in our case transforming values step by step)
-        ast = parse_tree
-        ast = ExpressionTerminalTransformer().transform(ast)
-        ast = ExpressionRuleTransformer(state).transform(ast)
-        if not isinstance(ast, ExpressionRuleEvaluator):
-            raise ExpressionEvaluationError()
-        result = ast.evaluate()
-        if not isinstance(result, EvaluationResult):
-            raise ExpressionEvaluationError()
-        return result.value
+
+        rule_transformer = DataFactoryExpressionTransformer()
+        transformed_ast = rule_transformer.transform(parse_tree)
+        expression_reconstructed = Reconstructor(self.lark_parser).reconstruct(transformed_ast)
+        return expression_reconstructed

@@ -401,3 +401,13 @@ FodyWeavers.xsd
 
 # Distributions / Releases
 dist
+*.egg-info
+
+# Dotnet Evaluator
+src/data_factory_testing_framework/DataFactoryTestingFrameworkEvaluator
+test_sdist
+test_wheel
+VERSION
+build
+dotnet_build
+.mono

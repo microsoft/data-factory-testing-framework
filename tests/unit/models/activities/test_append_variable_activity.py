@@ -13,9 +13,9 @@ from data_factory_testing_framework.state import PipelineRunState, PipelineRunVa
 @pytest.mark.parametrize(
     "initial_value,appended_value,expected_value",
     [
-        ([1, 2], 3, [1, 2, 3]),
-        ([], 1, [1]),
-        ([4], 5, [4, 5]),
+        ([1, 2], 3, [1, 2, "3"]),
+        ([], 1, ["1"]),
+        ([4], 5, [4, "5"]),
     ],
 )
 def test_when_int_variable_appended_then_state_variable_should_be_set(

@@ -1,24 +1,41 @@
-[tool.poetry]
+[project]
 name = "data-factory-testing-framework"
-version = "0.1.0"
+dynamic = ["version"]
+authors = [
+    {name = "Data Factory Testing Framework", email = "dftf@microsoft.com"},
+]
+requires-python = ">=3.9,<3.13"
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 description = "A stand-alone test framework that allows to write unit tests for Data Factory pipelines on Microsoft Fabric and Azure Data Factory."
-authors = ["Data Factory Testing Framework Team <dftf@microsoft.com>"]
 readme = "README.md"
-license = "MIT"
-include = [ "README.md", "LICENSE" ]
+license = { file="LICENSE" }
 keywords = ["fabric", "datafactory", "unit-testing", "functional-testing", "azure"]
-homepage = "https://github.com/microsoft/data-factory-testing-framework"
-documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
-repository = "https://github.com/microsoft/data-factory-testing-framework.git"
 
-[tool.poetry.urls]
-"Issues" = "https://github.com/microsoft/data-factory-testing-framework/issues"
+dependencies = [
+    "azure-core>=1.29.5,<2.0.0",
+    "lark>=1.1.8,<2.0.0",
+    "pythonnet>=3.0.3,<4.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/microsoft/data-factory-testing-framework"
+Documentation = "https://github.com/microsoft/data-factory-testing-framework/blob/main/README.md"
+Issues = "https://github.com/microsoft/data-factory-testing-framework/issues"
+Source = "https://github.com/microsoft/data-factory-testing-framework.git"
+
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 azure-core = "^1.29.5"
-xmltodict = "^0.13.0"
-lxml = "^4.9.3"
 lark = "^1.1.8"
 pythonnet = "^3.0.3"
 
@@ -29,12 +46,9 @@ ruff = "^0.1.5"
 pre-commit = "^3.5.0"
 astor = "^0.8.1"
 docstring-parser = "^0.15"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
+build = "^1.1.1"
+wheel = "^0.43.0"
+setuptools = "^69.0"
 
 [tool.ruff]
 select = [
@@ -83,3 +97,10 @@ convention = "google"
 [tool.pytest.ini_options]
 minversion = "7.0"
 pythonpath = ["."]
+
+[tool.setuptools.package-data]
+data_factory_testing_framework = []
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

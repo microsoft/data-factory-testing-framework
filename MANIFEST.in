@@ -1,0 +1,5 @@
+include VERSION
+include DataFactoryTestingFramework.sln
+recursive-include src *.cs *.cs
+recursive-include src *.csproj *.csproj
+prune src/data_factory_testing_framework/_pythonnet/obj
