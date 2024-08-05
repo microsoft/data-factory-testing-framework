@@ -120,6 +120,7 @@ from pytest import param as p
             id="linked_service_reference",
         ),
         p("@item()", PipelineRunState(iteration_item="value"), "@item()", "value", id="item_reference"),
+        p("@item() ", PipelineRunState(iteration_item="value"), "@item() ", "value", id="item_reference_with_ws"),
         p("@concat('a', 'b' )", PipelineRunState(), "@concat('a', 'b' )", "ab", id="function_call"),
         p(
             "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
