@@ -40,7 +40,7 @@ class ExpressionTransformer:
 
         expression_grammar = f"""
             expression_start: "@" expression_evaluation
-            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)?
+            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)? EXPRESSION_WS*
             ?expression_call: expression_function_call
                               // used to translate to expression_pipeline_reference
                               | expression_datafactory_parameters_reference
