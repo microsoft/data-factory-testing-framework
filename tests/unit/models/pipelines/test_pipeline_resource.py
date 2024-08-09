@@ -41,6 +41,92 @@ def test_when_validate_parameters_is_accurate_should_pass() -> None:
     assert parameters[2].value == "pipelineParameterValue3"
 
 
+@pytest.mark.parametrize(
+    ("variable_spec", "expected_value"),
+    [
+        (
+            {
+                "type": "String",
+                "defaultValue": "stringDefault",
+            },
+            "stringDefault",
+        ),
+        (
+            {
+                "type": "String",
+            },
+            "",
+        ),
+        (
+            {
+                "type": "String",
+                "defaultValue": "",
+            },
+            "",
+        ),
+        (
+            {
+                "type": "Boolean",
+                "defaultValue": True,
+            },
+            True,
+        ),
+        (
+            {
+                "type": "Boolean",
+            },
+            False,
+        ),
+        (
+            {
+                "type": "Integer",
+                "defaultValue": 1,
+            },
+            1,
+        ),
+        (
+            {
+                "type": "Integer",
+            },
+            0,
+        ),
+        (
+            {
+                "type": "Array",
+                "defaultValue": ["a", "b"],
+            },
+            ["a", "b"],
+        ),
+        (
+            {
+                "type": "Array",
+            },
+            [],
+        ),
+    ],
+)
+def test_when_get_run_variables_default_values_should_be_used(
+    variable_spec: dict[str, str], expected_value: object
+) -> None:
+    # Arrange
+    pipeline = Pipeline(
+        pipeline_id="some-id",
+        name="pipeline",
+        activities=[],
+        variables={
+            "variable": variable_spec,
+        },
+    )
+
+    # Act
+    variables = pipeline.get_run_variables()
+
+    # Assert
+    assert len(variables) == 1
+    assert variables[0].name == "variable"
+    assert variables[0].value == expected_value
+
+
 def test_when_validate_parameters_is_missing_run_parameter_should_throw_error() -> None:
     # Arrange
     pipeline = Pipeline(
