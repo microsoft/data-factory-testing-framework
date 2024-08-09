@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, List
+from typing import TYPE_CHECKING, Any, List, Union
 
 from data_factory_testing_framework.exceptions import ActivityNotFoundError
 
@@ -79,10 +79,25 @@ class Pipeline:
 
         return parameters
 
+    def _get_default_value_for_variable(self, variable_value: dict[str, Any]) -> Union[str, int, bool, List[Any]]:
+        """Get the default value of a variable."""
+        if variable_value["type"] == "String":
+            return variable_value.get("defaultValue", "")
+        elif variable_value["type"] == "Integer":
+            return variable_value.get("defaultValue", 0)
+        elif variable_value["type"] == "Boolean":
+            return variable_value.get("defaultValue", False)
+        elif variable_value["type"] == "Array":
+            return variable_value.get("defaultValue", [])
+        else:
+            raise NotImplementedError(f"Type {variable_value['type']} not implemented")
+
     def get_run_variables(self) -> List[PipelineRunVariable]:
         """Get the run variables for the pipeline. This can be used to generate the instance variables for a pipeline run."""
         run_variables = []
         for variable_name, variable_value in self.variables.items():
-            run_variables.append(PipelineRunVariable(variable_name, variable_value.get("default_value", None)))
+            run_variables.append(
+                PipelineRunVariable(variable_name, self._get_default_value_for_variable(variable_value))
+            )
 
         return run_variables

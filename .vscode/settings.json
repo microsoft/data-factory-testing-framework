@@ -10,4 +10,5 @@
     "python.testing.cwd": "${workspaceFolder}",
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
+    "python.defaultInterpreterPath": ".venv/bin/python",
 }

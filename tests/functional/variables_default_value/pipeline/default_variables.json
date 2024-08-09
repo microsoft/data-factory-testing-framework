@@ -1,0 +1,114 @@
+{
+    "name": "default_variables",
+    "properties": {
+        "activities": [
+            {
+                "name": "Set outputStringVar",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "pipelineReturnValue",
+                    "value": [
+                        {
+                            "key": "outputStringVar",
+                            "value": {
+                                "type": "Expression",
+                                "content": "@if(equals(variables('stringVar'), null), 'is null', concat('is not null: ', variables('stringVar')))\n"
+                            }
+                        }
+                    ],
+                    "setSystemVariable": true
+                }
+            },
+            {
+                "name": "Set outputIntVar",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "pipelineReturnValue",
+                    "value": [
+                        {
+                            "key": "outputIntVar",
+                            "value": {
+                                "type": "Expression",
+                                "content": "@if(equals(variables('intVar'), null), 'is null', concat('is not null: ', variables('intVar')))\n"
+                            }
+                        }
+                    ],
+                    "setSystemVariable": true
+                }
+            },
+            {
+                "name": "Set outputBoolVar",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "pipelineReturnValue",
+                    "value": [
+                        {
+                            "key": "outputBoolVar",
+                            "value": {
+                                "type": "Expression",
+                                "content": "@if(equals(variables('boolVar'), null), 'is null', concat('is not null: ', variables('boolVar')))\n"
+                            }
+                        }
+                    ],
+                    "setSystemVariable": true
+                }
+            },
+            {
+                "name": "Set outputArrayVar",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "pipelineReturnValue",
+                    "value": [
+                        {
+                            "key": "outputArrayVar",
+                            "value": {
+                                "type": "Expression",
+                                "content": "@if(equals(variables('arrayVar'), null), 'is null', concat('is not null: ', variables('arrayVar')))\n"
+                            }
+                        }
+                    ],
+                    "setSystemVariable": true
+                }
+            }
+        ],
+        "variables": {
+            "stringVar": {
+                "type": "String"
+            },
+            "intVar": {
+                "type": "Integer"
+            },
+            "boolVar": {
+                "type": "Boolean"
+            },
+            "arrayVar": {
+                "type": "Array"
+            }
+        },
+        "annotations": []
+    }
+}
