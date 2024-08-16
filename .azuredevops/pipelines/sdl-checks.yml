@@ -1,0 +1,51 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+
+schedules:
+# Ensure we build nightly to catch any new CVEs and report SDL often.
+- cron: "0 0 * * *"
+  displayName: Nightly Build
+  branches:
+    include:
+    - main
+  always: true
+
+pr:
+  branches:
+    include:
+    - main
+
+resources:
+  repositories:
+  - repository: 1es
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Unofficial.PipelineTemplate.yml@1es # Public Build (not used to publish)
+  parameters:
+    pool:
+      name: dftf-1eshosted-pool
+      image: dftf-1es-image-vanilla-ubuntu-22.04-ne
+      os: linux
+    sdl:
+      codeql:
+        compiled:
+          enabled: true
+        runSourceLanguagesInSourceAnalysis: true
+      sourceAnalysisPool:
+        name: dftf-1eshosted-pool
+        image: dftf-1es-image-vanilla-windows-2022-ne
+        os: windows
+    stages:
+      - stage: build
+        displayName: build
+        jobs:
+        - job: job
+          displayName: Job
+          steps:
+          - checkout: self
