@@ -1,6 +1,6 @@
 from enum import Enum
 
-from azure.core import CaseInsensitiveEnumMeta
+from data_factory_testing_framework._enum_meta import CaseInsensitiveEnumMeta
 
 
 class RunParameterType(str, Enum, metaclass=CaseInsensitiveEnumMeta):

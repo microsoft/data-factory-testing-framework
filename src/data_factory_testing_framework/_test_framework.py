@@ -1,8 +1,7 @@
 from enum import Enum
 from typing import Iterator, List, Optional
 
-from azure.core import CaseInsensitiveEnumMeta
-
+from data_factory_testing_framework._enum_meta import CaseInsensitiveEnumMeta
 from data_factory_testing_framework._repositories._factories.data_factory_repository_factory import (
     DataFactoryRepositoryFactory,
 )
