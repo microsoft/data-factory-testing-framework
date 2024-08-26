@@ -1,11 +1,12 @@
 {
-    "name": "switch-empty-default",
+    "name": "switchtest",
     "properties": {
         "activities": [
             {
                 "name": "Switch1",
                 "type": "Switch",
                 "dependsOn": [],
+                "userProperties": [],
                 "typeProperties": {
                     "on": {
                         "value": "@pipeline().parameters.current_value",
@@ -23,6 +24,7 @@
                                         "secureOutput": false,
                                         "secureInput": false
                                     },
+                                    "userProperties": [],
                                     "typeProperties": {
                                         "variableName": "case_hit",
                                         "value": "case_1_hit"
@@ -41,12 +43,29 @@
                                         "secureOutput": false,
                                         "secureInput": false
                                     },
+                                    "userProperties": [],
                                     "typeProperties": {
                                         "variableName": "case_hit",
                                         "value": "case_2_hit"
                                     }
                                 }
                             ]
+                        }
+                    ],
+                    "defaultActivities": [
+                        {
+                            "name": "Set variable1",
+                            "type": "SetVariable",
+                            "dependsOn": [],
+                            "policy": {
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "variableName": "case_hit",
+                                "value": "default_hit"
+                            }
                         }
                     ]
                 }

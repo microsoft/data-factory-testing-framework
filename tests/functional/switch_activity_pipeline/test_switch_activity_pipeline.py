@@ -16,7 +16,7 @@ from data_factory_testing_framework.state import RunParameter, RunParameterType
 def test_switch_activity(on_value: str, expected_outcome: str, request: pytest.FixtureRequest) -> None:
     # Arrange
     test_framework = TestFramework(
-        framework_type=TestFrameworkType.Fabric,
+        framework_type=TestFrameworkType.DataFactory,
         root_folder_path=request.fspath.dirname,
         should_evaluate_child_pipelines=True,
     )

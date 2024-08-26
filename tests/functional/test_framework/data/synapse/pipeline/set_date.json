@@ -1,0 +1,30 @@
+{
+    "name": "set_date",
+    "properties": {
+        "activities": [
+            {
+                "name": "Set datetime",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "Datetime",
+                    "value": {
+                        "value": "@utcnow()",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "variables": {
+            "Datetime": {
+                "type": "String"
+            }
+        },
+        "annotations": []
+    }
+}
