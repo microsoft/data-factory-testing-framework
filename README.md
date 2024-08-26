@@ -1,6 +1,6 @@
 # Data Factory - Testing Framework :hammer_and_wrench:
 
-A stand-alone test framework that allows to write unit tests for Data Factory pipelines on [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/) and [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory).
+A stand-alone test framework that allows to write unit tests for Data Factory pipelines on [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/), [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory) and [Azure Synapse Analytics](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory).
 
 > The framework is currently in _Public Preview_ and is not officially supported by Microsoft.
 
@@ -83,6 +83,10 @@ Azure Data Factory:
 
 1. [Copy blobs example](examples/data_factory/copy_blobs/README.md)
 2. [Batch job example](examples/data_factory/batch_job/README.md)
+
+Azure Synapse Analytics:
+
+1. [Copy blobs example](examples/synapse/copy_blobs/README.md)
 
 ## Contributing :handshake:
 
