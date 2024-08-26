@@ -4,7 +4,6 @@ from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.models.activities import Activity, ForEachActivity
 from data_factory_testing_framework.state import (
     PipelineRunState,
-    PipelineRunVariable,
     RunParameter,
     RunParameterType,
 )
@@ -27,9 +26,6 @@ def test_list_blobs(pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("List Folders")
     state = PipelineRunState(
-        variables=[
-            PipelineRunVariable(name="SourceContainerName", default_value="source"),
-        ],
         parameters=[
             RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
             RunParameter(
@@ -55,9 +51,6 @@ def test_for_each(pipeline: Pipeline) -> None:
     # Arrange
     activity = pipeline.get_activity_by_name("For Each SourceFolder")
     state = PipelineRunState(
-        variables=[
-            PipelineRunVariable(name="SourceContainerName", default_value="source"),
-        ],
         parameters=[
             RunParameter(RunParameterType.Global, "SourceStorageAccountName", "sourcestorage"),
             RunParameter(

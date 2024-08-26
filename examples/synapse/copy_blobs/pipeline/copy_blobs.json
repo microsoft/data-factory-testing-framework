@@ -1,0 +1,172 @@
+{
+	"name": "copy_blobs",
+	"properties": {
+		"activities": [
+			{
+				"name": "List Folders",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"headers": {
+						"x-ms-version": "2023-01-03"
+					},
+					"url": {
+						"value": "@concat('https://',pipeline().parameters.SourceStorageAccountName,'.blob.core.windows.net/',pipeline().parameters.SourceContainerName,'?restype=container&comp=list&prefix=',pipeline().parameters.SourceFolderPrefix,'&delimiter=$SourceBlobDelimiter')",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://storage.azure.com"
+					}
+				}
+			},
+			{
+				"name": "For Each SourceFolder",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "List Folders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@xpath(xml(activity('List Folders').output.Response),'/EnumerationResults/Blobs/BlobPrefix/Name/text()')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy files to Destination",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFolderPath": {
+											"value": "@item()",
+											"type": "Expression"
+										},
+										"wildcardFileName": "*.parquet"
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"copyBehavior": "FlattenHierarchy"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Binary",
+									"type": "DatasetReference",
+									"parameters": {
+										"ServiceURI": {
+											"value": "@concat('https://',pipeline().parameters.SourceStorageAccountName,'.blob.core.windows.net')",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().parameters.SourceContainerName",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@pipeline().parameters.SourceFolderPrefix",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Binary",
+									"type": "DatasetReference",
+									"parameters": {
+										"ServiceURI": {
+											"value": "@concat('https://',pipeline().parameters.SinkStorageAccountName,'.blob.core.windows.net')",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().parameters.SinkContainerName",
+											"type": "Expression"
+										},
+										"FolderName": {
+											"value": "@pipeline().parameters.SinkFolderName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"SourceContainerName": {
+				"type": "string"
+			},
+			"SourceFolderPrefix": {
+				"type": "string"
+			},
+			"SinkStorageAccountName": {
+				"type": "string"
+			},
+			"SinkContainerName": {
+				"type": "string"
+			},
+			"SinkFolderName": {
+				"type": "string"
+			},
+			"SourceStorageAccountName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "batch"
+		},
+		"annotations": []
+	}
+}
