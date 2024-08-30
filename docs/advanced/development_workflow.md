@@ -1,6 +1,6 @@
-# Recommended development workflow for Azure Data Factory v2
+# Recommended development workflow for Azure Data Factory (ADF) v2 and Azure Synapse Analytics
 
-* Use ADF Git integration
+* Use ADF / Azure Synapse Analytics Git integration
 * Use UI to create a feature branch, build the initial pipeline, and save it to the feature branch
 * Pull feature branch locally
 * Start writing unit and functional tests, run them locally for immediate feedback, and fix bugs

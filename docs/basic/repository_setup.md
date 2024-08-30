@@ -6,12 +6,13 @@ To be able to write tests for data factory, the pipeline and activity definition
 
 1. [Fabric - Git integration process](https://learn.microsoft.com/fabric/cicd/git-integration/git-integration-process)
 2. [Azure Data Factory - Git integration process](https://learn.microsoft.com/azure/data-factory/source-control)
+3. [Azure Synapse Analytics - Git integration process](https://learn.microsoft.com/en-us/azure/synapse-analytics/cicd/source-control)
 
-### Alternative for Azure Data Factory
+### Alternative for Azure Data Factory and Azure Synapse Analytics
 
 To download a single JSON file for testing purposes,  follow these steps:
 
-1. Open the Data Factory instance, and open the pipeline to be tested.
+1. Open the Data Factory or Synapse Analytics instance, and open the pipeline to be tested.
 2. Click on the action ellipses
 3. Click "Download support files"
 4. Extract the zip file containing the pipeline definition in a folder of choice.

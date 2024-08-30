@@ -22,7 +22,8 @@ repos:
         exclude: |
           (?x)^(
             tests/functional/utf_16_encoding/pipeline-content.json|
-            examples/fabric/simple_web_hook/fabric/ExamplePipeline.DataPipeline/pipeline-content.json
+            examples/fabric/simple_web_hook/fabric/ExamplePipeline.DataPipeline/pipeline-content.json|
+            tests/functional/test_framework/data/fabric/pipeline-content.json
           )$
       - id: trailing-whitespace
       - id: mixed-line-ending

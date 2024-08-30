@@ -60,13 +60,11 @@ class TestFramework:
                 self._repository = FabricRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self._repository = DataFactoryRepository([])
-        elif self._framework_type == TestFrameworkType.DataFactory:
+        elif self._framework_type == TestFrameworkType.DataFactory or self._framework_type == TestFrameworkType.Synapse:
             if root_folder_path is not None:
                 self._repository = DataFactoryRepositoryFactory().parse_from_folder(root_folder_path)
             else:
                 self._repository = DataFactoryRepository([])
-        elif self._framework_type == TestFrameworkType.Synapse:
-            raise NotImplementedError("Synapse test framework is not implemented yet.")
 
         self._should_evaluate_child_pipelines = should_evaluate_child_pipelines
 
