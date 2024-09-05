@@ -38,7 +38,7 @@ jobs:
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
       - name: Download dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.dist }}
           path: dist
