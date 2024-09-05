@@ -73,12 +73,12 @@ jobs:
         env:
           BUILD_VERSION: ${{ needs.version.outputs.version }}
       - name: Upload dist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: whl
           path: dist/*.whl
       - name: Upload sdist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sdist
           path: dist/*.tar.gz
