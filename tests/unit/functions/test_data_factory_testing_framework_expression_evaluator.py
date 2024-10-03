@@ -836,3 +836,52 @@ def test_conditional_expression_with_branching(
     else:
         with pytest.raises(expected):
             expression_runtime.evaluate(expression, state)
+
+
+@pytest.mark.parametrize(
+    "run_parameter_type, parameter_prefix",
+    [
+        (RunParameterType.Pipeline, "pipeline().parameters"),
+        (RunParameterType.Global, "pipeline().globalParameters"),
+        (RunParameterType.Dataset, "pipeline().dataset"),
+        (RunParameterType.LinkedService, "pipeline().linkedService"),
+        (RunParameterType.System, "pipeline()"),
+    ],
+)
+def test_complex_expression_with_missing_parameter(run_parameter_type: RunParameterType, parameter_prefix: str) -> None:
+    # Arrange
+    expression = f"@concat(pipeline().parameters.parameter, {parameter_prefix}.parameter2)"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "parameter", "value")])
+
+    # Act
+    with pytest.raises(ParameterNotFoundError) as exinfo:
+        expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert str(exinfo.value) == f"Parameter: 'parameter2' of type '{run_parameter_type}' not found"
+
+
+@pytest.mark.parametrize(
+    "run_parameter_type, parameter_prefix",
+    [
+        (RunParameterType.Global, "pipeline().globalParameters"),
+        (RunParameterType.Dataset, "pipeline().dataset"),
+        (RunParameterType.LinkedService, "pipeline().linkedService"),
+        (RunParameterType.System, "pipeline()"),
+    ],
+)
+def test_complex_expression_with_missing_parameter_with_same_name_of_another_type(
+    run_parameter_type: RunParameterType, parameter_prefix: str
+) -> None:
+    # Arrange
+    expression = f"@concat(pipeline().parameters.parameter, {parameter_prefix}.parameter)"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "parameter", "value")])
+
+    # Act
+    with pytest.raises(ParameterNotFoundError) as exinfo:
+        expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert str(exinfo.value) == f"Parameter: 'parameter' of type '{run_parameter_type}' not found"
