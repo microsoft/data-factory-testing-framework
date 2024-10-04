@@ -33,6 +33,30 @@ To run linting, run the following command:
 poetry run ruff .
 ```
 
+### Run tests
+
+We use pytest to test our code, coverage.py to generate coverage reports and [coverage gutters](https://marketplace.visualstudio.com/items?itemName=semasquare.vscode-coverage-gutters#:~:text=Features.%20Supports%20any%20language%20as%20long%20as%20you) VSCode extension to visualize code coverage in the editor.
+
+To run all tests and generate coverage data run the following command:
+
+```bash
+poetry run coverage run --source=src -m pytest .
+```
+
+This will generate a .coverage file. To visualize code coverage, generate a coverage.xml file from the .coverage file by running:
+
+```bash
+poetry run coverage xml
+```
+
+Once the xml file is generated, you can view the coverage results in the editor by running the `Coverage Gutters: Watch` command.
+
+To run tests and generate coverage.xml in a single command, run:
+
+```bash
+poetry run coverage run --source=src -m pytest . && coverage xml
+```
+
 ### Updating lock file
 
 When updating Poetry's lock file your local cache can become outdated.

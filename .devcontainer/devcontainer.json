@@ -33,7 +33,8 @@
 			"extensions": [
 				"GitHub.copilot",
 				"ms-python.python",
-				"ms-dotnettools.csharp"
+				"ms-dotnettools.csharp",
+				"ryanluker.vscode-coverage-gutters"
 			]
 		}
 	}
