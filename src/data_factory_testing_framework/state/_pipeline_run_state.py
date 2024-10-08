@@ -168,6 +168,10 @@ class PipelineRunState(RunState):
 
         return parameters[0].value
 
+    def _contains_parameter_with_type_and_name(self, parameter_type: RunParameterType, name: str) -> bool:
+        """Checks if the parameter exists in the state."""
+        return any(p.name == name and p.type == parameter_type for p in self.parameters)
+
     def is_activity_evaluated_in_scope(self, activity_name: str) -> bool:
         """Checks if an activity was evaluated in the current scope.
 

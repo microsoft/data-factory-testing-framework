@@ -54,16 +54,32 @@ class ExpressionRuntime:
                 expression = missing_parameter_match.group(2)
                 property_name = missing_parameter_match.group(4)
 
-                if expression.startswith("pipeline().parameters"):
+                if (
+                    f"pipeline().parameters.{property_name}" in expression
+                    and not state._contains_parameter_with_type_and_name(RunParameterType.Pipeline, property_name)
+                ):
                     raise ParameterNotFoundError(RunParameterType.Pipeline, property_name) from e
-                elif expression.startswith("pipeline().globalParameters"):
+                elif (
+                    f"pipeline().globalParameters.{property_name}" in expression
+                    and not state._contains_parameter_with_type_and_name(RunParameterType.Global, property_name)
+                ):
                     raise ParameterNotFoundError(RunParameterType.Global, property_name) from e
-                elif expression.startswith("pipeline().dataset"):
+                elif (
+                    f"pipeline().dataset.{property_name}" in expression
+                    and not state._contains_parameter_with_type_and_name(RunParameterType.Dataset, property_name)
+                ):
                     raise ParameterNotFoundError(RunParameterType.Dataset, property_name) from e
-                elif expression.startswith("pipeline().linkedService"):
+                elif (
+                    f"pipeline().linkedService.{property_name}" in expression
+                    and not state._contains_parameter_with_type_and_name(RunParameterType.LinkedService, property_name)
+                ):
                     raise ParameterNotFoundError(RunParameterType.LinkedService, property_name) from e
-                else:
+                elif not state._contains_parameter_with_type_and_name(RunParameterType.System, property_name):
                     raise ParameterNotFoundError(RunParameterType.System, property_name) from e
+                else:
+                    raise Exception(
+                        f"Unknown error for expression: '{expression}' with property: '{property_name}'. Internal error: '{e}'"
+                    ) from e
 
             if missing_variable_match:
                 variable_name = missing_variable_match.group(2)
