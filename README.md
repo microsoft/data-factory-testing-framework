@@ -4,7 +4,7 @@ A stand-alone test framework that allows to write unit tests for Data Factory pi
 
 > The framework is currently in _Public Preview_ and is not officially supported by Microsoft.
 
-## Features :rocket:
+## Features :star:
 
 The framework evaluates pipeline and activity definitions which can be asserted. It does so by providing the following features:
 
@@ -50,6 +50,20 @@ Data Factory does not support unit testing, nor testing of pipelines locally. Ha
 * Easier to cover a lot of different scenarios and edge cases
 * Regression testing
 
+## Getting started :rocket:
+
+Before you start writing tests, you need to set up the repository and install the framework:
+
+1. [Repository setup](docs/basic/repository_setup.md)
+2. [Installing and initializing the framework](docs/basic/installing_and_initializing_framework.md)
+
+> If you are a not that experienced with Python and prefer a step-by-step guide, use the more detailed [getting started](docs/basic/getting_started.md) guide.
+
+The framework allows you to write two types of tests:
+
+* [Activity testing](docs/basic/activity_testing.md) - for testing activities in isolation
+* [Pipeline testing](docs/basic/pipeline_testing.md) - for testing the entire pipeline
+
 ## Concepts :books:
 
 The following pages go deeper into different topics and concepts of the framework to help in getting you started.
@@ -61,8 +75,6 @@ The following pages go deeper into different topics and concepts of the framewor
 3. [State](docs/basic/state.md)
 4. [Activity testing](docs/basic/activity_testing.md)
 5. [Pipeline testing](docs/basic/pipeline_testing.md)
-
-> If you are a not that experienced with Python, you can follow the [Getting started](docs/basic/getting_started.md) guide to get started with the framework.
 
 ### Advanced :microscope:
 
