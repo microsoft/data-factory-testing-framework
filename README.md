@@ -57,7 +57,7 @@ Before you start writing tests, you need to set up the repository and install th
 1. [Repository setup](docs/basic/repository_setup.md)
 2. [Installing and initializing the framework](docs/basic/installing_and_initializing_framework.md)
 
-> If you are a not that experienced with Python and prefer a step-by-step guide, use the more detailed [getting started](docs/basic/getting_started.md) guide.
+> If you are not that experienced with Python and prefer a step-by-step guide, use the more detailed [getting started](docs/basic/getting_started.md) guide.
 
 The framework allows you to write two types of tests:
 
