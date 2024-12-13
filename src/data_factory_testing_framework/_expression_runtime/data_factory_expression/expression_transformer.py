@@ -106,7 +106,7 @@ class ExpressionTransformer:
         self.lark_parser = Lark(grammer, start="start", maybe_placeholders=False)
 
     def _supported_functions(self) -> str:
-        functions = [f'"{f}"' for f in FunctionsRepository._functions]
+        functions = [f'"{f}"i' for f in FunctionsRepository._functions]
         return " | ".join(functions)
 
     def _parse(self, expression: str) -> Tree[Token]:
