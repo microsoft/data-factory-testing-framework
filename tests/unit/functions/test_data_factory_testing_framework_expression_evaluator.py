@@ -367,6 +367,7 @@ def test_evaluate_function_names_are_case_insensitive() -> None:
     # Assert
     assert evaluated_value == "ab"
 
+
 def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter[0].field1.field2"
