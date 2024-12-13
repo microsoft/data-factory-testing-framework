@@ -355,6 +355,19 @@ def test_evaluate(
     assert actual == expected_evaluation
 
 
+def test_evaluate_function_names_are_case_insensitive() -> None:
+    # Arrange
+    expression = "@CONCAT('a', 'b')"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState()
+
+    # Act
+    evaluated_value = expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert evaluated_value == "ab"
+
+
 def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter[0].field1.field2"
