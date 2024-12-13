@@ -40,7 +40,7 @@ class ExpressionTransformer:
 
         expression_grammar = f"""
             expression_start: "@" expression_evaluation
-            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((("." EXPRESSION_PARAMETER_NAME) | EXPRESSION_ARRAY_INDEX)+)? EXPRESSION_WS*
+            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((EXPRESSION_NULL_CONDITIONAL_OPERATOR? (expression_field_reference | EXPRESSION_ARRAY_INDEX))+)? EXPRESSION_WS*
             ?expression_call: expression_function_call
                               // used to translate to expression_pipeline_reference
                               | expression_datafactory_parameters_reference
@@ -55,9 +55,8 @@ class ExpressionTransformer:
             expression_datafactory_parameters_reference: EXPRESSION_DATAFACTORY_REFERENCE "()"
             expression_datafactory_activity_reference: "activity" "(" EXPRESSION_ACTIVITY_NAME ")"
             expression_item_reference: "item" "()"
-            expression_pipeline_reference: "pipeline" "()" "." EXPRESSION_PIPELINE_PROPERTY
-
-
+            expression_pipeline_reference: "pipeline" "()" EXPRESSION_NULL_CONDITIONAL_OPERATOR? "." EXPRESSION_PIPELINE_PROPERTY
+            expression_field_reference: "." EXPRESSION_PARAMETER_NAME
 
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
@@ -83,6 +82,7 @@ class ExpressionTransformer:
             EXPRESSION_STRING: SINGLE_QUOTED_STRING
             EXPRESSION_SYSTEM_VARIABLE_NAME: /[a-zA-Z0-9_]+/
             EXPRESSION_VARIABLE_NAME: "'" /[^']*/ "'"
+            EXPRESSION_NULL_CONDITIONAL_OPERATOR: "?"
             EXPRESSION_WS: WS
         """  # noqa: E501
 

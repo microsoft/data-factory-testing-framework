@@ -368,6 +368,65 @@ def test_evaluate_function_names_are_case_insensitive() -> None:
     assert evaluated_value == "ab"
 
 
+def test_evaluate_function_with_null_conditional_operator() -> None:
+    # Arrange
+    expression = "@pipeline().parameters.parameter.field1?.field2"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(
+                RunParameterType.Pipeline,
+                "parameter",
+                {
+                    "field1": {"field2": "value1"},
+                },
+            ),
+        ]
+    )
+
+    # Act
+    evaluated_value = expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert evaluated_value == "value1"
+
+
+def test_evaluate_function_with_null_conditional_operator_and_null_value() -> None:
+    # Arrange
+    expression = "@pipeline().parameters.parameter?.field1?.field2"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(
+                RunParameterType.Pipeline,
+                "parameter",
+                {
+                    "field1": None,
+                },
+            ),
+        ]
+    )
+
+    # Act
+    evaluated_value = expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert evaluated_value is None
+
+
+def test_evaluate_function_with_null_conditional_operator_and_system_variable() -> None:
+    # Arrange
+    expression = "@pipeline()?.TriggeredByPipelineRunId"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState()
+
+    # Act
+    evaluated_value = expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert evaluated_value is None
+
+
 def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter[0].field1.field2"
