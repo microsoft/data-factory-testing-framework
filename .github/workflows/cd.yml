@@ -39,3 +39,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1.10.3
         with:
           packages-dir: ./dist
+          attestations: false
