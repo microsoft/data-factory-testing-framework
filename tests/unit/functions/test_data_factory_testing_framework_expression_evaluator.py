@@ -327,6 +327,34 @@ from pytest import param as p
             "variable_test_valueparameter_test_value",
             id="variable_and_parameter_reference",
         ),
+        p(
+            "@activity('get nested object').output.pipelineReturnValue.returnValue.attribute1[pipeline().parameters.parameter]",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.Pipeline, "parameter", "param1"),
+                ],
+                activity_results=[
+                    ActivityResult(
+                        activity_name="get nested object",
+                        status=DependencyCondition.SUCCEEDED,
+                        output={
+                            "pipelineReturnValue": {
+                                "returnValue": {
+                                    "attribute1": [
+                                        {
+                                            "param1": "value1",
+                                        }
+                                    ],
+                                }
+                            }
+                        },
+                    )
+                ]
+            ),
+            "@activity('get nested object').output.pipelineReturnValue.returnValue.attribute1[pipeline().parameters.parameter]",
+            "value1",
+            id="activity_reference_with_nested_property_and_string_array_index",
+        )
     ],
 )
 def test_evaluate(
