@@ -340,11 +340,9 @@ from pytest import param as p
                         output={
                             "pipelineReturnValue": {
                                 "returnValue": {
-                                    "attribute1": [
-                                        {
+                                    "attribute1": {
                                             "param1": "value1",
-                                        }
-                                    ],
+                                        },
                                 }
                             }
                         },
