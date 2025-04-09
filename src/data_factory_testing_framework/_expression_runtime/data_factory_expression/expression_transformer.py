@@ -57,7 +57,7 @@ class ExpressionTransformer:
             expression_item_reference: "item" "()"
             expression_pipeline_reference: "pipeline" "()" EXPRESSION_NULL_CONDITIONAL_OPERATOR? "." EXPRESSION_PIPELINE_PROPERTY
             expression_field_reference: "." EXPRESSION_PARAMETER_NAME
-            expression_object_or_array_accessor: "[" expression_evaluation "]" | EXPRESSION_ARRAY_INDEX  // resolves array[0] or object['key'] access
+            expression_object_or_array_accessor: "[" expression_evaluation "]" | EXPRESSION_ARRAY_INDEX | EXPRESSION_ARRAY_OBJECT_ACCESSOR  // resolves array[0], array["key"] or array[<expression>]
 
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
@@ -72,6 +72,7 @@ class ExpressionTransformer:
             EXPRESSION_DATAFACTORY_REFERENCE: "dataset" | "linkedService"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX
+            EXPRESSION_ARRAY_OBJECT_ACCESSOR: "[" SINGLE_QUOTED_STRING "]"
             EXPRESSION_BOOLEAN: BOOLEAN
             EXPRESSION_FLOAT: SIGNED_FLOAT
             EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
