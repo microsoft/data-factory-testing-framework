@@ -341,18 +341,18 @@ from pytest import param as p
                             "pipelineReturnValue": {
                                 "returnValue": {
                                     "attribute1": {
-                                            "param1": "value1",
-                                        },
+                                        "param1": "value1",
+                                    },
                                 }
                             }
                         },
                     )
-                ]
+                ],
             ),
             "@activity('get nested object').output.pipelineReturnValue.returnValue.attribute1[pipeline().parameters.parameter]",
             "value1",
             id="activity_reference_with_nested_property_and_string_array_index",
-        )
+        ),
     ],
 )
 def test_evaluate(
