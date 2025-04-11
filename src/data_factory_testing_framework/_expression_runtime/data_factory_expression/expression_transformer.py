@@ -40,7 +40,7 @@ class ExpressionTransformer:
 
         expression_grammar = f"""
             expression_start: "@" expression_evaluation
-            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((EXPRESSION_NULL_CONDITIONAL_OPERATOR? (expression_field_reference | EXPRESSION_ARRAY_INDEX))+)? EXPRESSION_WS*
+            expression_evaluation: (expression_logical_bool | expression_branch | expression_call) ((EXPRESSION_NULL_CONDITIONAL_OPERATOR? (expression_field_reference | expression_object_or_array_accessor))+)? EXPRESSION_WS*
             ?expression_call: expression_function_call
                               // used to translate to expression_pipeline_reference
                               | expression_datafactory_parameters_reference
@@ -57,6 +57,7 @@ class ExpressionTransformer:
             expression_item_reference: "item" "()"
             expression_pipeline_reference: "pipeline" "()" EXPRESSION_NULL_CONDITIONAL_OPERATOR? "." EXPRESSION_PIPELINE_PROPERTY
             expression_field_reference: "." EXPRESSION_PARAMETER_NAME
+            expression_object_or_array_accessor: "[" expression_evaluation "]" | EXPRESSION_ARRAY_INDEX | EXPRESSION_ARRAY_OBJECT_ACCESSOR  // resolves array[0], array["key"] or array[<expression>]
 
             // branch rules
             expression_logical_bool: EXPRESSION_LOGICAL_BOOL "(" expression_parameter "," expression_parameter ")"
@@ -71,6 +72,7 @@ class ExpressionTransformer:
             EXPRESSION_DATAFACTORY_REFERENCE: "dataset" | "linkedService"
             EXPRESSION_ACTIVITY_NAME: "'" /[^']*/ "'"
             EXPRESSION_ARRAY_INDEX: ARRAY_INDEX
+            EXPRESSION_ARRAY_OBJECT_ACCESSOR: "[" SINGLE_QUOTED_STRING "]"
             EXPRESSION_BOOLEAN: BOOLEAN
             EXPRESSION_FLOAT: SIGNED_FLOAT
             EXPRESSION_FUNCTION_NAME: {self._supported_functions()}
