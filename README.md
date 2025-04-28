@@ -2,7 +2,8 @@
 
 A stand-alone test framework that allows to write unit tests for Data Factory pipelines on [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/), [Azure Data Factory](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory) and [Azure Synapse Analytics](https://learn.microsoft.com/en-us/azure/data-factory/concepts-pipelines-activities?tabs=data-factory).
 
-> The framework is currently in _Public Preview_ and is not officially supported by Microsoft.
+> The framework is community supported only, hence there's no official Microsoft SLA for features or bug fixes.
+> Please file an issue for bugs or feature requests. The framework is open source and contributions are welcome!
 
 ## Features :star:
 
