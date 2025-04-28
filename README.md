@@ -4,6 +4,7 @@ A stand-alone test framework that allows to write unit tests for Data Factory pi
 
 > The framework is community supported only, hence there's no official Microsoft SLA for features or bug fixes.
 > Please file an issue for bugs or feature requests. The framework is open source and contributions are welcome!
+
 ## Features :star:
 
 The framework evaluates pipeline and activity definitions which can be asserted. It does so by providing the following features:
