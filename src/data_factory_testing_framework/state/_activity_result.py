@@ -9,6 +9,7 @@ class ActivityResult:
         activity_name: str,
         status: Optional[DependencyCondition] = None,
         output: Optional[Any] = None,  # noqa: ANN401
+        error: Optional[Any] = None,  # noqa: ANN401
     ) -> None:
         """Represents the result of an activity.
 
@@ -16,10 +17,12 @@ class ActivityResult:
             activity_name: Name of the activity.
             status: Status of the activity.
             output: Output of the activity. (e.g. { "count": 1 } for activity('activityName').output.count)
+            error: Error of the activity. (e.g. { "code": "ErrorCode", "message": "ErrorMessage" } for activity('activityName').Error)
         """
         self.activity_name = activity_name
         self.status = status if status is not None else DependencyCondition.SUCCEEDED
         self.output = output
+        self.error = error
 
     def __getitem__(self, item: str) -> Any:  # noqa: ANN401
         return getattr(self, item)
