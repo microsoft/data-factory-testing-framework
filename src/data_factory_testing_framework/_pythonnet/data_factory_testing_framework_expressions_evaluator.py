@@ -16,6 +16,7 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
         parameters = {
             "globalParameters": {},
             "parameters": {},
+            "libraryVariables": {},
             "dataset": {},
             "linkedService": {},
         }
@@ -27,6 +28,8 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
                 parameters["globalParameters"][parameter.name] = parameter.value
             elif parameter.type == RunParameterType.Pipeline:
                 parameters["parameters"][parameter.name] = parameter.value
+            elif parameter.type == RunParameterType.LibraryVariables:
+                parameters["libraryVariables"][parameter.name] = parameter.value
             elif parameter.type == RunParameterType.Dataset:
                 parameters["dataset"][parameter.name] = parameter.value
             elif parameter.type == RunParameterType.LinkedService:

@@ -32,6 +32,15 @@ state = PipelineRunState(
     ])
 ```
 
+The following `RunParameterType` values are available:
+
+* `RunParameterType.Parameter` to set a pipeline parameter: `@pipeline().parameters.<parameter_name>`
+* `RunParameterType.Global` to set a global parameter: `@pipeline().globalParameters.<global_parameter_name>`
+* `RunParameterType.System` to set a system parameter: `@pipeline().<system_parameter_name>`
+* `RunParameterType.Dataset` to set a dataset: `@dataset().<dataset_name>`
+* `RunParameterType.LinkedService` to set a linked service: `@linkedService().<linked_service_name>`
+* `RunParameterType.LibraryVariables` to set a library variable: `@pipeline().libraryVariables.<variable_name>`
+
 ### Activity results
 
 In the scenario where an activity has an expression that references the output of another activity `activity('another_activity_name').output.some_field`, the `PipelineRunState` can be used to configure the output of the `another_activity_name` activity.
