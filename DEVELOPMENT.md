@@ -6,6 +6,14 @@
 
 * poetry == 1.6.1
 
+### Installing the project
+
+Make sure to create a virtual environment and install the requirements by running:
+`poetry install --with dev`
+
+Build the .NET project:
+`dotnet build`
+
 ### Pre-Commit Hooks
 
 We use pre-commit hooks to ensure that the code is formatted correctly and that the code is linted before committing.
