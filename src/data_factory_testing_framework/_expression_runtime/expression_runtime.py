@@ -65,6 +65,13 @@ class ExpressionRuntime:
                 ):
                     raise ParameterNotFoundError(RunParameterType.Global, property_name) from e
                 elif (
+                    f"pipeline().libraryVariables.{property_name}" in expression
+                    and not state._contains_parameter_with_type_and_name(
+                        RunParameterType.LibraryVariables, property_name
+                    )
+                ):
+                    raise ParameterNotFoundError(RunParameterType.LibraryVariables, property_name) from e
+                elif (
                     f"pipeline().dataset.{property_name}" in expression
                     and not state._contains_parameter_with_type_and_name(RunParameterType.Dataset, property_name)
                 ):
