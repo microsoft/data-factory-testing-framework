@@ -390,6 +390,21 @@ from pytest import param as p
             "value1",
             id="activity_reference_with_nested_property_and_string_reference",
         ),
+        p(
+            "@activity('Error activity').Error.message",
+            PipelineRunState(
+                activity_results=[
+                    ActivityResult(
+                        activity_name="Error activity",
+                        status=DependencyCondition.FAILED,
+                        error={"message": "Oh no, something went wrong"},
+                    )
+                ],
+            ),
+            "@activity('Error activity').Error.message",
+            "Oh no, something went wrong",
+            id="activity_reference_with_error_message",
+        ),
     ],
 )
 def test_evaluate(

@@ -42,6 +42,7 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
                     "body": {
                         "output": activity.output,
                         "status": activity.status,
+                        "error": activity.error,
                     }
                 }
             }
