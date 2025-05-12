@@ -76,6 +76,17 @@ from pytest import param as p
             id="pipeline_global_parameters_reference",
         ),
         p(
+            "@pipeline().libraryVariables.variable",
+            PipelineRunState(
+                parameters=[
+                    RunParameter(RunParameterType.LibraryVariables, "variable", "value"),
+                ]
+            ),
+            "@pipeline().libraryVariables.variable",
+            "value",
+            id="pipeline_library_variables_reference",
+        ),
+        p(
             "@variables('variable')",
             PipelineRunState(
                 variables=[
@@ -724,6 +735,37 @@ def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> N
     assert str(exinfo.value) == "Parameter: 'RunId' of type 'RunParameterType.System' not found"
 
 
+def test_evaluate_library_variable() -> None:
+    # Arrange
+    expression = "@pipeline().libraryVariables.variable"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(RunParameterType.LibraryVariables, "variable", "value"),
+        ]
+    )
+
+    # Act
+    evaluated_value = expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert evaluated_value == "value"
+
+
+def test_evaluate_library_variable_raises_exception_when_parameter_not_set() -> None:
+    # Arrange
+    expression = "@pipeline().libraryVariables.variable"
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState()
+
+    # Act
+    with pytest.raises(ParameterNotFoundError) as exinfo:
+        expression_runtime.evaluate(expression, state)
+
+    # Assert
+    assert str(exinfo.value) == "Parameter: 'variable' of type 'RunParameterType.LibraryVariables' not found"
+
+
 @pytest.mark.parametrize(
     ["json_expression", "accessor", "expected"],
     [
@@ -967,6 +1009,7 @@ def test_conditional_expression_with_branching(
     [
         (RunParameterType.Pipeline, "pipeline().parameters"),
         (RunParameterType.Global, "pipeline().globalParameters"),
+        (RunParameterType.LibraryVariables, "pipeline().libraryVariables"),
         (RunParameterType.Dataset, "pipeline().dataset"),
         (RunParameterType.LinkedService, "pipeline().linkedService"),
         (RunParameterType.System, "pipeline()"),
@@ -990,6 +1033,7 @@ def test_complex_expression_with_missing_parameter(run_parameter_type: RunParame
     "run_parameter_type, parameter_prefix",
     [
         (RunParameterType.Global, "pipeline().globalParameters"),
+        (RunParameterType.LibraryVariables, "pipeline().libraryVariables"),
         (RunParameterType.Dataset, "pipeline().dataset"),
         (RunParameterType.LinkedService, "pipeline().linkedService"),
         (RunParameterType.System, "pipeline()"),
