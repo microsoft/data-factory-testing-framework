@@ -1,7 +1,7 @@
 ---
 name: CI/CD
 
-on: [push]  # yamllint disable-line rule:truthy
+on: [pull_request]  # yamllint disable-line rule:truthy
 
 jobs:
   ci:
