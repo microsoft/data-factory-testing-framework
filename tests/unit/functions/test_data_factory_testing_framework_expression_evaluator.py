@@ -14,6 +14,7 @@ from data_factory_testing_framework.exceptions import (
     StateIterationItemNotSetError,
     VariableNotFoundError,
 )
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.state import (
     ActivityResult,
     DependencyCondition,
@@ -427,7 +428,7 @@ def test_evaluate(
 
     # Act evaluating the expression
     dftf_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
-    actual = dftf_evaluator.evaluate(dftf_evaluator_expression, state)
+    actual = dftf_evaluator.evaluate(dftf_evaluator_expression, state, mock_config={})
 
     # Assert evaluation
     assert actual == expected_evaluation
@@ -440,7 +441,7 @@ def test_evaluate_function_names_are_case_insensitive() -> None:
     state = PipelineRunState()
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "ab"
@@ -463,7 +464,7 @@ def test_evaluate_function_with_null_conditional_operator() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -486,7 +487,7 @@ def test_evaluate_function_with_null_conditional_operator_and_null_value() -> No
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value is None
@@ -499,7 +500,7 @@ def test_evaluate_function_with_null_conditional_operator_and_system_variable() 
     state = PipelineRunState()
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value is None
@@ -524,7 +525,7 @@ def test_evaluate_parameter_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -538,7 +539,7 @@ def test_evaluate_raises_exception_when_pipeline_parameter_not_found() -> None:
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameter' of type 'RunParameterType.Pipeline' not found"
@@ -552,7 +553,7 @@ def test_evaluate_raises_exception_when_pipeline_global_parameter_not_found() ->
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameter' of type 'RunParameterType.Global' not found"
@@ -576,7 +577,7 @@ def test_evaluate_variable_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -590,7 +591,7 @@ def test_evaluate_raises_exception_when_variable_not_found() -> None:
 
     # Act
     with pytest.raises(VariableNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Variable 'variable' not found"
@@ -615,7 +616,7 @@ def test_evaluate_dataset_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -629,7 +630,7 @@ def test_evaluate_raises_exception_when_dataset_not_found() -> None:
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.Dataset' not found"
@@ -654,7 +655,7 @@ def test_evaluate_linked_service_with_complex_object_and_array_index() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -668,7 +669,7 @@ def test_evaluate_raises_exception_when_linked_service_not_found() -> None:
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'parameterName' of type 'RunParameterType.LinkedService' not found"
@@ -682,7 +683,7 @@ def test_evaluate_raises_exception_when_activity_not_found() -> None:
 
     # Act
     with pytest.raises(ActivityNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Activity with name 'activityName' not found"
@@ -696,7 +697,7 @@ def test_evaluate_raises_exception_when_state_iteration_item_not_set() -> None:
 
     # Act
     with pytest.raises(StateIterationItemNotSetError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Iteration item not set."
@@ -713,7 +714,7 @@ def test_evaluate_complex_item() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value1"
@@ -730,7 +731,7 @@ def test_evaluate_system_variable() -> None:
     )
 
     # Act
-    actual = expression_runtime.evaluate(expression, state)
+    actual = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert actual == "123"
@@ -744,7 +745,7 @@ def test_evaluate_system_variable_raises_exception_when_parameter_not_set() -> N
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'RunId' of type 'RunParameterType.System' not found"
@@ -761,7 +762,7 @@ def test_evaluate_library_variable() -> None:
     )
 
     # Act
-    evaluated_value = expression_runtime.evaluate(expression, state)
+    evaluated_value = expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert evaluated_value == "value"
@@ -775,7 +776,7 @@ def test_evaluate_library_variable_raises_exception_when_parameter_not_set() -> 
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == "Parameter: 'variable' of type 'RunParameterType.LibraryVariables' not found"
@@ -863,7 +864,7 @@ def test_json_nested_object_with_list_and_attributes(json_expression: str, acces
 
     expression_runtime = ExpressionRuntime()
     state = PipelineRunState()
-    actual = expression_runtime.evaluate(expression, state)
+    actual = expression_runtime.evaluate(expression, state, [], MockContext())
 
     assert actual == expected
 
@@ -966,11 +967,11 @@ def test_boolean_operators_short_circuit(
 
     # Act / Assert
     if isinstance(expected, bool):
-        actual = expression_runtime.evaluate(expression, state)
+        actual = expression_runtime.evaluate(expression, state, [], MockContext())
         assert actual == expected
     else:
         with pytest.raises(expected):
-            expression_runtime.evaluate(expression, state)
+            expression_runtime.evaluate(expression, state, [], MockContext())
 
 
 @pytest.mark.parametrize(
@@ -1010,13 +1011,13 @@ def test_conditional_expression_with_branching(
 
     # Act / Assert
     if isinstance(expected, (str, int, bool, float)):
-        actual = expression_runtime.evaluate(expression, state)
+        actual = expression_runtime.evaluate(expression, state, [], MockContext())
 
         # Assert
         assert actual == expected
     else:
         with pytest.raises(expected):
-            expression_runtime.evaluate(expression, state)
+            expression_runtime.evaluate(expression, state, [], MockContext())
 
 
 @pytest.mark.parametrize(
@@ -1038,7 +1039,7 @@ def test_complex_expression_with_missing_parameter(run_parameter_type: RunParame
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == f"Parameter: 'parameter2' of type '{run_parameter_type}' not found"
@@ -1064,7 +1065,7 @@ def test_complex_expression_with_missing_parameter_with_same_name_of_another_typ
 
     # Act
     with pytest.raises(ParameterNotFoundError) as exinfo:
-        expression_runtime.evaluate(expression, state)
+        expression_runtime.evaluate(expression, state, [], MockContext())
 
     # Assert
     assert str(exinfo.value) == f"Parameter: 'parameter' of type '{run_parameter_type}' not found"

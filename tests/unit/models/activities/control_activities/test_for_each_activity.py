@@ -5,29 +5,37 @@ from data_factory_testing_framework.exceptions._control_activity_expression_eval
 )
 from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType
 from data_factory_testing_framework.models.activities import ForEachActivity, SetVariableActivity
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameter, RunParameterType
 
 
-def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated() -> None:
+def test_when_evaluate_child_activities_then_should_return_the_activity_with_item_expression_evaluated(pipeline: Pipeline) -> None:
     # Arrange
     test_framework = TestFramework(TestFrameworkType.Fabric)
-    for_each_activity = ForEachActivity(
-        name="ForEachActivity",
-        typeProperties={
-            "items": DataFactoryElement("@split('a,b,c', ',')"),
-        },
-        activities=[
-            SetVariableActivity(
+
+    set_variable_activity = SetVariableActivity(
                 name="setVariable",
                 typeProperties={
                     "variableName": "variable",
                     "value": DataFactoryElement("@item()"),
                 },
                 depends_on=[],
-            ),
+            )
+
+    for_each_activity = ForEachActivity(
+        name="ForEachActivity",
+        typeProperties={
+            "items": DataFactoryElement("@split('a,b,c', ',')"),
+        },
+        activities=[
+            set_variable_activity
         ],
         depends_on=[],
     )
+
+    for_each_activity._pipeline = pipeline
+    set_variable_activity._pipeline = pipeline
+
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name="variable", default_value=""),
@@ -59,7 +67,7 @@ def test_when_evaluate_child_activities_then_should_return_the_activity_with_ite
 
 
 @pytest.mark.parametrize(("evaluated_value"), [1, 1.1, "string-value", {}, True, None])
-def test_evaluated_raises_error_when_evaluated_value_is_not_a_list(evaluated_value: DataFactoryObjectType) -> None:
+def test_evaluated_raises_error_when_evaluated_value_is_not_a_list(evaluated_value: DataFactoryObjectType, pipeline: Pipeline) -> None:
     # Arrange
     state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "input_values", evaluated_value)])
     foreach_activity = ForEachActivity(
@@ -70,6 +78,8 @@ def test_evaluated_raises_error_when_evaluated_value_is_not_a_list(evaluated_val
         activities=[],
         depends_on=[],
     )
+
+    foreach_activity._pipeline = pipeline
 
     # Act
     with pytest.raises(ControlActivityExpressionEvaluatedNotToExpectedTypeError) as ex_info:
