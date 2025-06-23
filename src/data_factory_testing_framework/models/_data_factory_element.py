@@ -1,11 +1,13 @@
 import json
-from typing import Any
+from typing import Any, List
 
 from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
 from data_factory_testing_framework.exceptions import (
     DataFactoryElementEvaluationError,
 )
 from data_factory_testing_framework.exceptions._user_error import UserError
+from data_factory_testing_framework.mock import ExpressionMock
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import RunState
 
@@ -23,17 +25,21 @@ class DataFactoryElement:
         self.expression = expression
         self.result: DataFactoryObjectType = None
 
-    def evaluate(self, state: RunState) -> DataFactoryObjectType:
-        """Evaluate the expression."""
+    def evaluate(
+        self,
+        state: RunState,
+        mocks: List[ExpressionMock],
+        mock_context: MockContext,
+    ) -> DataFactoryObjectType:
+        """Evaluates the expression and returns the result."""
         try:
             expression_runtime = ExpressionRuntime()
-            self.result = expression_runtime.evaluate(self.expression, state)
+            self.result = expression_runtime.evaluate(self.expression, state, mocks, mock_context)
             return self.result
         except UserError as e:
             raise e from e
         except Exception as e:
             raise DataFactoryElementEvaluationError(f"Error evaluating expression: {self.expression}") from e
-
         return self.result
 
     def get_json_value(self) -> Any:  # noqa: ANN401

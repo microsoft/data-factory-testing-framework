@@ -4,6 +4,7 @@ from data_factory_testing_framework.exceptions import (
     ParameterNotFoundError,
 )
 from data_factory_testing_framework.exceptions._user_error import UserError
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.state import PipelineRunState
 
@@ -15,7 +16,7 @@ def test_evaluate_datafactory_element() -> None:
     data_factory_element = DataFactoryElement(expression)
 
     # Act
-    result = data_factory_element.evaluate(state)
+    result = data_factory_element.evaluate(state, mocks=[], mock_context=MockContext())
 
     # Assert
     assert result == 6
@@ -29,7 +30,7 @@ def test_evaluate_datafactory_element_passes_user_error_through() -> None:
 
     # Act
     with pytest.raises(UserError) as e:
-        data_factory_element.evaluate(state)
+        data_factory_element.evaluate(state, mocks=[], mock_context=MockContext())
 
     # Assert
     assert isinstance(e.value, ParameterNotFoundError)
@@ -43,4 +44,4 @@ def test_evaluate_datafactory_element_raises_technical_errors() -> None:
 
     # Act
     with pytest.raises(DataFactoryElementEvaluationError):
-        data_factory_element.evaluate(state)
+        data_factory_element.evaluate(state, mocks=[], mock_context=MockContext())
