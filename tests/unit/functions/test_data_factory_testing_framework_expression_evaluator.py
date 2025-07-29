@@ -445,16 +445,30 @@ def test_evaluate_function_names_are_case_insensitive() -> None:
     # Assert
     assert evaluated_value == "ab"
 
+
 @pytest.mark.parametrize(
     ["expression", "property_name"],
     [
-        p("@contains(createArray(activity('Fail').status,activity('Notebook').status),'Failed')", "status", id="status"),
-        p("@contains(createArray(activity('Fail').status,activity('Notebook').error),'Succeeded')", "error", id="error"),
-        p("@contains(createArray(activity('Fail').status,activity('Notebook').output),'Succeeded')", "output", id="output"),
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').status),'Failed')",
+            "status",
+            id="status",
+        ),
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').error),'Succeeded')",
+            "error",
+            id="error",
+        ),
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').output),'Succeeded')",
+            "output",
+            id="output",
+        ),
     ],
 )
 def test_evaluate_expression_with_none_activity_result_raises_exception(
-    expression: str, property_name: str,
+    expression: str,
+    property_name: str,
 ) -> None:
     # Arrange
     expression_runtime = ExpressionRuntime()
