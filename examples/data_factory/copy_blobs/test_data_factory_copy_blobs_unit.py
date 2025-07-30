@@ -7,6 +7,7 @@ from data_factory_testing_framework.state import (
     RunParameter,
     RunParameterType,
 )
+from data_factory_testing_framework.state._dependency_condition import DependencyCondition
 
 
 @pytest.fixture
@@ -61,7 +62,7 @@ def test_for_each(pipeline: Pipeline) -> None:
     )
     state.add_activity_result(
         activity_name="List Folders",
-        status="Succeeded",
+        status=DependencyCondition.SUCCEEDED,
         output={
             "Response": """
                     <EnumerationResults ServiceEndpoint="http://myaccount.blob.core.windows.net/"  ContainerName="mycontainer">

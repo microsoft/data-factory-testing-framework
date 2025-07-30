@@ -37,16 +37,16 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
 
         activity_results = {}
         for activity in state.activity_results:
-            activity_result_dir = {
-                "outputs": {
-                    "body": {
-                        "output": activity.output,
-                        "status": activity.status,
-                        "error": activity.error,
-                    }
-                }
+            output_body = {
+                k: v
+                for k, v in {
+                    "error": activity.error,
+                    "output": activity.output,
+                    "status": activity.status.value if activity.status is not None else None,
+                }.items()
+                if v is not None
             }
-            activity_results[activity.activity_name] = activity_result_dir
+            activity_results[activity.activity_name] = {"outputs": {"body": output_body}}
 
         variables = {variable.name: variable.value for variable in state.variables}
 
