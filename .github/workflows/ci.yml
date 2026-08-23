@@ -14,18 +14,18 @@ jobs:
       version: ${{ steps.set-version.outputs.GITVERSION_SEMVER }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # to calculate the version we need the tags and the commit history
           fetch-tags: true
           fetch-depth: 0
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v1.1.1
+        uses: gittools/actions/gitversion/setup@8d68520cde93ca9226ee0e09870caaca033d2cd2 # v1.1.1
         with:
           versionSpec: '5.x'
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0
+        uses: gittools/actions/gitversion/execute@c368911c8982846e30b6855f79e579104849bfc3 # v0.13.6
         with:
           useConfigFile: true
           configFilePath: './.conventional-commits/GitVersion.yml'
@@ -41,17 +41,17 @@ jobs:
       contents: read
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Set up python
         id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
         with:
           python-version: '3.9'
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: '8.0.x'
       - name: Install Poetry
-        uses: snok/install-poetry@v1
+        uses: snok/install-poetry@a783c322200f0519c7926aa6faa857c4e23e9263 # v1.4.2
         with:
           version: 1.8.2
           virtualenvs-create: true
@@ -74,12 +74,12 @@ jobs:
         env:
           BUILD_VERSION: ${{ needs.version.outputs.version }}
       - name: Upload dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: whl
           path: dist/*.whl
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: sdist
           path: dist/*.tar.gz
