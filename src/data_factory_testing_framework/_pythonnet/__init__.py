@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pythonnet
@@ -10,9 +9,11 @@ import clr  # noqa: E402
 def load_dotnet_assemblies() -> None:
     # Load the .NET assemblies
     for dll in (Path(__file__).parent / "bin").glob("**/*.dll"):
-        dll = os.path.abspath(dll)
+        # clr.AddReference appends the file extension itself when resolving a path,
+        # so the path has to be passed without the '.dll' suffix.
+        assembly_path = str(dll.resolve().with_suffix(""))
         try:
-            clr.AddReference(dll)
+            clr.AddReference(assembly_path)
         except Exception:
             pass
 
