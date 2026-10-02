@@ -29,6 +29,21 @@ class Pipeline:
         self.variables: dict = kwargs["variables"] if "variables" in kwargs else {}
         self.activities = activities
         self.annotations = kwargs["annotations"] if "annotations" in kwargs else []
+        self._set_activity_pipeline_reference()
+
+    def _set_activity_pipeline_reference(self) -> None:
+        """Set the pipeline reference for all activities in the pipeline."""
+        all_child_activties = self.activities.copy()
+
+        # Flatten the nested activities and set the pipeline reference
+        # for each activity in the pipeline.
+        # For control activities, we also need to set the pipeline reference
+        # for their nested activities.
+        while all_child_activties:
+            current_child_activity = all_child_activties.pop(0)
+            all_child_activties.extend(current_child_activity.nested_activities)
+            current_child_activity._pipeline = self
+
 
     def get_activity_by_name(self, name: str) -> "Activity":
         """Get an activity by name. Throws an exception if the activity is not found.

@@ -1,9 +1,12 @@
 from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.models.activities import ExecutePipelineActivity
 from data_factory_testing_framework.state import PipelineRunState, RunParameter, RunParameterType
 
 
-def test_execute_pipeline_activity_evaluates_parameters() -> None:
+def test_execute_pipeline_activity_evaluates_parameters(
+    pipeline: Pipeline,
+) -> None:
     # Arrange
     execute_pipeline_activity = ExecutePipelineActivity(
         name="ExecutePipelineActivity",
@@ -14,6 +17,8 @@ def test_execute_pipeline_activity_evaluates_parameters() -> None:
         },
         depends_on=[],
     )
+    execute_pipeline_activity._pipeline = pipeline
+
     state = PipelineRunState(
         parameters=[
             RunParameter(name="param1", value="value1", parameter_type=RunParameterType.Pipeline),
@@ -29,13 +34,17 @@ def test_execute_pipeline_activity_evaluates_parameters() -> None:
     assert activity.parameters["url"].result == "value1"
 
 
-def test_execute_pipeline_activity_evaluates_no_parameters() -> None:
+def test_execute_pipeline_activity_evaluates_no_parameters(
+    pipeline: Pipeline,
+) -> None:
     # Arrange
     execute_pipeline_activity = ExecutePipelineActivity(
         name="ExecutePipelineActivity",
         typeProperties={},
         depends_on=[],
     )
+    execute_pipeline_activity._pipeline = pipeline
+
     state = PipelineRunState()
 
     # Act

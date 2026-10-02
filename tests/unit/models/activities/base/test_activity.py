@@ -1,6 +1,7 @@
 import pytest
 from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.models.activities import Activity, ExecutePipelineActivity
 from data_factory_testing_framework.state import DependencyCondition, PipelineRunState, RunParameter, RunParameterType
 
@@ -70,10 +71,12 @@ def test_dependency_condition_completed_is_false_when_no_activity_result_is_set(
     assert result is False
 
 
-def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded() -> None:
+def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded(pipeline: Pipeline) -> None:
     # Arrange
     pipeline_activity = Activity(name="activity", type="WebActivity", dependsOn=[])
     state = PipelineRunState()
+
+    pipeline_activity._pipeline = pipeline
 
     # Act
     pipeline_activity.evaluate(state)
@@ -82,7 +85,7 @@ def test_evaluate_when_no_status_is_set_should_set_status_to_succeeded() -> None
     assert pipeline_activity.status == DependencyCondition.Succeeded
 
 
-def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
+def test_evaluate_is_evaluating_expressions_inside_dict(pipeline: Pipeline) -> None:
     # Arrange
     pipeline_activity = ExecutePipelineActivity(
         name="activity",
@@ -94,6 +97,9 @@ def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
         },
         depends_on=[],
     )
+
+    pipeline_activity._pipeline = pipeline
+
     state = PipelineRunState(
         parameters=[
             RunParameter(RunParameterType.Pipeline, "url", "example.com"),

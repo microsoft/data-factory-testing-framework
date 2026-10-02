@@ -1,7 +1,9 @@
-from typing import Any
+from typing import Any, List, Optional
 
+from data_factory_testing_framework.mock import ExpressionMock
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
-from data_factory_testing_framework.models.activities import ControlActivity
+from data_factory_testing_framework.models.activities._control_activity import ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
 
 
@@ -14,19 +16,34 @@ class SetVariableActivity(ControlActivity):
         """
         kwargs["type"] = "SetVariable"
 
-        super(ControlActivity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.variable_name: str = self.type_properties["variableName"]
         self.value: DataFactoryElement = self.type_properties["value"]
 
-    def evaluate(self, state: PipelineRunState) -> "SetVariableActivity":
-        super(ControlActivity, self).evaluate(state)
+    def evaluate(
+        self,
+        state: PipelineRunState,
+        mocks: Optional[List[ExpressionMock]] = None
+    ) -> "SetVariableActivity":
+        mocks = mocks or []
+        super().evaluate(state, mocks)
+        
 
         if self.type_properties["variableName"] == "pipelineReturnValue":
             for return_value in self.type_properties["value"]:
                 value = return_value["value"]
                 if isinstance(value, DataFactoryElement):
-                    evaluated_value = value.evaluate(state)
+                    evaluated_value = value.evaluate(
+                        state,
+                        mocks,
+                        mock_context=MockContext(
+                            pipeline=self.pipeline,
+                            activity=self,
+                            # TODO: Clarify what the property path should be here.
+                            property_path=f"pipelineReturnValue.{return_value['key']}"
+                        )
+                    )
                 else:
                     evaluated_value = value
 
@@ -35,7 +52,15 @@ class SetVariableActivity(ControlActivity):
             return self
 
         if isinstance(self.value, DataFactoryElement):
-            evaluated_value = self.value.evaluate(state)
+            evaluated_value = self.value.evaluate(
+                state=state,
+                mocks=mocks,
+                mock_context=MockContext(
+                    pipeline=self.pipeline,
+                    activity=self,
+                    property_path="value"
+                )
+            )
         else:
             evaluated_value = self.value
 

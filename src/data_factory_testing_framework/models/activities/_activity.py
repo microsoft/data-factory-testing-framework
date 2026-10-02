@@ -1,10 +1,15 @@
-from typing import Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional
 
-from data_factory_testing_framework.models import DataFactoryElement
+from data_factory_testing_framework.mock import ExpressionMock
+from data_factory_testing_framework.mock_context import MockContext
+from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities._activity_dependency import (
     ActivityDependency,
 )
 from data_factory_testing_framework.state import DependencyCondition, PipelineRunState
+
+if TYPE_CHECKING:
+    from data_factory_testing_framework.models._pipeline import Pipeline
 
 
 class Activity:
@@ -34,9 +39,39 @@ class Activity:
 
         self.status: DependencyCondition = None
         self.output = {}
+        self._pipeline: Optional["Pipeline"] = None
 
-    def evaluate(self, state: PipelineRunState) -> "Activity":
-        self._evaluate_expressions(self, state, types_to_ignore=[Activity])
+    @property
+    def pipeline(self) -> "Pipeline":
+        """Get the pipeline that contains this activity."""
+        if self._pipeline is None:
+            raise ValueError("Pipeline is not set for this activity.")
+        return self._pipeline
+
+
+    @property
+    def nested_activities(self) -> List["Activity"]:
+        """Get the nested activities of this activity.
+
+        Some activties, like IfConditionActivity or SwitchActivity, have nested activities.
+        Other activities, like SetVariableActivity or FilterActivity, do not have nested activities and return an empty list.
+        """
+        return []
+
+    def evaluate(
+        self,
+        state: PipelineRunState,
+        mocks: Optional[List[ExpressionMock]] = None,
+    ) -> "Activity":
+        """Evaluate the activity expressions and set the status to Succeeded."""
+        mocks = mocks or []
+
+        self._evaluate_expressions(
+            self,
+            state,
+            mocks,
+            types_to_ignore=[Activity],
+        )
         self.status = DependencyCondition.Succeeded
         self.output = {}
         return self
@@ -64,8 +99,10 @@ class Activity:
         self,
         obj: Any,  # noqa: ANN401
         state: PipelineRunState,
-        visited: Optional[List[Any]] = None,  # noqa: ANN401
-        types_to_ignore: Optional[List[Any]] = None,  # noqa: ANN401
+        mocks: List[ExpressionMock],
+        visited: Optional[List[Any]] = None,
+        types_to_ignore: Optional[List[Any]] = None,
+        property_path: Optional[str] = None,
     ) -> None:
         if visited is None:
             visited = []
@@ -76,7 +113,16 @@ class Activity:
         visited.append(obj)
 
         if data_factory_element := isinstance(obj, DataFactoryElement) and obj:
-            data_factory_element.evaluate(state)
+            # TODO: clarify how we build the property path for DataFactoryElement
+            data_factory_element.evaluate(
+                state=state,
+                mocks=mocks,
+                mock_context=MockContext(
+                    pipeline=self._pipeline,
+                    activity=self,
+                    property_path=property_path
+                ),
+            )
             return
 
         # Attributes
@@ -92,8 +138,14 @@ class Activity:
             attribute = getattr(obj, attribute_name)
             if attribute is None:
                 continue
-
-            self._evaluate_expressions(attribute, state, visited, types_to_ignore)
+            self._evaluate_expressions(
+                obj=attribute,
+                state=state,
+                mocks=mocks,
+                visited=visited,
+                types_to_ignore=types_to_ignore,
+                property_path=f"{property_path}.{attribute_name}" if property_path else attribute_name,
+            )
 
         # Dictionary
         if isinstance(obj, dict):
@@ -101,11 +153,18 @@ class Activity:
                 if "activities" in key:
                     continue
 
-                self._evaluate_expressions(obj[key], state, visited, types_to_ignore)
+                self._evaluate_expressions(
+                    obj=obj[key],
+                    state=state,
+                    mocks=mocks,
+                    visited=visited,
+                    types_to_ignore=types_to_ignore,
+                    property_path=f"{property_path}.{key}" if property_path else key,
+                )
 
         # List
         if isinstance(obj, list):
-            for item in obj:
+            for index, item in enumerate(obj):
                 ignore_item = False
                 for type_to_ignore in types_to_ignore:
                     if isinstance(item, type_to_ignore):
@@ -114,7 +173,14 @@ class Activity:
                 if ignore_item:
                     continue
 
-                self._evaluate_expressions(item, state, visited, types_to_ignore)
+                self._evaluate_expressions(
+                    obj=item,
+                    state=state,
+                    mocks=mocks,
+                    visited=visited,
+                    types_to_ignore=types_to_ignore,
+                    property_path=f"{property_path}[{index}]" if property_path else f"[{index}]",
+                )
 
     def set_result(self, result: DependencyCondition, output: Optional[Any] = None) -> None:  # noqa: ANN401
         self.status = result

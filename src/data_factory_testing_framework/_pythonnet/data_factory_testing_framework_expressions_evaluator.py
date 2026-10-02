@@ -11,7 +11,18 @@ from data_factory_testing_framework.state import PipelineRunState, RunParameterT
 
 class DataFactoryTestingFrameworkExpressionsEvaluator:
     @staticmethod
-    def evaluate(expression: str, state: PipelineRunState) -> Union[str, int, float, bool, dict, list]:
+    def evaluate(
+        expression: str,
+        state: PipelineRunState,
+        mock_config: dict[str, Union[str, int, float, bool, dict, list]],
+    ) -> Union[str, int, float, bool, dict, list]:
+        """Evaluate an expression using the Data Factory Testing Framework's .NET Evaluator.
+        
+        Args:
+            expression (str): The expression to evaluate.
+            state (PipelineRunState): The state containing parameters, variables, and activity results.
+            mock_config (dict, optional): A dictionary containing mock configurations for the evaluation, mapping function names to their mock results.
+        """
         evaluator = Evaluator()
         parameters = {
             "globalParameters": {},
@@ -58,5 +69,6 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
             json.dumps(variables),
             state_iter_item_json,
             json.dumps(activity_results),
+            json.dumps(mock_config),
         )
         return json.loads(result)["result"]

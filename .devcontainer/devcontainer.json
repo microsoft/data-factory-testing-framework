@@ -20,6 +20,19 @@
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
+	"remoteEnv": {
+    // -------------------------------------------------
+    // ENV settings to preserve history between rebuilds
+    "PROMPT_COMMAND": "history -a",
+    "HISTFILE": "/.devcontainercache/.bash_history",
+    // -------------------------------------------------
+    // CACHE Folders
+    "PRE_COMMIT_HOME": "/.devcontainercache/pre-commit",
+    "PIP_CACHE_DIR": "/.devcontainercache/pip-cache"
+    },
+	"mounts": [
+    	"source=${devcontainerId},target=/.devcontainercache,type=volume"
+    ],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -34,7 +47,8 @@
 				"GitHub.copilot",
 				"ms-python.python",
 				"ms-dotnettools.csharp",
-				"ryanluker.vscode-coverage-gutters"
+				"ryanluker.vscode-coverage-gutters",
+				"charliermarsh.ruff"
 			]
 		}
 	}

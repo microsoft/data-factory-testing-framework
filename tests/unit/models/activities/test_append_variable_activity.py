@@ -7,6 +7,7 @@ from data_factory_testing_framework.exceptions import (
 )
 from data_factory_testing_framework.models import DataFactoryElement
 from data_factory_testing_framework.models.activities import AppendVariableActivity
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable
 
 
@@ -19,7 +20,7 @@ from data_factory_testing_framework.state import PipelineRunState, PipelineRunVa
     ],
 )
 def test_when_int_variable_appended_then_state_variable_should_be_set(
-    initial_value: List[int], appended_value: int, expected_value: List[int]
+    initial_value: List[int], appended_value: int, expected_value: List[int], pipeline: Pipeline
 ) -> None:
     # Arrange
     TestFramework(framework_type=TestFrameworkType.Fabric)
@@ -31,6 +32,7 @@ def test_when_int_variable_appended_then_state_variable_should_be_set(
             "value": DataFactoryElement(str(appended_value)),
         },
     )
+    set_variable_activity._pipeline = pipeline
     state = PipelineRunState(
         variables=[
             PipelineRunVariable(name=variable_name, default_value=initial_value),
@@ -45,7 +47,7 @@ def test_when_int_variable_appended_then_state_variable_should_be_set(
     assert variable.value == expected_value
 
 
-def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
+def test_when_unknown_variable_evaluated_then_should_raise_exception(pipeline: Pipeline) -> None:
     # Arrange
     TestFramework(framework_type=TestFrameworkType.Fabric)
     variable_name = "TestVariable"
@@ -56,6 +58,7 @@ def test_when_unknown_variable_evaluated_then_should_raise_exception() -> None:
             "value": DataFactoryElement("TestValue"),
         },
     )
+    set_variable_activity._pipeline = pipeline
     state = PipelineRunState()
 
     # Act

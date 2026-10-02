@@ -12,6 +12,7 @@ from data_factory_testing_framework._repositories.data_factory_repository import
 from data_factory_testing_framework.exceptions import (
     NoRemainingPipelineActivitiesMeetDependencyConditionsError,
 )
+from data_factory_testing_framework.mock import ExpressionMock
 from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.models.activities import (
     Activity,
@@ -98,7 +99,9 @@ class TestFramework:
         """
         return self.evaluate_activities([activity], state)
 
-    def evaluate_pipeline(self, pipeline: Pipeline, parameters: List[RunParameter]) -> Iterator[Activity]:
+    def evaluate_pipeline(
+        self, pipeline: Pipeline, parameters: List[RunParameter], mocks: Optional[List["ExpressionMock"]] = None
+    ) -> Iterator[Activity]:
         """Evaluates all pipeline activities using the provided parameters.
 
         The order of activity execution is simulated based on the dependencies.
@@ -107,15 +110,27 @@ class TestFramework:
         Args:
             pipeline: The pipeline to evaluate.
             parameters: The parameters to use for evaluating the pipeline.
+            mocks: Optional expression mocks to use during evaluation.
 
         Returns:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
+        mocks = mocks or []
         parameters = pipeline.validate_and_append_default_parameters(parameters)
         state = PipelineRunState(parameters, pipeline.get_run_variables())
-        return self.evaluate_activities(pipeline.activities, state)
 
-    def evaluate_activities(self, activities: List[Activity], state: PipelineRunState) -> Iterator[Activity]:
+        return self._evaluate_activities(
+            activities=pipeline.activities,
+            state=state,
+            mocks=mocks,
+        )
+
+    def evaluate_activities(
+        self,
+        activities: List[Activity],
+        state: PipelineRunState,
+        mocks: Optional[List["ExpressionMock"]] = None,
+    ) -> Iterator[Activity]:
         """Evaluates all activities using the provided state.
 
         The order of activity execution is simulated based on the dependencies.
@@ -124,10 +139,25 @@ class TestFramework:
         Args:
             activities: The activities to evaluate.
             state: The state to use for evaluating the pipeline.
+            mocks: Optional expression mocks to use during evaluation.
 
         Returns:
             A list of evaluated pipelines, which can be more than 1 due to possible child activities.
         """
+        mocks = mocks or []
+
+        return self._evaluate_activities(
+            activities,
+            state,
+            mocks=mocks,
+        )
+
+    def _evaluate_activities(
+        self,
+        activities: List[Activity],
+        state: PipelineRunState,
+        mocks: List[ExpressionMock],
+    ) -> Iterator[Activity]:
         fail_activity_evaluated = False
         while len(state.scoped_activity_results) != len(activities):
             any_activity_evaluated = False
@@ -136,7 +166,7 @@ class TestFramework:
                 and a.are_dependency_condition_met(state),
                 activities,
             ):
-                evaluated_activity = activity.evaluate(state)
+                evaluated_activity = activity.evaluate(state, mocks)
                 if not self._is_iteration_activity(evaluated_activity) or (
                     isinstance(evaluated_activity, ExecutePipelineActivity) and not self.should_evaluate_child_pipelines
                 ):
@@ -168,6 +198,7 @@ class TestFramework:
                             pipeline,
                             activity.get_child_run_parameters(state),
                             self.evaluate_activities,
+                            mocks,
                         )
 
                     if not isinstance(activity, ExecutePipelineActivity) and isinstance(activity, ControlActivity):
@@ -175,6 +206,7 @@ class TestFramework:
                         activities_iterator = control_activity.evaluate_control_activities(
                             state,
                             self.evaluate_activities,
+                            mocks,
                         )
 
                     for child_activity in activities_iterator:

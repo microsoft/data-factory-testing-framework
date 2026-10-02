@@ -10,7 +10,7 @@ from data_factory_testing_framework.models.activities import SetVariableActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameter, RunParameterType
 
 
-def test_when_evaluated_should_evaluate_expression() -> None:
+def test_when_evaluated_should_evaluate_expression(pipeline: Pipeline) -> None:
     # Arrange
     activity = SwitchActivity(
         name="SwitchActivity",
@@ -18,6 +18,7 @@ def test_when_evaluated_should_evaluate_expression() -> None:
         cases_activities={},
         typeProperties={"on": DataFactoryElement("@concat('case_', '1')")},
     )
+    activity._pipeline = pipeline
 
     # Act
     activity.evaluate(PipelineRunState())
@@ -105,14 +106,14 @@ def test_evaluate_pipeline_should_pass_iteration_item_to_child_activities() -> N
     evaluator = Mock(return_value=[])
 
     # Act
-    list(activity.evaluate_control_activities(state, evaluator))
+    list(activity.evaluate_control_activities(state, evaluator, []))
 
     # Assert
     assert evaluator.call_args[0][1].iteration_item == "some-item"
 
 
 @pytest.mark.parametrize(("evaluated_value"), [1, 1.1, True, {}, [], None])
-def test_evaluated_raises_error_when_evaluated_value_is_not_a_str(evaluated_value: DataFactoryObjectType) -> None:
+def test_evaluated_raises_error_when_evaluated_value_is_not_a_str(evaluated_value: DataFactoryObjectType, pipeline: Pipeline) -> None:
     # Arrange
     state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "input_values", evaluated_value)])
     activity = SwitchActivity(
@@ -121,6 +122,8 @@ def test_evaluated_raises_error_when_evaluated_value_is_not_a_str(evaluated_valu
         cases_activities={},
         typeProperties={"on": DataFactoryElement("@pipeline().parameters.input_values")},
     )
+
+    activity._pipeline = pipeline
 
     # Act
     with pytest.raises(ControlActivityExpressionEvaluatedNotToExpectedTypeError) as ex_info:

@@ -21,8 +21,7 @@ def test_package_modules() -> None:
     public_modules = get_public_members(package, predicate=is_public_module)
 
     # Assert
-    assert len(public_modules) == 3
-    assert public_modules == ["exceptions", "models", "state"]
+    assert public_modules == ['exceptions', 'mock', 'mock_context', 'mock_helpers', 'models', 'state']
 
 
 def test_package_classes() -> None:

@@ -1,5 +1,7 @@
-from typing import Any
+from typing import Any, List, Optional
 
+from data_factory_testing_framework.mock import ExpressionMock
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models.activities._control_activity import ControlActivity
 from data_factory_testing_framework.state import PipelineRunState
@@ -14,16 +16,22 @@ class AppendVariableActivity(ControlActivity):
         """
         kwargs["type"] = "AppendVariable"
 
-        super(ControlActivity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.variable_name: str = self.type_properties["variableName"]
         self.value: DataFactoryElement = self.type_properties["value"]
 
-    def evaluate(self, state: PipelineRunState) -> "AppendVariableActivity":
-        super(ControlActivity, self).evaluate(state)
+    def evaluate(
+        self, state: PipelineRunState, mocks: Optional[List[ExpressionMock]] = None
+    ) -> "AppendVariableActivity":
+        mocks = mocks or []
+
+        super().evaluate(state, mocks)
 
         if isinstance(self.value, DataFactoryElement):
-            evaluated_value = self.value.evaluate(state)
+            evaluated_value = self.value.evaluate(
+                state, mocks, mock_context=MockContext(pipeline=self.pipeline, activity=self, property_path="value")
+            )
         else:
             evaluated_value = self.value
 

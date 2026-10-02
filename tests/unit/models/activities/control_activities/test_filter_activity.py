@@ -3,8 +3,9 @@ from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
     ControlActivityExpressionEvaluatedNotToExpectedTypeError,
 )
-from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType, Pipeline
+from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType
 from data_factory_testing_framework.models.activities import FilterActivity
+from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.state import PipelineRunState, RunParameter, RunParameterType
 
 
@@ -19,7 +20,7 @@ from data_factory_testing_framework.state import PipelineRunState, RunParameter,
         ([-1, 3, 4], [-1, 3]),
     ],
 )
-def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_values: []) -> None:
+def test_filter_activity_on_range_of_values(input_values: list, expected_filtered_values: list) -> None:
     # Arrange
     test_framework = TestFramework(framework_type=TestFrameworkType.Fabric)
     pipeline = Pipeline(
@@ -42,7 +43,6 @@ def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_
             ),
         ],
     )
-
     # Act
     activities = test_framework.evaluate_pipeline(
         pipeline,
@@ -60,7 +60,8 @@ def test_filter_activity_on_range_of_values(input_values: [], expected_filtered_
 
 @pytest.mark.parametrize(("evaluated_value"), [1, 1.1, "string-value", {}, True, None])
 def test_filter_activity_evaluated_raises_error_when_evaluated_value_is_not_a_list(
-    evaluated_value: DataFactoryObjectType
+    evaluated_value: DataFactoryObjectType,
+    pipeline: Pipeline,
 ) -> None:
     # Arrange
     state = PipelineRunState(parameters=[RunParameter(RunParameterType.Pipeline, "input_values", evaluated_value)])
@@ -71,6 +72,8 @@ def test_filter_activity_evaluated_raises_error_when_evaluated_value_is_not_a_li
             "condition": DataFactoryElement("@lessOrEquals(item(), 3)"),
         },
     )
+
+    filter_activity._pipeline = pipeline
 
     # Act
     with pytest.raises(ControlActivityExpressionEvaluatedNotToExpectedTypeError) as ex_info:
