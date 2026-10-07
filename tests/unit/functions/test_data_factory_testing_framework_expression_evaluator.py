@@ -132,6 +132,11 @@ from pytest import param as p
         ),
         p("@item()", PipelineRunState(iteration_item="value"), "@item()", "value", id="item_reference"),
         p("@item() ", PipelineRunState(iteration_item="value"), "@item() ", "value", id="item_reference_with_ws"),
+        p("@item()", PipelineRunState(iteration_item=0), "@item()", 0, id="item_reference_zero"),
+        p("@item()", PipelineRunState(iteration_item=""), "@item()", "", id="item_reference_empty_string"),
+        p("@item()", PipelineRunState(iteration_item=False), "@item()", False, id="item_reference_false"),
+        p("@item()", PipelineRunState(iteration_item=[]), "@item()", [], id="item_reference_empty_list"),
+        p("@item()", PipelineRunState(iteration_item={}), "@item()", {}, id="item_reference_empty_dict"),
         p("@concat('a', 'b' )", PipelineRunState(), "@concat('a', 'b' )", "ab", id="function_call"),
         p(
             "@concat('https://example.com/jobs/', '123''', concat('&', 'abc,'))",
