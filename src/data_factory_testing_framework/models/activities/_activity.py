@@ -86,7 +86,7 @@ class Activity:
             if not attribute.startswith("_") and not callable(getattr(obj, attribute))
         ]
         for attribute_name in attribute_names:
-            if "activities" in attribute_name:
+            if self._is_nested_activities_name(attribute_name):
                 continue
 
             attribute = getattr(obj, attribute_name)
@@ -98,7 +98,7 @@ class Activity:
         # Dictionary
         if isinstance(obj, dict):
             for key in obj.keys():
-                if "activities" in key:
+                if self._is_nested_activities_name(key):
                     continue
 
                 self._evaluate_expressions(obj[key], state, visited, types_to_ignore)
@@ -115,6 +115,12 @@ class Activity:
                     continue
 
                 self._evaluate_expressions(item, state, visited, types_to_ignore)
+
+    @staticmethod
+    def _is_nested_activities_name(name: str) -> bool:
+        # Nested activities (activities, ifTrueActivities, ifFalseActivities, defaultActivities, ...)
+        # are evaluated by the control activity in their own scope, never eagerly with the parent.
+        return "activities" in name.lower()
 
     def set_result(self, result: DependencyCondition, output: Optional[Any] = None) -> None:  # noqa: ANN401
         self.status = result

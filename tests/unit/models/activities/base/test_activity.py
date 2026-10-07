@@ -105,3 +105,40 @@ def test_evaluate_is_evaluating_expressions_inside_dict() -> None:
 
     # Assert
     assert pipeline_activity.type_properties["parameters"]["url"].result == "example.com"
+
+
+@pytest.mark.parametrize(
+    "nested_activities_key",
+    ["activities", "ifTrueActivities", "ifFalseActivities", "defaultActivities"],
+)
+def test_evaluate_does_not_evaluate_expressions_of_nested_activities(nested_activities_key: str) -> None:
+    # Arrange
+    activity = Activity(
+        name="activity",
+        type="Container",
+        typeProperties={
+            "url": DataFactoryElement("@pipeline().parameters.url"),
+            nested_activities_key: [
+                {
+                    "name": "nested",
+                    "type": "SetVariable",
+                    "typeProperties": {
+                        "variableName": "variable",
+                        "value": DataFactoryElement("@pipeline().parameters.not_in_scope"),
+                    },
+                },
+            ],
+        },
+    )
+    state = PipelineRunState(
+        parameters=[
+            RunParameter(RunParameterType.Pipeline, "url", "example.com"),
+        ],
+    )
+
+    # Act
+    activity.evaluate(state)
+
+    # Assert
+    assert activity.type_properties["url"].result == "example.com"
+    assert activity.type_properties[nested_activities_key][0]["typeProperties"]["value"].result is None
