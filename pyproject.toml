@@ -53,7 +53,7 @@ astor = "^0.8.1"
 docstring-parser = "^0.15"
 build = "^1.1.1"
 wheel = "^0.43.0"
-setuptools = "^70.0"
+setuptools = "^78.1"
 
 [tool.ruff]
 select = [
