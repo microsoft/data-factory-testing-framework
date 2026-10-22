@@ -1,0 +1,61 @@
+{
+    "name": "if_condition_branch",
+    "properties": {
+        "activities": [
+            {
+                "name": "Has_Date",
+                "type": "IfCondition",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@empty(pipeline().parameters.date)",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "Set_Today",
+                            "type": "SetVariable",
+                            "dependsOn": [],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "variableName": "day",
+                                "value": {
+                                    "value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ],
+                    "ifFalseActivities": [
+                        {
+                            "name": "Set_Given_Date",
+                            "type": "SetVariable",
+                            "dependsOn": [],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "variableName": "day",
+                                "value": {
+                                    "value": "@formatDateTime(pipeline().parameters.date, 'yyyy-MM-dd')",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "date": {
+                "type": "string",
+                "defaultValue": ""
+            }
+        },
+        "variables": {
+            "day": {
+                "type": "String"
+            }
+        },
+        "annotations": []
+    }
+}

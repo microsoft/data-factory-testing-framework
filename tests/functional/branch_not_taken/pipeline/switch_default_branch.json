@@ -1,0 +1,70 @@
+{
+    "name": "switch_default_branch",
+    "properties": {
+        "activities": [
+            {
+                "name": "On_Mode",
+                "type": "Switch",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "on": {
+                        "value": "@pipeline().parameters.mode",
+                        "type": "Expression"
+                    },
+                    "cases": [
+                        {
+                            "value": "today",
+                            "activities": [
+                                {
+                                    "name": "Set_Today",
+                                    "type": "SetVariable",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "variableName": "day",
+                                        "value": {
+                                            "value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "defaultActivities": [
+                        {
+                            "name": "Set_Given_Date",
+                            "type": "SetVariable",
+                            "dependsOn": [],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "variableName": "day",
+                                "value": {
+                                    "value": "@formatDateTime(pipeline().parameters.date, 'yyyy-MM-dd')",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "mode": {
+                "type": "string",
+                "defaultValue": "today"
+            },
+            "date": {
+                "type": "string",
+                "defaultValue": ""
+            }
+        },
+        "variables": {
+            "day": {
+                "type": "String"
+            }
+        },
+        "annotations": []
+    }
+}
