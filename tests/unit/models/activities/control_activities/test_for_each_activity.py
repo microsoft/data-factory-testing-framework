@@ -79,3 +79,37 @@ def test_evaluated_raises_error_when_evaluated_value_is_not_a_list(evaluated_val
         ex_info.value.args[0]
         == "Iteration expression of Activity: 'ForEachActivity' does not evaluate to the expected type: 'list'."
     )
+
+
+def test_when_evaluate_child_activities_then_falsy_items_are_passed_as_item() -> None:
+    # Arrange
+    test_framework = TestFramework(TestFrameworkType.Fabric)
+    for_each_activity = ForEachActivity(
+        name="ForEachActivity",
+        typeProperties={
+            "items": DataFactoryElement("@range(0, 3)"),
+        },
+        activities=[
+            SetVariableActivity(
+                name="setVariable",
+                typeProperties={
+                    "variableName": "variable",
+                    "value": DataFactoryElement("@item()"),
+                },
+                depends_on=[],
+            ),
+        ],
+        depends_on=[],
+    )
+    state = PipelineRunState(
+        variables=[
+            PipelineRunVariable(name="variable", default_value=0),
+        ],
+    )
+
+    # Act
+    activities = test_framework.evaluate_activity(for_each_activity, state)
+
+    # Assert
+    items = [activity.type_properties["value"].result for activity in activities]
+    assert items == [0, 1, 2]

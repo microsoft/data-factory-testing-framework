@@ -50,7 +50,7 @@ class DataFactoryTestingFrameworkExpressionsEvaluator:
 
         variables = {variable.name: variable.value for variable in state.variables}
 
-        state_iter_item_json = json.dumps(state.iteration_item) if state.iteration_item else None
+        state_iter_item_json = json.dumps(state.iteration_item) if state.iteration_item is not None else None
 
         result = evaluator.EvaluateExpression(
             expression,
