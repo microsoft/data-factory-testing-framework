@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 from typing import Any
 
 from data_factory_testing_framework._expression_runtime.expression_runtime import ExpressionRuntime
@@ -8,6 +9,13 @@ from data_factory_testing_framework.exceptions import (
 from data_factory_testing_framework.exceptions._user_error import UserError
 from data_factory_testing_framework.models._data_factory_object_type import DataFactoryObjectType
 from data_factory_testing_framework.state import RunState
+
+
+@lru_cache(maxsize=None)
+def _get_expression_runtime() -> ExpressionRuntime:
+    # Building an ExpressionRuntime compiles the Lark grammar, which costs more than evaluating
+    # an expression. It holds no per-evaluation state, so one instance serves every element.
+    return ExpressionRuntime()
 
 
 class DataFactoryElement:
@@ -26,8 +34,7 @@ class DataFactoryElement:
     def evaluate(self, state: RunState) -> DataFactoryObjectType:
         """Evaluate the expression."""
         try:
-            expression_runtime = ExpressionRuntime()
-            self.result = expression_runtime.evaluate(self.expression, state)
+            self.result = _get_expression_runtime().evaluate(self.expression, state)
             return self.result
         except UserError as e:
             raise e from e
