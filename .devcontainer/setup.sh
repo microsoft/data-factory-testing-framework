@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+sudo chown -R $(id -u):$(id -g) /.devcontainercache
+
 dotnet build
 poetry install --no-interaction --no-root
 poetry run pip install -e .

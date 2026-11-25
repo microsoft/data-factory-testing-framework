@@ -1,5 +1,6 @@
-from typing import Any, Callable, Iterator, List
+from typing import Any, Callable, Iterator, List, Optional
 
+from data_factory_testing_framework.mock import ExpressionMock
 from data_factory_testing_framework.models._data_factory_element import DataFactoryElement
 from data_factory_testing_framework.models._pipeline import Pipeline
 from data_factory_testing_framework.models.activities._activity import Activity
@@ -16,7 +17,7 @@ class ExecutePipelineActivity(ControlActivity):
         """
         kwargs["type"] = "ExecutePipeline"
 
-        super(ControlActivity, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.parameters: dict = {}
         if "parameters" in self.type_properties:
@@ -41,10 +42,12 @@ class ExecutePipelineActivity(ControlActivity):
         pipeline: Pipeline,
         parameters: List[RunParameter],
         evaluate_activities: Callable[[List[Activity], PipelineRunState], Iterator[Activity]],
+        mocks: Optional[List[ExpressionMock]] = None
     ) -> Iterator[Activity]:
+        mocks = mocks or []
         parameters = pipeline.validate_and_append_default_parameters(parameters)
         scoped_state = PipelineRunState(parameters, pipeline.get_run_variables())
-        for activity in evaluate_activities(pipeline.activities, scoped_state):
+        for activity in evaluate_activities(pipeline.activities, scoped_state, mocks):
             yield activity
 
         # Set the pipelineReturnValues as evaluated by SetVariable activities to the ExecutePipelineActivity output

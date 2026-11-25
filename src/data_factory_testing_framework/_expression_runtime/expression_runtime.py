@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from data_factory_testing_framework._expression_runtime.data_factory_expression.expression_transformer import (
     ExpressionTransformer as DataFactoryTestingFrameworkExpressionsTransformer,
@@ -12,6 +13,8 @@ from data_factory_testing_framework.exceptions import (
     StateIterationItemNotSetError,
     VariableNotFoundError,
 )
+from data_factory_testing_framework.mock import ExpressionMock
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.state import PipelineRunState, RunParameterType
 
 
@@ -21,12 +24,41 @@ class ExpressionRuntime:
         self.dftf_expressions_transformer = DataFactoryTestingFrameworkExpressionsTransformer()
         self.dftf_expressions_evaluator = DataFactoryTestingFrameworkExpressionsEvaluator()
 
-    def evaluate(self, expression: str, state: PipelineRunState) -> str:
+    def _build_mock_config(
+        self,
+        mocks: List[ExpressionMock],
+        mock_context: MockContext,
+    ) -> dict:
+        """Builds a mock configuration dictionary from the provided mocks and context."""
+        mock_config = {}
+
+        for mock in mocks:
+            if mock.scope.is_in_scope(mock_context):
+                # If we already have a mock for this function, we throw an error
+                if mock.function_name in mock_config:
+                    raise ValueError(
+                        f'Duplicate mock function name detected: "{mock.function_name}". '
+                        "Please ensure mocks have mutually exclusive scopes."
+                    )
+                else:
+                    mock_config[mock.function_name] = mock.mock_result
+
+        return mock_config
+
+    def evaluate(
+        self,
+        expression: str,
+        state: PipelineRunState,
+        mocks: List[ExpressionMock],
+        mock_context: MockContext,
+    ) -> str:
+        """Evaluate an expression with optional mocks and context."""
+        mock_config = self._build_mock_config(mocks, mock_context)
         dftf_transformed_expression = self.dftf_expressions_transformer.transform_to_dftf_evaluator_expression(
             expression, state
         )
         try:
-            result = self.dftf_expressions_evaluator.evaluate(dftf_transformed_expression, state)
+            result = self.dftf_expressions_evaluator.evaluate(dftf_transformed_expression, state, mock_config)
         except Exception as e:
             # match the exception type (coming from .NET) to the one we expect
             missing_parameter_match = re.match(

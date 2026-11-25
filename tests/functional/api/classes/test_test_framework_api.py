@@ -1,8 +1,9 @@
+from ast import List
 import inspect
 import types
 import typing
-from typing import Optional
-
+from typing import Optional, Union
+from typing import ForwardRef
 from data_factory_testing_framework import TestFrameworkType
 from data_factory_testing_framework.models import Pipeline
 from data_factory_testing_framework.models.activities import Activity
@@ -103,6 +104,12 @@ def test_test_framework_method_signatures() -> None:
                 inspect.Parameter(
                     name="state", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=PipelineRunState
                 ),
+                inspect.Parameter(
+                    name="mocks",
+                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                    default=None,
+                    annotation=typing.Optional[typing.List[ForwardRef('ExpressionMock')]],
+                ),
             ],
             return_annotation=typing.Iterator[Activity],
         ),
@@ -124,6 +131,12 @@ def test_test_framework_method_signatures() -> None:
                     name="parameters",
                     kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
                     annotation=typing.List[RunParameter],
+                ),
+                inspect.Parameter(
+                    name="mocks",
+                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                    default=None,
+                    annotation=typing.Optional[typing.List[ForwardRef('ExpressionMock')]],
                 ),
             ],
             return_annotation=typing.Iterator[Activity],

@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import Mock
 
 import pytest
@@ -5,12 +6,14 @@ from data_factory_testing_framework import TestFramework, TestFrameworkType
 from data_factory_testing_framework.exceptions._control_activity_expression_evaluated_not_to_expected_type import (
     ControlActivityExpressionEvaluatedNotToExpectedTypeError,
 )
+from data_factory_testing_framework.mock_context import MockContext
 from data_factory_testing_framework.models import DataFactoryElement, DataFactoryObjectType
 from data_factory_testing_framework.models.activities import SetVariableActivity, UntilActivity
 from data_factory_testing_framework.state import PipelineRunState, PipelineRunVariable, RunParameter, RunParameterType
+from data_factory_testing_framework.models._pipeline import Pipeline
 
 
-def test_when_evaluate_until_activity_should_repeat_until_expression_is_true(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_when_evaluate_until_activity_should_repeat_until_expression_is_true(monkeypatch: pytest.MonkeyPatch, pipeline: Pipeline) -> None:
     # Arrange
     test_framework = TestFramework(framework_type=TestFrameworkType.Fabric)
     until_activity = UntilActivity(
@@ -30,6 +33,8 @@ def test_when_evaluate_until_activity_should_repeat_until_expression_is_true(mon
         ],
         depends_on=[],
     )
+    until_activity._pipeline = pipeline
+    until_activity.activities[0]._pipeline = pipeline
 
     state = PipelineRunState(
         variables=[
@@ -38,7 +43,7 @@ def test_when_evaluate_until_activity_should_repeat_until_expression_is_true(mon
     )
 
     # Act
-    monkeypatch.setattr(until_activity.expression, "evaluate", lambda state: False)
+    monkeypatch.setattr(until_activity.expression, "evaluate", lambda state, mocks, mock_context: False)
     activities = test_framework.evaluate_activity(until_activity, state)
 
     # Assert
@@ -50,7 +55,7 @@ def test_when_evaluate_until_activity_should_repeat_until_expression_is_true(mon
     assert set_variable_activity is not None
     assert set_variable_activity.name == "setVariable"
 
-    monkeypatch.setattr(until_activity.expression, "evaluate", lambda state: True)
+    monkeypatch.setattr(until_activity.expression, "evaluate", lambda state, mocks, mock_context: True)
 
     # Assert that there are no more activities
     with pytest.raises(StopIteration):
