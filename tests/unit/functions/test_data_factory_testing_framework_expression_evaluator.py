@@ -446,6 +446,55 @@ def test_evaluate_function_names_are_case_insensitive() -> None:
     assert evaluated_value == "ab"
 
 
+@pytest.mark.parametrize(
+    ["expression", "property_name"],
+    [
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').status),'Failed')",
+            "status",
+            id="status",
+        ),
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').error),'Succeeded')",
+            "error",
+            id="error",
+        ),
+        p(
+            "@contains(createArray(activity('Fail').status,activity('Notebook').output),'Succeeded')",
+            "output",
+            id="output",
+        ),
+    ],
+)
+def test_evaluate_expression_with_none_activity_result_raises_exception(
+    expression: str,
+    property_name: str,
+) -> None:
+    # Arrange
+    expression_runtime = ExpressionRuntime()
+    state = PipelineRunState(
+        activity_results=[
+            ActivityResult(
+                activity_name="Fail",
+                status=DependencyCondition.FAILED,
+                output={},
+            ),
+            ActivityResult(
+                activity_name="Notebook",
+                status=None,
+                output=None,
+                error=None,
+            ),
+        ]
+    )
+
+    # Act & Assert
+    with pytest.raises(ParameterNotFoundError) as exinfo:
+        expression_runtime.evaluate(expression, state)
+
+    assert str(exinfo.value) == f"Parameter: '{property_name}' of type 'RunParameterType.System' not found"
+
+
 def test_evaluate_function_with_null_conditional_operator() -> None:
     # Arrange
     expression = "@pipeline().parameters.parameter.field1?.field2"

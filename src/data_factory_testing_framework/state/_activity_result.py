@@ -7,7 +7,7 @@ class ActivityResult:
     def __init__(
         self,
         activity_name: str,
-        status: Optional[DependencyCondition] = None,
+        status: Optional[DependencyCondition] = DependencyCondition.SUCCEEDED,
         output: Optional[Any] = None,  # noqa: ANN401
         error: Optional[Any] = None,  # noqa: ANN401
     ) -> None:
@@ -20,7 +20,7 @@ class ActivityResult:
             error: Error of the activity. (e.g. { "code": "ErrorCode", "message": "ErrorMessage" } for activity('activityName').Error)
         """
         self.activity_name = activity_name
-        self.status = status if status is not None else DependencyCondition.SUCCEEDED
+        self.status = status
         self.output = output
         self.error = error
 
